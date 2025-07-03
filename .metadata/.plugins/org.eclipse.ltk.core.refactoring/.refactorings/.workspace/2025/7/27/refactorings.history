@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Rename Java project &apos;demo&apos; to &apos;Junko&apos;&#x0D;&#x0A;- Original element: &apos;demo&apos;&#x0D;&#x0A;- Renamed element: &apos;demo&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename Java project &apos;demo&apos;" flags="7" id="org.eclipse.jdt.ui.rename.java.project" input="=demo" name="Junko" references="true" stamp="1751520913548" version="1.0"/>&#x0A;<refactoring comment="Delete resource &apos;Junko&apos;" deleteContents="true" description="Delete resource &apos;Junko&apos;" element1="/Junko" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1751520921106"/>
-</session>
