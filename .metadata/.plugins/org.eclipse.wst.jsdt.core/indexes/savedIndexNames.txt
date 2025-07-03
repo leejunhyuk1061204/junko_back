@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+C:\Junko_back\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3179326534.index
+3509634936.index
+2640400870.index
+225937336.index
+2720072133.index
+2861158040.index
