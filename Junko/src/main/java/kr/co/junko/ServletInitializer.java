@@ -1,6 +1,5 @@
 package kr.co.junko;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -19,12 +18,12 @@ public class ServletInitializer extends SpringBootServletInitializer {
         return builder.sources(JunkoApplication.class);
     }
 	
-    public static void main(String[] args) {
-        // 내장 톰캣 실행 시에도 Key 초기화
-        if (Jwt.getPriKey() == null) {
-            Jwt.setPriKey();
-        }
-        SpringApplication.run(JunkoApplication.class, args);
-    }
+//    public static void main(String[] args) {
+//        // 내장 톰캣 실행 시에도 Key 초기화
+//        if (Jwt.getPriKey() == null) {
+//            Jwt.setPriKey();
+//        }
+//        SpringApplication.run(JunkoApplication.class, args);
+//    }
 
 }
