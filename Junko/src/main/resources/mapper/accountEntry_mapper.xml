@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.AccountEntryDAO">
+	
+	<select id="accountList" resultType="kr.co.junko.dto.AccountingEntryDTO">
+		SELECT entry_idx 
+		,account_idx
+		,entry_type
+		,amount
+		,entry_date 
+		,custom_idx
+        ,sales_idx
+		FROM accountingEntry
+		ORDER BY entry_idx DESC
+		LIMIT #{limit} OFFSET #{offset}
+		
+	</select>
+	
+	<select id="pages" resultType="int">
+		SELECT CEIL(COUNT(entry_idx)/#{param1}) AS pages FROM accountingEntry
+	</select>
+	
+	<insert id="accountRegist" parameterType="kr.co.junko.dto.AccountingEntryDTO">
+	INSERT INTO accountingEntry (account_idx, entry_type, amount, entry_date, custom_idx, sales_idx)
+VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, #{sales_idx})
+	</insert>
+	
+
+
+</mapper>

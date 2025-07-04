@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.product.ProductDAO">
+
+	<insert id="productInsert" parameterType="kr.co.junko.dto.ProductDTO"
+	        useGeneratedKeys="true" keyProperty="product_idx">
+	    INSERT INTO product (
+	        product_name, purchase_price, selling_price, discount_rate, product_standard, category_idx
+	    ) 
+	    VALUES (
+	        #{product_name}, #{purchase_price}, #{selling_price}, #{discount_rate}, #{product_standard}, #{category_idx}
+	    )
+	</insert>
+
+	<insert id="fileWrite">
+	    INSERT INTO file (ori_filename, new_filename, idx, type)
+	    VALUES (#{ori_filename}, #{new_filename}, #{idx}, #{type})
+	</insert>
+
+</mapper>
