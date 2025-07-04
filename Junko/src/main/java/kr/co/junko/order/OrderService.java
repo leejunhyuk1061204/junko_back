@@ -53,10 +53,10 @@ public class OrderService {
 	public Map<String, Object> orderList(Map<String, Object> param) {
 		int cnt = 10;
 		int offset = ((int)param.get("page")-1)*cnt;
-		int total = dao.orderTotalPage(cnt);
 		param.put("cnt", cnt);
 		param.put("offset", offset);
 		List<OrderDTO>list = dao.orderList(param);
+		int total = dao.orderTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orederList", list);
 		result.put("total", total);
@@ -67,10 +67,10 @@ public class OrderService {
 	public Map<String, Object> orderProductList(Map<String, Object> param) {
 		int cnt = 5;
 		int offset = ((int)param.get("page")-1)*cnt;
-		int total = dao.orderProductTotalPage(cnt);
 		param.put("cnt", cnt);
 		param.put("offset", offset);
 		List<OrderProductDTO>list = dao.orderProductList(param);
+		int total = dao.orderProductTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orederProductList", list);
 		result.put("total", total);
@@ -81,10 +81,10 @@ public class OrderService {
 	public Map<String, Object> orderPlanList(Map<String, Object> param) {
 		int cnt = 5;
 		int offset = ((int)param.get("page")-1)*cnt;
-		int total = dao.orderPlanListTotalPage(cnt);
 		param.put("cnt", cnt);
 		param.put("offset", offset);
 		List<OrderPlanDTO>list = dao.orderPlanList(param);
+		int total = dao.orderPlanListTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orederPlanList", list);
 		result.put("total", total);

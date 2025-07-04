@@ -24,15 +24,15 @@ public interface OrderDAO {
 
 	int orderPlanUpdate(OrderPlanDTO dto);
 
-	int orderTotalPage(int cnt);
+	int orderTotalPage(Map<String, Object> param);
 
 	List<OrderDTO> orderList(Map<String, Object> param);
 
-	int orderProductTotalPage(int cnt);
+	int orderProductTotalPage(Map<String, Object> param);
 
 	List<OrderProductDTO> orderProductList(Map<String, Object> param);
 
-	int orderPlanListTotalPage(int cnt);
+	int orderPlanListTotalPage(Map<String, Object> param);
 
 	List<OrderPlanDTO> orderPlanList(Map<String, Object> param);
 

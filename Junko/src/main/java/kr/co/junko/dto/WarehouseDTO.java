@@ -9,5 +9,6 @@ public class WarehouseDTO {
 	private String warehouse_name;
 	private String warehouse_address;
 	private int user_idx;
+	private boolean del_yn;
 	
 }

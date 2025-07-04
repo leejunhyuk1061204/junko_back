@@ -66,8 +66,29 @@
 		where plan_idx = #{plan_idx}
 	</update>
 
-	<select id="orderTotalPage">
-		select ceil(count(order_idx)/#{cnt}) as total from `order`
+	<select id="orderTotalPage" parameterType="map">
+		select ceil(count(order_idx)*1.0/#{cnt}) as total from `order`
+		<where>
+		del_yn = false
+			<if test="custom_idx != null and custom_idx != 0">
+				and custom_idx = #{custom_idx}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="status != null and status !=''">
+				and status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and reg_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and reg_date <![CDATA[<]]>= #{end_date}
+			</if>
+		</where>
 	</select>
 	
 	<select id="orderList" resultType="kr.co.junko.dto.OrderDTO" parameterType="map">
@@ -111,8 +132,17 @@
 	 -->
 	 
 	 
-	 <select id="orderProductTotalPage">
-		select ceil(count(order_product_idx)/#{cnt}) as total from order_product
+	 <select id="orderProductTotalPage" parameterType="map">
+		select ceil(count(order_product_idx)*1.0/#{cnt}) as total from order_product
+		<where>
+				del_yn = false
+			<if test="order_idx != null and order_idx != 0">
+				and order_idx = #{order_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+		</where>
 	</select>
 	
 	
@@ -137,8 +167,20 @@
 	</select>
 	
 	
-	<select id="orderPlanListTotalPage">
-		select ceil(count(plan_idx)/#{cnt}) as total from order_plan
+	<select id="orderPlanListTotalPage" parameterType="map">
+		select ceil(count(plan_idx)*1.0/#{cnt}) as total from order_plan
+		<where>
+				del_yn = false
+			<if test="order_product_idx != null and order_product_idx != 0">
+				and order_product_idx = #{order_product_idx}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and delivery_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and delivery_date <![CDATA[<]]>= #{end_date}
+			</if>
+		</where>
 	</select>
 	
 	

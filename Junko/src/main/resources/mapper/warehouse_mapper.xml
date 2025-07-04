@@ -10,4 +10,57 @@
 		values (#{warehouse_name},#{warehouse_address},#{user_idx})
 	</insert>
 
+	<update id="warehouseUpdate" parameterType="map">
+		update warehouse
+		<trim prefix="set" suffixOverrides=",">
+			<if test="warehouse_name != null and warehouse_name != ''">
+				warehouse_name = #{warehouse_name},
+			</if>
+			<if test="warehouse_address != null and warehouse_address !=''">
+				warehouse_address = #{warehouse_address},
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				user_idx = #{user_idx}
+			</if>
+		</trim>
+		where warehouse_idx = #{warehouse_idx}
+	</update>
+	
+	<select id="warehouseList" parameterType="map" resultType="kr.co.junko.dto.WarehouseDTO">
+		select * from warehouse
+		<where>
+			del_yn = false
+			<if test="warehouse_name != null and warehouse_name !=''">
+				and warehouse_name like concat('%', #{warehouse_name} ,'%')
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}			
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="warehouseTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) as total from warehouse
+		<where>
+			del_yn = false
+			<if test="warehouse_name != null and warehouse_name !=''">
+				and warehouse_name like concat('%', #{warehouse_name} ,'%')
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}			
+			</if>
+		</where>
+	</select>
+
+	<update id="warehouseDel">
+		update warehouse set del_yn = true where warehouse_idx = #{param1}
+	</update>
+	
 </mapper>
