@@ -20,5 +20,6 @@ public class AccountingEntryDTO {
 	
 	private Integer sales_idx;
 	// 거래처 - 매입일 경우 매출,환불이 null이기 때문에 가져옴
+	private boolean del_yn; // 삭제여부
 }
 

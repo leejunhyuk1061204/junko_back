@@ -14,6 +14,7 @@ public class CollectionAndPaymentDTO {
 	private int amount;	// 금액
 	private Date date;		// 일자
 	private String target;	// 거래대상
+	private boolean del_yn; // 삭제여부
 	
 }
 

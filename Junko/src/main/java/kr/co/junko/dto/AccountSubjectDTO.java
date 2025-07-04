@@ -10,7 +10,7 @@ public class AccountSubjectDTO {
 	
 	private int as_idx;			// 계정과목번호
 	private String as_name;	// 계정과목명
-	
+	private boolean del_yn; // 삭제여부
 	
 }
 

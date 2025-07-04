@@ -14,7 +14,7 @@ public class ProductDTO {
 	private int discount_rate;
 	private String product_standard;
 	private int category_idx;
-	private boolean delete;
+	private boolean del_yn; // 삭제여부
 	
 	private MultipartFile[] images; // 여러 장 이미지 업로드용
 	

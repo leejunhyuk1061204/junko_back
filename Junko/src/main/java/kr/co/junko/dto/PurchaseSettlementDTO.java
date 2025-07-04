@@ -17,6 +17,7 @@ public class PurchaseSettlementDTO {
 	private String settlement_day;			// 정산일자
 	private BigDecimal total_amount;		// 정산금액
 	private String status;						// 정산상태
+	private boolean del_yn; // 삭제여부
 	
 }
 

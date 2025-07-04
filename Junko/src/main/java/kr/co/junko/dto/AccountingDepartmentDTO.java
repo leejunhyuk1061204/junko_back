@@ -12,7 +12,7 @@ public class AccountingDepartmentDTO {
 	private int as_idx;		// 계정과목번호
 	private int amount;	// 금액
 	private String type;	// 종류 (차변,대변)
-	
+	private boolean del_yn; // 삭제여부
 	
 }
 

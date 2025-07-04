@@ -13,5 +13,6 @@ public class FileDTO {
 	private Date reg_date;
 	private String type;
 	private int idx;
+	private boolean del_yn; // 삭제여부
 	
 }

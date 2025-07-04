@@ -12,6 +12,7 @@
 		,custom_idx
         ,sales_idx
 		FROM accountingEntry
+		WHERE del_yn = false
 		ORDER BY entry_idx DESC
 		LIMIT #{limit} OFFSET #{offset}
 		
