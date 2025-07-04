@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.chart.ChartDAO">
+
+	<!-- 어제와 오늘 매출 -->
+	<select id="getDaySales" resultType="map">
+		SELECT
+		    CURDATE() AS date
+		    <!-- 금일 총 매출 -->
+		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() THEN sp.product_price*sp.product_cnt 
+		        ELSE 0 END) AS sales_today
+		    <!-- 전일 총 매출 -->
+		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() - INTERVAL 1 DAY
+		        THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_yesterday
+		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
+		WHERE s.status IN ('결제 완료', '배송중', '배송완료')
+			<!-- 전날이랑 오늘 데이터만 필터링 -->
+		    AND DATE(s.payment_date) IN (CURDATE(), CURDATE() - INTERVAL 1 DAY)
+	</select>
+	
+	<!-- 일일 기준 주문건수와 취소건수 -->
+	<select id="getRecentOrderStats" resultType="map">
+		SELECT date, order_cnt, cancel_cnt
+		FROM (
+		    SELECT 
+		        s.payment_date AS date,
+		        COUNT(CASE WHEN s.status IN ('결제 완료', '배송중', '배송완료') THEN 1 END) AS order_cnt,
+		        COUNT(CASE WHEN s.status = '결제취소' THEN 1 END) AS cancel_cnt
+		    FROM sales s GROUP BY date ORDER BY date DESC LIMIT 5) t ORDER BY date
+	</select>
+	
+	<!-- 판매율 높은 상품 순 5개 -->
+	<select id="getPopularProduct" resultType="map">
+		SELECT sp.product_idx, p.product_name, SUM(sp.product_cnt) AS total_sales
+		FROM sales_product sp JOIN sales s ON sp.sales_idx = s.sales_idx
+			JOIN product p ON sp.product_idx = p.product_idx
+		WHERE s.status IN ('결제 완료', '배송중', '배송완료')
+		GROUP BY sp.product_idx ORDER BY total_sales DESC LIMIT 5
+	</select>
+	
+	<!-- 반품율 높은 상품 순 5개 -->
+	<select id="getHighReturnProduct" resultType="map">
+		SELECT 
+			p.product_idx,
+		    p.product_name,
+		    SUM(rr.quantity) AS return_cnt
+		FROM return_receive rr JOIN product p ON rr.product_idx = p.product_idx
+		WHERE rr.status IN ('반품예정', '반품완료') AND p.del_yn = 'N'
+		GROUP BY p.product_idx ORDER BY return_cnt DESC LIMIT 5
+		<!--
+		SELECT 
+	        <choose>
+	            <when test="groupBy == 'category'">
+	                c.category_name AS label
+	            </when>
+	            <otherwise>
+	                p.product_name AS label
+	            </otherwise>
+	        </choose>,
+	        SUM(rr.quantity) AS total_return_qty
+	    FROM return_receive rr
+	    JOIN product p ON rr.product_idx = p.product_idx
+	    <if test="groupBy == 'category'">
+	        JOIN category c ON p.category_idx = c.category_idx
+	    </if>
+	    WHERE rr.status IN ('반품예정', '반품완료')
+	    
+	    <if test="delYnExclude == true">
+	        AND p.del_yn = 'N'
+	    </if>
+	
+	    <if test="startDate != null and endDate != null">
+	        AND rr.handle_date BETWEEN #{startDate} AND #{endDate}
+	    </if>
+	
+	    GROUP BY 
+	        <choose>
+	            <when test="groupBy == 'category'">c.category_name</when>
+	            <otherwise>p.product_name</otherwise>
+	        </choose>
+	
+	    ORDER BY total_return_qty DESC
+	    LIMIT 5
+	    -->
+	    
+	</select>
+
+	<!-- 전년도 대비 월별 매출 비교 -->
+	<select id="getMonthlySalesYoY" resultType="map">
+		SELECT
+			DATE_FORMAT(s.payment_date, '%Y-%m') AS month
+			<!-- 전년도 매출 -->
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1
+				THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_last_year
+			<!-- 이번년도 매출 -->
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())
+        		THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_this_year
+		FROM sales s JOIN sales_product sp ON s.sales_idx=sp.sales_idx
+		WHERE s.status IN ('결제 완료','배송중','배송완료')
+			<!-- 올해하고 작년 데이터만 -->
+			AND YEAR(s.payment_date) IN (YEAR(CURDATE()), YEAR(CURDATE())-1)
+		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m') ORDER BY month
+	</select>
+
+</mapper>
