@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.co.junko.dto.memberDTO;
+import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.util.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class MemberController {
 	Map<String, Object> result = null;
 	
 	@PostMapping(value="/join")
-	public Map<String, Object>join (@RequestBody memberDTO dto){
+	public Map<String, Object>join (@RequestBody MemberDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
 		boolean success = service.join(dto);
@@ -41,7 +41,7 @@ public class MemberController {
 	}
 	
 	@PostMapping(value="/login")
-	public Map<String, Object>login(@RequestBody memberDTO dto){
+	public Map<String, Object>login(@RequestBody MemberDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
 		boolean success = service.login(dto);
