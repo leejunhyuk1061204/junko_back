@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.category.CategoryDAO">
+	
+	<insert id="cateInsert" parameterType="kr.co.junko.dto.CategoryDTO">
+		INSERT INTO category 	
+		(category_name
+			<if test="category_parent != null"> <!-- 상위 카테고리 null 이어도 생성 가능 -->
+				, category_parent
+			</if>
+			)
+		VALUES
+		(#{category_name}
+			<if test="category_parent != null"> <!-- 상위 카테고리 null 아닐 때만 입력 -->
+				, #{category_parent}
+			</if>
+			)
+		</insert>
+	
+	<update id="cateUpdate" parameterType="kr.co.junko.dto.CategoryDTO">
+		UPDATE category SET category_name=#{category_name}, category_parent=#{category_parent} 
+			where category_idx = #{category_idx}
+	</update>
+	
+	<select id="cateList" resultType="kr.co.junko.dto.CategoryDTO">
+		SELECT * from category
+	</select>
+	
+	<delete id="cateDel" parameterType="kr.co.junko.dto.CategoryDTO">
+		DELETE FROM category WHERE category_idx = #{category_idx}
+	</delete>
+	
+	<select id="childCnt" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM category WHERE category_parent = #{category_idx}
+	</select>
+	
+</mapper>
