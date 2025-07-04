@@ -2,15 +2,15 @@ package kr.co.junko.member;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.co.junko.dto.memberDTO;
+import kr.co.junko.dto.MemberDTO;
 
 @Mapper
 public interface MemberDAO {
 
-	int join(memberDTO dto);
+	int join(MemberDTO dto);
 
 	int overlay(String id);
 
-	int login(memberDTO dto);
+	int login(MemberDTO dto);
 
 }

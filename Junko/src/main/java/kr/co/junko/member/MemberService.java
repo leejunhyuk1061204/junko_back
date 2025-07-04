@@ -2,7 +2,7 @@ package kr.co.junko.member;
 
 import org.springframework.stereotype.Service;
 
-import kr.co.junko.dto.memberDTO;
+import kr.co.junko.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +13,7 @@ public class MemberService {
 	
 	private final MemberDAO dao;
 
-	public boolean join(memberDTO dto) {
+	public boolean join(MemberDTO dto) {
 		int row = dao.join(dto);
 		return row>0;
 	}
@@ -23,7 +23,7 @@ public class MemberService {
 		return row == 0 ;
 	}
 
-	public boolean login(memberDTO dto) {
+	public boolean login(MemberDTO dto) {
 		int row = dao.login(dto);
 		return row > 0 ;
 	}

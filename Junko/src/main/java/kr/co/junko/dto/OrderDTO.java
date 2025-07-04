@@ -13,6 +13,6 @@ public class OrderDTO {
 	private LocalDate reg_date;
 	private int user_idx;
 	private String status;
-	private boolean delete;
+	private boolean del_yn;
 	
 }

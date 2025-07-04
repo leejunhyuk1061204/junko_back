@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.junko.member.MemberDAO">
 
-	<insert id="join" parameterType="kr.co.junko.dto.memberDTO">
+	<insert id="join" parameterType="kr.co.junko.dto.MemberDTO">
 		insert into user (user_id,pw,user_name,email,phone,address,hire_date,job_idx,dept_idx)
 		values (#{user_id},#{pw},#{user_name},#{email},#{phone},#{address},#{hire_date},#{job_idx},#{dept_idx})
 	</insert>
@@ -12,7 +12,7 @@
 		select count(user_idx) from user where user_id = #{param1}
 	</select>
 
-	<select id="login" parameterType="kr.co.junko.dto.memberDTO">
+	<select id="login" parameterType="kr.co.junko.dto.MemberDTO">
 		select count(user_idx) from user where user_id = #{user_id} and pw = #{pw}
 	</select>
 

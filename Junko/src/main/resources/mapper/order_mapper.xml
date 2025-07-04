@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.order.OrderDAO">
+
+	<insert id="orderInsert" parameterType="kr.co.junko.dto.OrderDTO">
+		insert into `order` (custom_idx,warehouse_idx,user_idx)
+		values (#{custom_idx},#{warehouse_idx},#{user_idx})
+	</insert>
+	
+	<insert id="orderProductInsert" parameterType="kr.co.junko.dto.OrderProductDTO">
+		insert into order_product(order_idx,product_idx,order_cnt)
+		values (#{order_idx},#{product_idx},#{order_cnt})
+	</insert>
+	
+	<insert id="orderPlanInsert" parameterType="kr.co.junko.dto.OrderPlanDTO">
+		insert into order_plan (order_product_idx,order_cnt,delivery_date)
+		values (#{order_product_idx},#{order_cnt},#{delivery_date})
+	</insert>
+
+	<update id="orderUpdate" parameterType="kr.co.junko.dto.OrderDTO">
+		update `order`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="custom_idx != null and custom_idx != 0">
+				custom_idx=#{custom_idx},
+			</if> 
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				warehouse_idx=#{warehouse_idx},			
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				user_idx=#{user_idx},
+			</if>
+			<if test ="status != null and status !=''">
+				status=#{status}
+			</if>
+		</trim> 
+		where order_idx=#{order_idx}
+	</update>
+	
+	<update id="orderProductUpdate" parameterType="kr.co.junko.dto.OrderProductDTO">
+		update order_product 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="product_idx != null and product_idx != 0">
+				product_idx=#{product_idx},
+			</if>
+			<if test="order_cnt != null and order_cnt != 0">
+				order_cnt=#{order_cnt}
+			</if>
+		</trim>
+		where order_product_idx = #{order_product_idx}
+	</update>
+	
+	<update id="orderPlanUpdate" parameterType="kr.co.junko.dto.OrderPlanDTO">
+		update order_plan
+		<trim prefix="set" suffixOverrides=",">
+		<if test="order_product_idx != null and order_product_idx != 0">
+			order_product_idx=#{order_product_idx},
+		</if>
+		<if test="order_cnt != null and order_cnt != 0">
+			order_cnt=#{order_cnt},
+		</if>
+		<if test="delivery_date != null">
+			delivery_date=#{delivery_date}
+		</if>
+		</trim>
+		where plan_idx = #{plan_idx}
+	</update>
+
+	<select id="orderTotalPage">
+		select ceil(count(order_idx)/#{cnt}) as total from `order`
+	</select>
+	
+	<select id="orderList" resultType="kr.co.junko.dto.OrderDTO" parameterType="map">
+		select * from `order`
+		<where>
+		del_yn = false
+			<if test="custom_idx != null and custom_idx != 0">
+				and custom_idx = #{custom_idx}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="status != null and status !=''">
+				and status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and reg_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and reg_date <![CDATA[<]]>= #{end_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	<!-- 
+	<	&lt;
+	>	&gt;
+	&	&amp;
+	"	&quot;
+	'	&apos;
+	or CDATA 사용
+	 -->
+	 
+	 
+	 <select id="orderProductTotalPage">
+		select ceil(count(order_product_idx)/#{cnt}) as total from order_product
+	</select>
+	
+	
+	<select id="orderProductList" parameterType="map" resultType="kr.co.junko.dto.OrderProductDTO">
+		select * from order_product
+		<where>
+				del_yn = false
+			<if test="order_idx != null and order_idx != 0">
+				and order_idx = #{order_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	
+	<select id="orderPlanListTotalPage">
+		select ceil(count(plan_idx)/#{cnt}) as total from order_plan
+	</select>
+	
+	
+	<select id="orderPlanList" parameterType="map" resultType="kr.co.junko.dto.OrderPlanDTO">
+		select * from order_plan
+		<where>
+				del_yn = false
+			<if test="order_product_idx != null and order_product_idx != 0">
+				and order_product_idx = #{order_product_idx}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and delivery_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and delivery_date <![CDATA[<]]>= #{end_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+
+	<select id="orderByIdx" resultType="kr.co.junko.dto.OrderDTO">
+		select * from `order` where order_idx = #{param1}
+	</select>
+	
+	<select id="orderProductByIdx" resultType="kr.co.junko.dto.OrderProductDTO">
+		select * from order_product where order_product_idx = #{param1}
+	</select>
+	
+	<select id="orderPlanByIdx" resultType="kr.co.junko.dto.OrderPlanDTO">
+		select * from order_plan where plan_idx = #{param1}
+	</select>
+	
+	<update id="orderDel">
+		update `order` set del_yn = true where order_idx = #{param1}
+	</update>
+	
+	<update id="orderProductDel">
+		update order_product set del_yn = true where order_product_idx = #{param1}
+	</update>
+	
+	<update id="orderPlanDel">
+		update order_plan set del_yn = true where plan_idx = #{param1}
+	</update>
+	
+
+
+</mapper>
