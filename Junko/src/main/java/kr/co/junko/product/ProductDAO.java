@@ -11,4 +11,9 @@ public interface ProductDAO {
 
 	int fileWrite(String ori_filename, String new_filename, int idx, String type);
 	
+	int productUpdate(ProductDTO dto);
+
+	int softDelProductImg(int product_idx);
+
+	int softDelProduct(int product_idx);
 }

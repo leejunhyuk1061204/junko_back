@@ -13,9 +13,48 @@
 	    )
 	</insert>
 
-	<insert id="fileWrite">
+	<insert id="fileWrite" parameterType="kr.co.junko.dto.FileDTO">
 	    INSERT INTO file (ori_filename, new_filename, idx, type)
 	    VALUES (#{ori_filename}, #{new_filename}, #{idx}, #{type})
 	</insert>
+
+	<update id="productUpdate" parameterType="kr.co.junko.dto.ProductDTO">
+		UPDATE product
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="product_name != null and product_name != ''">
+				product_name = #{product_name},
+			</if>
+			<if test="purchase_price != null and purchase_price != 0">
+				purchase_price = #{purchase_price},
+			</if>
+			<if test="selling_price != null and selling_price != 0">
+				selling_price = #{selling_price},
+			</if>
+			<if test="discount_rate != null">
+				discount_rate = #{discount_rate},
+			</if>
+			<if test="product_standard != null and product_standard != ''">
+				product_standard = #{product_standard},
+			</if>
+			<if test="category_idx != null and category_idx != 0">
+				category_idx = #{category_idx},
+			</if>
+		</trim>
+		WHERE product_idx = #{product_idx}
+	</update>
+
+	<update id="softDelProductImg" parameterType="int">
+		UPDATE file
+		SET del_yn = 1
+		WHERE idx = #{product_idx}
+		AND type = 'product'
+		AND del_yn = 0
+	</update>
+
+	<update id="softDelProduct" parameterType="int">
+		UPDATE product
+		SET del_yn = 1
+		WHERE product_idx = #{product_idx}
+	</update>
 
 </mapper>
