@@ -20,6 +20,7 @@
 	%C : 해당 클래스의 풀 경로
 	%M : 실행한 메서드명
 	 -->
+	 <property name="LOG_PATH" value="${LOG_PATH:-./logs}" />
 	<property name="LOG_PATTERN" value="%-5level %d{yy-MM-dd HH:mm:ss} [%thread]  [%logger{0}:%line] - %msg%n"/>
 
 	<!-- Appenders :  CONSOLE -->
@@ -33,7 +34,7 @@
 	<!-- Appenders :  FILE -->
 	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">    
        <!-- 저장 위치 -->
-       <file>/usr/local/tomcat/logs/fittime.log</file>
+       <file>${LOG_PATH}/fittime.log</file>
        <!-- 출력 패턴 -->
        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
          <pattern>${LOG_PATTERN}</pattern>       
@@ -41,7 +42,7 @@
       <!-- Rolling 정책 --> 
       <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
          <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 --> 
-         <fileNamePattern>/usr/local/tomcat/logs/fittime.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+         <fileNamePattern>${LOG_PATH}/fittime.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
          <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
             <!-- 파일당 최고 용량 kb, mb, gb -->
             <maxFileSize>10MB</maxFileSize>
