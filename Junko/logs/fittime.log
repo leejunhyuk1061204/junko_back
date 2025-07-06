@@ -1,3 +1,1100 @@
+<<<<<<< HEAD
+INFO  25-07-06 19:30:04 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 16184 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 19:30:04 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 19:30:06 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 19:30:06 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 19:30:06 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 19:30:06 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 19:30:06 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 19:30:06 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2170 ms
+INFO  25-07-06 19:30:08 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 19:30:08 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 19:30:08 [main]  [JunkoApplication:61] - Started JunkoApplication in 4.784 seconds (JVM running for 5.987)
+INFO  25-07-06 19:32:27 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 19:32:27 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 19:32:27 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 13 ms
+ERROR 25-07-06 19:32:27 [http-nio-8080-exec-1]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kr.co.junko.product.ProductDAO.productList] with root cause
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kr.co.junko.product.ProductDAO.productList
+	at org.apache.ibatis.binding.MapperMethod$SqlCommand.<init>(MapperMethod.java:229)
+	at org.apache.ibatis.binding.MapperMethod.<init>(MapperMethod.java:53)
+	at org.apache.ibatis.binding.MapperProxy.lambda$cachedInvoker$0(MapperProxy.java:96)
+	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1705)
+	at org.apache.ibatis.util.MapUtil.computeIfAbsent(MapUtil.java:36)
+	at org.apache.ibatis.binding.MapperProxy.cachedInvoker(MapperProxy.java:94)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy72.productList(Unknown Source)
+	at kr.co.junko.product.ProductService.productList(ProductService.java:182)
+	at kr.co.junko.product.ProductService$$FastClassBySpringCGLIB$$3cd1e027.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at kr.co.junko.product.ProductService$$EnhancerBySpringCGLIB$$d8b94110.productList(<generated>)
+	at kr.co.junko.product.ProductController.productList(ProductController.java:126)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 19:34:33 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 13308 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 19:34:33 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 19:34:35 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 19:34:35 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 19:34:35 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 19:34:35 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 19:34:36 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 19:34:36 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2186 ms
+INFO  25-07-06 19:34:37 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 19:34:38 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 19:34:38 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.062 seconds (JVM running for 6.112)
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '치마', '%') OR product_idx 
+LIKE CONCAT('%', '치마', '%')) AND category_idx = 3 ORDER BY selling_price ASC LIMIT 0, 10 
+ {executed in 9 msec}
+INFO  25-07-06 19:34:41 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT COUNT(*) FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '치마', '%') 
+OR product_idx LIKE CONCAT('%', '치마', '%')) AND category_idx = 3 
+ {executed in 12 msec}
+INFO  25-07-06 19:34:56 [http-nio-8080-exec-2]  [sqltiming:373] - SELECT * FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '규격', '%') OR product_idx 
+LIKE CONCAT('%', '규격', '%')) AND category_idx = 1 ORDER BY selling_price ASC LIMIT 0, 10 
+ {executed in 10 msec}
+INFO  25-07-06 19:34:56 [http-nio-8080-exec-2]  [sqltiming:373] - SELECT COUNT(*) FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '규격', '%') 
+OR product_idx LIKE CONCAT('%', '규격', '%')) AND category_idx = 1 
+ {executed in 13 msec}
+INFO  25-07-06 19:35:15 [http-nio-8080-exec-3]  [sqltiming:373] - SELECT * FROM product WHERE del_yn = '0' AND category_idx = 1 ORDER BY selling_price ASC LIMIT 
+0, 10 
+ {executed in 9 msec}
+INFO  25-07-06 19:35:15 [http-nio-8080-exec-3]  [sqltiming:373] - SELECT COUNT(*) FROM product WHERE del_yn = '0' AND category_idx = 1 
+ {executed in 9 msec}
+INFO  25-07-06 20:13:27 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 1892 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:13:27 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:13:29 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:13:29 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:13:29 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:13:29 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:13:30 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:13:30 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2195 ms
+INFO  25-07-06 20:13:32 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:13:32 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:13:32 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.285 seconds (JVM running for 6.38)
+INFO  25-07-06 20:15:31 [http-nio-8080-exec-2]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:15:31 [http-nio-8080-exec-2]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:15:31 [http-nio-8080-exec-2]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 20:15:32 [http-nio-8080-exec-2]  [OptionController:27] - dto : OptionDTO(option_idx=1, option_name=색상, option_value=블랙, del_yn=false)
+ERROR 25-07-06 20:15:32 [http-nio-8080-exec-2]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kr.co.junko.option.OptionDAO.optionInsert] with root cause
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kr.co.junko.option.OptionDAO.optionInsert
+	at org.apache.ibatis.binding.MapperMethod$SqlCommand.<init>(MapperMethod.java:229)
+	at org.apache.ibatis.binding.MapperMethod.<init>(MapperMethod.java:53)
+	at org.apache.ibatis.binding.MapperProxy.lambda$cachedInvoker$0(MapperProxy.java:96)
+	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1705)
+	at org.apache.ibatis.util.MapUtil.computeIfAbsent(MapUtil.java:36)
+	at org.apache.ibatis.binding.MapperProxy.cachedInvoker(MapperProxy.java:94)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy69.optionInsert(Unknown Source)
+	at kr.co.junko.option.OptionService.optionInsert(OptionService.java:18)
+	at kr.co.junko.option.OptionController.optionInsert(OptionController.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 20:16:22 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 11536 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:16:22 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:16:24 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:16:24 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:16:24 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:16:24 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:16:24 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:16:24 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2307 ms
+INFO  25-07-06 20:16:26 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:16:27 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:16:27 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.238 seconds (JVM running for 6.446)
+INFO  25-07-06 20:16:30 [http-nio-8080-exec-3]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:16:30 [http-nio-8080-exec-3]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:16:30 [http-nio-8080-exec-3]  [DispatcherServlet:547] - Completed initialization in 2 ms
+INFO  25-07-06 20:16:31 [http-nio-8080-exec-3]  [OptionController:27] - dto : OptionDTO(option_idx=1, option_name=색상, option_value=블랙, del_yn=false)
+INFO  25-07-06 20:16:31 [http-nio-8080-exec-3]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:16:31 [http-nio-8080-exec-3]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:16:31 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO option (option_idx, option_name, option_value) VALUES (1, '색상', '블랙') 
+ {executed in 2 msec}
+INFO  25-07-06 20:19:29 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 18876 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:19:29 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:19:31 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:19:31 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:19:31 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:19:31 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:19:32 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:19:32 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2242 ms
+INFO  25-07-06 20:19:34 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:19:34 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:19:34 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.484 seconds (JVM running for 6.744)
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [OptionController:39] - dto : OptionDTO(option_idx=1, option_name=사이즈, option_value=L, del_yn=false)
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:20:18 [http-nio-8080-exec-1]  [sqltiming:373] - UPDATE option SET option_name = '사이즈', option_value = 'L', del_yn = 0 WHERE option_idx = 1 
+ {executed in 18 msec}
+INFO  25-07-06 20:20:30 [http-nio-8080-exec-2]  [OptionController:39] - dto : OptionDTO(option_idx=1, option_name=null, option_value=M, del_yn=false)
+INFO  25-07-06 20:20:31 [http-nio-8080-exec-2]  [sqltiming:373] - UPDATE option SET option_value = 'M', del_yn = 0 WHERE option_idx = 1 
+ {executed in 9 msec}
+INFO  25-07-06 20:22:52 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 2120 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:22:52 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:22:55 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:22:55 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:22:55 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:22:55 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:22:55 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:22:55 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2251 ms
+INFO  25-07-06 20:22:57 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:22:57 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:22:57 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.41 seconds (JVM running for 6.537)
+INFO  25-07-06 20:23:09 [http-nio-8080-exec-2]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:23:09 [http-nio-8080-exec-2]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:23:09 [http-nio-8080-exec-2]  [DispatcherServlet:547] - Completed initialization in 2 ms
+INFO  25-07-06 20:23:09 [http-nio-8080-exec-2]  [OptionController:40] - dto : OptionDTO(option_idx=1, option_name=사이즈, option_value=L, del_yn=false)
+INFO  25-07-06 20:23:10 [http-nio-8080-exec-2]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:23:10 [http-nio-8080-exec-2]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:23:10 [http-nio-8080-exec-2]  [sqltiming:373] - UPDATE option SET option_name = '사이즈', option_value = 'L', del_yn = 0 WHERE option_idx = 1 
+ {executed in 5 msec}
+INFO  25-07-06 20:23:30 [http-nio-8080-exec-1]  [OptionController:51] - dto : OptionDTO(option_idx=1, option_name=null, option_value=null, del_yn=false)
+INFO  25-07-06 20:23:31 [http-nio-8080-exec-1]  [sqltiming:373] - UPDATE option SET del_yn = 1 WHERE option_idx = 1 
+ {executed in 62 msec}
+INFO  25-07-06 20:37:20 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 17224 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:37:20 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:37:22 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:37:22 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:37:22 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:37:22 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:37:23 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:37:23 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2247 ms
+INFO  25-07-06 20:37:25 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:37:25 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:37:25 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.431 seconds (JVM running for 6.662)
+INFO  25-07-06 20:37:25 [http-nio-8080-exec-2]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:37:25 [http-nio-8080-exec-2]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:37:25 [http-nio-8080-exec-2]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 20:37:25 [http-nio-8080-exec-2]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:37:25 [http-nio-8080-exec-2]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:37:25 [http-nio-8080-exec-2]  [sqltiming:373] - INSERT INTO using_option (product_idx, option_idx) VALUES (2, 1) 
+ {executed in 0 msec}
+INFO  25-07-06 20:46:39 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 8876 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:46:39 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:46:41 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:46:41 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:46:41 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:46:41 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:46:41 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:46:41 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2281 ms
+INFO  25-07-06 20:46:43 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:46:43 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:46:43 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.142 seconds (JVM running for 6.502)
+INFO  25-07-06 20:47:01 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:47:01 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:47:01 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 3 ms
+INFO  25-07-06 20:47:01 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:47:01 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:47:01 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM option WHERE option_idx = 1 
+ {executed in 11 msec}
+INFO  25-07-06 20:47:20 [http-nio-8080-exec-2]  [sqltiming:373] - SELECT * FROM option WHERE option_idx = 1 
+ {executed in 15 msec}
+INFO  25-07-06 20:47:27 [http-nio-8080-exec-3]  [sqltiming:373] - SELECT * FROM option WHERE option_idx = 1 
+ {executed in 8 msec}
+INFO  25-07-06 20:47:27 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO using_option (product_idx, option_idx) VALUES (4, 1) 
+ {executed in 10 msec}
+INFO  25-07-06 20:53:06 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 2476 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:53:06 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:53:08 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:53:08 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:53:08 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:53:08 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:53:08 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:53:08 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2279 ms
+INFO  25-07-06 20:53:10 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:53:10 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:53:11 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.442 seconds (JVM running for 6.679)
+INFO  25-07-06 20:53:52 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:53:52 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:53:52 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 3 ms
+INFO  25-07-06 20:53:52 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:53:52 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:53:52 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT u.using_idx , u.product_idx , u.option_idx , o.option_name , o.option_value FROM using_option 
+u JOIN option o ON u.option_idx = o.option_idx WHERE u.product_idx = 2 AND u.del_yn = 0 AND 
+o.del_yn = 0 
+ {executed in 7 msec}
+INFO  25-07-06 20:54:30 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 2960 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 20:54:30 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:54:33 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:54:33 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:54:33 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:54:33 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:54:33 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:54:33 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2176 ms
+INFO  25-07-06 20:54:35 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:54:35 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:54:35 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.136 seconds (JVM running for 6.318)
+INFO  25-07-06 20:54:36 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:54:36 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:54:36 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-06 20:54:36 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:54:36 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:54:36 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT u.using_idx , u.product_idx , u.option_idx , o.option_name , o.option_value FROM using_option 
+u JOIN option o ON u.option_idx = o.option_idx WHERE u.product_idx = 2 AND u.del_yn = 0 AND 
+o.del_yn = 0 
+ {executed in 15 msec}
+INFO  25-07-06 21:35:20 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 13464 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 21:35:20 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 21:35:22 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 21:35:22 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:35:22 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 21:35:22 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 21:35:22 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 21:35:22 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2003 ms
+INFO  25-07-06 21:35:24 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:35:24 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 21:35:24 [main]  [JunkoApplication:61] - Started JunkoApplication in 4.723 seconds (JVM running for 6.09)
+INFO  25-07-06 21:35:49 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 21:35:49 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 21:35:49 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 21:35:49 [http-nio-8080-exec-1]  [OptionController:35] - dto : OptionDTO(option_idx=1, option_name=색상, option_value=블랙, del_yn=0)
+INFO  25-07-06 21:35:49 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 21:35:49 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+WARN  25-07-06 21:35:49 [http-nio-8080-exec-1]  [ErrorPacket:100] - Error: 1062-23000: Duplicate entry '1' for key 'PRIMARY'
+ERROR 25-07-06 21:35:49 [http-nio-8080-exec-1]  [sqltiming:154] - 1. PreparedStatement.execute() FAILED! INSERT INTO option (option_idx, option_name, option_value) VALUES (1, '색상', '블랙') 
+ {FAILED after 16 msec}
+java.sql.SQLIntegrityConstraintViolationException: (conn=171) Duplicate entry '1' for key 'PRIMARY'
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:290)
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:370)
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:134)
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:872)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:811)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:730)
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:654)
+	at org.mariadb.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:95)
+	at org.mariadb.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:268)
+	at net.sf.log4jdbc.sql.jdbcapi.PreparedStatementSpy.execute(PreparedStatementSpy.java:443)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:48)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:75)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:50)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425)
+	at com.sun.proxy.$Proxy62.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:62)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy69.optionInsert(Unknown Source)
+	at kr.co.junko.option.OptionService.optionInsert(OptionService.java:24)
+	at kr.co.junko.option.OptionController.optionInsert(OptionController.java:38)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+ERROR 25-07-06 21:35:49 [http-nio-8080-exec-1]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DuplicateKeyException: 
+### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: (conn=171) Duplicate entry '1' for key 'PRIMARY'
+### The error may exist in file [C:\JUNKO\junko_back\Junko\target\classes\mapper\option_mapper.xml]
+### The error may involve kr.co.junko.option.OptionDAO.optionInsert-Inline
+### The error occurred while setting parameters
+### SQL: INSERT INTO option (option_idx, option_name, option_value)             VALUES (?, ?, ?)
+### Cause: java.sql.SQLIntegrityConstraintViolationException: (conn=171) Duplicate entry '1' for key 'PRIMARY'
+; (conn=171) Duplicate entry '1' for key 'PRIMARY'; nested exception is java.sql.SQLIntegrityConstraintViolationException: (conn=171) Duplicate entry '1' for key 'PRIMARY'] with root cause
+java.sql.SQLIntegrityConstraintViolationException: (conn=171) Duplicate entry '1' for key 'PRIMARY'
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:290)
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:370)
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:134)
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:872)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:811)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:730)
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:654)
+	at org.mariadb.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:95)
+	at org.mariadb.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:268)
+	at net.sf.log4jdbc.sql.jdbcapi.PreparedStatementSpy.execute(PreparedStatementSpy.java:443)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:48)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:75)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:50)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425)
+	at com.sun.proxy.$Proxy62.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:62)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy69.optionInsert(Unknown Source)
+	at kr.co.junko.option.OptionService.optionInsert(OptionService.java:24)
+	at kr.co.junko.option.OptionController.optionInsert(OptionController.java:38)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 21:36:18 [http-nio-8080-exec-2]  [OptionController:35] - dto : OptionDTO(option_idx=2, option_name=색상, option_value=블랙, del_yn=0)
+INFO  25-07-06 21:36:18 [http-nio-8080-exec-2]  [sqltiming:373] - INSERT INTO option (option_idx, option_name, option_value) VALUES (2, '색상', '블랙') 
+ {executed in 12 msec}
+INFO  25-07-06 21:36:50 [http-nio-8080-exec-3]  [OptionController:35] - dto : OptionDTO(option_idx=3, option_name=색상, option_value=아이보리, del_yn=0)
+INFO  25-07-06 21:36:50 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO option (option_idx, option_name, option_value) VALUES (3, '색상', '아이보리') 
+ {executed in 13 msec}
+INFO  25-07-06 21:37:07 [http-nio-8080-exec-4]  [sqltiming:373] - SELECT * FROM option WHERE option_idx = 2 
+ {executed in 7 msec}
+INFO  25-07-06 21:37:07 [http-nio-8080-exec-4]  [sqltiming:373] - INSERT INTO using_option (product_idx, option_idx) VALUES (2, 2) 
+ {executed in 9 msec}
+INFO  25-07-06 21:37:10 [http-nio-8080-exec-5]  [sqltiming:373] - SELECT * FROM option WHERE option_idx = 3 
+ {executed in 0 msec}
+INFO  25-07-06 21:37:10 [http-nio-8080-exec-5]  [sqltiming:373] - INSERT INTO using_option (product_idx, option_idx) VALUES (2, 3) 
+ {executed in 7 msec}
+INFO  25-07-06 21:38:05 [http-nio-8080-exec-9]  [sqltiming:373] - SELECT o.* FROM using_option u JOIN option o ON u.option_idx = o.option_idx WHERE u.product_idx 
+= 2 AND u.del_yn = 0 AND o.del_yn = 0 
+ {executed in 23 msec}
+INFO  25-07-06 21:38:05 [http-nio-8080-exec-9]  [sqltiming:373] - SELECT c.combined_name FROM product_option po JOIN combined c ON po.combined_idx = c.combined_idx 
+WHERE po.product_idx = 2 AND po.del_yn = 0 AND c.del_yn = 0 
+ {executed in 3 msec}
+WARN  25-07-06 21:38:05 [http-nio-8080-exec-9]  [ErrorPacket:100] - Error: 1364-HY000: Field 'combined_idx' doesn't have a default value
+ERROR 25-07-06 21:38:05 [http-nio-8080-exec-9]  [sqltiming:154] - 1. PreparedStatement.execute() FAILED! INSERT INTO combined (combined_name, del_yn) VALUES ('L / 블랙 / 아이보리', 0) 
+ {FAILED after 8 msec}
+java.sql.SQLException: (conn=171) Field 'combined_idx' doesn't have a default value
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:299)
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:370)
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:134)
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:872)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:811)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:730)
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:654)
+	at org.mariadb.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:95)
+	at org.mariadb.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:268)
+	at net.sf.log4jdbc.sql.jdbcapi.PreparedStatementSpy.execute(PreparedStatementSpy.java:443)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:48)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:75)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:50)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425)
+	at com.sun.proxy.$Proxy62.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:62)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy69.insertCombined(Unknown Source)
+	at kr.co.junko.option.OptionService.autoCombined(OptionService.java:106)
+	at kr.co.junko.option.OptionController.autoCombined(OptionController.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+ERROR 25-07-06 21:38:05 [http-nio-8080-exec-9]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DataIntegrityViolationException: 
+### Error updating database.  Cause: java.sql.SQLException: (conn=171) Field 'combined_idx' doesn't have a default value
+### The error may exist in file [C:\JUNKO\junko_back\Junko\target\classes\mapper\option_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: INSERT INTO combined (combined_name, del_yn)         VALUES (?, 0)
+### Cause: java.sql.SQLException: (conn=171) Field 'combined_idx' doesn't have a default value
+; (conn=171) Field 'combined_idx' doesn't have a default value; nested exception is java.sql.SQLException: (conn=171) Field 'combined_idx' doesn't have a default value] with root cause
+java.sql.SQLException: (conn=171) Field 'combined_idx' doesn't have a default value
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:299)
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:370)
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:134)
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:872)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:811)
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:730)
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:654)
+	at org.mariadb.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:95)
+	at org.mariadb.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:268)
+	at net.sf.log4jdbc.sql.jdbcapi.PreparedStatementSpy.execute(PreparedStatementSpy.java:443)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:48)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:75)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:50)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425)
+	at com.sun.proxy.$Proxy62.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:62)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy69.insertCombined(Unknown Source)
+	at kr.co.junko.option.OptionService.autoCombined(OptionService.java:106)
+	at kr.co.junko.option.OptionController.autoCombined(OptionController.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 21:43:12 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT o.* FROM using_option u JOIN option o ON u.option_idx = o.option_idx WHERE u.product_idx 
+= 2 AND u.del_yn = 0 AND o.del_yn = 0 
+ {executed in 13 msec}
+INFO  25-07-06 21:43:12 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT c.combined_name FROM product_option po JOIN combined c ON po.combined_idx = c.combined_idx 
+WHERE po.product_idx = 2 AND po.del_yn = 0 AND c.del_yn = 0 
+ {executed in 5 msec}
+INFO  25-07-06 21:43:12 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('L / 블랙 / 아이보리', 0) 
+ {executed in 14 msec}
+INFO  25-07-06 21:43:12 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('L / 블랙 / 아이보리', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:43:12 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 1, 1, 0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - SELECT o.* FROM using_option u JOIN option o ON u.option_idx = o.option_idx WHERE u.product_idx 
+= 2 AND u.del_yn = 0 AND o.del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - SELECT c.combined_name FROM product_option po JOIN combined c ON po.combined_idx = c.combined_idx 
+WHERE po.product_idx = 2 AND po.del_yn = 0 AND c.del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('S / 블랙', 0) 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('S / 블랙', 0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 2, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('S / 아이보리', 0) 
+ {executed in 8 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('S / 아이보리', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 3, 1, 0) 
+ {executed in 8 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('S / 화이트', 0) 
+ {executed in 12 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('S / 화이트', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 4, 1, 0) 
+ {executed in 14 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('S / 네이비', 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('S / 네이비', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 5, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('M / 블랙', 0) 
+ {executed in 9 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('M / 블랙', 0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 6, 1, 0) 
+ {executed in 11 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('M / 아이보리', 0) 
+ {executed in 8 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('M / 아이보리', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 7, 1, 0) 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('M / 화이트', 0) 
+ {executed in 20 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('M / 화이트', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 8, 1, 0) 
+ {executed in 17 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('M / 네이비', 0) 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('M / 네이비', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 9, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('L / 블랙', 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('L / 블랙', 0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 10, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('L / 아이보리', 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('L / 아이보리', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 11, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('L / 화이트', 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('L / 화이트', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 12, 1, 0) 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('L / 네이비', 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('L / 네이비', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 13, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 블랙', 0) 
+ {executed in 13 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 블랙', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 14, 1, 0) 
+ {executed in 9 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 아이보리', 0) 
+ {executed in 8 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 아이보리', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 15, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 화이트', 0) 
+ {executed in 6 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 화이트', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 16, 1, 0) 
+ {executed in 7 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 네이비', 0) 
+ {executed in 9 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO combined (combined_name, del_yn) VALUES ('XL / 네이비', 
+0) 
+ {executed in 0 msec}
+INFO  25-07-06 21:47:35 [http-nio-8080-exec-3]  [sqltiming:373] - INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn) VALUES (2, 17, 1, 0) 
+ {executed in 6 msec}
+INFO  25-07-06 22:03:18 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 6984 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 22:03:18 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 22:03:20 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 22:03:20 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:03:20 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 22:03:20 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 22:03:20 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 22:03:20 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2197 ms
+INFO  25-07-06 22:03:22 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:03:22 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 22:03:22 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.196 seconds (JVM running for 6.423)
+INFO  25-07-06 22:03:48 [http-nio-8080-exec-2]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 22:03:48 [http-nio-8080-exec-2]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 22:03:48 [http-nio-8080-exec-2]  [DispatcherServlet:547] - Completed initialization in 12 ms
+WARN  25-07-06 22:03:48 [http-nio-8080-exec-2]  [DefaultHandlerExceptionResolver:208] - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported]
+ERROR 25-07-06 22:04:10 [http-nio-8080-exec-1]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kr.co.junko.option.OptionDAO.combinedOptionsDel] with root cause
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kr.co.junko.option.OptionDAO.combinedOptionsDel
+	at org.apache.ibatis.binding.MapperMethod$SqlCommand.<init>(MapperMethod.java:229)
+	at org.apache.ibatis.binding.MapperMethod.<init>(MapperMethod.java:53)
+	at org.apache.ibatis.binding.MapperProxy.lambda$cachedInvoker$0(MapperProxy.java:96)
+	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1705)
+	at org.apache.ibatis.util.MapUtil.computeIfAbsent(MapUtil.java:36)
+	at org.apache.ibatis.binding.MapperProxy.cachedInvoker(MapperProxy.java:94)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy69.combinedOptionsDel(Unknown Source)
+	at kr.co.junko.option.OptionService.combinedOptionsDel(OptionService.java:150)
+	at kr.co.junko.option.OptionController.combinedOptionsDel(OptionController.java:127)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:920)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:558)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 22:05:02 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 17624 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 22:05:02 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 22:05:04 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 22:05:04 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:05:04 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 22:05:04 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 22:05:04 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 22:05:04 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2048 ms
+INFO  25-07-06 22:05:06 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:05:06 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 22:05:06 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.014 seconds (JVM running for 6.368)
+INFO  25-07-06 22:05:08 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 22:05:08 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 22:05:08 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 22:05:08 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 22:05:09 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 22:05:09 [http-nio-8080-exec-1]  [sqltiming:373] - UPDATE product_option SET del_yn = 1 WHERE combined_idx = 2 
+ {executed in 16 msec}
+INFO  25-07-06 22:05:09 [http-nio-8080-exec-1]  [sqltiming:373] - UPDATE combined SET del_yn = 1 WHERE combined_idx = 2 
+ {executed in 0 msec}
+INFO  25-07-06 22:05:58 [http-nio-8080-exec-2]  [sqltiming:373] - UPDATE product_option SET del_yn = 1 WHERE product_option_idx = 3 
+ {executed in 17 msec}
+INFO  25-07-06 22:14:05 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 4416 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 22:14:05 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 22:14:07 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 22:14:07 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:14:07 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 22:14:07 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 22:14:07 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 22:14:07 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2123 ms
+INFO  25-07-06 22:14:09 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:14:09 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 22:14:09 [main]  [JunkoApplication:61] - Started JunkoApplication in 5.138 seconds (JVM running for 6.459)
+INFO  25-07-06 22:15:24 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 22:15:24 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 22:15:24 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 22:15:24 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 22:15:24 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 22:15:24 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM combined WHERE del_yn = 0 
+ {executed in 13 msec}
+INFO  25-07-06 22:15:44 [http-nio-8080-exec-2]  [sqltiming:373] - SELECT c.* FROM product_option po JOIN combined c ON po.combined_idx = c.combined_idx WHERE 
+po.product_idx = 2 AND po.del_yn = 0 AND c.del_yn = 0 
+ {executed in 16 msec}
+INFO  25-07-06 22:29:10 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-9TF9FJ1 with PID 10536 (C:\JUNKO\junko_back\Junko\target\classes started by User in C:\JUNKO\junko_back\Junko)
+INFO  25-07-06 22:29:10 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 22:29:12 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 22:29:12 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:29:12 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 22:29:12 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 22:29:13 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 22:29:13 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 2160 ms
+INFO  25-07-06 22:29:14 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 22:29:14 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 22:29:14 [main]  [JunkoApplication:61] - Started JunkoApplication in 4.969 seconds (JVM running for 6.195)
+INFO  25-07-06 22:29:23 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 22:29:23 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 22:29:23 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-06 22:29:23 [http-nio-8080-exec-1]  [ProductController:37] - dto : ProductDTO(product_idx=0, product_name=청치마, purchase_price=25000, selling_price=39000, discount_rate=10, product_standard=규격, category_idx=3, del_yn=false, images=[org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@1fdc7b7e])
+INFO  25-07-06 22:29:28 [http-nio-8080-exec-2]  [ProductController:37] - dto : ProductDTO(product_idx=0, product_name=청치마, purchase_price=25000, selling_price=39000, discount_rate=10, product_standard=규격, category_idx=3, del_yn=false, images=[org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@56489486])
+INFO  25-07-06 22:29:46 [http-nio-8080-exec-3]  [MemberController:45] - dto : MemberDTO(user_idx=0, user_id=user1, pw=pass, user_name=null, email=null, phone=null, address=null, hire_date=null, status=null, anuual_cnt=0, job_idx=0, dept_idx=0)
+INFO  25-07-06 22:29:46 [http-nio-8080-exec-3]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 22:29:46 [http-nio-8080-exec-3]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 22:29:46 [http-nio-8080-exec-3]  [sqltiming:373] - select count(user_idx) from user where user_id = 'user1' and pw = 'pass' 
+ {executed in 7 msec}
+INFO  25-07-06 22:30:07 [http-nio-8080-exec-4]  [ProductController:37] - dto : ProductDTO(product_idx=0, product_name=청치마, purchase_price=25000, selling_price=39000, discount_rate=10, product_standard=규격, category_idx=3, del_yn=false, images=[org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@7a0f8269])
+INFO  25-07-06 22:30:07 [http-nio-8080-exec-4]  [sqltiming:373] - INSERT INTO product ( product_name, purchase_price, selling_price, discount_rate, product_standard, 
+category_idx ) VALUES ( '청치마', 25000, 39000, 10, '규격', 3 ) 
+ {executed in 13 msec}
+INFO  25-07-06 22:30:07 [http-nio-8080-exec-4]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO product ( product_name, purchase_price, selling_price, 
+discount_rate, product_standard, category_idx ) VALUES ( '청치마', 25000, 39000, 10, '규격', 3 ) 
+ {executed in 0 msec}
+INFO  25-07-06 22:30:07 [http-nio-8080-exec-4]  [sqltiming:373] - INSERT INTO file (ori_filename, new_filename, idx, type) VALUES ('강아지.png', 'efb186a6-f36d-4ee1-a778-db5fa4f12c58.png', 
+14, 'product') 
+ {executed in 8 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [ProductController:72] - CSV file : org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@20126f
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - INSERT INTO product ( product_name, purchase_price, selling_price, discount_rate, product_standard, 
+category_idx ) VALUES ( '오버핏 반팔 티셔츠', 8000, 15000, 10, 'L / XL / 2XL', 1 ) 
+ {executed in 8 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO product ( product_name, purchase_price, selling_price, 
+discount_rate, product_standard, category_idx ) VALUES ( '오버핏 반팔 티셔츠', 8000, 15000, 10, 'L 
+/ XL / 2XL', 1 ) 
+ {executed in 0 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - INSERT INTO product ( product_name, purchase_price, selling_price, discount_rate, product_standard, 
+category_idx ) VALUES ( '슬림핏 청바지', 12000, 25000, 5, '28 / 30 / 32 / 34', 3 ) 
+ {executed in 7 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO product ( product_name, purchase_price, selling_price, 
+discount_rate, product_standard, category_idx ) VALUES ( '슬림핏 청바지', 12000, 25000, 5, '28 / 
+30 / 32 / 34', 3 ) 
+ {executed in 0 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - INSERT INTO product ( product_name, purchase_price, selling_price, discount_rate, product_standard, 
+category_idx ) VALUES ( '롱패딩 점퍼', 30000, 59000, 15, '95 / 100 / 105', 2 ) 
+ {executed in 9 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO product ( product_name, purchase_price, selling_price, 
+discount_rate, product_standard, category_idx ) VALUES ( '롱패딩 점퍼', 30000, 59000, 15, '95 / 
+100 / 105', 2 ) 
+ {executed in 0 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - INSERT INTO product ( product_name, purchase_price, selling_price, discount_rate, product_standard, 
+category_idx ) VALUES ( '코튼 셔츠', 10000, 19000, 0, 'M / L / XL', 1 ) 
+ {executed in 6 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO product ( product_name, purchase_price, selling_price, 
+discount_rate, product_standard, category_idx ) VALUES ( '코튼 셔츠', 10000, 19000, 0, 'M / L / 
+XL', 1 ) 
+ {executed in 0 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - INSERT INTO product ( product_name, purchase_price, selling_price, discount_rate, product_standard, 
+category_idx ) VALUES ( '크롭 자켓', 18000, 32000, 20, 'S / M', 3 ) 
+ {executed in 8 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO product ( product_name, purchase_price, selling_price, 
+discount_rate, product_standard, category_idx ) VALUES ( '크롭 자켓', 18000, 32000, 20, 'S / M', 
+3 ) 
+ {executed in 0 msec}
+INFO  25-07-06 22:33:01 [http-nio-8080-exec-9]  [ProductService:127] - CSV 상품 등록 성공 수 : 5
+INFO  25-07-06 22:33:16 [http-nio-8080-exec-10]  [ProductController:125] - dto: ProductDTO(product_idx=5, product_name=가디건, purchase_price=0, selling_price=42000, discount_rate=0, product_standard=null, category_idx=0, del_yn=false, images=null)
+INFO  25-07-06 22:33:16 [http-nio-8080-exec-10]  [sqltiming:373] - UPDATE product SET product_name = '가디건', selling_price = 42000, discount_rate = 0 WHERE product_idx 
+= 5 
+ {executed in 16 msec}
+INFO  25-07-06 22:33:23 [http-nio-8080-exec-1]  [ProductController:152] - 이미지 수정 요청: product_idx=6, files=1
+INFO  25-07-06 22:33:23 [http-nio-8080-exec-1]  [sqltiming:373] - UPDATE file SET del_yn = 1 WHERE idx = 6 AND type = 'product' AND del_yn = 0 
+ {executed in 10 msec}
+INFO  25-07-06 22:33:23 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO file (ori_filename, new_filename, idx, type) VALUES ('강아지.png', 'ce345475-c00d-4de4-8078-3a8bc340499d.png', 
+6, 'product') 
+ {executed in 7 msec}
+INFO  25-07-06 22:33:29 [http-nio-8080-exec-2]  [sqltiming:373] - UPDATE file SET del_yn = 1 WHERE idx = 6 AND type = 'product' AND del_yn = 0 
+ {executed in 14 msec}
+INFO  25-07-06 22:34:10 [http-nio-8080-exec-6]  [sqltiming:373] - UPDATE product SET del_yn = 1 WHERE product_idx = 4 
+ {executed in 4 msec}
+INFO  25-07-06 22:34:21 [http-nio-8080-exec-8]  [sqltiming:373] - SELECT * FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '규격', '%') OR product_idx 
+LIKE CONCAT('%', '규격', '%')) AND category_idx = 1 ORDER BY selling_price ASC LIMIT 0, 10 
+ {executed in 11 msec}
+INFO  25-07-06 22:34:21 [http-nio-8080-exec-8]  [sqltiming:373] - SELECT COUNT(*) FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '규격', '%') 
+OR product_idx LIKE CONCAT('%', '규격', '%')) AND category_idx = 1 
+ {executed in 5 msec}
+INFO  25-07-06 22:34:28 [http-nio-8080-exec-10]  [sqltiming:373] - SELECT * FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '치마', '%') OR product_idx 
+LIKE CONCAT('%', '치마', '%')) AND category_idx = 1 ORDER BY selling_price ASC LIMIT 0, 10 
+ {executed in 11 msec}
+INFO  25-07-06 22:34:28 [http-nio-8080-exec-10]  [sqltiming:373] - SELECT COUNT(*) FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '치마', '%') 
+OR product_idx LIKE CONCAT('%', '치마', '%')) AND category_idx = 1 
+ {executed in 13 msec}
+INFO  25-07-06 22:34:34 [http-nio-8080-exec-2]  [sqltiming:373] - SELECT * FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '치마', '%') OR product_idx 
+LIKE CONCAT('%', '치마', '%')) AND category_idx = 3 ORDER BY selling_price ASC LIMIT 0, 10 
+ {executed in 9 msec}
+INFO  25-07-06 22:34:34 [http-nio-8080-exec-2]  [sqltiming:373] - SELECT COUNT(*) FROM product WHERE del_yn = '0' AND (product_name LIKE CONCAT('%', '치마', '%') 
+OR product_idx LIKE CONCAT('%', '치마', '%')) AND category_idx = 3 
+ {executed in 10 msec}
+INFO  25-07-06 22:34:53 [http-nio-8080-exec-5]  [OptionController:40] - dto : OptionDTO(option_idx=3, option_name=색상, option_value=아이보리, del_yn=0)
+INFO  25-07-06 22:34:53 [http-nio-8080-exec-5]  [sqltiming:373] - INSERT INTO option (option_idx, option_name, option_value) VALUES (3, '색상', '아이보리') 
+ {executed in 3 msec}
+INFO  25-07-06 22:35:14 [http-nio-8080-exec-7]  [OptionController:64] - dto : OptionDTO(option_idx=3, option_name=사이즈, option_value=S,M,L,XL, del_yn=0)
+INFO  25-07-06 22:35:25 [http-nio-8080-exec-9]  [OptionController:64] - dto : OptionDTO(option_idx=3, option_name=사이즈, option_value=S,M,L,XL, del_yn=0)
+INFO  25-07-06 22:35:25 [http-nio-8080-exec-9]  [sqltiming:373] - UPDATE option SET option_name = '사이즈', option_value = 'S,M,L,XL', del_yn = 0 WHERE option_idx 
+= 3 
+ {executed in 14 msec}
+INFO  25-07-06 22:35:46 [http-nio-8080-exec-2]  [sqltiming:373] - UPDATE option SET del_yn = 1 WHERE option_idx = 3 
+ {executed in 16 msec}
+INFO  25-07-06 22:35:57 [http-nio-8080-exec-4]  [sqltiming:373] - SELECT u.using_idx , u.product_idx , u.option_idx , o.option_name , o.option_value FROM using_option 
+u JOIN option o ON u.option_idx = o.option_idx WHERE u.product_idx = 2 AND u.del_yn = 0 AND 
+o.del_yn = 0 
+ {executed in 4 msec}
+INFO  25-07-06 22:36:15 [http-nio-8080-exec-6]  [sqltiming:373] - SELECT * FROM combined WHERE del_yn = 0 
+ {executed in 4 msec}
+INFO  25-07-06 22:36:22 [http-nio-8080-exec-7]  [sqltiming:373] - SELECT c.* FROM product_option po JOIN combined c ON po.combined_idx = c.combined_idx WHERE 
+po.product_idx = 2 AND po.del_yn = 0 AND c.del_yn = 0 
+ {executed in 15 msec}
+=======
 INFO  25-07-06 20:03:44 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 15496 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
 INFO  25-07-06 20:03:44 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
 INFO  25-07-06 20:03:44 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
@@ -309,3 +1406,4 @@ INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:17
 INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
 INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
 INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+>>>>>>> origin/main

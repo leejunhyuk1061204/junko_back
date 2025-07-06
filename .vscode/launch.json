@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-JunkoApplication<Junko>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "kr.co.junko.JunkoApplication",
+            "projectName": "Junko",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
