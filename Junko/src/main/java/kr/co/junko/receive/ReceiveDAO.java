@@ -17,4 +17,21 @@ public interface ReceiveDAO {
 
 	List<Map<String, Object>> receiveInfo(int order_idx);
 
+	int receiveUpdate(ReceiveDTO dto);
+
+	int receiveProductUpdate(ReceiveProductDTO dto);
+	
+	List<ReceiveDTO> receiveList(Map<String, Object> param);
+
+	int receiveTotalPage(Map<String, Object> param);
+
+	int receiveDel(int idx);
+
+	int receiveProductDel(int idx);
+
+	List<ReceiveProductDTO> receiveProductList(Map<String, Object> param);
+
+	int receiveProductTotalPage(Map<String, Object> param);
+
+
 }

@@ -82,3 +82,230 @@ WARN  25-07-06 20:44:17 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBas
 INFO  25-07-06 20:44:17 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
 INFO  25-07-06 20:44:17 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
 INFO  25-07-06 20:44:17 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-06 20:57:17 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 4468 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
+INFO  25-07-06 20:57:17 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 20:57:17 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 20:57:17 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:57:17 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 20:57:17 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 20:57:18 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 20:57:18 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 813 ms
+INFO  25-07-06 20:57:18 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:57:18 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 20:57:18 [main]  [JunkoApplication:61] - Started JunkoApplication in 1.715 seconds (JVM running for 2.357)
+INFO  25-07-06 20:58:15 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 20:58:15 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 20:58:15 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+WARN  25-07-06 20:58:15 [http-nio-8080-exec-1]  [DefaultHandlerExceptionResolver:208] - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' not supported]
+INFO  25-07-06 20:58:24 [http-nio-8080-exec-2]  [ReceiveController:24] - dto : ReceiveDTO(receive_idx=2, order_idx=0, user_idx=0, receive_date=null, status=입고완료, del_yn=false)
+INFO  25-07-06 20:58:24 [http-nio-8080-exec-2]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 20:58:24 [http-nio-8080-exec-2]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 20:58:24 [http-nio-8080-exec-2]  [sqltiming:373] - update receive set status='입고완료' where receive_idx = 2 
+ {executed in 6 msec}
+INFO  25-07-06 20:58:33 [http-nio-8080-exec-3]  [ReceiveController:24] - dto : ReceiveDTO(receive_idx=2, order_idx=0, user_idx=0, receive_date=null, status=입고예정, del_yn=false)
+INFO  25-07-06 20:58:33 [http-nio-8080-exec-3]  [sqltiming:373] - update receive set status='입고예정' where receive_idx = 2 
+ {executed in 5 msec}
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-06 20:58:39 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-06 21:10:21 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 17592 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
+INFO  25-07-06 21:10:21 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 21:10:22 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 21:10:22 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:10:22 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 21:10:22 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 21:10:22 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 21:10:22 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 806 ms
+INFO  25-07-06 21:10:22 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:10:22 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 21:10:22 [main]  [JunkoApplication:61] - Started JunkoApplication in 1.687 seconds (JVM running for 2.318)
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [ReceiveController:33] - param : {page=1}
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [sqltiming:373] - select * from receive WHERE del_yn = false limit 10 offset 0 
+ {executed in 5 msec}
+INFO  25-07-06 21:11:37 [http-nio-8080-exec-1]  [sqltiming:373] - select ceil(count(*)*1.0/10) as total from receive WHERE del_yn = false 
+ {executed in 4 msec}
+INFO  25-07-06 21:12:06 [http-nio-8080-exec-2]  [ReceiveController:33] - param : {page=1, receive_date=2025-07-06}
+INFO  25-07-06 21:12:06 [http-nio-8080-exec-2]  [sqltiming:373] - select * from receive WHERE del_yn = false and receive_date = '2025-07-06' limit 10 offset 
+0 
+ {executed in 4 msec}
+INFO  25-07-06 21:12:06 [http-nio-8080-exec-2]  [sqltiming:373] - select ceil(count(*)*1.0/10) as total from receive WHERE del_yn = false and receive_date = 
+'2025-07-06' 
+ {executed in 9 msec}
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-06 21:12:16 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-06 21:24:29 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 14980 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
+INFO  25-07-06 21:24:29 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 21:24:30 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 21:24:30 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:24:30 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 21:24:30 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 21:24:30 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 21:24:30 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 847 ms
+INFO  25-07-06 21:24:31 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:24:31 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 21:24:31 [main]  [JunkoApplication:61] - Started JunkoApplication in 1.761 seconds (JVM running for 2.395)
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [ReceiveController:51] - idx = 2
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [sqltiming:373] - update receive set del_yn = true where receive_idx = 2 
+ {executed in 5 msec}
+INFO  25-07-06 21:25:05 [http-nio-8080-exec-1]  [sqltiming:373] - update receive_product set del_yn = true where receive_idx = 2 
+ {executed in 6 msec}
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-06 21:26:10 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-06 21:31:46 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 13632 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
+INFO  25-07-06 21:31:46 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 21:31:47 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 21:31:47 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:31:47 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 21:31:47 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 21:31:47 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 21:31:47 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 799 ms
+INFO  25-07-06 21:31:47 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:31:47 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 21:31:47 [main]  [JunkoApplication:61] - Started JunkoApplication in 1.681 seconds (JVM running for 2.313)
+INFO  25-07-06 21:32:15 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 21:32:15 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 21:32:15 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-06 21:32:38 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-06 21:32:38 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:32:38 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-06 21:32:38 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+INFO  25-07-06 21:32:38 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:32:46 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 9036 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
+INFO  25-07-06 21:32:46 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 21:32:46 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 21:32:46 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:32:46 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 21:32:46 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 21:32:47 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 21:32:47 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 803 ms
+INFO  25-07-06 21:32:47 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:32:47 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 21:32:47 [main]  [JunkoApplication:61] - Started JunkoApplication in 1.717 seconds (JVM running for 2.38)
+INFO  25-07-06 21:32:50 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 21:32:50 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 21:32:50 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-06 21:32:50 [http-nio-8080-exec-1]  [ReceiveController:44] - param : {page=1}
+INFO  25-07-06 21:32:50 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 21:32:51 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 21:32:51 [http-nio-8080-exec-1]  [sqltiming:373] - select * from receive_product WHERE del_yn = false limit 5 offset 0 
+ {executed in 7 msec}
+INFO  25-07-06 21:32:51 [http-nio-8080-exec-1]  [sqltiming:373] - select ceil(count(*)*1.0/5) as total from receive_product WHERE del_yn = false 
+ {executed in 6 msec}
+INFO  25-07-06 21:33:06 [http-nio-8080-exec-2]  [ReceiveController:44] - param : {page=1, receive_idx=3}
+INFO  25-07-06 21:33:06 [http-nio-8080-exec-2]  [sqltiming:373] - select * from receive_product WHERE del_yn = false and receive_idx=3 limit 5 offset 0 
+ {executed in 5 msec}
+INFO  25-07-06 21:33:06 [http-nio-8080-exec-2]  [sqltiming:373] - select ceil(count(*)*1.0/5) as total from receive_product WHERE del_yn = false and receive_idx=3 
+ {executed in 5 msec}
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-06 21:33:14 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-06 21:38:04 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on DESKTOP-IH285P6 with PID 7608 (C:\STUDY\finalproject\Junko_back\Junko\target\classes started by admin in C:\STUDY\finalproject\Junko_back\Junko)
+INFO  25-07-06 21:38:04 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-06 21:38:05 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-06 21:38:05 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:38:05 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-06 21:38:05 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-06 21:38:05 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-06 21:38:05 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 858 ms
+INFO  25-07-06 21:38:05 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:38:05 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-06 21:38:05 [main]  [JunkoApplication:61] - Started JunkoApplication in 1.838 seconds (JVM running for 2.551)
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [ReceiveController:38] - dto : ReceiveProductDTO(receive_product_idx=2, receive_idx=0, product_idx=0, product_option_idx=0, receive_cnt=10, del_yn=false)
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-06 21:38:56 [http-nio-8080-exec-1]  [sqltiming:373] - update receive_product set receive_cnt = 10 where receive_product_idx=2 
+ {executed in 6 msec}
+INFO  25-07-06 21:39:09 [http-nio-8080-exec-2]  [ReceiveController:38] - dto : ReceiveProductDTO(receive_product_idx=2, receive_idx=0, product_idx=0, product_option_idx=0, receive_cnt=20, del_yn=false)
+INFO  25-07-06 21:39:09 [http-nio-8080-exec-2]  [sqltiming:373] - update receive_product set receive_cnt = 20 where receive_product_idx=2 
+ {executed in 5 msec}
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-06 21:39:11 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.

@@ -2,6 +2,7 @@ package kr.co.junko.receive;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +71,56 @@ public class ReceiveService {
 	public boolean insertReceiveProduct(ReceiveProductDTO dto) {
 		return dao.insertReceiveProduct(dto)>0;
 	}
+
+	public boolean receiveUpdate(ReceiveDTO dto) {
+		return dao.receiveUpdate(dto)>0;
+	}
+	
+	public boolean receiveProductUpdate(ReceiveProductDTO dto) {
+		return dao.receiveProductUpdate(dto)>0;
+	}
+
+	public Map<String, Object> receiveList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<ReceiveDTO>list = dao.receiveList(param);
+		int total = dao.receiveTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+
+	public Map<String, Object> receiveProductList(Map<String, Object> param) {
+		int cnt = 5;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<ReceiveProductDTO>list = dao.receiveProductList(param);
+		int total = dao.receiveProductTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+	
+	@Transactional
+	public boolean receiveDel(int idx) {
+		boolean receiveResult = dao.receiveDel(idx)>0;
+		if(!receiveResult) throw new RuntimeException("입고 삭제 실패");
+		
+		boolean productResult = dao.receiveProductDel(idx)>0;
+		if(!productResult) throw new RuntimeException("입고 상품 삭제 실패");
+		
+		return true;
+	}
+
+	
+
 	
 	
 }

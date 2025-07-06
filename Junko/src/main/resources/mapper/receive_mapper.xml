@@ -39,4 +39,134 @@
 		where o.order_idx = #{param1}
 	</select>
 	
+	<update id="receiveUpdate" parameterType="kr.co.junko.dto.ReceiveDTO">
+		update receive
+		<trim prefix="set" suffixOverrides=",">
+				<if test="order_idx != null and order_idx != 0">
+					order_idx=#{order_idx},
+				</if>
+				<if test ="user_idx != null and user_idx != 0">
+					user_idx=#{user_idx},
+				</if>
+				<if test ="receive_date != null">
+					receive_date=#{receive_date},
+				</if>
+				<if test="status != null and status != ''">
+					status=#{status}
+				</if>
+		</trim>
+		where receive_idx = #{receive_idx}
+	</update>
+	
+	<update id="receiveProductUpdate" parameterType="kr.co.junko.dto.ReceiveProductDTO">
+		update receive_product
+		<trim prefix="set" suffixOverrides=",">
+			<if test="receive_idx != null and receive_idx != 0">
+				receive_idx = #{receive_idx},
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				product_idx = #{product_idx},
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				product_option_idx = #{product_option_idx},
+			</if>
+			<if test="receive_cnt != null and receive_cnt != 0">
+				receive_cnt = #{receive_cnt}
+			</if>
+		</trim>
+		where receive_product_idx=#{receive_product_idx}
+	</update>
+	
+	<select id="receiveList" parameterType="map" resultType="kr.co.junko.dto.ReceiveDTO">
+		select * from receive
+		<where>
+			del_yn = false
+			<if test="order_idx != null and order_idx != 0">
+				and order_idx = #{order_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="receive_date !=null">
+				and receive_date = #{receive_date}
+			</if>
+			<if test="status != null and status !=''">
+				and status = #{status}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="receiveTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) as total from receive
+		<where>
+			del_yn = false
+			<if test="order_idx != null and order_idx != 0">
+				and order_idx = #{order_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="receive_date !=null">
+				and receive_date = #{receive_date}
+			</if>
+			<if test="status != null and status !=''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="receiveProductList" parameterType="map" resultType="kr.co.junko.dto.ReceiveProductDTO">
+		select * from receive_product
+		<where>
+			del_yn = false
+			<if test="receive_idx != null and receive_idx != 0">
+				and receive_idx=#{receive_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx=#{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx=#{product_option_idx}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="receiveProductTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) as total from receive_product
+		<where>
+			del_yn = false
+			<if test="receive_idx != null and receive_idx != 0">
+				and receive_idx=#{receive_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx=#{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx=#{product_option_idx}
+			</if>
+		</where>
+	</select>
+	
+	<update id="receiveDel">
+		update receive set del_yn = true where receive_idx = #{receive_idx}
+	</update>
+	
+	<update id="receiveProductDel">
+		update receive_product set del_yn = true where receive_idx = #{receive_idx}
+	</update>
+	
 </mapper>
