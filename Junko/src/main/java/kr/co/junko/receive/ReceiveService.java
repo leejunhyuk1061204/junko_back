@@ -13,6 +13,7 @@ import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.ReceiveDTO;
 import kr.co.junko.dto.ReceiveProductDTO;
 import kr.co.junko.order.OrderDAO;
+import kr.co.junko.stock.StockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,30 +24,44 @@ public class ReceiveService {
 
 	private final ReceiveDAO dao;
 	private final OrderDAO orderDAO;
+	private final StockService stockService;
 
 	@Transactional
 	public boolean fullInsertReceive(OrderDTO dto) {
 		
 		ReceiveDTO receive = null;
 		ReceiveProductDTO product = null;
+		Map<LocalDate, Integer> dateMap = new HashMap<LocalDate, Integer>();
 		
 		// 1. 입고 정보 가져오기
 		// order_idx,user_idx,receive_date
 		// receive_idx,product_idx,product_option_idx,receive_cnt
 		List<Map<String, Object>>info = dao.receiveInfo(dto.getOrder_idx());
 		for (Map<String, Object> param : info) {
-			receive = new ReceiveDTO();
-			receive.setOrder_idx(dto.getOrder_idx());
-			receive.setUser_idx((int)param.get("warehouse_idx"));
 			Date sqlDate = (Date)param.get("delivery_date");
 			LocalDate date = sqlDate.toLocalDate();
-			receive.setReceive_date(date);
+
+			int receive_idx = 0;
 			
-			boolean receiveResult = insertReceive(receive);	// 2. 입고 등록
-			if(!receiveResult) throw new RuntimeException("입고 등록 실패");
+			if(!dateMap.containsKey(date)) {
+				receive = new ReceiveDTO();
+				receive.setOrder_idx(dto.getOrder_idx());
+				receive.setUser_idx((int)param.get("user_idx"));
+				receive.setReceive_date(date);
+				
+				boolean receiveResult = insertReceive(receive);	// 2. 입고 등록
+				if(!receiveResult) throw new RuntimeException("입고 등록 실패");
+				
+				receive_idx = receive.getReceive_idx();
+				
+				dateMap.put(date, receive_idx);
+			} else {
+				receive_idx = dateMap.get(date);
+			}
+			
 			
 			product = new ReceiveProductDTO();
-			product.setReceive_idx(receive.getReceive_idx());
+			product.setReceive_idx(receive_idx);
 			product.setProduct_idx((int)param.get("product_idx"));
 			product.setReceive_cnt((int)param.get("order_cnt"));
 			if(param.get("product_option_idx") != null) {
@@ -73,7 +88,11 @@ public class ReceiveService {
 	}
 
 	public boolean receiveUpdate(ReceiveDTO dto) {
-		return dao.receiveUpdate(dto)>0;
+		if("입고완료".equals(dto.getStatus())) {
+			return stockService.stockInsert(dto);
+		}else {
+			return dao.receiveUpdate(dto)>0;
+		}
 	}
 	
 	public boolean receiveProductUpdate(ReceiveProductDTO dto) {

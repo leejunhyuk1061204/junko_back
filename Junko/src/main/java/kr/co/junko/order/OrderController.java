@@ -13,6 +13,7 @@ import kr.co.junko.dto.FullOrderDTO;
 import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
+import kr.co.junko.dto.PlanProductDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -106,6 +107,17 @@ public class OrderController {
 			return result;
 		}
 		
+		// 발주 계획 상품 수정
+		@PostMapping(value="/planProduct/update")
+		public Map<String, Object>planProductUpdate(@RequestBody PlanProductDTO dto){
+			log.info("dto : {}",dto);
+			result = new HashMap<String, Object>(); 
+			boolean success = service.planProductUpdate(dto);
+			result.put("success", success);
+			return result;
+			
+		}
+		
 		// 발주 리스트
 		@PostMapping(value="/order/list")
 		public Map<String, Object>orderList(@RequestBody Map<String, Object>param){
@@ -126,6 +138,13 @@ public class OrderController {
 		public Map<String, Object>orderPlanList(@RequestBody Map<String, Object>param){
 			log.info("param : {}",param);
 			return service.orderPlanList(param);
+		}
+		
+		// 발주 계획 상품 리스트
+		@PostMapping(value="/planProduct/list")
+		public Map<String, Object>planProductList(@RequestBody Map<String, Object>param){
+			log.info("param : {}",param);
+			return service.planProductList(param);
 		}
 		
 		// 번호로 발주정보 가져오기

@@ -11,6 +11,7 @@ import kr.co.junko.dto.FullOrderDTO;
 import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
+import kr.co.junko.dto.PlanProductDTO;
 import kr.co.junko.receive.ReceiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,11 @@ public class OrderService {
 		int row = dao.orderPlanInsert(dto);
 		return row>0;
 	}
+	
+	public boolean planProductInsert(PlanProductDTO dto) {
+		int row = dao.planProductInsert(dto);
+		return row>0;
+	}
 
 	public boolean orderUpdate(OrderDTO dto) {
 		if("확정".equals(dto.getStatus())) {
@@ -54,6 +60,10 @@ public class OrderService {
 	public boolean orderPlanUpdate(OrderPlanDTO dto) {
 		int row = dao.orderPlanUpdate(dto);
 		return row>0;
+	}
+	
+	public boolean planProductUpdate(PlanProductDTO dto) {
+		return dao.planProductUpdate(dto)>0;
 	}
 
 	public Map<String, Object> orderList(Map<String, Object> param) {
@@ -97,6 +107,20 @@ public class OrderService {
 		result.put("page", param.get("page"));
 		return result;
 	}
+	
+	public Map<String, Object> planProductList(Map<String, Object> param) {
+		int cnt = 5;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<PlanProductDTO>list = dao.planProductList(param);
+		int total = dao.planProductListTotalPage(param);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("orederPlanList", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
 
 	public OrderDTO orderByIdx(int idx) {
 		return dao.orderByIdx(idx);
@@ -128,7 +152,7 @@ public class OrderService {
 	@Transactional
 	public boolean orderFullInsert(FullOrderDTO dto) {
 		
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Integer> productMap = new HashMap<String, Integer>();
 		
 		boolean orderResult = orderInsert(dto.getOrder());
 		if(!orderResult) throw new RuntimeException("발주 등록 실패");
@@ -136,16 +160,24 @@ public class OrderService {
 		for (OrderProductDTO product : dto.getOrderProduct()) {
 			product.setOrder_idx(dto.getOrder().getOrder_idx());
 			boolean orderProductResult = orderProductInsert(product);
-			map.put(product.getTempId(), product.getOrder_product_idx());
 			if(!orderProductResult) throw new RuntimeException("발주 상품 등록 실패");
+			productMap.put(product.getTempId(), product.getOrder_product_idx());
 		}
 		
 		for (OrderPlanDTO plan : dto.getOrderPlan()) {
 			plan.setOrder_idx(dto.getOrder().getOrder_idx());
-			plan.setOrder_product_idx(map.get(plan.getProductTempId()));
 			boolean orderPlanResult = orderPlanInsert(plan);
 			if(!orderPlanResult) throw new RuntimeException("발주 계획 등록 실패");
+			
+			for (PlanProductDTO pp : plan.getPlanProduct()) {
+				pp.setPlan_idx(plan.getPlan_idx());
+				pp.setOrder_product_idx(productMap.get(pp.getProductTempId()));
+				boolean ppResult = planProductInsert(pp);
+				if(!ppResult) throw new RuntimeException("발주 계획 상품 등록 실패");
+			}
 		}
+		
+		
 		
 		return true;
 	}
@@ -160,5 +192,9 @@ public class OrderService {
 		if(!orderPlanResult) throw new RuntimeException("발주 계획 삭제 실패");
 		return true;
 	}
+
+	
+
+	
 
 }

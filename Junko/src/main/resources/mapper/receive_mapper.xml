@@ -25,17 +25,17 @@
 	</insert>
 
 	<select id="receiveInfo" resultType="map">
-		select 
-		o.order_idx 
-		,w.warehouse_idx 
+		select o.order_idx
+		,w.user_idx 
 		,op.delivery_date
 		,op2.product_idx 
 		,op2.product_option_idx
-		,op.order_cnt 
-		from `order` o 
+		,pp.order_cnt
+		from `order` o
 		join warehouse w on w.warehouse_idx = o.warehouse_idx 
-		join order_plan op on o.order_idx = op.order_idx 
-		join order_product op2 on op.order_product_idx = op2.order_product_idx 
+		join order_plan op on o.order_idx = op.order_idx
+		join plan_product pp on op.plan_idx = pp.plan_idx
+		join order_product op2 on pp.order_product_idx = op2.order_product_idx
 		where o.order_idx = #{param1}
 	</select>
 	
@@ -51,6 +51,7 @@
 				<if test ="receive_date != null">
 					receive_date=#{receive_date},
 				</if>
+				<!-- 입고 완료는 다른 메서드 -->
 				<if test="status != null and status != ''">
 					status=#{status}
 				</if>

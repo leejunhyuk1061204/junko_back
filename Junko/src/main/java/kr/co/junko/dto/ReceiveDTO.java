@@ -14,4 +14,9 @@ public class ReceiveDTO {
 	private String status;
 	private boolean del_yn;
 	
+	// 입고 완료 시 입력받는 값
+	private int zone_idx;
+	private LocalDate manufacture;
+	private LocalDate expiration;
+	
 }
