@@ -128,12 +128,24 @@ public class OrderService {
 	@Transactional
 	public boolean orderFullInsert(FullOrderDTO dto) {
 		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
 		boolean orderResult = orderInsert(dto.getOrder());
 		if(!orderResult) throw new RuntimeException("발주 등록 실패");
-		boolean orderProductResult = orderProductInsert(dto.getOrderProduct());
-		if(!orderProductResult) throw new RuntimeException("발주 상품 등록 실패");
-		boolean orderPlanResult = orderPlanInsert(dto.getOrderPlan());
-		if(!orderPlanResult) throw new RuntimeException("발주 계획 등록 실패");
+		
+		for (OrderProductDTO product : dto.getOrderProduct()) {
+			product.setOrder_idx(dto.getOrder().getOrder_idx());
+			boolean orderProductResult = orderProductInsert(product);
+			map.put(product.getTempId(), product.getOrder_product_idx());
+			if(!orderProductResult) throw new RuntimeException("발주 상품 등록 실패");
+		}
+		
+		for (OrderPlanDTO plan : dto.getOrderPlan()) {
+			plan.setOrder_idx(dto.getOrder().getOrder_idx());
+			plan.setOrder_product_idx(map.get(plan.getProductTempId()));
+			boolean orderPlanResult = orderPlanInsert(plan);
+			if(!orderPlanResult) throw new RuntimeException("발주 계획 등록 실패");
+		}
 		
 		return true;
 	}

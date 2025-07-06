@@ -3,12 +3,18 @@
 
 <mapper namespace="kr.co.junko.order.OrderDAO">
 
-	<insert id="orderInsert" parameterType="kr.co.junko.dto.OrderDTO">
+	<insert id="orderInsert" parameterType="kr.co.junko.dto.OrderDTO"
+	useGeneratedKeys="true"
+	keyColumn="order_idx"
+	keyProperty="order_idx">
 		insert into `order` (custom_idx,warehouse_idx,user_idx)
 		values (#{custom_idx},#{warehouse_idx},#{user_idx})
 	</insert>
 	
-	<insert id="orderProductInsert" parameterType="kr.co.junko.dto.OrderProductDTO">
+	<insert id="orderProductInsert" parameterType="kr.co.junko.dto.OrderProductDTO"
+	useGeneratedKeys="true"
+	keyColumn="order_product_idx"
+	keyProperty="order_product_idx">
 		insert into order_product(order_idx,product_idx,order_cnt
 		<if test="product_option_idx != null and product_option_idx != 0">
 			,product_option_idx

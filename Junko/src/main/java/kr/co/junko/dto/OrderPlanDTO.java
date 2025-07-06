@@ -14,4 +14,6 @@ public class OrderPlanDTO {
 	private boolean del_yn;
 	private int order_idx;
 	
+	private String productTempId; // product 매칭용 임시ID
+	
 }
