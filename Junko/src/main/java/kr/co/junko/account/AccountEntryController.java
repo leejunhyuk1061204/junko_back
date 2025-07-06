@@ -31,7 +31,7 @@ public class AccountEntryController {
 		result = service.accountList(page);
 		return result;
 	}
-	
+	//저
 	// 전표 등록
 	@PostMapping(value="/accountRegist")
 	public Map<String, Object> accountRegist(@RequestBody AccountingEntryDTO dto){
