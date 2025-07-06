@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -166,5 +167,27 @@ public class ProductService {
 	public boolean softDelProduct(int product_idx) {
 		int row = dao.softDelProduct(product_idx);
 		return row > 0;
+	}
+
+	// 상품 목록 조회
+	public Map<String, Object> productList(Map<String, Object> param) {
+		int page = (int) param.getOrDefault("page", 1);
+    	int size = (int) param.getOrDefault("size", 10);
+    	String search = (String) param.getOrDefault("search", "");
+    	int category = (int) param.getOrDefault("category", 0);
+    	String sort = (String) param.getOrDefault("sort", "product_idx");
+
+		int start = (page - 1) * size;
+
+		List<ProductDTO> list = dao.productList(start, size, search, category, sort); // 상품 목록 조회
+		int total = dao.productTotalCnt(search, category); // 전체 상품 개수 조회
+
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", page);
+
+		return result;
 	}
 }

@@ -3,6 +3,7 @@
 
 <mapper namespace="kr.co.junko.product.ProductDAO">
 
+<!-- 상품 등록 -->
 	<insert id="productInsert" parameterType="kr.co.junko.dto.ProductDTO"
 	        useGeneratedKeys="true" keyProperty="product_idx">
 	    INSERT INTO product (
@@ -13,11 +14,13 @@
 	    )
 	</insert>
 
+<!-- 상품 이미지 등록 -->
 	<insert id="fileWrite" parameterType="kr.co.junko.dto.FileDTO">
 	    INSERT INTO file (ori_filename, new_filename, idx, type)
 	    VALUES (#{ori_filename}, #{new_filename}, #{idx}, #{type})
 	</insert>
 
+<!-- 상품 이미지 조회 -->
 	<update id="productUpdate" parameterType="kr.co.junko.dto.ProductDTO">
 		UPDATE product
 		<trim prefix="SET" suffixOverrides=",">
@@ -43,6 +46,7 @@
 		WHERE product_idx = #{product_idx}
 	</update>
 
+<!-- 상품 이미지 삭제 -->
 	<update id="softDelProductImg" parameterType="int">
 		UPDATE file
 		SET del_yn = 1
@@ -51,10 +55,46 @@
 		AND del_yn = 0
 	</update>
 
+<!-- 상품 삭제 -->
 	<update id="softDelProduct" parameterType="int">
 		UPDATE product
 		SET del_yn = 1
 		WHERE product_idx = #{product_idx}
 	</update>
+
+<!-- 상품 목록 조회 -->
+	<select id="productList" resultType="kr.co.junko.dto.ProductDTO">
+		SELECT *
+		FROM product
+		WHERE del_yn = '0'
+		<if test="search != null and search != ''">
+			AND (product_name LIKE CONCAT('%', #{search}, '%')
+				OR product_idx LIKE CONCAT('%', #{search}, '%'))
+		</if>
+		<if test="category != 0">
+			AND category_idx = #{category}
+		</if>
+		ORDER BY 
+			<choose>
+				<when test="sort == 'price_asc'">selling_price ASC</when>
+				<when test="sort == 'price_desc'">selling_price DESC</when>
+				<otherwise>product_idx DESC</otherwise>
+			</choose>
+		LIMIT #{start}, #{size}
+	</select>
+
+<!-- 상품 총 개수 조회 -->
+	<select id="productTotalCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM product
+		WHERE del_yn = '0'
+		<if test="search != null and search != ''">
+			AND (product_name LIKE CONCAT('%', #{search}, '%')
+				OR product_idx LIKE CONCAT('%', #{search}, '%'))
+		</if>
+		<if test="category != 0">
+			AND category_idx = #{category}
+		</if>
+	</select>
 
 </mapper>
