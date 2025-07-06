@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.receive.ReceiveDAO">
+
+	<insert id="insertReceive" parameterType="kr.co.junko.dto.ReceiveDTO"
+	useGeneratedKeys="true"
+	keyColumn="receive_idx"
+	keyProperty="receive_idx">
+		insert into receive (order_idx,user_idx,receive_date)
+		values (#{order_idx},#{user_idx},#{receive_date})
+	</insert>
+	
+	<insert id="insertReceiveProduct" parameterType="kr.co.junko.dto.ReceiveProductDTO">
+		insert into receive_product (receive_idx,product_idx,receive_cnt
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,product_option_idx
+		</if>
+		)
+		values (#{receive_idx},#{product_idx},#{receive_cnt}
+		<if test="product_option_idx != null and product_option_idx != 0">
+		,#{product_option_idx}
+		</if>
+		)
+	</insert>
+
+	<select id="receiveInfo" resultType="map">
+		select 
+		o.order_idx 
+		,w.warehouse_idx 
+		,op.delivery_date
+		,op2.product_idx 
+		,op2.product_option_idx
+		,op.order_cnt 
+		from `order` o 
+		join warehouse w on w.warehouse_idx = o.warehouse_idx 
+		join order_plan op on o.order_idx = op.order_idx 
+		join order_product op2 on op.order_product_idx = op2.order_product_idx 
+		where o.order_idx = #{param1}
+	</select>
+	
+</mapper>

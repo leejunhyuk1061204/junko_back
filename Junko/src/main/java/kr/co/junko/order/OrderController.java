@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.junko.dto.FullOrderDTO;
 import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
@@ -47,9 +48,26 @@ public class OrderController {
 	@PostMapping(value="/orderPlan/insert")
 	public Map<String, Object>orderPlanInsert(@RequestBody OrderPlanDTO dto){
 		log.info("dto : {}",dto);
-		result = new HashMap<String, Object>(); 
+		result = new HashMap<String, Object>();
 		boolean success = service.orderPlanInsert(dto);
 		result.put("success", success);
+		return result;
+	}
+	
+	// 발주 등록 트랜잭션
+	@PostMapping(value="/order/full/insert")
+	public Map<String, Object>orderFullInsert(@RequestBody FullOrderDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>(); 
+		
+		try {
+			boolean success = service.orderFullInsert(dto);
+			result.put("success", success);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	
@@ -58,8 +76,13 @@ public class OrderController {
 	public Map<String, Object>orderUpdate(@RequestBody OrderDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.orderUpdate(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.orderUpdate(dto);
+			result.put("success", success);
+		} catch (RuntimeException e) {
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	
@@ -165,7 +188,21 @@ public class OrderController {
 			return result;
 		}
 				
-				
+		// 발주 삭제 트랜잭션
+		@GetMapping(value="/order/full/del/{order_idx}")
+		public Map<String, Object>orderFullDel(@PathVariable int order_idx){
+			log.info("idx : "+order_idx);
+			result = new HashMap<String, Object>();
+			try {
+				boolean success = service.orderFullDel(order_idx);
+				result.put("success", success);
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				result.put("success", false);
+				result.put("msg", e.getMessage());
+			}
+			return result;
+		}
 		
 	
 	
