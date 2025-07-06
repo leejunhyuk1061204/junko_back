@@ -12,5 +12,8 @@ public class OrderPlanDTO {
 	private int order_cnt;
 	private LocalDate delivery_date;
 	private boolean del_yn;
+	private int order_idx;
+	
+	private String productTempId; // product 매칭용 임시ID
 	
 }

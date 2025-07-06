@@ -48,4 +48,8 @@ public interface OrderDAO {
 
 	int orderPlanDel(int idx);
 
+	int orderProductDelByOrderIdx(int idx);
+
+	int orderPlanDelByOrderIdx(int idx);
+
 }

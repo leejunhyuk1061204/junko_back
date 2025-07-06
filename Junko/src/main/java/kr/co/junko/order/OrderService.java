@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.junko.dto.FullOrderDTO;
 import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
+import kr.co.junko.receive.ReceiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,10 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderService {
 	
 	private final OrderDAO dao;
+	private final ReceiveService ReceiveService;
 
 	public boolean orderInsert(OrderDTO dto) {
 		int row = dao.orderInsert(dto);
-		log.info("row : " + row);
 		return row >0;
 	}
 
@@ -36,8 +39,11 @@ public class OrderService {
 	}
 
 	public boolean orderUpdate(OrderDTO dto) {
-		int row = dao.orderUpdate(dto);
-		return row>0;
+		if("확정".equals(dto.getStatus())) {
+			return ReceiveService.fullInsertReceive(dto);
+		} else {
+			return dao.orderUpdate(dto)>0;
+		}
 	}
 
 	public boolean orderProductUpdate(OrderProductDTO dto) {
@@ -117,6 +123,42 @@ public class OrderService {
 	public boolean orderPlanDel(int idx) {
 		int row = dao.orderPlanDel(idx);
 		return row>0;
+	}
+
+	@Transactional
+	public boolean orderFullInsert(FullOrderDTO dto) {
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		boolean orderResult = orderInsert(dto.getOrder());
+		if(!orderResult) throw new RuntimeException("발주 등록 실패");
+		
+		for (OrderProductDTO product : dto.getOrderProduct()) {
+			product.setOrder_idx(dto.getOrder().getOrder_idx());
+			boolean orderProductResult = orderProductInsert(product);
+			map.put(product.getTempId(), product.getOrder_product_idx());
+			if(!orderProductResult) throw new RuntimeException("발주 상품 등록 실패");
+		}
+		
+		for (OrderPlanDTO plan : dto.getOrderPlan()) {
+			plan.setOrder_idx(dto.getOrder().getOrder_idx());
+			plan.setOrder_product_idx(map.get(plan.getProductTempId()));
+			boolean orderPlanResult = orderPlanInsert(plan);
+			if(!orderPlanResult) throw new RuntimeException("발주 계획 등록 실패");
+		}
+		
+		return true;
+	}
+
+	@Transactional
+	public boolean orderFullDel(int idx) {
+		boolean orderResult = dao.orderDel(idx)>0;
+		if(!orderResult) throw new RuntimeException("발주 삭제 실패");
+		boolean orderProductResult = dao.orderProductDelByOrderIdx(idx)>0;
+		if(!orderProductResult) throw new RuntimeException("발주 상품 삭제 실패");
+		boolean orderPlanResult = dao.orderPlanDelByOrderIdx(idx)>0;
+		if(!orderPlanResult) throw new RuntimeException("발주 계획 삭제 실패");
+		return true;
 	}
 
 }
