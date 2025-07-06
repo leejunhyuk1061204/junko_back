@@ -35,4 +35,18 @@ public class AccountEntryService {
 		return row > 0 ? true : false;
 	}
 
+	public Map<String, Object> accountDetail(int entry_idx) {
+		return dao.acountDetail(entry_idx);
+	}
+
+	public boolean accoutUpdate(int entry_idx, AccountingEntryDTO dto, String user_id) {
+		return dao.accoutUpdate(entry_idx,dto,user_id);
+	}
+
+	public boolean accountDelete(int entry_idx, String user_id) {
+		return dao.accountDelete(entry_idx, user_id);
+	}
+
+	
+
 }
