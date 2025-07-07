@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.junko.product.ProductDAO">
 
-<!-- 상품 등록 -->
+	<!-- 상품 등록 -->
 	<insert id="productInsert" parameterType="kr.co.junko.dto.ProductDTO"
 	        useGeneratedKeys="true" keyProperty="product_idx">
 	    INSERT INTO product (
@@ -14,13 +14,13 @@
 	    )
 	</insert>
 
-<!-- 상품 이미지 등록 -->
+	<!-- 상품 이미지 등록 -->
 	<insert id="fileWrite" parameterType="kr.co.junko.dto.FileDTO">
 	    INSERT INTO file (ori_filename, new_filename, idx, type)
 	    VALUES (#{ori_filename}, #{new_filename}, #{idx}, #{type})
 	</insert>
 
-<!-- 상품 이미지 조회 -->
+	<!-- 상품 이미지 조회 -->
 	<update id="productUpdate" parameterType="kr.co.junko.dto.ProductDTO">
 		UPDATE product
 		<trim prefix="SET" suffixOverrides=",">
@@ -46,7 +46,7 @@
 		WHERE product_idx = #{product_idx}
 	</update>
 
-<!-- 상품 이미지 삭제 -->
+	<!-- 상품 이미지 삭제 -->
 	<update id="softDelProductImg" parameterType="int">
 		UPDATE file
 		SET del_yn = 1
@@ -55,14 +55,14 @@
 		AND del_yn = 0
 	</update>
 
-<!-- 상품 삭제 -->
+	<!-- 상품 삭제 -->
 	<update id="softDelProduct" parameterType="int">
 		UPDATE product
 		SET del_yn = 1
 		WHERE product_idx = #{product_idx}
 	</update>
 
-<!-- 상품 목록 조회 -->
+	<!-- 상품 목록 조회 -->
 	<select id="productList" resultType="kr.co.junko.dto.ProductDTO">
 		SELECT *
 		FROM product
@@ -83,7 +83,7 @@
 		LIMIT #{start}, #{size}
 	</select>
 
-<!-- 상품 총 개수 조회 -->
+	<!-- 상품 총 개수 조회 -->
 	<select id="productTotalCnt" resultType="int">
 		SELECT COUNT(*)
 		FROM product
@@ -96,5 +96,58 @@
 			AND category_idx = #{category}
 		</if>
 	</select>
+	
+    <!-- 문서 업로드 -->
+    <insert id="productDocsUpload">
+        INSERT INTO file (ori_filename, new_filename, type, idx)
+        VALUES (#{oriName}, #{newName}, 'prod_doc', #{product_idx})
+    </insert>
+    
+    <!-- 문서 개수 확인 -->
+    <select id="productDocsCnt" resultType="int">
+        SELECT COUNT(*) FROM file
+        	WHERE type = 'prod_doc' AND idx = #{product_idx} AND del_yn = 0
+    </select>
+    
+    <!-- 문서 삭제 -->
+    <update id="productDocsDel">
+        UPDATE file SET del_yn = 1
+        WHERE file_idx = #{docId} AND type = 'prod_doc'
+    </update>
+    
+    <!-- 문서 리스트 -->
+    <select id="productDocsList" resultType="kr.co.junko.dto.FileDTO">
+        SELECT file_idx, ori_filename, new_filename, reg_date
+        FROM file
+        WHERE type = 'prod_doc' AND idx = #{product_idx} AND del_yn = 0
+        ORDER BY reg_date DESC
+    </select>
+    
+    <!-- 문서 다운로드 -->
+    <select id="downloadProductDoc" parameterType="string" resultType="string">
+	    SELECT ori_filename 
+	    FROM file 
+	    WHERE new_filename = #{newFileName} AND del_yn = 0 AND type = 'prod_doc'
+	</select>
+
+	<!-- 기존 상품 1건 조회 -->
+	<select id="selectProductIdx" parameterType="int" resultType="kr.co.junko.dto.ProductDTO">
+	    SELECT * FROM product WHERE product_idx = #{product_idx}
+	</select>
+	
+	<!-- 로그인 ID로 user_idx 가져오기 -->
+	<select id="LoginUserIdx" resultType="int">
+	    SELECT user_idx FROM user WHERE user_id = #{loginId}
+	</select>
+	
+	<!-- 히스토리 삽입 -->
+	<insert id="insertProductHistory">
+	    INSERT INTO product_history (
+	        product_idx, product_name, purchase_price, selling_price,
+	        discount_rate, product_standard, status, updated_by)
+	    VALUES (
+	        #{product_idx}, #{product_name}, #{purchase_price}, #{selling_price},
+	        #{discount_rate}, #{product_standard}, #{status}, #{updated_by})
+	</insert>
 
 </mapper>

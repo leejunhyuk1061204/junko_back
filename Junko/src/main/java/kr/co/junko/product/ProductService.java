@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.ProductDTO;
+import kr.co.junko.dto.ProductHistoryDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -140,9 +142,29 @@ public class ProductService {
 
 	// 상품 수정
 	// 상품 정보 수정은 이미지 수정과 분리되어 있음
-	public boolean productUpdate(ProductDTO dto) {
-		int row = dao.productUpdate(dto);
-		return row > 0;
+	public boolean productUpdate(ProductDTO dto, String loginId) {
+	    // 1. 기존 상품 정보 조회
+	    ProductDTO original = dao.selectProductIdx(dto.getProduct_idx());
+	    if (original == null) return false;
+
+	    // 2. 히스토리 객체 생성
+	    ProductHistoryDTO history = new ProductHistoryDTO();
+	    history.setProduct_idx(original.getProduct_idx());
+	    history.setProduct_name(original.getProduct_name());
+	    history.setPurchase_price(original.getPurchase_price());
+	    history.setSelling_price(original.getSelling_price());
+	    history.setDiscount_rate(original.getDiscount_rate());
+	    history.setProduct_standard(original.getProduct_standard());
+	    history.setStatus("수정됨");
+	    history.setUpdated_by(dao.LoginUserIdx(loginId));
+
+	    // 3. 히스토리 INSERT
+	    int h = dao.insertProductHistory(history);
+
+	    // 4. 상품 수정
+	    int p = dao.productUpdate(dto);
+
+	    return h == 1 && p == 1;
 	}
 
 	// 상품 이미지 소프트 삭제
@@ -190,4 +212,65 @@ public class ProductService {
 
 		return result;
 	}
+
+	// 상품 문서 등록
+	public boolean productDocsUpload(int product_idx, MultipartFile[] files) {
+	    if (files == null || files.length == 0) return false;
+
+	    // 파일 확장자 제한 리스트
+	    List<String> allowedExts = List.of(".pdf", ".doc", ".docx", ".xls", ".xlsx");
+
+	    // 개수 제한 확인
+	    int currentCount = dao.productDocsCnt(product_idx);
+	    if (currentCount + files.length > 10) {
+	        log.warn("문서 업로드 제한 초과: 현재 {}, 추가 {}", currentCount, files.length);
+	        return false;
+	    }
+
+	    for (MultipartFile file : files) {
+	        if (file.isEmpty()) continue; // 파일 없으면 넘어가라
+
+	        String oriName = file.getOriginalFilename();
+	        String ext = oriName.substring(oriName.lastIndexOf(".")).toLowerCase();
+	        if (!allowedExts.contains(ext)) {
+	            log.warn("허용되지 않은 문서 확장자: {}", ext);
+	            continue;
+	        }
+
+	        if (file.getSize() > 20 * 1024 * 1024) {
+	            log.warn("파일 크기 초과: {}", oriName);
+	            continue;
+	        }
+
+	        String newName = UUID.randomUUID().toString() + ext;
+	        Path path = Paths.get(root + "/" + newName);
+
+	        try {
+	            Files.write(path, file.getBytes());
+	            dao.productDocsUpload(oriName, newName, product_idx);
+	        } catch (Exception e) {
+	            log.error("문서 저장 실패: {}", oriName, e);
+	            return false;
+	        }
+	    }
+
+	    return true;
+	}
+
+	// 상품 문서 삭제
+	public boolean productDocsDel(int doc_id) {
+		int row = dao.productDocsDel(doc_id);
+		return row>0;
+	}
+
+	// 상품 문서 리스트
+	public List<FileDTO> productDocsList(int product_idx) {
+		return dao.productDocsList(product_idx);
+	}
+
+	// 상품 문서 다운로드
+	public String downloadProductDoc(String fileName) {
+		return dao.downloadProductDoc(fileName);
+	}
+
 }
