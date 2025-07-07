@@ -18,6 +18,12 @@ public interface ChartDAO {
 
 	List<Map<String, Object>> getInventoryTurnoverStats(Map<String, Object> param);
 	
+	List<Map<String, Object>> returnProduct(Map<String, Object> param);
+	
+	List<Map<String, Object>> getDelayedProduct(Map<String, Object> param);
+	
+	List<Map<String, Object>> getOrderStatus(Map<String, Object> param);
+
 	List<Map<String, Object>> getMonthlySalesYoY(Map<String, Object> param);
 
 

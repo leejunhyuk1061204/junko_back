@@ -22,12 +22,12 @@ public class ChartController {
 	
 	@PostMapping("/list/chart")
 	public Map<String, Object> chart(@RequestBody Map<String, Object> param,
-			@RequestParam Integer categoryIdx,
-			@RequestParam String startDate,
-			@RequestParam String endDate,
 			@RequestHeader Map<String, String> header) {
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 		Map<String, Object> result = new HashMap<String, Object>();
+		Integer categoryIdx = (Integer) param.get("categoryIdx");
+		String startDate = (String) param.get("startDate");
+		String endDate = (String) param.get("endDate");
 		
 		if (loginId != null && !loginId.isEmpty()) {
 			if(categoryIdx != null) {

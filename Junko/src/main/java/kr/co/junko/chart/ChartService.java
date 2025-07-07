@@ -25,6 +25,9 @@ public class ChartService {
 		list.put("getPopularProduct", safeList(dao.getPopularProduct(param)));
 		list.put("getHighReturnProduct", safeList(dao.getHighReturnProduct(param)));
 		list.put("getInventoryTurnoverStats", safeList(dao.getInventoryTurnoverStats(param)));
+		list.put("returnProduct", safeList(dao.returnProduct(param)));
+		list.put("getDelayedProduct", safeList(dao.getDelayedProduct(param)));
+		list.put("getOrderStatus", safeList(dao.getOrderStatus(param)));
 		list.put("getMonthlySalesYoY", safeList(dao.getMonthlySalesYoY(param)));
 		
 		return list;

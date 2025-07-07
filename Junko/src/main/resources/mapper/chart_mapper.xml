@@ -15,16 +15,13 @@
 		        THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_yesterday
 		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
-		JOIN category c ON c.category_idx = s.category_idx
+		JOIN category c ON c.category_idx = p.category_idx
 			<where>
 				s.status IN ('결제 완료', '배송중', '배송완료')
 				<!-- 전날이랑 오늘 데이터만 필터링 -->
-		    	AND DATE(s.payment_date) IN (CURDATE(), CURDATE() - INTERVAL 1 DAY)
+		    	AND s.payment_date IN (CURDATE(), CURDATE() - INTERVAL 1 DAY)
 		    	<if test="categoryIdx != null">
 			        AND p.category_idx = #{categoryIdx}
-			    </if>
-			    <if test="startDate != null and endDate != null">
-			        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 			    </if>
 			</where>
 	</select>
@@ -73,17 +70,13 @@
 	
 	<!-- 반품율 높은 상품 순 5개 -->
 	<select id="getHighReturnProduct" resultType="map">
-		SELECT 
-			p.product_idx, c.category_name, p.product_name, SUM(rr.quantity) AS return_cnt
+		SELECT p.product_idx, c.category_name, p.product_name, SUM(rr.quantity) AS return_cnt
 		FROM return_receive rr JOIN product p ON rr.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
 			<where>
 				rr.status IN ('반품예정', '반품완료') AND p.del_yn = 0
 				<if test="categoryIdx != null">
 			        AND p.category_idx = #{categoryIdx}
-			    </if>
-			    <if test="startDate != null and endDate != null">
-			        AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 			    </if>
 			</where>
 		GROUP BY p.product_idx, c.category_idx ORDER BY return_cnt DESC LIMIT 5
@@ -114,11 +107,60 @@
 			</where>
 		GROUP BY p.product_idx, c.category_idx
 	</select>
+	
+	<!-- 반품률 분석 -->
+	<select id="returnProduct" resultType="map">
+		SELECT p.product_idx, c.category_name, p.product_name, SUM(rr.quantity) AS return_cnt
+		FROM return_receive rr JOIN product p ON rr.product_idx = p.product_idx
+		JOIN category c ON p.category_idx = c.category_idx
+			<where>
+				rr.status IN ('반품예정', '반품완료') AND p.del_yn = 0
+				<if test="categoryIdx != null">
+			        AND p.category_idx = #{categoryIdx}
+			    </if>
+			</where>
+		GROUP BY p.product_idx, c.category_idx
+	</select>
+	
+	<!-- 처리 지연 상품 -->
+	<select id="getDelayedProduct" resultType="map">
+		SELECT p.product_idx, c.category_name, p.product_name, s.status, s.payment_date
+		    ,DATEDIFF(NOW(), s.payment_date) AS delay_days <!-- 날짜 간격 일 단위로 반환 -->
+		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
+		JOIN product p ON sp.product_idx = p.product_idx
+		JOIN category c ON p.category_idx = c.category_idx
+			<where>
+			    s.status IN ('결제 완료', '배송중') <!-- 아직 처리 중 -->
+			    AND DATEDIFF(NOW(), s.payment_date) >= 3 <!-- 3일 이상 -->
+			    AND p.del_yn = 0
+				<if test="categoryIdx != null">
+		            AND p.category_idx = #{categoryIdx}
+		        </if>
+		        <if test="startDate != null and endDate != null">
+		            AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+		        </if>
+			</where>
+		ORDER BY delay_days DESC
+	</select>
+	
+	<!-- 기간별 주문 상태 분석 -->
+	<select id="getOrderStatus" resultType="map">
+		SELECT 
+		    DATE(s.payment_date) AS date,
+		    COUNT(CASE WHEN s.status IN ('결제 대기', '결제 완료') THEN 1 END) AS complete,
+		    COUNT(CASE WHEN s.status = '배송중' THEN 1 END) AS shipping,
+		    COUNT(CASE WHEN s.status = '배송완료' THEN 1 END) AS shipped,
+		    COUNT(CASE WHEN s.status = '결제취소' THEN 1 END) AS cancelled
+		FROM sales s
+		WHERE DATE(s.payment_date) BETWEEN '2025-07-01' AND '2025-07-31'
+		GROUP BY DATE(s.payment_date)
+		ORDER BY date
+	</select>
 
 	<!-- 전년도 대비 월별 매출 비교 -->
 	<select id="getMonthlySalesYoY" resultType="map">
 		SELECT c.category_name
-			DATE_FORMAT(s.payment_date, '%Y-%m') AS month
+			,DATE_FORMAT(s.payment_date, '%Y-%m') AS month
 			<!-- 전년도 매출 -->
 			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1
 				THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_last_year
@@ -126,7 +168,7 @@
 			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())
         		THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_this_year
 		FROM sales s JOIN sales_product sp ON s.sales_idx=sp.sales_idx
-		JOIN product p ON rr.product_idx = p.product_idx
+		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
 			<where>
 				s.status IN ('결제 완료','배송중','배송완료')
