@@ -34,7 +34,7 @@ public class SalesService {
 		if("결제 완료".equals(dto.getStatus())) {
 			String curState = salesDetailByIdx(dto.getSales_idx()).getStatus();
 			if("결제 대기".equals(curState)) {
-				return waybillService.waybillInsert(dto); 
+				return waybillService.waybillInsert(dto);
 			}
 			return dao.salesUpdate(dto)>0;
 		} else {

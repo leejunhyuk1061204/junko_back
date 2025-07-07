@@ -3,7 +3,10 @@
 
 <mapper namespace="kr.co.junko.waybill.WaybillDAO">
 
-	<insert id="waybillInsert" parameterType="kr.co.junko.dto.SalesDTO">
+	<insert id="waybillInsert" parameterType="kr.co.junko.dto.SalesDTO"
+	useGeneratedKeys="true"
+	keyColumn="waybill_idx"
+	keyProperty="waybill_idx">
 		insert into waybill (sales_idx, custom_idx)
 		values (#{sales_idx},#{custom_idx})
 	</insert>

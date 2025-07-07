@@ -19,4 +19,7 @@ public class SalesDTO {
 	// 송장 자동 생성 시 입력값
 	private int custom_idx;
 	
+	// 출고 자동 생성용 waybill_idx 받아오기
+	private int waybill_idx;
+	
 }
