@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.template.TemplateDAO">
+
+    <!-- 템플릿 등록 -->
+    <insert id="templateInsert" parameterType="kr.co.junko.dto.TemplateDTO" useGeneratedKeys="true" keyProperty="template_idx">
+        INSERT INTO template (
+            user_idx, template_name, template_desc,
+            template_html, created_date)
+        VALUES (
+            #{user_idx}, #{template_name}, #{template_desc},
+            #{template_html}, NOW())
+    </insert>
+    
+    <!-- 변수 등록 -->
+    <insert id="insertVariable" parameterType="kr.co.junko.dto.TemplateVarDTO">
+        INSERT INTO template_variable (template_idx, variable_name)
+        	VALUES (#{template_idx}, #{variable_name})
+    </insert>
+    
+    <!-- 템플릿 상세 조회 -->
+    <select id="selectTemplate" parameterType="int" resultType="kr.co.junko.dto.TemplateDTO">
+        SELECT * FROM template
+        WHERE template_idx = #{template_idx} AND del_yn = 0
+    </select>
+    
+    <!-- 템플릿 수정 -->
+    <update id="templateUpdate" parameterType="kr.co.junko.dto.TemplateDTO">
+        UPDATE template
+        SET template_name = #{template_name},
+            template_desc = #{template_desc},
+            template_html = #{template_html},
+            update_date = NOW()
+        WHERE template_idx = #{template_idx} AND del_yn = 0
+    </update>
+    
+    <!-- 기존 변수 삭제 -->
+    <update id="templateVarDel" parameterType="int">
+        UPDATE template_variable
+        SET del_yn = 1
+        WHERE template_idx = #{template_idx}
+    </update>
+    
+    <!-- 템플릿 삭제 -->
+    <update id="templateDel" parameterType="int">
+    	UPDATE template SET del_yn = 1
+  		WHERE template_idx = #{template_idx}
+    </update>
+    
+    <!-- 템플릿 리스트 -->
+    <select id="templateList" resultType="kr.co.junko.dto.TemplateDTO">
+	    SELECT * FROM template
+        WHERE del_yn = 0
+        ORDER BY created_date DESC
+    </select>
+    
+    <!-- 템플릿 상세보기 -->
+    <select id="templateDetail" resultType="kr.co.junko.dto.TemplateDTO">
+    	SELECT * FROM template
+    	WHERE template_idx = #{template_idx} AND del_yn = 0
+    </select>
+    
+    <!-- 변수 목록 조회 -->
+    <select id="templateVarList" parameterType="int" resultType="kr.co.junko.dto.TemplateVarDTO">
+    	SELECT * FROM template_variable
+        WHERE template_idx = #{template_idx} AND del_yn = 0
+    </select>
+
+</mapper>

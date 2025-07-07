@@ -1,0 +1,31 @@
+package kr.co.junko.template;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TemplateVarDTO;
+
+@Mapper
+public interface TemplateDAO {
+
+	int templateInsert(TemplateDTO dto);
+
+	void insertVariable(TemplateVarDTO varDTO);
+
+	TemplateDTO selectTemplate(int template_idx);
+
+	int templateUpdate(TemplateDTO dto);
+
+	void templateVarDel(int template_idx);
+
+	int templateDel(int template_idx);
+
+	List<TemplateDTO> templateList();
+
+	TemplateDTO templateDetail(int template_idx);
+
+	List<TemplateVarDTO> templateVarList(int template_idx);
+
+}
