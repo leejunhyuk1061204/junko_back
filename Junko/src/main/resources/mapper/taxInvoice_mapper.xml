@@ -13,7 +13,7 @@
 	
 	<select id="pages" resultType="int">
     SELECT CEIL(COUNT(*) * 1.0 / #{limit}) 
-    FROM tax_invoice
+    FROM taxInvoice
     WHERE del_yn = false
 </select>
 	
@@ -59,7 +59,7 @@
 </update>
 	
 	<insert id="saveLog" parameterType="TaxInvoiceLogDTO">
-    INSERT INTO tax_invoice_log (invoice_idx, status, status_by, status_time, memo)
+    INSERT INTO taxInvoiceLog (invoice_idx, status, status_by, status_time, memo)
     VALUES (#{invoice_idx}, #{status}, #{status_by}, #{status_time}, #{memo})
 </insert>
 	
