@@ -3,19 +3,41 @@
 
 <mapper namespace="kr.co.junko.order.OrderDAO">
 
-	<insert id="orderInsert" parameterType="kr.co.junko.dto.OrderDTO">
+	<insert id="orderInsert" parameterType="kr.co.junko.dto.OrderDTO"
+	useGeneratedKeys="true"
+	keyColumn="order_idx"
+	keyProperty="order_idx">
 		insert into `order` (custom_idx,warehouse_idx,user_idx)
 		values (#{custom_idx},#{warehouse_idx},#{user_idx})
 	</insert>
 	
-	<insert id="orderProductInsert" parameterType="kr.co.junko.dto.OrderProductDTO">
-		insert into order_product(order_idx,product_idx,order_cnt)
-		values (#{order_idx},#{product_idx},#{order_cnt})
+	<insert id="orderProductInsert" parameterType="kr.co.junko.dto.OrderProductDTO"
+	useGeneratedKeys="true"
+	keyColumn="order_product_idx"
+	keyProperty="order_product_idx">
+		insert into order_product(order_idx,product_idx,order_cnt
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,product_option_idx
+		</if>
+		)
+		values (#{order_idx},#{product_idx},#{order_cnt}
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,#{product_option_idx}
+		</if>
+		)
 	</insert>
 	
-	<insert id="orderPlanInsert" parameterType="kr.co.junko.dto.OrderPlanDTO">
-		insert into order_plan (order_product_idx,order_cnt,delivery_date)
-		values (#{order_product_idx},#{order_cnt},#{delivery_date})
+	<insert id="orderPlanInsert" parameterType="kr.co.junko.dto.OrderPlanDTO"
+	useGeneratedKeys="true"
+	keyColumn="plan_idx"
+	keyProperty="plan_idx">
+		insert into order_plan (delivery_date,order_idx)
+		values (#{delivery_date},#{order_idx})
+	</insert>
+	
+	<insert id="planProductInsert" parameterType="kr.co.junko.dto.PlanProductDTO">
+		insert into plan_product (plan_idx,order_product_idx,order_cnt)
+		values (#{plan_idx},#{order_product_idx},#{order_cnt})
 	</insert>
 
 	<update id="orderUpdate" parameterType="kr.co.junko.dto.OrderDTO">
@@ -46,6 +68,9 @@
 			<if test="order_cnt != null and order_cnt != 0">
 				order_cnt=#{order_cnt}
 			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				product_option_idx=#{product_option_idx}
+			</if>
 		</trim>
 		where order_product_idx = #{order_product_idx}
 	</update>
@@ -53,17 +78,30 @@
 	<update id="orderPlanUpdate" parameterType="kr.co.junko.dto.OrderPlanDTO">
 		update order_plan
 		<trim prefix="set" suffixOverrides=",">
-		<if test="order_product_idx != null and order_product_idx != 0">
-			order_product_idx=#{order_product_idx},
-		</if>
-		<if test="order_cnt != null and order_cnt != 0">
-			order_cnt=#{order_cnt},
-		</if>
-		<if test="delivery_date != null">
-			delivery_date=#{delivery_date}
-		</if>
+			<if test="delivery_date != null">
+				delivery_date=#{delivery_date},
+			</if>
+			<if test="order_idx != null and order_idx != 0">
+				order_idx=#{order_idx}
+			</if>
 		</trim>
 		where plan_idx = #{plan_idx}
+	</update>
+	
+	<update id="planProductUpdate" parameterType="kr.co.junko.dto.PlanProductDTO">
+		update plan_product
+		<trim prefix="set" suffixOverrides=",">
+			<if test="plan_idx != null and plan_idx != 0">
+				plan_idx=#{plan_idx},
+			</if>
+			<if test="order_product_idx != null and order_product_idx != 0">
+				order_product_idx=#{order_product_idx},
+			</if>
+			<if test="order_cnt != null and order_cnt != 0">
+				order_cnt = #{order_cnt}
+			</if>
+		</trim>
+		where plan_product_idx=#{plan_product_idx}
 	</update>
 
 	<select id="orderTotalPage" parameterType="map">
@@ -142,6 +180,9 @@
 			<if test="product_idx != null and product_idx != 0">
 				and product_idx = #{product_idx}
 			</if>
+			<if test="product_option_idx !=null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
+			</if>
 		</where>
 	</select>
 	
@@ -155,6 +196,9 @@
 			</if>
 			<if test="product_idx != null and product_idx != 0">
 				and product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx !=null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn !=''">
@@ -171,14 +215,14 @@
 		select ceil(count(plan_idx)*1.0/#{cnt}) as total from order_plan
 		<where>
 				del_yn = false
-			<if test="order_product_idx != null and order_product_idx != 0">
-				and order_product_idx = #{order_product_idx}
-			</if>
 			<if test="start_date != null and start_date != ''">
 				and delivery_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
 				and delivery_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="order_idx != null and order_idx != 0">
+				and order_idx = #{order_idx}
 			</if>
 		</where>
 	</select>
@@ -188,14 +232,47 @@
 		select * from order_plan
 		<where>
 				del_yn = false
-			<if test="order_product_idx != null and order_product_idx != 0">
-				and order_product_idx = #{order_product_idx}
-			</if>
 			<if test="start_date != null and start_date != ''">
 				and delivery_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
 				and delivery_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="order_idx != null and order_idx != 0">
+				and order_idx = #{order_idx}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="planProductListTotalPage">
+		select ceil(count(*)*1.0/#{cnt}) from plan_product
+		<where>
+			del_yn = false
+			<if test="plan_idx != null and plan_idx != 0">
+				and plan_idx = #{plan_idx}
+			</if>
+			<if test="order_product_idx != null and order_product_idx != 0">
+				and order_product_idx = #{order_product_idx}
+			</if>
+		</where>
+	</select>
+	
+	<select id="planProductList" parameterType="map" resultType="kr.co.junko.dto.PlanProductDTO">
+		select * from plan_product
+		<where>
+			del_yn = false
+			<if test="plan_idx != null and plan_idx != 0">
+				and plan_idx = #{plan_idx}
+			</if>
+			<if test="order_product_idx != null and order_product_idx != 0">
+				and order_product_idx = #{order_product_idx}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn !=''">
@@ -231,6 +308,15 @@
 		update order_plan set del_yn = true where plan_idx = #{param1}
 	</update>
 	
+	<update id="orderProductDelByOrderIdx">
+		update order_product set del_yn = true where order_idx = #{param1}
+	</update>
+	
+	<update id="orderPlanDelByOrderIdx">
+		update order_plan o
+		join plan_product pp on o.plan_idx = pp.plan_idx 
+		set o.del_yn = true, pp.del_yn = true where o.order_idx = #{param1}
+	</update>
 
 
 </mapper>

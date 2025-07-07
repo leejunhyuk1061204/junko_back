@@ -63,4 +63,59 @@
 		update warehouse set del_yn = true where warehouse_idx = #{param1}
 	</update>
 	
+	<insert id="zoneInsert" parameterType="kr.co.junko.dto.ZoneDTO">
+		insert into `zone` (warehouse_idx,zone_name)
+		values (#{warehouse_idx},#{zone_name})
+	</insert>
+	
+	<update id="zoneUpdate" parameterType="kr.co.junko.dto.ZoneDTO">
+		update `zone`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				warehouse_idx = #{warehouse_idx},
+			</if>
+			<if test="zone_name != null and zone_name != ''">
+				zone_name = #{zone_name}
+			</if>
+		</trim>
+		where zone_idx =#{zone_idx}
+	</update>
+	
+	<select id="zoneList" parameterType="map" resultType="kr.co.junko.dto.ZoneDTO">
+		select * from `zone`
+		<where>
+			del_yn = false
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx} 
+			</if>
+			<if test="zone_name != null and zone_name != ''">
+				and zone_name = #{zone_name}
+			</if>	
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="zoneListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) as total from `zone`
+		<where>
+			del_yn = false
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx} 
+			</if>
+			<if test="zone_name != null and zone_name != ''">
+				and zone_name = #{zone_name}
+			</if>	
+		</where>
+	</select>
+	
+	<update id="zoneDel">
+		update `zone` set del_yn = true where zone_idx = #{param1}
+	</update>
+	
 </mapper>

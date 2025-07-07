@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.stock.StockDAO">
+
+	<select id="stockInfo" resultType="map">
+		SELECT rp.product_idx, rp.product_option_idx,rp.receive_cnt, o.warehouse_idx, c.lot_require
+		from receive r 
+		join receive_product rp on r.receive_idx = rp.receive_idx 
+		join `order` o on r.order_idx = o.order_idx 
+		join product p on rp.product_idx = p.product_idx
+		join category c on p.category_idx = c.category_idx
+		where r.receive_idx = #{param1}
+	</select>
+
+	<insert id="stockInsert" parameterType="kr.co.junko.dto.StockDTO">
+		insert into stock (product_idx,stock_cnt, zone_idx, type, user_idx
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,product_option_idx
+		</if>
+		<if test="manufacture != null">
+			,manufacture
+		</if>
+		<if test="expiration != null">
+			,expiration
+		</if>
+		)
+		values (#{product_idx},#{stock_cnt},#{zone_idx},#{type},#{user_idx}
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,#{product_option_idx}
+		</if>
+		<if test="manufacture != null">
+			,#{manufacture}
+		</if>
+		<if test="expiration != null">
+			,#{expiration}
+		</if>
+		)
+	</insert>
+</mapper>

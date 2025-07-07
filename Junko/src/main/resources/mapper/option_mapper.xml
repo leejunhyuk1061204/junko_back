@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.option.OptionDAO">
+
+    <!-- 옵션 등록 -->
+    <insert id="optionInsert" parameterType="kr.co.junko.dto.OptionDTO">
+        INSERT INTO option (option_idx, option_name, option_value)
+            VALUES (#{option_idx}, #{option_name}, #{option_value})
+    </insert>
+
+    <!-- 옵션 수정 -->
+    <update id="optionUpdate" parameterType="kr.co.junko.dto.OptionDTO">
+        UPDATE option
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="option_name != null and option_name != ''">
+                option_name = #{option_name},
+            </if>
+            <if test="option_value != null and option_value != ''">
+                option_value = #{option_value},
+            </if>
+            <if test="del_yn != null">
+                del_yn = #{del_yn},
+            </if>
+        </trim>
+        WHERE option_idx = #{option_idx}
+    </update>
+
+    <!-- 옵션 삭제 -->
+    <update id="optionDel" parameterType="int">
+        UPDATE option
+        SET del_yn = 1
+        WHERE option_idx = #{option_idx}
+    </update>
+
+    <!-- 옵션 유효성 확인 -->
+    <select id="selectOptionByIdx" resultType="kr.co.junko.dto.OptionDTO">
+        SELECT * FROM option
+        WHERE option_idx = #{option_idx}
+    </select>
+
+    <!-- 상품에 옵션 연결 -->
+    <insert id="optionUse">
+        INSERT INTO using_option (product_idx, option_idx)
+            VALUES (#{product_idx}, #{option_idx})
+    </insert>
+
+    <!-- 상품에 연결된 옵션 해제 (소프트 딜리트) -->
+    <update id="optionUseDel">
+        UPDATE using_option
+        SET del_yn = 1
+        WHERE using_idx = #{using_idx}
+    </update>
+
+    <!-- 상품에 연결된 옵션 목록 조회 -->
+    <select id="usingOptionList" resultType="kr.co.junko.dto.UsingOptionDTO">
+        SELECT u.using_idx
+            , u.product_idx
+            , u.option_idx
+            , o.option_name
+            , o.option_value
+        FROM using_option u
+        JOIN option o ON u.option_idx = o.option_idx
+        WHERE u.product_idx = #{product_idx}
+        AND u.del_yn = 0
+        AND o.del_yn = 0
+    </select>
+
+    <!-- 조합 옵션 등록 (수동) -->
+    <insert id="combinedInsert" parameterType="kr.co.junko.dto.CombinedDTO">
+        INSERT INTO combined (combined_name) VALUES (#{combined_name})
+    </insert>
+
+    <!-- 조합 옵션 자동 생성 -->
+    <!-- 연결된 옵션 리스트 -->
+    <select id="getOptionsByProduct" resultType="kr.co.junko.dto.OptionDTO">
+        SELECT o.*
+        FROM using_option u
+        JOIN option o ON u.option_idx = o.option_idx
+        WHERE u.product_idx = #{product_idx}
+        AND u.del_yn = 0
+        AND o.del_yn = 0
+    </select>
+
+    <!-- 조합 등록 -->
+    <insert id="insertCombined" useGeneratedKeys="true" keyProperty="combined_idx">
+        INSERT INTO combined (combined_name, del_yn)
+        VALUES (#{combined_name}, 0)
+    </insert>
+
+    <!-- 상품-조합 등록 -->
+    <insert id="insertProductOption">
+        INSERT INTO product_option (product_idx, combined_idx, min_cnt, del_yn)
+        VALUES (#{product_idx}, #{combined_idx}, #{min_cnt}, 0)
+    </insert>
+
+    <!-- 이미 등록된 combined_name 목록 조회 -->
+    <select id="selectCombinedProduct" resultType="String">
+        SELECT c.combined_name
+        FROM product_option po
+        JOIN combined c ON po.combined_idx = c.combined_idx
+        WHERE po.product_idx = #{product_idx}
+        AND po.del_yn = 0
+        AND c.del_yn = 0
+    </select>
+
+    <!-- 상품 옵션 삭제 -->
+    <update id="productOptionDel" parameterType="int">
+        UPDATE product_option
+        SET del_yn = 1
+        WHERE product_option_idx = #{idx}
+    </update>
+
+    <!-- 연결된 상품 조합 먼저 삭제 -->
+    <update id="combinedOptionsDel" parameterType="int">
+        UPDATE product_option
+        SET del_yn = 1
+        WHERE combined_idx = #{combined_idx}
+    </update>
+
+    <!-- 조합 자체 삭제 -->
+    <update id="deleteCombined" parameterType="int">
+        UPDATE combined
+        SET del_yn = 1
+        WHERE combined_idx = #{combined_idx}
+    </update>
+
+    <!-- 조합된 옵션 목록 조회 -->
+    <select id="combinedList" resultType="kr.co.junko.dto.CombinedDTO">
+        SELECT *
+        FROM combined
+        WHERE del_yn = 0
+    </select>
+
+    <!-- 상품에 조합된 옵션 목록 조회 -->
+    <select id="combinedListProduct" resultType="kr.co.junko.dto.CombinedDTO">
+        SELECT c.*
+        FROM product_option po
+        JOIN combined c ON po.combined_idx = c.combined_idx
+        WHERE po.product_idx = #{product_idx}
+        AND po.del_yn = 0
+        AND c.del_yn = 0
+    </select>
+
+</mapper>

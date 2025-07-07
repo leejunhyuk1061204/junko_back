@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
+import kr.co.junko.dto.PlanProductDTO;
 
 @Mapper
 public interface OrderDAO {
@@ -17,12 +18,16 @@ public interface OrderDAO {
 	int orderProductInsert(OrderProductDTO dto);
 
 	int orderPlanInsert(OrderPlanDTO dto);
+	
+	int planProductInsert(PlanProductDTO dto);
 
 	int orderUpdate(OrderDTO dto);
 
 	int orderProductUpdate(OrderProductDTO dto);
 
 	int orderPlanUpdate(OrderPlanDTO dto);
+	
+	int planProductUpdate(PlanProductDTO dto);
 
 	int orderTotalPage(Map<String, Object> param);
 
@@ -35,6 +40,10 @@ public interface OrderDAO {
 	int orderPlanListTotalPage(Map<String, Object> param);
 
 	List<OrderPlanDTO> orderPlanList(Map<String, Object> param);
+	
+	int planProductListTotalPage(Map<String, Object> param);
+	
+	List<PlanProductDTO> planProductList(Map<String, Object> param);
 
 	OrderDTO orderByIdx(int idx);
 
@@ -47,5 +56,17 @@ public interface OrderDAO {
 	int orderProductDel(int idx);
 
 	int orderPlanDel(int idx);
+
+	int orderProductDelByOrderIdx(int idx);
+
+	int orderPlanDelByOrderIdx(int idx);
+
+	
+
+	
+
+	
+
+	
 
 }
