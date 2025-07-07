@@ -24,13 +24,13 @@
     AND del_yn = false
 </select>
 	
-	<insert id="insertInvoice" parameterType="TaxInvoiceDTO" useGeneratedKeys="true" keyProperty="invoice_idx">
+	<insert id="insertInvoice" parameterType="kr.co.junko.dto.TaxInvoiceDTO" useGeneratedKeys="true" keyProperty="invoice_idx">
     INSERT INTO taxInvoice (custom_idx, entry_idx, total_amount, status, reg_date, mod_date, issued_by, del_yn)
     VALUES (#{custom_idx}, #{entry_idx}, #{total_amount}, #{status}, NOW(), NOW(), #{issued_by}, false)
 </insert>
 	
 	
-	<update id="taxInvoiceUpdate" parameterType="TaxInvoiceDTO">
+	<update id="taxInvoiceUpdate" parameterType="kr.co.junko.dto.TaxInvoiceDTO">
     UPDATE taxInvoice
     SET custom_idx = #{custom_idx},
         entry_idx = #{entry_idx},
@@ -47,7 +47,7 @@
     UPDATE taxInvoice
     SET del_yn = true,
         mod_date = NOW()
-    WHERE invoice_idx = #{invoiceId}
+    WHERE invoice_idx = #{invoice_idx}
     AND del_yn = false
 </update>
 	
@@ -58,7 +58,7 @@
     AND del_yn = false
 </update>
 	
-	<insert id="saveLog" parameterType="TaxInvoiceLogDTO">
+	<insert id="saveLog" parameterType="kr.co.junko.dto.TaxInvoiceLogDTO">
     INSERT INTO taxInvoiceLog (invoice_idx, status, status_by, status_time, memo)
     VALUES (#{invoice_idx}, #{status}, #{status_by}, #{status_time}, #{memo})
 </insert>
@@ -68,7 +68,6 @@
     SELECT *
     FROM taxInvoiceLog
     WHERE invoice_idx = #{invoice_idx}
-    AND del_yn = false
 </select>
 	
 	
