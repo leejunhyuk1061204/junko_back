@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.junko.dto.SalesDTO;
+import kr.co.junko.waybill.WaybillService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,13 +24,22 @@ import lombok.extern.slf4j.Slf4j;
 public class SalesService {
 
 	private final SalesDAO dao;
+	private final WaybillService waybillService;
 
 	public boolean salesInsert(SalesDTO dto) {
 		return dao.salesInsert(dto)>0;
 	}
 
 	public boolean salesUpdate(SalesDTO dto) {
-		return dao.salesUpdate(dto)>0;
+		if("결제 완료".equals(dto.getStatus())) {
+			String curState = salesDetailByIdx(dto.getSales_idx()).getStatus();
+			if("결제 대기".equals(curState)) {
+				return waybillService.waybillInsert(dto); 
+			}
+			return dao.salesUpdate(dto)>0;
+		} else {
+			return dao.salesUpdate(dto)>0;
+		}
 	}
 
 	public Map<String, Object> salesList(Map<String, Object> param) {
@@ -52,6 +63,7 @@ public class SalesService {
 	// 엑셀로 csv 파일 등록하니까 자동 "" 붙는 문제 발생
 	// 메모장에 내용 복사 후 UTF-8 .csv 파일로 저장 후 업로드하면 정상 작동
 	// 엑셀 다른이름 저장 -> 파일 형식을 CSV UTF-8 (Comma delimited) (*.csv)로 선택
+	@Transactional
 	public boolean salesCsvInsert(MultipartFile file) {
 		
 		if(file.isEmpty()) {return false;}
@@ -95,6 +107,10 @@ public class SalesService {
 			log.error("CSV 파일 처리 중 오류 발생", e);
 			return false;
 		}
+	}
+
+	public SalesDTO salesDetailByIdx(int idx) {
+		return dao.salesDetailByIdx(idx);
 	}
 	
 }

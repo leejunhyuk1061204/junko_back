@@ -16,4 +16,7 @@ public class SalesDTO {
 	private String status;
 	private boolean del_yn;
 	
+	// 송장 자동 생성 시 입력값
+	private int custom_idx;
+	
 }

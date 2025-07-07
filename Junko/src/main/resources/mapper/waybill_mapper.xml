@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.waybill.WaybillDAO">
+
+	<insert id="waybillInsert" parameterType="kr.co.junko.dto.SalesDTO">
+		insert into waybill (sales_idx, custom_idx)
+		values (#{sales_idx},#{custom_idx})
+	</insert>
+
+	<update id="waybillUpdate" parameterType="kr.co.junko.dto.WaybillDTO">
+		update waybill
+		<trim prefix="set" suffixOverrides=",">
+		<if test="sales_idx != null and sales_idx !=0">
+			sales_idx = #{sales_idx},
+		</if>
+		<if test="status != null and status !=''">
+			status = #{status},
+		</if>
+		<if test="custom_idx != null and custom_idx !=0">
+			custom_idx = #{custom_idx}
+		</if>
+		</trim>
+		where waybill_idx = #{waybill_idx} 
+	</update>
+
+	<select id="waybillList" parameterType="map" resultType="kr.co.junko.dto.WaybillDTO">
+		select * from waybill
+		<where>
+			del_yn = false
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="custom_idx != null and custom_idx != 0">
+				and custom_idx = #{custom_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and waybill_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and waybill_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="waybill_date != null and waybill_date != ''">
+				and waybill_date = #{reg_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+
+	<select id="waybillListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from waybill
+		<where>
+			del_yn = false
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="custom_idx != null and custom_idx != 0">
+				and custom_idx = #{custom_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and waybill_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and waybill_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="waybill_date != null and waybill_date != ''">
+				and waybill_date = #{reg_date}
+			</if>
+		</where>
+	</select>
+
+	<update id="waybillDel">
+		update waybill set del_yn = true where waybill_idx = #{param1}
+	</update>
+
+</mapper>
