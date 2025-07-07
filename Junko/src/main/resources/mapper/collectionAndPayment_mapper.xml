@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.CollectionAndPaymentDAO">
+	
+	 <!-- 중복 등록 여부 확인 -->
+  <select id="capRegist" resultType="boolean">
+    SELECT COUNT(*) > 0
+    FROM collectionAndPayment
+    WHERE type = #{type}
+      AND date = #{date}
+      AND amount = #{amount}
+      AND custom_idx = #{custom_idx}
+      AND del_yn = false
+  </select>
+	
+	<!--  입출금 등록 -->
+  <insert id="insert"
+          parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO"
+          useGeneratedKeys="true"
+          keyProperty="cap_idx">
+    INSERT INTO collectionAndPayment (
+      type, date, amount, custom_idx, entry_idx, memo, del_yn
+    ) VALUES (
+      #{type}, #{date}, #{amount}, #{custom_idx}, #{entry_idx}, #{memo}, false
+    )
+  </insert>
+	
+	<select id="capList" parameterType="int"
+        resultType="kr.co.junko.dto.CollectionAndPaymentResponseDTO">
+  SELECT
+    cp.cap_idx,
+    cp.type,
+    cp.date,
+    cp.amount,
+    cp.custom_idx,
+    c.name AS custom_name,
+    c.account_bank,
+    c.account_number,
+    cp.entry_idx,
+    ae.entry_title,
+    cp.memo,
+    cp.del_yn AS deleted
+  FROM collection_payment cp
+  LEFT JOIN custom c ON cp.custom_idx = c.custom_idx
+  LEFT JOIN accountingEntry ae ON cp.entry_idx = ae.entry_idx
+  WHERE cp.cap_idx = #{cap_idx}
+    AND cp.del_yn = false
+</select>
+	
+	<update id="capUpdate" parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO">
+  UPDATE collection_payment
+  SET type = #{type},
+      date = #{date},
+      amount = #{amount},
+      custom_idx = #{custom_idx},
+      entry_idx = #{entry_idx},
+      memo = #{memo}
+  WHERE cap_idx = #{cap_idx}
+</update>
+	
+	<update id="capDel" parameterType="int">
+  UPDATE collection_payment
+  SET del_yn = true
+  WHERE cap_idx = #{cap_idx}
+</update>
+	
+	<select id="capCustom" resultType="kr.co.junko.dto.CustomDTO">
+  SELECT
+    custom_idx,
+    custom_name,
+    custom_owner,
+    custom_phone,
+    custom_fax,
+    custom_type,
+    business_number,
+    account_number,
+    bank,
+    del_yn
+  FROM custom
+  WHERE del_yn = 0
+  ORDER BY custom_name ASC
+</select>
+	
+	<select id="capCustomList" resultType="kr.co.junko.dto.CustomDTO">
+  SELECT
+    custom_idx,
+    custom_name,
+    account_number,
+    bank
+  FROM custom
+  WHERE del_yn = 0
+  ORDER BY custom_name ASC
+</select>
+	
+	<!-- 전표 -->
+<select id="getEntryList" resultType="kr.co.junko.dto.LinkedItemDTO">
+  SELECT entry_idx AS idx, entry_title AS title, 'entry' AS type
+  FROM accountingEntry
+  WHERE del_yn = 0
+</select>
+
+<!-- 정산 -->
+<select id="getSettlementList" resultType="kr.co.junko.dto.LinkedItemDTO">
+  SELECT settlement_id AS idx, settlement_title AS title, 'settlement' AS type
+  FROM purchaseSettlement
+  WHERE del_yn = 0
+</select>
+
+<!-- 세금계산서 -->
+<select id="getInvoiceList" resultType="kr.co.junko.dto.LinkedItemDTO">
+  SELECT invoice_idx AS idx, invoice_title AS title, 'invoice' AS type
+  FROM taxInvoice
+  WHERE del_yn = 0
+</select>
+	
+	 <insert id="insertFile" parameterType="kr.co.junko.dto.FileDTO">
+    INSERT INTO file (
+      ori_filename, new_filename, reg_date, type, idx, del_yn
+    ) VALUES (
+      #{ori_filename}, #{new_filename}, #{reg_date}, #{type}, #{idx}, #{del_yn}
+    )
+  </insert>
+
+  <select id="getFileByIdx" parameterType="int" resultType="kr.co.junko.dto.FileDTO">
+    SELECT *
+    FROM file
+    WHERE file_idx = #{file_idx} AND del_yn = false
+  </select>
+
+  <update id="deleteFile" parameterType="int">
+    UPDATE file
+    SET del_yn = true
+    WHERE file_idx = #{file_idx}
+  </update>
+	
+	<insert id="insertLog" parameterType="kr.co.junko.dto.CollectionAndPaymentLogDTO">
+    INSERT INTO collectionAndPayment_log (
+      cap_idx, action_type, before_data, after_data, log_date
+    ) VALUES (
+      #{cap_idx}, #{action_type}, #{before_data}, #{after_data}, NOW()
+    )
+  </insert>
+
+  <select id="getLogsByCapIdx" parameterType="int" resultType="kr.co.junko.dto.CollectionAndPaymentLogDTO">
+    SELECT *
+    FROM collectionAndPayment_log
+    WHERE cap_idx = #{cap_idx}
+    ORDER BY log_date DESC
+  </select>
+	
+	
+	
+	
+</mapper>

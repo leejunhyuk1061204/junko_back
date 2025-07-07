@@ -1,20 +1,30 @@
 package kr.co.junko.accountEntry;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.junko.dto.AccountingEntryDTO;
+import kr.co.junko.dto.FileDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -75,5 +85,90 @@ public class AccountEntryController {
 		
 		return result;
 	}
+	
+	//전표 상태 변경
+	@PatchMapping(value="/accountStatusUpdate/{entry_idx}/status")
+	public ResponseEntity<?> accountStatusUpdate(@PathVariable int entry_idx,
+			@RequestBody Map<String, String> map,
+			@RequestParam String user_id){
+		
+		String newStatus = map.get("status");
+		String logMsg = map.getOrDefault("logMsg", null);
+		service.accountStatusUpdate(entry_idx, newStatus, user_id, logMsg);
+		
+		
+		return ResponseEntity.ok().build();
+		
+	}
+	
+	// 전표 증빙파일 첨부 등록
+	@PostMapping(value="/accountFile/{entry_idx}/upload")
+	public Map<String, Object> accountFile(@PathVariable int entry_idx,
+		 @RequestParam("file") MultipartFile file){
+		
+		return service.accountFile(entry_idx,file);
+	}
+	
+	// 전표 증빙파일 리스트 / 다운로드
+	@GetMapping(value="/entryFileList/{entry_idx}/upload")
+	public Map<String, Object> entryFileList(@PathVariable int entry_idx) {
+	    return service.entryFileList(entry_idx);
+	}
+	
+	@GetMapping(value="/entryFileDown/{file_idx}")
+	public ResponseEntity<InputStreamResource> entryFileDown(@PathVariable int file_idx) throws IOException{
+		
+		FileDTO dto = service.entryFileDown(file_idx);
+		File file = new File("C:/upload" + dto.getNew_filename());
+		
+		if (!file.exists()) {
+			throw new FileNotFoundException("존재하지 않 파일");
+		}
+		
+	
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+	    return ResponseEntity.ok()
+	            .header("Content-Disposition", "attachment; filename=\"" + dto.getOri_filename() + "\"")
+	            .body(resource);
+	}
+	
+	
+	// 전표 변경 이력 및 상태 변경 로그 조회 
+	@GetMapping(value="/accountLog/{entry_idx}")
+	public Map<String, Object> accountLog(@PathVariable int entry_idx) {
+	    return service.accountLog(entry_idx);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

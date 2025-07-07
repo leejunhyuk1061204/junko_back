@@ -1,0 +1,830 @@
+INFO  25-07-07 11:01:52 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 45745 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:01:52 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:01:54 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:01:54 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:01:54 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:01:54 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:01:54 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:01:54 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1285 ms
+WARN  25-07-07 11:01:54 [main]  [AnnotationConfigServletWebServerApplicationContext:599] - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+INFO  25-07-07 11:01:54 [main]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:01:54 [main]  [ConditionEvaluationReportLoggingListener:136] - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+ERROR 25-07-07 11:01:54 [main]  [SpringApplication:818] - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:693)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:929)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:591)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:732)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:409)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at kr.co.junko.JunkoApplication.main(JunkoApplication.java:30)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:224)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:710)
+	... 20 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:113)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1707)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1452)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 33 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:330)
+	... 47 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 57 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 71 common frames omitted
+Caused by: java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:700)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:577)
+	at org.mybatis.spring.SqlSessionFactoryBean.getObject(SqlSessionFactoryBean.java:720)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.sqlSessionFactory(MybatisAutoConfiguration.java:187)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$8971da55.CGLIB$sqlSessionFactory$1(<generated>)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$8971da55$$FastClassBySpringCGLIB$$b02c2a26.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$8971da55.sqlSessionFactory(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 72 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceLogDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:127)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.parse(XMLMapperBuilder.java:100)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:698)
+	... 85 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceLogDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:103)
+	at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseStatementNode(XMLStatementBuilder.java:78)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:143)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:135)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:125)
+	... 87 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceLogDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:128)
+	at org.apache.ibatis.builder.BaseBuilder.resolveAlias(BaseBuilder.java:132)
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:101)
+	... 91 common frames omitted
+Caused by: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:226)
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:103)
+	at org.apache.ibatis.io.Resources.classForName(Resources.java:322)
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:124)
+	... 93 common frames omitted
+INFO  25-07-07 11:04:00 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 45756 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:04:00 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:04:01 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:04:01 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:04:01 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:04:01 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:04:01 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:04:01 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 862 ms
+WARN  25-07-07 11:04:01 [main]  [AnnotationConfigServletWebServerApplicationContext:599] - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+INFO  25-07-07 11:04:01 [main]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:04:01 [main]  [ConditionEvaluationReportLoggingListener:136] - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+ERROR 25-07-07 11:04:01 [main]  [SpringApplication:818] - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:693)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:929)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:591)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:732)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:409)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at kr.co.junko.JunkoApplication.main(JunkoApplication.java:30)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:224)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:710)
+	... 20 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:113)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1707)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1452)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 33 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:330)
+	... 47 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 57 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 71 common frames omitted
+Caused by: java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:700)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:577)
+	at org.mybatis.spring.SqlSessionFactoryBean.getObject(SqlSessionFactoryBean.java:720)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.sqlSessionFactory(MybatisAutoConfiguration.java:187)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$3065590a.CGLIB$sqlSessionFactory$1(<generated>)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$3065590a$$FastClassBySpringCGLIB$$cb1bc5df.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$3065590a.sqlSessionFactory(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 72 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoice_mapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceLogDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:127)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.parse(XMLMapperBuilder.java:100)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:698)
+	... 85 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceLogDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:103)
+	at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseStatementNode(XMLStatementBuilder.java:78)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:143)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:135)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:125)
+	... 87 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceLogDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:128)
+	at org.apache.ibatis.builder.BaseBuilder.resolveAlias(BaseBuilder.java:132)
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:101)
+	... 91 common frames omitted
+Caused by: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceLogDTO
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:226)
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:103)
+	at org.apache.ibatis.io.Resources.classForName(Resources.java:322)
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:124)
+	... 93 common frames omitted
+INFO  25-07-07 11:05:54 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 45759 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:05:54 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:05:55 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:05:55 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:05:55 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:05:55 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:05:55 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:05:55 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 873 ms
+INFO  25-07-07 11:05:55 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:05:55 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 11:05:55 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.13 seconds (JVM running for 2.698)
+INFO  25-07-07 11:06:57 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 11:06:57 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:06:57 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:06:57 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:26:41 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 46081 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:26:41 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:26:42 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:26:42 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:26:42 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:26:42 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:26:42 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:26:42 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 992 ms
+WARN  25-07-07 11:26:42 [main]  [AnnotationConfigServletWebServerApplicationContext:599] - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+INFO  25-07-07 11:26:42 [main]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:26:42 [main]  [ConditionEvaluationReportLoggingListener:136] - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+ERROR 25-07-07 11:26:42 [main]  [SpringApplication:818] - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:693)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:929)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:591)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:732)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:409)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at kr.co.junko.JunkoApplication.main(JunkoApplication.java:30)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:224)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:710)
+	... 20 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:113)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1707)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1452)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 33 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:330)
+	... 47 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 57 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 71 common frames omitted
+Caused by: java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:700)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:577)
+	at org.mybatis.spring.SqlSessionFactoryBean.getObject(SqlSessionFactoryBean.java:720)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.sqlSessionFactory(MybatisAutoConfiguration.java:187)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$ed22240e.CGLIB$sqlSessionFactory$0(<generated>)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$ed22240e$$FastClassBySpringCGLIB$$ccdb79c4.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$ed22240e.sqlSessionFactory(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 72 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:127)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.parse(XMLMapperBuilder.java:100)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:698)
+	... 85 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:103)
+	at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseStatementNode(XMLStatementBuilder.java:78)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:143)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:135)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:125)
+	... 87 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:128)
+	at org.apache.ibatis.builder.BaseBuilder.resolveAlias(BaseBuilder.java:132)
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:101)
+	... 91 common frames omitted
+Caused by: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:226)
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:103)
+	at org.apache.ibatis.io.Resources.classForName(Resources.java:322)
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:124)
+	... 93 common frames omitted
+INFO  25-07-07 11:27:49 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 46087 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:27:49 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:27:49 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:27:49 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:27:49 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:27:49 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:27:50 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:27:50 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 830 ms
+WARN  25-07-07 11:27:50 [main]  [AnnotationConfigServletWebServerApplicationContext:599] - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+INFO  25-07-07 11:27:50 [main]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:27:50 [main]  [ConditionEvaluationReportLoggingListener:136] - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+ERROR 25-07-07 11:27:50 [main]  [SpringApplication:818] - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:693)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:929)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:591)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:732)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:409)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at kr.co.junko.JunkoApplication.main(JunkoApplication.java:30)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:224)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:710)
+	... 20 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:113)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1707)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1452)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 33 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:330)
+	... 47 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 57 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 71 common frames omitted
+Caused by: java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:700)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:577)
+	at org.mybatis.spring.SqlSessionFactoryBean.getObject(SqlSessionFactoryBean.java:720)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.sqlSessionFactory(MybatisAutoConfiguration.java:187)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$3065590a.CGLIB$sqlSessionFactory$1(<generated>)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$3065590a$$FastClassBySpringCGLIB$$cb1bc5df.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$3065590a.sqlSessionFactory(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 72 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:127)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.parse(XMLMapperBuilder.java:100)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:698)
+	... 85 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:103)
+	at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseStatementNode(XMLStatementBuilder.java:78)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:143)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:135)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:125)
+	... 87 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:128)
+	at org.apache.ibatis.builder.BaseBuilder.resolveAlias(BaseBuilder.java:132)
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:101)
+	... 91 common frames omitted
+Caused by: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:226)
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:103)
+	at org.apache.ibatis.io.Resources.classForName(Resources.java:322)
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:124)
+	... 93 common frames omitted
+INFO  25-07-07 11:30:09 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 46093 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:30:09 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:30:10 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:30:10 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:30:10 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:30:10 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:30:10 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:30:10 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 849 ms
+WARN  25-07-07 11:30:10 [main]  [AnnotationConfigServletWebServerApplicationContext:599] - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+INFO  25-07-07 11:30:10 [main]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:30:10 [main]  [ConditionEvaluationReportLoggingListener:136] - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+ERROR 25-07-07 11:30:10 [main]  [SpringApplication:818] - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:693)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:929)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:591)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:732)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:409)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at kr.co.junko.JunkoApplication.main(JunkoApplication.java:30)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:224)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:710)
+	... 20 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/kr/co/junko/accountDepartment/AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:113)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1707)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1452)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 33 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:330)
+	... 47 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 57 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 71 common frames omitted
+Caused by: java.io.IOException: Failed to parse mapping resource: 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:700)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:577)
+	at org.mybatis.spring.SqlSessionFactoryBean.getObject(SqlSessionFactoryBean.java:720)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.sqlSessionFactory(MybatisAutoConfiguration.java:187)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$4a19510b.CGLIB$sqlSessionFactory$2(<generated>)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$4a19510b$$FastClassBySpringCGLIB$$4abe4f11.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$4a19510b.sqlSessionFactory(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 72 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [/Users/kimkyoungwhoe/junko_back/Junko/target/classes/mapper/taxInvoiceDetail_mapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:127)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.parse(XMLMapperBuilder.java:100)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:698)
+	... 85 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:103)
+	at org.apache.ibatis.builder.xml.XMLStatementBuilder.parseStatementNode(XMLStatementBuilder.java:78)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:143)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:135)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:125)
+	... 87 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: Could not resolve type alias 'TaxInvoiceDetailDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:128)
+	at org.apache.ibatis.builder.BaseBuilder.resolveAlias(BaseBuilder.java:132)
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:101)
+	... 91 common frames omitted
+Caused by: java.lang.ClassNotFoundException: Cannot find class: TaxInvoiceDetailDTO
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:226)
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:103)
+	at org.apache.ibatis.io.Resources.classForName(Resources.java:322)
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:124)
+	... 93 common frames omitted
+INFO  25-07-07 11:32:00 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 46096 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 11:32:00 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 11:32:01 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 11:32:01 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:32:01 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 11:32:01 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 11:32:01 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 11:32:01 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1014 ms
+INFO  25-07-07 11:32:01 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:32:01 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 11:32:01 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.166 seconds (JVM running for 2.688)
+INFO  25-07-07 11:32:07 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 11:32:07 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 11:32:07 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 11:32:07 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 12:27:43 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 46561 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 12:27:43 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 12:27:44 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 12:27:44 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 12:27:44 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 12:27:44 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 12:27:44 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 12:27:44 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1059 ms
+INFO  25-07-07 12:27:45 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 12:27:45 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 12:27:45 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.234 seconds (JVM running for 2.795)
+INFO  25-07-07 12:47:55 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 12:47:55 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 12:47:55 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 12:47:55 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 15:53:54 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 47307 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 15:53:54 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 15:53:55 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 15:53:55 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 15:53:55 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 15:53:55 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 15:53:55 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 15:53:55 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1014 ms
+INFO  25-07-07 15:53:55 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 15:53:55 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 15:53:55 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.188 seconds (JVM running for 2.846)
+INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:23 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 48188 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 16:23:23 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 16:23:24 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 16:23:24 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:24 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 16:23:24 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 16:23:24 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 16:23:24 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1032 ms
+INFO  25-07-07 16:23:25 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:25 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 16:23:25 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.269 seconds (JVM running for 2.944)
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 20:54:04 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 49837 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 20:54:04 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 20:54:05 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 20:54:05 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 20:54:05 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 20:54:05 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 20:54:05 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 20:54:05 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1023 ms
+INFO  25-07-07 20:54:06 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 20:54:06 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 20:54:06 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.352 seconds (JVM running for 2.972)
+INFO  25-07-07 20:54:12 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 20:54:12 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 20:54:12 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 20:54:12 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:13:27 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 49891 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 21:13:27 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 21:13:28 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 21:13:28 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:13:28 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 21:13:28 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 21:13:29 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 21:13:29 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1030 ms
+INFO  25-07-07 21:13:29 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:13:29 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 21:13:29 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.351 seconds (JVM running for 2.956)
+INFO  25-07-07 21:13:38 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 21:13:38 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:13:38 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 21:13:38 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:32:49 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 49965 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 21:32:49 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 21:32:50 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 21:32:50 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:32:50 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 21:32:50 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 21:32:50 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 21:32:50 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1035 ms
+INFO  25-07-07 21:32:51 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:32:51 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 21:32:51 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.384 seconds (JVM running for 3.146)
+INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]

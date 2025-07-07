@@ -8,14 +8,23 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ChartDAO {
 
-	List<Map<String, Object>> getDaySales();
+	List<Map<String, Object>> getDaySales(Map<String, Object> param);
 
-	List<Map<String, Object>> getRecentOrderStats();
-	
-	List<Map<String, Object>> getPopularProduct();
-	
-	List<Map<String, Object>> getHighReturnProduct();
+	List<Map<String, Object>> getRecentOrderStats(Map<String, Object> param);
 
-	List<Map<String, Object>> getMonthlySalesYoY();
+	List<Map<String, Object>> getPopularProduct(Map<String, Object> param);
+
+	List<Map<String, Object>> getHighReturnProduct(Map<String, Object> param);
+
+	List<Map<String, Object>> getInventoryTurnoverStats(Map<String, Object> param);
+	
+	List<Map<String, Object>> returnProduct(Map<String, Object> param);
+	
+	List<Map<String, Object>> getDelayedProduct(Map<String, Object> param);
+	
+	List<Map<String, Object>> getOrderStatus(Map<String, Object> param);
+
+	List<Map<String, Object>> getMonthlySalesYoY(Map<String, Object> param);
+
 
 }
