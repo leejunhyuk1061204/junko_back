@@ -20,4 +20,6 @@ public interface SalesDAO {
 
 	int salesDel(int idx);
 
+	SalesDTO salesDetailByIdx(int idx);
+
 }

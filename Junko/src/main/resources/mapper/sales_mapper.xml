@@ -120,4 +120,8 @@
 		update sales set del_yn = true where sales_idx = #{param1}
 	</update>
 
+	<select id="salesDetailByIdx" resultType="kr.co.junko.dto.SalesDTO">
+		select * from sales where sales_idx = #{param1}
+	</select>
+
 </mapper>

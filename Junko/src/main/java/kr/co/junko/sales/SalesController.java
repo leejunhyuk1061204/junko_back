@@ -36,8 +36,15 @@ public class SalesController {
 	public Map<String, Object>salesUpdate(@RequestBody SalesDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success =service.salesUpdate(dto);
-		result.put("success", success);
+		
+		try {
+			boolean success =service.salesUpdate(dto);
+			result.put("success", success);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	
@@ -64,4 +71,14 @@ public class SalesController {
 		result.put("success", success);
 		return result;
 	}
+	
+	@GetMapping(value="/sales/detail/{sales_idx}")
+	public Map<String, Object>salesDetailByIdx(@PathVariable int sales_idx){
+		log.info("idx = "+sales_idx);
+		result = new HashMap<String, Object>();
+		SalesDTO dto = service.salesDetailByIdx(sales_idx);
+		result.put("dto", dto);
+		return result;
+	}
+	
 }

@@ -1,10 +1,22 @@
 package kr.co.junko.product;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.ProductDTO;
 import kr.co.junko.util.Jwt;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +41,9 @@ public class ProductController {
 	
 	Map<String, Object> result = null;
 	
+	@Value("${spring.servlet.multipart.location}")
+	private String uploadDir;
+	
 	// 상품 등록
 	@PostMapping(value="/product/insert")
 	public Map<String, Object> productInsert(
@@ -35,7 +51,7 @@ public class ProductController {
 			@RequestHeader Map<String, String> header) {
 		
 		log.info("dto : {}", dto);
-		Map<String, Object> result = new HashMap<>();
+		result = new HashMap<String,Object>();
 
 		// 1. 토큰에서 사용자 정보 추출
 		String token = header.get("authorization");
@@ -69,6 +85,7 @@ public class ProductController {
 	public Map<String, Object> productCsvInsert(
 		@RequestParam("file") MultipartFile file,
 		@RequestHeader Map<String, String> header) {
+		
 		log.info("CSV file : {}", file);
 		result = new HashMap<String, Object>();
 
@@ -96,9 +113,8 @@ public class ProductController {
 	public Map<String, Object> uploadProductImg(
 		@PathVariable("product_idx") int product_idx,
 		@RequestParam("images") MultipartFile[] files,
-		@RequestHeader Map<String, String> header
-	) {
-		Map<String, Object> result = new HashMap<>();
+		@RequestHeader Map<String, String> header) {
+		result = new HashMap<String,Object>();
 
 		String token = header.get("authorization");
 		Map<String, Object> payload = Jwt.readToken(token);
@@ -123,7 +139,7 @@ public class ProductController {
 		@ModelAttribute ProductDTO dto,
 		@RequestHeader Map<String, String> header) {
 		log.info("dto: {}", dto);
-		Map<String, Object> result = new HashMap<>();
+		result = new HashMap<String,Object>();
 
 		String token = header.get("authorization");
 		Map<String, Object> payload = Jwt.readToken(token);
@@ -133,7 +149,7 @@ public class ProductController {
 		boolean success = false;
 
 		if (login) {
-			success = service.productUpdate(dto);
+			success = service.productUpdate(dto, loginId);
 		}
 		
 		result.put("success", success);
@@ -147,10 +163,9 @@ public class ProductController {
 	public Map<String, Object> updateProductImg(
 		@PathVariable("product_idx") int product_idx,
 		@RequestParam(value = "images", required = false) MultipartFile[] files,
-		@RequestHeader Map<String, String> header
-	) {
+		@RequestHeader Map<String, String> header) {
 		log.info("이미지 수정 요청: product_idx={}, files={}", product_idx, files != null ? files.length : 0);
-		Map<String, Object> result = new HashMap<>();
+		result = new HashMap<String,Object>();
 
 		String token = header.get("authorization");
 		Map<String, Object> payload = Jwt.readToken(token);
@@ -175,7 +190,7 @@ public class ProductController {
 		@PathVariable("product_idx") int product_idx,
 		@RequestHeader Map<String, String> header) {
 
-		Map<String, Object> result = new HashMap<>();
+		result = new HashMap<String,Object>();
 
 		String token = header.get("authorization");
 		Map<String, Object> payload = Jwt.readToken(token);
@@ -199,7 +214,7 @@ public class ProductController {
 		@PathVariable("product_idx") int product_idx,
 		@RequestHeader Map<String, String> header) {
 
-		Map<String, Object> result = new HashMap<>();
+		result = new HashMap<String,Object>();
 
 		String token = header.get("authorization");
 		Map<String, Object> payload = Jwt.readToken(token);
@@ -221,4 +236,102 @@ public class ProductController {
 	public Map<String, Object> productList(@RequestBody Map<String, Object> param) {
 		return service.productList(param);
 	}
+	
+	// 문서 업로드
+	@PostMapping("/product/{product_idx}/docs")
+	public Map<String, Object> productDocsUpload(
+	    @PathVariable("product_idx") int product_idx,
+	    @RequestParam("docs") MultipartFile[] files,
+	    @RequestHeader Map<String, String> header) {
+	    result = new HashMap<String,Object>();
+	    
+	    String token = header.get("authorization");
+	    Map<String, Object> payload = Jwt.readToken(token);
+	    String loginId = (String) payload.get("user_id");
+
+	    boolean login = loginId != null && !loginId.isEmpty();
+	    boolean success = false;
+
+	    if (login) {
+	        success = service.productDocsUpload(product_idx, files);
+	    }
+
+	    result.put("success", success);
+	    result.put("loginYN", login);
+	    return result;
+	}
+	
+	// 문서 삭제
+	@PutMapping("/product/docs/{doc_id}/del")
+	public Map<String, Object> productDocsDel(
+	    @PathVariable("doc_id") int doc_id,
+	    @RequestHeader Map<String, String> header) {
+		
+	    result = new HashMap<String,Object>();
+	    String token = header.get("authorization");
+	    Map<String, Object> payload = Jwt.readToken(token);
+	    String loginId = (String) payload.get("user_id");
+
+	    boolean login = loginId != null && !loginId.isEmpty();
+	    boolean success = false;
+
+	    if (login) {
+	        success = service.productDocsDel(doc_id);
+	    }
+
+	    result.put("success", success);
+	    result.put("loginYN", login);
+	    return result;
+	}
+	
+	// 문서 리스트
+	@GetMapping("/product/{product_idx}/docs")
+	public Map<String, Object> productDocsList(@PathVariable("product_idx") int product_idx) {
+		result = new HashMap<String,Object>();
+	    List<FileDTO> docs = service.productDocsList(product_idx);
+	    result.put("docs", docs);
+	    return result;
+	}
+
+	// 문서 다운로드
+	@GetMapping("/product/docs/{fileName}")
+	public ResponseEntity<Resource> downloadProductDoc(
+	    @PathVariable("fileName") String fileName,
+	    @RequestHeader Map<String, String> header) {
+
+	    try {
+	        String token = header.get("authorization");
+	        Map<String, Object> payload = Jwt.readToken(token);
+	        String loginId = (String) payload.get("user_id");
+
+	        boolean login = loginId != null && !loginId.isEmpty();
+	        if (!login) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+	        // ori_filename 조회
+	        String oriFilename = service.downloadProductDoc(fileName);
+	        if (oriFilename == null) return ResponseEntity.notFound().build();
+
+	        // 실제 파일 로드
+	        Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+	        Resource resource = new UrlResource(filePath.toUri());
+	        if (!resource.exists()) return ResponseEntity.notFound().build();
+
+	        // 파일 content type 설정
+	        String contentType = Files.probeContentType(filePath);
+	        if (contentType == null) contentType = "application/octet-stream";
+
+	        // 다운로드 응답 반환
+	        return ResponseEntity.ok()
+	                .contentType(MediaType.parseMediaType(contentType))
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + oriFilename + "\"")
+	                .body(resource);
+
+	    } catch (Exception e) {
+	        log.error("문서 다운로드 실패: {}", fileName, e);
+	        return ResponseEntity.internalServerError().build();
+	    }
+	}
+
+
+	
 }
