@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.custom.CustomDAO">
+
+	<!-- 거래처 등록 -->
+    <insert id="customInsert" parameterType="kr.co.junko.dto.CustomDTO">
+        INSERT INTO custom (
+            custom_name, custom_owner, custom_phone, custom_fax, custom_type,
+            business_number, account_number, bank)
+        VALUES (
+            #{custom_name}, #{custom_owner}, #{custom_phone}, #{custom_fax}, #{custom_type},
+            #{business_number}, #{account_number}, #{bank})
+    </insert>
+
+	<!-- 거래처 수정 -->
+	<update id="customUpdate" parameterType="kr.co.junko.dto.CustomDTO">
+	    UPDATE custom
+	    <trim prefix="SET" suffixOverrides=",">
+	        <if test="custom_name != null and custom_name != ''">
+	            custom_name = #{custom_name},
+	        </if>
+	        <if test="custom_owner != null and custom_owner != ''">
+	            custom_owner = #{custom_owner},
+	        </if>
+	        <if test="custom_phone != null and custom_phone != ''">
+	            custom_phone = #{custom_phone},
+	        </if>
+	        <if test="custom_fax != null and custom_fax != ''">
+	            custom_fax = #{custom_fax},
+	        </if>
+	        <if test="custom_type != null and custom_type != ''">
+	            custom_type = #{custom_type},
+	        </if>
+	        <if test="business_number != null and business_number != ''">
+	            business_number = #{business_number},
+	        </if>
+	        <if test="account_number != null and account_number != ''">
+	            account_number = #{account_number},
+	        </if>
+	        <if test="bank != null and bank != ''">
+	            bank = #{bank},
+	        </if>
+	    </trim>
+	    WHERE custom_idx = #{custom_idx}
+	</update>
+	
+	<!-- 거래처 삭제 -->
+    <update id="customDel" parameterType="int">
+        UPDATE custom
+        SET del_yn = 1
+        WHERE custom_idx = #{custom_idx}
+    </update>
+    
+    <!-- 거래처 리스트 -->
+    <select id="customList" resultType="kr.co.junko.dto.CustomDTO">
+        SELECT *
+        FROM custom
+        WHERE del_yn = 0
+        <if test="search != null and search != ''">
+            AND (
+                custom_name LIKE CONCAT('%', #{search}, '%') OR
+                custom_owner LIKE CONCAT('%', #{search}, '%') OR
+                custom_phone LIKE CONCAT('%', #{search}, '%')
+            )
+        </if>
+        ORDER BY custom_idx DESC
+        LIMIT #{start}, #{size}
+    </select>
+    
+    <!-- 거래처 총 숫자 -->
+    <select id="customCnt" resultType="int">
+        SELECT COUNT(*)
+        FROM custom
+        WHERE del_yn = 0
+        <if test="search != null and search != ''">
+            AND (
+                custom_name LIKE CONCAT('%', #{search}, '%') OR
+                custom_owner LIKE CONCAT('%', #{search}, '%') OR
+                custom_phone LIKE CONCAT('%', #{search}, '%')
+            )
+        </if>
+    </select>
+
+	<!-- 거래처 검색 -->
+    <select id="customSelect" parameterType="int" resultType="kr.co.junko.dto.CustomDTO">
+        SELECT *
+        FROM custom
+        WHERE custom_idx = #{custom_idx} AND del_yn = 0
+    </select>
+
+
+</mapper>

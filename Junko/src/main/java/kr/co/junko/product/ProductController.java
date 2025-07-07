@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -294,29 +295,32 @@ public class ProductController {
 
 	// 문서 다운로드
 	@GetMapping("/product/docs/{fileName}")
-	public ResponseEntity<Resource> downloadProductDoc(@PathVariable("fileName") String fileName) {
-	    try {
-	        // DB에서 ori_filename 조회
-	        String oriFilename = service.downloadProductDoc(fileName);
-	        if (oriFilename == null) {
-	            return ResponseEntity.notFound().build();
-	        }
+	public ResponseEntity<Resource> downloadProductDoc(
+	    @PathVariable("fileName") String fileName,
+	    @RequestHeader Map<String, String> header) {
 
-	        // 실제 경로에서 파일 로드
+	    try {
+	        String token = header.get("authorization");
+	        Map<String, Object> payload = Jwt.readToken(token);
+	        String loginId = (String) payload.get("user_id");
+
+	        boolean login = loginId != null && !loginId.isEmpty();
+	        if (!login) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+	        // ori_filename 조회
+	        String oriFilename = service.downloadProductDoc(fileName);
+	        if (oriFilename == null) return ResponseEntity.notFound().build();
+
+	        // 실제 파일 로드
 	        Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
 	        Resource resource = new UrlResource(filePath.toUri());
+	        if (!resource.exists()) return ResponseEntity.notFound().build();
 
-	        // 파일 없으면 
-	        if (!resource.exists()) {
-	            return ResponseEntity.notFound().build();
-	        }
-
-	        // 파일 확장자에 따라서 content_type 결정
+	        // 파일 content type 설정
 	        String contentType = Files.probeContentType(filePath);
-	        // 바이너리 파일로 처리하라는 의미 / 브라우저 무조건 다운로드
 	        if (contentType == null) contentType = "application/octet-stream";
 
-	        // 다운로드 응답 생성
+	        // 다운로드 응답 반환
 	        return ResponseEntity.ok()
 	                .contentType(MediaType.parseMediaType(contentType))
 	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + oriFilename + "\"")
@@ -327,6 +331,7 @@ public class ProductController {
 	        return ResponseEntity.internalServerError().build();
 	    }
 	}
+
 
 	
 }
