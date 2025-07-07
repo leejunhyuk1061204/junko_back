@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.sales.SalesDAO">
+
+	<insert id="salesInsert" parameterType="kr.co.junko.dto.SalesDTO">
+		insert into sales (customer, customer_phone, customer_address, payment_option
+		<if test="payment_date != null">
+			,payment_date
+		</if>
+		<if test="status != null and status != ''">
+			,status
+		</if>
+		)
+		values (#{customer},#{customer_phone},#{customer_address},#{payment_option}
+		<if test="payment_date != null">
+			,#{payment_date}
+		</if>
+		<if test="status != null and status != ''">
+			,#{status}
+		</if>
+		)
+	</insert>
+	
+	<update id="salesUpdate" parameterType="kr.co.junko.dto.SalesDTO">
+		update sales
+		<trim prefix="set" suffixOverrides=",">
+			<if test="customer != null and customer != ''">
+				customer = #{customer},
+			</if>
+			<if test="customer_phone != null and customer_phone != ''">
+				customer_phone = #{customer_phone},
+			</if>
+			<if test="customer_address != null and customer_address != ''">
+				customer_address = #{customer_address},
+			</if>
+			<if test="payment_option != null and payment_option !=''">
+				payment_option = #{payment_option},
+			</if>
+			<if test="payment_date != null">
+				payment_date = #{payment_date},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status}
+			</if>
+		</trim>
+		where sales_idx = #{sales_idx}
+	</update>
+
+	<select id="salesList" parameterType="map" resultType="kr.co.junko.dto.SalesDTO">
+		select * from sales
+		<where>
+			del_yn = false
+			<if test="customer != null and customer != ''">
+				and customer = #{customer}
+			</if>
+			<if test="customer_phone != null and customer_phone != ''">
+				and customer_phone = #{customer_phone}
+			</if>
+			<if test="customer_address != null and customer_address != ''">
+				and customer_address = #{customer_address}
+			</if>
+			<if test="payment_option != null and payment_option != ''">
+				and payment_option = #{payment_option}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and payment_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and payment_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="payment_date != null and payment_date != ''">
+				and payment_date = #{payment_date}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="salesListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from sales
+		<where>
+			del_yn = false
+			<if test="customer != null and customer != ''">
+				and customer = #{customer}
+			</if>
+			<if test="customer_phone != null and customer_phone != ''">
+				and customer_phone = #{customer_phone}
+			</if>
+			<if test="customer_address != null and customer_address != ''">
+				and customer_address = #{customer_address}
+			</if>
+			<if test="payment_option != null and payment_option != ''">
+				and payment_option = #{payment_option}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and payment_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and payment_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="payment_date != null and payment_date != ''">
+				and payment_date = #{payment_date}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<update id="salesDel">
+		update sales set del_yn = true where sales_idx = #{param1}
+	</update>
+
+</mapper>

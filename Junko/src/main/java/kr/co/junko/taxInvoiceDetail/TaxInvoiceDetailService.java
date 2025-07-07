@@ -52,6 +52,78 @@ public class TaxInvoiceDetailService {
 
 	    return result;
 	}
+
+	public Map<String, Object> addProdDetail(TaxInvoiceDetailDTO dto) {
+		result = new HashMap<String, Object>();
+		
+		dto.setTotal_amount(dto.getQuantity() * dto.getPrice());
+		
+		int row = dao.addProdDetail(dto);
+	    if (row > 0) {
+	        result.put("success", true);
+	        result.put("message", "품목 추가");
+	        result.put("detail_idx", dto.getDetail_idx());
+	    } else {
+	        result.put("success", false);
+	        result.put("message", "품목 추가 실패");
+	    }
+		
+		
+		return result;
+	}
+
+	public Map<String, Object> prodDetailUpdate(TaxInvoiceDetailDTO dto) {
+		result = new HashMap<String, Object>();
+		
+		dto.setTotal_amount(dto.getQuantity() * dto.getPrice());
+		
+		int row = dao.prodDetailUpdate(dto);
+	    if (row > 0) {
+	        result.put("success", true);
+	        result.put("message", "품목이 수정되었습니다.");
+	    } else {
+	        result.put("success", false);
+	        result.put("message", "수정할 품목을 찾을 수 없습니다.");
+	    }
+		
+		
+		return result;
+	
+	}
+
+	public Map<String, Object> prodDetailDel(int invoice_idx, int detail_idx) {
+		result = new HashMap<String, Object>();
+		
+		int row = dao.prodDetailDel(invoice_idx, detail_idx);
+	    if (row > 0) {
+	        result.put("success", true);
+	        result.put("message", "품목 삭제");
+	    } else {
+	        result.put("success", false);
+	        result.put("message", "삭제할 품목을 찾을 수 없습니다.");
+	    }
+
+	    return result;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
