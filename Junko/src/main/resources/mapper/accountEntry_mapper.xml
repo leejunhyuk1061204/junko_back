@@ -56,6 +56,52 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
 	</delete>
 	
 	
+	<select id="getEntryWriterAndStatus" parameterType="int" resultType="map">
+    SELECT user_id, status FROM accountingEntry WHERE entry_idx = #{entry_idx}
+</select>
+	
+	<update id="accountStatusUpdate" parameterType="map">
+    UPDATE accountingEntry SET status = #{status} WHERE entry_idx = #{entry_idx}
+</update>
+	
+	<insert id="saveLog" parameterType="kr.co.junko.dto.AccountingEntryLogDTO">
+    INSERT INTO accountingEntryLog
+    (entry_idx, user_id, action, before_status, after_status, log_message, created_at)
+    VALUES
+    (#{entry_idx}, #{user_id}, #{action}, #{before_status}, #{after_status}, #{log_message}, #{created_at})
+</insert>
+	
+	<insert id="accountFile" parameterType="kr.co.junko.dto.FileDTO">
+    INSERT INTO file
+    (ori_filename, new_filename, reg_date, type, idx, del_yn)
+    VALUES
+    (#{ori_filename}, #{new_filename}, #{reg_date}, #{type}, #{idx}, #{del_yn})
+</insert>
+	
+	
+	<select id="entryFileList" resultType="kr.co.junko.dto.FileDTO">
+    SELECT *
+    FROM file
+    WHERE idx = #{entry_idx} AND type = 'accounting' AND del_yn = 0
+    ORDER BY file_idx DESC
+</select>
+	
+	<select id="entryFileDown" resultType="kr.co.junko.dto.FileDTO">
+    SELECT *
+    FROM file
+    WHERE file_idx = #{file_idx}
+</select>
+	
+	<select id="accountLog" resultType="kr.co.junko.dto.AccountingEntryLogDTO">
+    SELECT 
+        log_idx, entry_idx, user_id, action, before_status, after_status, log_message, created_at
+    FROM 
+        accountingEntryLog
+    WHERE 
+        entry_idx = #{entry_idx}
+    ORDER BY 
+        created_at DESC
+</select>
 	
 	
 	
