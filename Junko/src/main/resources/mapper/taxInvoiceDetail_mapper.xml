@@ -10,7 +10,7 @@
     ORDER BY detail_idx ASC
 </select>
 	
-	<select id="taxProductList" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
+	<select id="taxProductOne" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
     SELECT *
     FROM taxInvoiceDetail
     WHERE invoice_idx = #{invoice_idx}

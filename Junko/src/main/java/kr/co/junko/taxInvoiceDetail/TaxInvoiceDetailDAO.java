@@ -11,6 +11,6 @@ public interface TaxInvoiceDetailDAO {
 
 	List<TaxInvoiceDetailDTO> taxProductList(int invoice_idx);
 
-	TaxInvoiceDetailDTO taxProductList(int invoice_idx, int detail_idx);
+	TaxInvoiceDetailDTO taxProductOne(int invoice_idx, int detail_idx);
 
 }

@@ -40,7 +40,7 @@ public class TaxInvoiceDetailService {
 	public Map<String, Object> taxProductOne(int invoice_idx, int detail_idx) {
 		result = new HashMap<String, Object>();
 		
-		TaxInvoiceDetailDTO dto = dao.taxProductList(invoice_idx, detail_idx);
+		TaxInvoiceDetailDTO dto = dao.taxProductOne(invoice_idx, detail_idx);
 		
 		if (dto == null) {
 	        result.put("success", false);
