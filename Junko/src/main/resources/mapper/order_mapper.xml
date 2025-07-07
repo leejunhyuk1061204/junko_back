@@ -126,6 +126,9 @@
 			<if test="end_date != null and end_date != ''">
 				and reg_date <![CDATA[<]]>= #{end_date}
 			</if>
+			<if test="reg_date != null and reg_date != ''">
+				and reg_date = #{reg_date}
+			</if>
 		</where>
 	</select>
 	
@@ -150,6 +153,9 @@
 			</if>
 			<if test="end_date != null and end_date != ''">
 				and reg_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="reg_date != null and reg_date != ''">
+				and reg_date = #{reg_date}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn !=''">
@@ -221,6 +227,9 @@
 			<if test="end_date != null and end_date != ''">
 				and delivery_date <![CDATA[<]]>= #{end_date}
 			</if>
+			<if test="delivery_date != null and delivery_date !=''">
+				and delivery_date = #{delivery_date}
+			</if>
 			<if test="order_idx != null and order_idx != 0">
 				and order_idx = #{order_idx}
 			</if>
@@ -237,6 +246,9 @@
 			</if>
 			<if test="end_date != null and end_date != ''">
 				and delivery_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="delivery_date != null and delivery_date !=''">
+				and delivery_date = #{delivery_date}
 			</if>
 			<if test="order_idx != null and order_idx != 0">
 				and order_idx = #{order_idx}
