@@ -12,7 +12,7 @@
 	
 	<select id="taxProductList" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
     SELECT *
-    FROM tax_invoice_detail
+    FROM taxInvoicDetail
     WHERE invoice_idx = #{invoice_idx}
       AND detail_idx = #{detail_idx}
 </select>
