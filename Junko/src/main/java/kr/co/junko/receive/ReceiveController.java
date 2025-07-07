@@ -27,8 +27,15 @@ public class ReceiveController {
 	public Map<String, Object>receiveUpdate(@RequestBody ReceiveDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.receiveUpdate(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.receiveUpdate(dto);
+			result.put("success", success);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
+		
 		return result;
 	}
 	
