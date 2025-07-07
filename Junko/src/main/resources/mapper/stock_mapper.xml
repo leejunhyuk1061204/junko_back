@@ -13,4 +13,28 @@
 		where r.receive_idx = #{param1}
 	</select>
 
+	<insert id="stockInsert" parameterType="kr.co.junko.dto.StockDTO">
+		insert into stock (product_idx,stock_cnt, zone_idx, type, user_idx
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,product_option_idx
+		</if>
+		<if test="manufacture != null">
+			,manufacture
+		</if>
+		<if test="expiration != null">
+			,expiration
+		</if>
+		)
+		values (#{product_idx},#{stock_cnt},#{zone_idx},#{type},#{user_idx}
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,#{product_option_idx}
+		</if>
+		<if test="manufacture != null">
+			,#{manufacture}
+		</if>
+		<if test="expiration != null">
+			,#{expiration}
+		</if>
+		)
+	</insert>
 </mapper>

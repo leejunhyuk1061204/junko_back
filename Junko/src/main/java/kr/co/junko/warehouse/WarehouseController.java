@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.WarehouseDTO;
+import kr.co.junko.dto.ZoneDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,4 +59,38 @@ public class WarehouseController {
 		result.put("success", success);
 		return result;
 	}
+	
+	@PostMapping(value="/zone/insert")
+	public Map<String, Object>zoneInsert(@RequestBody ZoneDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.zoneInsert(dto);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/zone/update")
+	public Map<String, Object>zoneUpdate(@RequestBody ZoneDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.zoneUpdate(dto);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/zone/list")
+	public Map<String, Object>zoneList(@RequestBody Map<String, Object>param){
+		log.info("param : {}",param);
+		return service.zoneList(param);
+	}
+	
+	@GetMapping(value="/zone/del/{zone_idx}")
+	public Map<String, Object>zoeDel(@PathVariable int zone_idx){
+		log.info("idx = "+zone_idx);
+		result = new HashMap<String, Object>();
+		boolean success = service.zoneDel(zone_idx);
+		result.put("success", success);
+		return result;
+	}
+	
 }
