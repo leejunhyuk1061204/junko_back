@@ -5,14 +5,14 @@
 	
 <select id="taxProductList" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
     SELECT *
-    FROM taxInvoicDetail
+    FROM taxInvoiceDetail
     WHERE invoice_idx = #{invoice_idx}
     ORDER BY detail_idx ASC
 </select>
 	
 	<select id="taxProductList" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
     SELECT *
-    FROM taxInvoicDetail
+    FROM taxInvoiceDetail
     WHERE invoice_idx = #{invoice_idx}
       AND detail_idx = #{detail_idx}
 </select>
