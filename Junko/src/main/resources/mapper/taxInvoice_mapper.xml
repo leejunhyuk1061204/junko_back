@@ -30,7 +30,7 @@
 </insert>
 	
 	
-	<update id="taxInvoicUpdate" parameterType="TaxInvoiceDTO">
+	<update id="taxInvoiceUpdate" parameterType="TaxInvoiceDTO">
     UPDATE taxInvoice
     SET custom_idx = #{custom_idx},
         entry_idx = #{entry_idx},
