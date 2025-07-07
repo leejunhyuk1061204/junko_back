@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.TaxInvoiceDAO">
+	
+<select id="taxInvoiceList" resultType="kr.co.junko.dto.TaxInvoiceDTO">
+    SELECT *
+    FROM taxInvoice
+    WHERE del_yn = false
+    ORDER BY reg_date DESC
+    LIMIT #{limit} OFFSET #{offset}
+</select>
+	
+	<select id="pages" resultType="int">
+    SELECT CEIL(COUNT(*) * 1.0 / #{limit}) 
+    FROM taxInvoice
+    WHERE del_yn = false
+</select>
+	
+	<select id="taxInvoice" resultType="kr.co.junko.dto.TaxInvoiceDTO">
+    SELECT *
+    FROM taxInvoice
+    WHERE invoice_idx = #{invoice_idx}
+    AND del_yn = false
+</select>
+	
+	<insert id="insertInvoice" parameterType="kr.co.junko.dto.TaxInvoiceDTO" useGeneratedKeys="true" keyProperty="invoice_idx">
+    INSERT INTO taxInvoice (custom_idx, entry_idx, total_amount, status, reg_date, mod_date, issued_by, del_yn)
+    VALUES (#{custom_idx}, #{entry_idx}, #{total_amount}, #{status}, NOW(), NOW(), #{issued_by}, false)
+</insert>
+	
+	
+	<update id="taxInvoiceUpdate" parameterType="kr.co.junko.dto.TaxInvoiceDTO">
+    UPDATE taxInvoice
+    SET custom_idx = #{custom_idx},
+        entry_idx = #{entry_idx},
+        total_amount = #{total_amount},
+        status = #{status},
+        mod_date = NOW(),
+        issued_by = #{issued_by}
+    WHERE invoice_idx = #{invoice_idx}
+    AND del_yn = false
+</update>
+	
+	
+	<update id="taxInvoiceDel">
+    UPDATE taxInvoice
+    SET del_yn = true,
+        mod_date = NOW()
+    WHERE invoice_idx = #{invoice_idx}
+    AND del_yn = false
+</update>
+	
+	<update id="taxStatusUpdate">
+    UPDATE taxInvoice
+    SET status = #{status}, mod_date = NOW()
+    WHERE invoice_idx = #{invoice_idx}
+    AND del_yn = false
+</update>
+	
+	<insert id="saveLog" parameterType="kr.co.junko.dto.TaxInvoiceLogDTO">
+    INSERT INTO taxInvoiceLog (invoice_idx, status, status_by, status_time, memo)
+    VALUES (#{invoice_idx}, #{status}, #{status_by}, #{status_time}, #{memo})
+</insert>
+	
+	
+	<select id="taxLogList" resultType="kr.co.junko.dto.TaxInvoiceLogDTO">
+    SELECT *
+    FROM taxInvoiceLog
+    WHERE invoice_idx = #{invoice_idx}
+</select>
+	
+	
+	
+	
+	
+</mapper>
