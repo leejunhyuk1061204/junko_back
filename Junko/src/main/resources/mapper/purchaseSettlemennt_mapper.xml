@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.PurchasesettlementDAO">
+	
+<select id="getSettlementById(" parameterType="int" resultType="kr.co.junko.dto.PurchaseSettlementDTO">
+	SELECT * FROM purchaseSettlement
+	WHERE settlement_id = #{settlement_id} AND del_yn = false
+</select>
+
+	
+	<insert id="psRegister" parameterType="kr.co.junko.dto.PurchaseSettlementDTO">
+	INSERT INTO purchaseSettlement (
+		entry_idx, custom_idx, settlement_day, total_amount, amount, status, del_yn
+	) VALUES (
+		#{entry_idx}, #{custom_idx}, #{settlement_day}, #{total_amount}, #{amount}, #{status}, false
+	)
+</insert>
+	
+	
+	<!-- 정산 수정 -->
+<update id="settlementUpdate" parameterType="kr.co.junko.dto.PurchaseSettlementDTO">
+    UPDATE purchaseSettlement
+    SET settlement_day = #{settlement_day},
+        total_amount = #{total_amount},
+        amount = #{amount},
+        status = #{status}
+    WHERE settlement_id = #{settlement_idx}
+      AND del_yn = false
+      AND status = '미정산'
+</update>
+
+<!-- 정산 삭제 (del_yn = true) -->
+<update id="settlementDel" parameterType="int">
+    UPDATE purchaseSettlement
+    SET del_yn = true
+    WHERE settlement_id = #{settlement_id}
+      AND del_yn = false
+      AND status = '미정산'
+</update>
+	
+</mapper>
