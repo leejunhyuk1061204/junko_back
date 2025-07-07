@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.CollectionAndPaymentDAO">
+	
+	 <!-- 중복 등록 여부 확인 -->
+  <select id="capRegist" resultType="boolean">
+    SELECT COUNT(*) > 0
+    FROM collectionAndPayment
+    WHERE type = #{type}
+      AND date = #{date}
+      AND amount = #{amount}
+      AND custom_idx = #{custom_idx}
+      AND del_yn = false
+  </select>
+	
+	<!--  입출금 등록 -->
+  <insert id="insert"
+          parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO"
+          useGeneratedKeys="true"
+          keyProperty="cap_idx">
+    INSERT INTO collectionAndPayment (
+      type, date, amount, custom_idx, entry_idx, memo, del_yn
+    ) VALUES (
+      #{type}, #{date}, #{amount}, #{custom_idx}, #{entry_idx}, #{memo}, false
+    )
+  </insert>
+	
+	<select id="capList" parameterType="int"
+        resultType="kr.co.junko.dto.CollectionAndPaymentResponseDTO">
+  SELECT
+    cp.cap_idx,
+    cp.type,
+    cp.date,
+    cp.amount,
+    cp.custom_idx,
+    c.name AS custom_name,
+    c.account_bank,
+    c.account_number,
+    cp.entry_idx,
+    ae.entry_title,
+    cp.memo,
+    cp.del_yn AS deleted
+  FROM collection_payment cp
+  LEFT JOIN custom c ON cp.custom_idx = c.custom_idx
+  LEFT JOIN accountingEntry ae ON cp.entry_idx = ae.entry_idx
+  WHERE cp.cap_idx = #{cap_idx}
+    AND cp.del_yn = false
+</select>
+	
+	<update id="capUpdate" parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO">
+  UPDATE collection_payment
+  SET type = #{type},
+      date = #{date},
+      amount = #{amount},
+      custom_idx = #{custom_idx},
+      entry_idx = #{entry_idx},
+      memo = #{memo}
+  WHERE cap_idx = #{cap_idx}
+</update>
+	
+	<update id="capDel" parameterType="int">
+  UPDATE collection_payment
+  SET del_yn = true
+  WHERE cap_idx = #{cap_idx}
+</update>
+	
+	
+	
+	
+	
+</mapper>

@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class TaxInvoiceFileService {
 	        dto.setOri_filename(ori_filename);
 	        dto.setNew_filename(new_filename);
 	        dto.setType("tax_invoice"); 
-	        dto.setReg_date(new Date(System.currentTimeMillis()));
+	        dto.setReg_date(LocalDateTime.now());
 	        dto.setDel_yn(false);
 
 	        dao.taxInvoiceFile(dto);

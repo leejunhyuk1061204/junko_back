@@ -1,19 +1,30 @@
 package kr.co.junko.accountDepartment;
 
+import java.net.URLEncoder;
+import org.springframework.http.HttpHeaders;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.junko.dto.AccountingDepartmentDTO;
+import kr.co.junko.dto.FileDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -109,7 +120,58 @@ public class AccountDepartmentController {
 	    return result;
 	}
 
+	// 분개 파일 첨부 
+	@PostMapping("/accountDeptFile/{entry_idx}/details/{dept_idx}")
+	public ResponseEntity<Map<String, Object>> accountDeptFile(
+	        @PathVariable int entry_idx,
+	        @PathVariable int dept_idx,
+	        @RequestParam("file") MultipartFile file) {
+
+	    Map<String, Object> result = new HashMap<>();
+
+	    try {
+	        service.accountDeptFile(file, "ENTRY_DETAIL", dept_idx);
+	        result.put("result", "success");
+	    } catch (Exception e) {
+	        result.put("result", "fail");
+	        result.put("message", e.getMessage());
+	    }
+
+	    return ResponseEntity.ok(result);
+	}
 	
+	
+	// 분개 파일 다운로드
+	@GetMapping("/deptfileDown/{file_idx}")
+	public ResponseEntity<UrlResource> deptfileDown(@PathVariable int file_idx) {
+	    FileDTO dto = service.deptfileDown(file_idx);
+
+	    if (dto == null || dto.isDel_yn()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	    }
+
+	    try {
+	        String basePath = "C:/upload";
+	        Path filePath = Paths.get(basePath + dto.getNew_filename());
+	        UrlResource resource = new UrlResource(filePath.toUri());
+
+	        if (!resource.exists()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	        }
+
+	        String encodedName = URLEncoder.encode(dto.getOri_filename(), "UTF-8");
+
+	        return ResponseEntity.ok()
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedName + "\"")
+	                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+	                .body(resource);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    
+	    }
+	}
 	
 	
 }

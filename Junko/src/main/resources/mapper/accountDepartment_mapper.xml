@@ -64,7 +64,17 @@
     WHERE dept_idx = #{dept_idx}
 </update>
 	
+	<insert id="accountDeptFile" parameterType="kr.co.junko.dto.FileDTO" useGeneratedKeys="true" keyProperty="file_idx">
+    INSERT INTO file (ori_filename, new_filename, reg_date, type, idx, del_yn)
+    VALUES (#{ori_filename}, #{new_filename}, #{reg_date}, #{type}, #{idx}, #{del_yn})
+</insert>
 	
+	<select id="deptfileDown" parameterType="int" resultType="kr.co.junko.dto.FileDTO">
+    SELECT *
+    FROM file
+    WHERE file_idx = #{file_idx}
+    AND del_yn = false
+</select>
 	
 	
 	
