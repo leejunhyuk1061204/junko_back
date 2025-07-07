@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.AccountDepartmentDAO">
+	
+	<select id="accountDeptList" resultType="kr.co.junko.dto.AccountingDepartmentDTO">
+    SELECT 
+        d.dept_idx,
+        d.as_idx,
+        s.as_name,
+        d.amount,
+        d.type,
+        d.del_yn
+    FROM accountingDepartment d
+    JOIN accountSubject s ON d.as_idx = s.as_idx
+    WHERE d.entry_id = #{entry_idx}
+      AND d.del_yn = false
+</select>
+	
+	<select id="accountDeptDetail" resultType="kr.co.junko.dto.AccountingDepartmentDTO">
+    SELECT 
+        d.dept_idx,
+        d.as_idx,
+        s.as_name,
+        d.amount,
+        d.type,
+        d.del_yn
+    FROM accountingDepartment d
+    JOIN accountSubject s ON d.as_idx = s.as_idx
+    WHERE d.entry_idx = #{entry_idx}
+      AND d.dept_idx = #{dept_idx}
+      AND d.del_yn = false
+</select>
+	
+	<insert id="accountDeptAdd" parameterType="kr.co.junko.dto.AccountingDepartmentDTO" useGeneratedKeys="true" keyProperty="dept_idx">
+    INSERT INTO accountingDepartment (
+        entry_idx,
+        as_idx,
+        amount,
+        type,
+        del_yn
+    )
+    VALUES (
+        #{entry_idx},
+        #{as_idx},
+        #{amount},
+        #{type},
+        false
+    )
+</insert>
+	
+	<update id="accountDeptUpdate" parameterType="kr.co.junko.dto.AccountingDepartmentDTO">
+    UPDATE accountingDepartment
+    SET
+        amount = #{amount},
+        type = #{type}
+    WHERE dept_idx = #{dept_idx}
+</update>
+	
+	
+	<update id="accountDeptDelete" parameterType="int">
+    UPDATE accountingDepartment
+    SET del_yn = true
+    WHERE dept_idx = #{dept_idx}
+</update>
+	
+	
+	
+	
+	
+	
+	
+</mapper>

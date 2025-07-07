@@ -1,4 +1,4 @@
-package kr.co.junko.account;
+package kr.co.junko.accountEntry;
 
 import java.util.ArrayList;
 import java.util.Map;
