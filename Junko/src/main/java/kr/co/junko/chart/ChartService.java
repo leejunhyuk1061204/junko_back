@@ -17,14 +17,15 @@ public class ChartService {
 	
 	private final ChartDAO dao;
 	
-	public Map<String, Object> chart() {
+	public Map<String, Object> chart(Map<String, Object> param) {
 		Map<String, Object> list = new HashMap<String, Object>();
 		
-		list.put("getDaySales", safeList(dao.getDaySales()));
-		list.put("getRecentOrderStats", safeList(dao.getRecentOrderStats()));
-		list.put("getPopularProduct", safeList(dao.getPopularProduct()));
-		list.put("getHighReturnProduct", safeList(dao.getHighReturnProduct()));
-		list.put("getMonthlySalesYoY", safeList(dao.getMonthlySalesYoY()));
+		list.put("getDaySales", safeList(dao.getDaySales(param)));
+		list.put("getRecentOrderStats", safeList(dao.getRecentOrderStats(param)));
+		list.put("getPopularProduct", safeList(dao.getPopularProduct(param)));
+		list.put("getHighReturnProduct", safeList(dao.getHighReturnProduct(param)));
+		list.put("getInventoryTurnoverStats", safeList(dao.getInventoryTurnoverStats(param)));
+		list.put("getMonthlySalesYoY", safeList(dao.getMonthlySalesYoY(param)));
 		
 		return list;
 	}
