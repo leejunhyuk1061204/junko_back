@@ -13,4 +13,10 @@ public interface TaxInvoiceDetailDAO {
 
 	TaxInvoiceDetailDTO taxProductOne(int invoice_idx, int detail_idx);
 
+	int addProdDetail(TaxInvoiceDetailDTO dto);
+
+	int prodDetailUpdate(TaxInvoiceDetailDTO dto);
+
+	int prodDetailDel(int invoice_idx, int detail_idx);
+
 }
