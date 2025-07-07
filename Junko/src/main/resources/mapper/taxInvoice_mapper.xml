@@ -52,7 +52,7 @@
 </update>
 	
 	<update id="taxStatusUpdate">
-    UPDATE tax_invoice
+    UPDATE taxInvoice
     SET status = #{status}, mod_date = NOW()
     WHERE invoice_idx = #{invoice_idx}
     AND del_yn = false

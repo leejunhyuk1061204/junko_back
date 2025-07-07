@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.account.TaxInvoiceDeatilDAO">
+	
+<select id="taxProductList" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
+    SELECT *
+    FROM taxInvoicDetail
+    WHERE invoice_idx = #{invoice_idx}
+    ORDER BY detail_idx ASC
+</select>
+	
+	<select id="taxProductList" resultType="kr.co.junko.dto.TaxInvoiceDetailDTO">
+    SELECT *
+    FROM tax_invoice_detail
+    WHERE invoice_idx = #{invoice_idx}
+      AND detail_idx = #{detail_idx}
+</select>
+	
+	
+</mapper>
