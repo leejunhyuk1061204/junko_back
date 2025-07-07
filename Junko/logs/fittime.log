@@ -768,3 +768,18 @@ INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdm
 INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
 INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
 INFO  25-07-07 15:54:00 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:23 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on gimgyeonghoeui-MacBookPro.local with PID 48188 (/Users/kimkyoungwhoe/junko_back/Junko/target/classes started by kimkyoungwhoe in /Users/kimkyoungwhoe/junko_back/Junko)
+INFO  25-07-07 16:23:23 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-07 16:23:24 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-07 16:23:24 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:24 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-07 16:23:24 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-07 16:23:24 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-07 16:23:24 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1032 ms
+INFO  25-07-07 16:23:25 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:25 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-07 16:23:25 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.269 seconds (JVM running for 2.944)
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-07 16:23:27 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]

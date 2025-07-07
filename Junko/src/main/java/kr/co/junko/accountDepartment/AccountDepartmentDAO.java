@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.junko.dto.AccountingDepartmentDTO;
+import kr.co.junko.dto.FileDTO;
 
 @Mapper
 public interface AccountDepartmentDAO {
@@ -18,5 +19,9 @@ public interface AccountDepartmentDAO {
 	int accountDeptUpdate(AccountingDepartmentDTO dto);
 
 	int accountDeptDelete(int dept_idx);
+
+	void accountDeptFile(FileDTO dto);
+
+	FileDTO deptfileDown(int file_idx);
 
 }

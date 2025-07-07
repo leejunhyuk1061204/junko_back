@@ -94,7 +94,7 @@ public class AccountEntryService {
 			FileDTO dto = new FileDTO();
 			dto.setOri_filename(ori_filename);
 			dto.setNew_filename(new_filename);
-			dto.setReg_date(new java.sql.Date(System.currentTimeMillis()));
+			dto.setReg_date(LocalDateTime.now());
 			dto.setType("accounnting");
 			dto.setIdx(entry_idx);
 			dto.setDel_yn(false);
