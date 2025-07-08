@@ -12,5 +12,7 @@ public interface StockDAO {
 
 	int stockInsert(StockDTO stockDTO);
 
+	StockDTO stockDetailByIdx(int idx);
+
 
 }

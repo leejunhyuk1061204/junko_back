@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.junko.dto.ShipmentDTO;
 import kr.co.junko.dto.WaybillDTO;
+import kr.co.junko.stock.StockService;
 import kr.co.junko.warehouse.WarehouseDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class ShipmentService {
 
 	private final ShipmentDAO dao;
 	private final WarehouseDAO warehouseDAO;
+	private final StockService stockService;
 
 	public boolean shipmentInsert(WaybillDTO dto) {
 		// user_idx, sales_idx, waybill_idx, shipment_date, warehouse_idx
@@ -35,6 +37,9 @@ public class ShipmentService {
 	}
 
 	public boolean shipmentUpdate(ShipmentDTO dto) {
+		if("출고완료".equals(dto.getStatus())) {
+			return stockService.stockInsert(dto);
+		}
 		return dao.shipmentUpdate(dto)>0;
 	}
 
