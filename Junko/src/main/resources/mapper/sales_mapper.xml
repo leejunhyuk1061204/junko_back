@@ -3,7 +3,10 @@
 
 <mapper namespace="kr.co.junko.sales.SalesDAO">
 
-	<insert id="salesInsert" parameterType="kr.co.junko.dto.SalesDTO">
+	<insert id="salesInsert" parameterType="kr.co.junko.dto.SalesDTO"
+	useGeneratedKeys="true"
+	keyColumn="sales_idx"
+	keyProperty="sales_idx">
 		insert into sales (customer, customer_phone, customer_address, payment_option
 		<if test="payment_date != null">
 			,payment_date
@@ -123,5 +126,66 @@
 	<select id="salesDetailByIdx" resultType="kr.co.junko.dto.SalesDTO">
 		select * from sales where sales_idx = #{param1}
 	</select>
+
+	<insert id="salesProductInsert" parameterType="kr.co.junko.dto.SalesProductDTO">
+		insert into sales_product (sales_idx, product_idx, product_cnt, product_price)
+		values (#{sales_idx},#{product_idx},#{product_cnt},#{product_price})
+	</insert>
+
+	<update id="salesProductUpdate" parameterType="kr.co.junko.dto.SalesProductDTO">
+		update sales_product
+		<trim prefix="set" suffixOverrides=",">
+			<if test="sales_idx != null and sales_idx != 0">
+				sales_idx = #{sales_idx},
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				product_idx = #{product_idx},
+			</if>
+			<if test="product_cnt != null and product_cnt != 0">
+				product_cnt = #{product_cnt},
+			</if>
+			<if test="product_price != null and product_price != 0">
+				product_price = #{product_price}
+			</if>
+		</trim>
+		where sales_product_idx = #{sales_product_idx}
+	</update>
+	
+	<select id="salesProductList" parameterType="map" resultType="kr.co.junko.dto.SalesProductDTO">
+		select * from sales_product
+		<where>
+			del_yn = false
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+
+	<select id="salesProdcutListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from sales_product
+		<where>
+			del_yn = false
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+		</where>
+	</select>
+
+	<update id="salesProductDel">
+		update slaes_product set del_yn = true where sales_product_idx = #{sales_product_idx}
+	</update>
 
 </mapper>

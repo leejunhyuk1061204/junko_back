@@ -1,6 +1,7 @@
 package kr.co.junko.sales;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.junko.dto.FullSalesDTO;
 import kr.co.junko.dto.SalesDTO;
+import kr.co.junko.dto.SalesProductDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,11 +27,17 @@ public class SalesController {
 	Map<String, Object>result = null;
 	
 	@PostMapping(value="/sales/insert")
-	public Map<String, Object>salesInsert(@RequestBody SalesDTO dto){
+	public Map<String, Object>salesInsert(@RequestBody FullSalesDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success =service.salesInsert(dto);
-		result.put("success", success);
+		try {
+			boolean success =service.salesInsert(dto);
+			result.put("success", success);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	
@@ -78,6 +87,30 @@ public class SalesController {
 		result = new HashMap<String, Object>();
 		SalesDTO dto = service.salesDetailByIdx(sales_idx);
 		result.put("dto", dto);
+		return result;
+	}
+	
+	@PostMapping(value="/salesProduct/update")
+	public Map<String, Object>salesProductUpdate(@RequestBody SalesProductDTO dto){
+		log.info("dot : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.salesProductUpdate(dto);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/salesProduct/list")
+	public Map<String, Object>salesProductList(@RequestBody Map<String, Object>param){
+		log.info("param : {}",param);
+		return service.salesProductList(param);
+	}
+	
+	@GetMapping(value="/salesProduct/del/{sales_product_idx}")
+	public Map<String, Object> salesProductDel(@PathVariable int sales_product_idx){
+		log.info("idx = "+ sales_product_idx);
+		result = new HashMap<String, Object>();
+		boolean success = service.salesProductDel(sales_product_idx);
+		result.put("success", success);
 		return result;
 	}
 	

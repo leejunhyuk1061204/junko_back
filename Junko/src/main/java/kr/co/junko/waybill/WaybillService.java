@@ -40,7 +40,6 @@ public class WaybillService {
 		boolean salesResult = salesDAO.salesUpdate(dto)>0;
 		if(!salesResult) throw new RuntimeException("주문 상태 변경 실패");
 		
-		
 		return true;
 	}
 

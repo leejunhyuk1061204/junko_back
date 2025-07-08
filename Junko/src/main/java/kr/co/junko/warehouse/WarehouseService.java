@@ -72,6 +72,10 @@ public class WarehouseService {
 	public boolean zoneDel(int idx) {
 		return dao.zoneDel(idx)>0;
 	}
+
+	public int getWarehouseByZoneIdx(int idx) {
+		return dao.getWarehouseByZoneIdx(idx);
+	}
 	
 	
 	

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.junko.dto.ReceiveDTO;
 import kr.co.junko.dto.StockDTO;
 import kr.co.junko.receive.ReceiveDAO;
+import kr.co.junko.warehouse.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +20,7 @@ public class StockService {
 
 	private final StockDAO dao;
 	private final ReceiveDAO receiveDAO;
+	private final WarehouseService warehouseService;
 
 	@Transactional
 	public boolean stockInsert(ReceiveDTO dto) {
@@ -39,6 +41,8 @@ public class StockService {
 				stockDTO.setExpiration(LocalDate.parse((String)stockInfo.get("expiration")));
 			}
 			stockDTO.setZone_idx((int)stockInfo.get("zone_idx"));
+			int warehouse_idx = warehouseService.getWarehouseByZoneIdx((int)stockInfo.get("zone_idx"));
+			stockDTO.setWarehouse_idx(warehouse_idx);
 			stockDTO.setStock_cnt((int)stockInfo.get("stock_cnt"));
 			stockDTO.setUser_idx(dto.getUser_idx());
 			stockDTO.setType("입고");

@@ -118,4 +118,8 @@
 		update `zone` set del_yn = true where zone_idx = #{param1}
 	</update>
 	
+	<select id="getWarehouseByZoneIdx">
+		select warehouse_idx from `zone` where zone_idx = #{param1}
+	</select>
+	
 </mapper>

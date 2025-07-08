@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.junko.dto.SalesDTO;
+import kr.co.junko.dto.SalesProductDTO;
 
 @Mapper
 public interface SalesDAO {
@@ -21,5 +22,15 @@ public interface SalesDAO {
 	int salesDel(int idx);
 
 	SalesDTO salesDetailByIdx(int idx);
+
+	int salesProductInsert(SalesProductDTO product);
+
+	int salesProductUpdate(SalesProductDTO dto);
+
+	List<SalesProductDTO> salesProductList(Map<String, Object> param);
+
+	int salesProdcutListTotalPage(Map<String, Object> param);
+
+	int salesProductDel(int sales_product_idx);
 
 }

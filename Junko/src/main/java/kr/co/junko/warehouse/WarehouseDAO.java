@@ -31,4 +31,6 @@ public interface WarehouseDAO {
 
 	int zoneDel(int idx);
 
+	int getWarehouseByZoneIdx(int idx);
+
 }
