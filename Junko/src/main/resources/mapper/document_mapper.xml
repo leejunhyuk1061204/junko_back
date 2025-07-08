@@ -14,5 +14,12 @@
 		INSERT INTO approval_line (document_idx, user_idx, step, status, approved_date)
 			VALUES (#{document_idx}, #{user_idx}, #{step}, #{status}, NOW())
 	</insert>
+	
+	<!-- 문서 idx 가져오기 -->
+	<select id="documentIdx" resultType="kr.co.junko.dto.DocumentDTO">
+		SELECT * FROM document
+		WHERE document_idx = #{document_idx}
+		  AND del_yn = 0
+	</select>
 
 </mapper>

@@ -1,16 +1,25 @@
 package kr.co.junko.document;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+
 import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.file.FileDAO;
 import kr.co.junko.template.TemplateService;
 
 @Service
@@ -18,6 +27,7 @@ public class DocumentService {
 
 	@Autowired DocumentDAO dao;
     @Autowired TemplateService temService;
+    @Autowired FileDAO filedao;
 	
 	public String documentPreview(int template_idx, Map<String, String> variables) {
 		// 해당 템플릿 가져오기
@@ -96,6 +106,64 @@ public class DocumentService {
 		result.put("document_idx", document_idx);
 		
 		return result;
+	}
+
+	// PDF 파일 생성 및 파일 테이블 저장
+	@Transactional
+	public String documentPDF(DocumentDTO dto) throws Exception {
+
+		// 문서 조회
+		DocumentDTO doc = dao.documentIdx(dto.getDocument_idx());
+		if (doc == null || doc.getContent() == null || doc.getContent().trim().isEmpty()) {
+			throw new IllegalArgumentException("문서 내용이 비어있습니다.");
+		}
+		
+		String htmlContent = doc.getContent().trim();
+		
+		// <html> 이나 <body> 태그가 있는지 검사
+		String lower = htmlContent.toLowerCase();
+		boolean hasHtml = lower.contains("<html");
+		boolean hasBody = lower.contains("<body");
+		if (!hasHtml || !hasBody) {
+			htmlContent = "<html><body>" + htmlContent + "</body></html>";
+		}
+		
+		// 한글 폰트를 강제로 CSS에 삽입
+		String css = "<style> * { font-family: 'malgun'; } </style>";
+		htmlContent = htmlContent.replaceFirst("(?i)<head>", "<head>" + css);
+		if (!htmlContent.toLowerCase().contains("<head>")) {
+			htmlContent = htmlContent.replaceFirst("(?i)<html>", "<html><head>" + css + "</head>");
+		}
+		
+		// 파일 경로 생성
+		String uploadRoot = "C:/upload/pdf";
+		new File(uploadRoot).mkdirs(); // 폴더 없으면 생성
+		String fileName = "document_"+UUID.randomUUID().toString().substring(0, 8)+".pdf";
+		String filePath = Paths.get(uploadRoot, fileName).toString();
+		
+		// PDF 생성 (HTML 렌더링)
+		try (OutputStream os = new FileOutputStream(filePath)){
+			PdfRendererBuilder builder = new PdfRendererBuilder();
+			builder.useFastMode();
+			builder.withHtmlContent(htmlContent, null);
+			
+			// 한글 폰트 경로 (윈도우 기준)
+			String fontPath = "C:/Windows/Fonts/malgun.ttf";
+			builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "malgun");
+
+			builder.toStream(os);
+			builder.run();
+		}
+		
+		// 파일 테이블에 저장
+		FileDTO file = new FileDTO();
+		file.setOri_filename("문서 PDF");
+		file.setNew_filename(fileName);
+		file.setType("document");
+		file.setIdx(dto.getDocument_idx());
+		filedao.insertFile(file);
+		
+		return filePath;
 	}
 	
 }
