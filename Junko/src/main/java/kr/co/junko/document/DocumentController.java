@@ -6,7 +6,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +68,36 @@ public class DocumentController {
 		}
 		
 		return result;
+	}
+	
+	
+	// 문서 결재 (승인)
+	@PostMapping(value="/document/approve")
+	public Map<String, Object> documentApprove(@RequestBody Map<String, Object> req){
+		result = new HashMap<String, Object>();
+		
+		boolean success = service.documentApprove(req);
+		result.put("success", success);
+		
+		return result;
+	}
+	
+	// 문서 결재 (반려)
+	@PostMapping(value="/document/reject")
+	public Map<String, Object> documentReject(@RequestBody Map<String, Object> req){
+		result = new HashMap<String, Object>();
+		
+		boolean success = service.documentReject(req);
+		result.put("success", success);
+		
+		return result;
+	}
+	
+	// 상태 조회
+	@GetMapping("/document/status/{document_idx}")
+	public ResponseEntity<String> getDocStatus(@PathVariable int document_idx) {
+	    String status = service.getDocStatus(document_idx);
+	    return ResponseEntity.ok(status);
 	}
 	
 	

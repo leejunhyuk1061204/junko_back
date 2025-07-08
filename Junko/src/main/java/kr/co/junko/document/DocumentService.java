@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import kr.co.junko.dto.ApprovalLineDTO;
+import kr.co.junko.dto.ApprovalLogDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
@@ -164,6 +166,82 @@ public class DocumentService {
 		filedao.insertFile(file);
 		
 		return filePath;
+	}
+
+	@Transactional
+	public boolean documentApprove(Map<String, Object> req) {
+		int document_idx = (int) req.get("document_idx");
+		int user_idx = (int) req.get("user_idx");
+		String comment = (String) req.getOrDefault("comment", "");
+		
+		ApprovalLineDTO line = dao.documentApprove(document_idx, user_idx);
+		if (line == null || !"미확인".equals(line.getStatus())) {
+			return false;
+		}
+		
+		// 순서 보장
+		int minStep = dao.getMinStep(document_idx);
+		if (line.getStep() != minStep) {
+			return false; // 본인 차례 아직임.
+		}
+		
+		line.setStatus("승인");
+		line.setComment(comment);
+		line.setApproved_date(new Date(System.currentTimeMillis()));
+		dao.updateApprove(line);
+		
+	    ApprovalLogDTO log = new ApprovalLogDTO();
+	    log.setDocument_idx(document_idx);
+	    log.setUser_idx(user_idx);
+	    log.setStatus("승인");
+	    log.setComment(comment);
+	    log.setApproved_date(new Date(System.currentTimeMillis()));
+	    dao.insertLog(log);
+		
+		boolean allApproved = dao.approveCnt(document_idx) == 0;
+		if (allApproved) {
+			dao.updateDocStatus(document_idx, "승인");
+		}
+		return true;
+	}
+
+	@Transactional
+	public boolean documentReject(Map<String, Object> req) {
+		int document_idx = (int) req.get("document_idx");
+		int user_idx = (int) req.get("user_idx");
+		String comment = (String) req.getOrDefault("comment", "");
+		
+		ApprovalLineDTO line = dao.documentApprove(document_idx, user_idx);
+		if (line == null || !"미확인".equals(line.getStatus())) {
+			return false;
+		}
+		
+		// 순서 보장
+		int minStep = dao.getMinStep(document_idx);
+		if (line.getStep() != minStep) {
+			return false; // 본인 차례 아직임.
+		}
+		
+		line.setStatus("반려");
+		line.setComment(comment);
+		line.setApproved_date(new Date(System.currentTimeMillis()));
+		dao.updateApprove(line);
+		
+	    ApprovalLogDTO log = new ApprovalLogDTO();
+	    log.setDocument_idx(document_idx);
+	    log.setUser_idx(user_idx);
+	    log.setStatus("반려");
+	    log.setComment(comment);
+	    log.setApproved_date(new Date(System.currentTimeMillis()));
+	    dao.insertLog(log);
+
+		dao.updateDocStatus(document_idx, "반려");
+		
+		return true;
+	}
+
+	public String getDocStatus(int document_idx) {
+		return dao.getDocStatus(document_idx);
 	}
 	
 }
