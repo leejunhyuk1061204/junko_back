@@ -106,4 +106,8 @@
 		update shipment set del_yn = true where shipment_idx = #{shipment_idx}
 	</update>
 	
+	<select id="shipmentDetailByIdx" resultType="kr.co.junko.dto.ShipmentDTO">
+		select * from shipment where shipment_idx = #{param1}
+	</select>
+	
 </mapper>

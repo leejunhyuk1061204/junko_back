@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.dto.ReceiveDTO;
+import kr.co.junko.dto.SalesDTO;
 import kr.co.junko.dto.ShipmentDTO;
 import kr.co.junko.dto.StockDTO;
+import kr.co.junko.dto.WaybillDTO;
 import kr.co.junko.receive.ReceiveDAO;
+import kr.co.junko.sales.SalesDAO;
 import kr.co.junko.shipment.ShipmentDAO;
 import kr.co.junko.shipment.ShipmentService;
 import kr.co.junko.warehouse.WarehouseService;
+import kr.co.junko.waybill.WaybillDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +29,8 @@ public class StockService {
 	private final ReceiveDAO receiveDAO;
 	private final WarehouseService warehouseService;
 	private final ShipmentDAO shipmentDAO;
+	private final SalesDAO salesDAO;
+	private final WaybillDAO waybillDAO;
 
 	@Transactional
 	public boolean stockInsert(ReceiveDTO dto) {
@@ -90,9 +96,23 @@ public class StockService {
 		
 		// 2. 출고 상태변경
 		boolean shipResult = shipmentDAO.shipmentUpdate(dto)>0;
-		if(!shipResult) throw new RuntimeException("출고 상태변경 실패");
+		if(!shipResult) throw new RuntimeException("출고 상태 변경 실패");
+		
+		ShipmentDTO shipmentDTO = shipmentDAO.shipmentDetailByIdx(dto.getShipment_idx());
 		
 		// 3. 주문 상태 변경
+		SalesDTO salesDTO = new SalesDTO();
+		salesDTO.setSales_idx(shipmentDTO.getSales_idx());
+		salesDTO.setStatus("배송중");
+		boolean salesResult = salesDAO.salesUpdate(salesDTO)>0;
+		if(!salesResult) throw new RuntimeException("주문 상태 변경 실패");
+		
+		// 4. 송장 상태 변경
+		WaybillDTO waybillDTO = new WaybillDTO();
+		waybillDTO.setWaybill_idx(shipmentDTO.getWaybill_idx());
+		waybillDTO.setStatus("배송중");
+		boolean waybillResult = waybillDAO.waybillUpdate(waybillDTO)>0;
+		if(!waybillResult) throw new RuntimeException("송장 상태 변경 실패");
 		
 		return true;
 	}

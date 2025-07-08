@@ -26,8 +26,14 @@ public class WaybillController {
 	public Map<String, Object> waybillInsert(@RequestBody WaybillDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.waybillInsert(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.waybillInsert(dto);
+			result.put("success", success);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	

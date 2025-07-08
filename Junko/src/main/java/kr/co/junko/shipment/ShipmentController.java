@@ -25,8 +25,14 @@ public class ShipmentController {
 	public Map<String, Object> shipmentUpdate(@RequestBody ShipmentDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.shipmentUpdate(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.shipmentUpdate(dto);
+			result.put("success", success);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	

@@ -21,4 +21,6 @@ public interface ShipmentDAO {
 
 	int shipmentDel(int idx);
 
+	ShipmentDTO shipmentDetailByIdx(int shipment_idx);
+
 }
