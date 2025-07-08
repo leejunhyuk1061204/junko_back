@@ -1,5 +1,6 @@
 package kr.co.junko.waybill;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.junko.dto.SalesDTO;
 import kr.co.junko.dto.WaybillDTO;
 import kr.co.junko.sales.SalesDAO;
+import kr.co.junko.shipment.ShipmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +22,7 @@ public class WaybillService {
 
 	private final WaybillDAO dao;
 	private final SalesDAO salesDAO;
+	private final ShipmentService shipmentService;
 
 	@Transactional
 	public boolean waybillInsert(SalesDTO dto) {
@@ -27,9 +30,16 @@ public class WaybillService {
 		// 1. 송장 등록
 		boolean waybillResult = dao.waybillInsert(dto)>0;
 		if(!waybillResult) throw new RuntimeException("송장 등록 실패");
-		// 2. 주문 상태 변경
+		
+		// 2. 출고 등록
+		boolean shipResult = shipmentService.shipmentInsert(dto.getSales_idx(),dto.getWaybill_idx());
+		if(!shipResult) throw new RuntimeException("출고 등록 실패");
+		
+		// 3. 주문 상태 변경
+		dto.setPayment_date(LocalDate.now());
 		boolean salesResult = salesDAO.salesUpdate(dto)>0;
 		if(!salesResult) throw new RuntimeException("주문 상태 변경 실패");
+		
 		
 		return true;
 	}
