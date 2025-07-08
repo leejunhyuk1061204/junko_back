@@ -22,4 +22,60 @@
 		  AND del_yn = 0
 	</select>
 
+
+
+
+	<!-- 결재라인 조회 -->
+	<select id="documentApprove" resultType="kr.co.junko.dto.ApprovalLineDTO">
+	    SELECT * FROM approval_line
+	    WHERE document_idx = #{document_idx}
+	    AND user_idx = #{user_idx}
+	    AND del_yn = 0
+	</select>
+	
+	<!-- 결재 상태 업데이트 -->
+	<update id="updateApprove">
+	    UPDATE approval_line
+	    SET status = #{status},
+	        comment = #{comment},
+	        approved_date = #{approved_date}
+	    WHERE document_idx = #{document_idx}
+	    AND user_idx = #{user_idx}
+	</update>
+	
+	<!-- 미승인 상태 결재라인 카운트 -->
+	<select id="approveCnt" resultType="int">
+	    SELECT COUNT(*) FROM approval_line
+	    WHERE document_idx = #{document_idx}
+	    AND status != '승인'
+	    AND del_yn = 0
+	</select>
+	
+	<!-- 문서 상태 변경 -->
+	<update id="updateDocStatus">
+	    UPDATE document
+	    SET status = #{status}
+	    WHERE document_idx = #{document_idx}
+	</update>
+	
+	
+	<!-- 로그 저장 -->
+	<insert id="insertLog" parameterType="kr.co.junko.dto.ApprovalLogDTO">
+	    INSERT INTO approval_log (document_idx, user_idx, status, comment, approved_date)
+	    VALUES (#{document_idx}, #{user_idx}, #{status}, #{comment}, #{approved_date})
+	</insert>
+
+	<!-- 상태 조회 -->
+	<select id="getDocStatus" resultType="String">
+	    SELECT status FROM document WHERE document_idx = #{document_idx}
+	</select>
+	
+	<select id="getMinStep" resultType="int">
+		SELECT MIN(step)
+		FROM approval_line
+		WHERE document_idx = #{document_idx}
+		AND status = '미확인'
+		AND del_yn = 0
+	</select>
+
 </mapper>
