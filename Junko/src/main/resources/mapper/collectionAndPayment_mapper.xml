@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.junko.account.CollectionAndPaymentDAO">
+<mapper namespace="kr.co.junko.collectionAndPayment.CollectionAndPaymentDAO">
 	
 	 <!-- 중복 등록 여부 확인 -->
   <select id="capRegist" resultType="boolean">
@@ -14,7 +14,7 @@
       AND del_yn = false
   </select>
 	
-	<!--  입출금 등록 -->
+	 <!-- 입출금 등록 -->
   <insert id="insert"
           parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO"
           useGeneratedKeys="true"
@@ -41,7 +41,7 @@
     ae.entry_title,
     cp.memo,
     cp.del_yn AS deleted
-  FROM collection_payment cp
+  FROM collectionAndPayment cp
   LEFT JOIN custom c ON cp.custom_idx = c.custom_idx
   LEFT JOIN accountingEntry ae ON cp.entry_idx = ae.entry_idx
   WHERE cp.cap_idx = #{cap_idx}
@@ -49,7 +49,7 @@
 </select>
 	
 	<update id="capUpdate" parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO">
-  UPDATE collection_payment
+  UPDATE collectionAndPayment
   SET type = #{type},
       date = #{date},
       amount = #{amount},
@@ -60,7 +60,7 @@
 </update>
 	
 	<update id="capDel" parameterType="int">
-  UPDATE collection_payment
+  UPDATE collectionAndPayment
   SET del_yn = true
   WHERE cap_idx = #{cap_idx}
 </update>
@@ -135,7 +135,7 @@
   </update>
 	
 	<insert id="insertLog" parameterType="kr.co.junko.dto.CollectionAndPaymentLogDTO">
-    INSERT INTO collectionAndPayment_log (
+    INSERT INTO capLog (
       cap_idx, action_type, before_data, after_data, log_date
     ) VALUES (
       #{cap_idx}, #{action_type}, #{before_data}, #{after_data}, NOW()
@@ -144,7 +144,7 @@
 
   <select id="getLogsByCapIdx" parameterType="int" resultType="kr.co.junko.dto.CollectionAndPaymentLogDTO">
     SELECT *
-    FROM collectionAndPayment_log
+    FROM capLog
     WHERE cap_idx = #{cap_idx}
     ORDER BY log_date DESC
   </select>

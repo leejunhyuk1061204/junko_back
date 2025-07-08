@@ -90,6 +90,7 @@ public class ProductService {
 		return true;
 	}
 
+	@Transactional
 	// 엑셀로 csv 파일 등록하니까 자동 "" 붙는 문제 발생
 	// 메모장에 내용 복사 후 UTF-8 .csv 파일로 저장 후 업로드하면 정상 작동
 	public boolean productCsvInsert(MultipartFile file) {
