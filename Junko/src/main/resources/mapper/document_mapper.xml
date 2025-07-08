@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.document.DocumentDAO">
+
+	<!-- 문서 저장 -->
+	<insert id="documentInsert" useGeneratedKeys="true" keyProperty="document_idx" parameterType="kr.co.junko.dto.DocumentDTO">
+		INSERT INTO document (user_idx, content, created_date, status)
+			VALUES (#{user_idx}, #{content}, NOW(), #{status})
+	</insert>
+	
+	<!-- 결재라인 저장 -->
+	<insert id="insertApprovalLine" useGeneratedKeys="true" keyProperty="approval_idx" parameterType="kr.co.junko.dto.ApprovalLineDTO">
+		INSERT INTO approval_line (document_idx, user_idx, step, status, approved_date)
+			VALUES (#{document_idx}, #{user_idx}, #{step}, #{status}, NOW())
+	</insert>
+
+</mapper>

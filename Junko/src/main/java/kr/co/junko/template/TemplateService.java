@@ -57,6 +57,7 @@ public class TemplateService {
 		return list;
 	}
 
+	// 템플릿 수정
 	public boolean templateUpdate(TemplateDTO dto) {
 		
 		// Http 클라이언트 요청 시 {{}} 가 있으면 무조건 환경 변수로 인식하는 이슈 발생
@@ -84,23 +85,50 @@ public class TemplateService {
 		return true;
 	}
 
+	// 템플릿 삭제
 	public boolean templateDel(int template_idx) {
 		int row = dao.templateDel(template_idx);
 		return row>0;
 	}
 
+	// 템플릿 리스트
 	public List<TemplateDTO> templateList() {
 		return dao.templateList();
 	}
 
+	// 템플릿 상세보기
 	public TemplateDTO templateDetail(int template_idx) {
 		return dao.templateDetail(template_idx);
 	}
 
+	// 템플릿 변수 리스트
 	public List<TemplateVarDTO> templateVarList(int template_idx) {
 		return dao.templateVarList(template_idx);
 	}
-	
-	
-	
+
+	// 템플릿 미리보기
+	public String templatePreview(int template_idx) {
+		// 해당 템플릿 가져오기
+	    TemplateDTO template = dao.templateDetail(template_idx);
+	    if (template == null) {
+	    	return null;
+    	}
+
+	    // html 원본 템플릿 내용 가져오기
+	    String html = template.getTemplate_html();
+	    List<String> variables = extractVariables(html);
+	    
+	    for (String var : variables) {
+	    	// html 키에 샘플 데이터 넣기
+	        html = html.replace("{{" + var + "}}", "샘플_" + var);
+	    }
+	    
+	    return html;
+	}
+
+	// 다른 패키지에서 사용하기 위해 메서드 생성
+	public TemplateDTO getTemplate(int template_idx) {
+		return dao.selectTemplate(template_idx);
+	}
+
 }

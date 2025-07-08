@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,6 +92,18 @@ public class TemplateController {
 		List<TemplateVarDTO> list = service.templateVarList(template_idx);
 		result.put("list", list);
 		
+		return result;
+	}
+	
+	// 템플릿 미리보기
+	@GetMapping(value="/template/preview/{template_idx}")
+	public Map<String, Object> templatePreview(@PathVariable int template_idx){
+		result = new HashMap<String, Object>();
+		
+		String html = service.templatePreview(template_idx);
+		result.put("preview", html);
+	    result.put("success", html != null);
+	    
 		return result;
 	}
 	

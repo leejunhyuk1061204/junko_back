@@ -828,3 +828,594 @@ INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdm
 INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
 INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
 INFO  25-07-07 21:32:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:17:38 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 5492 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 10:17:38 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 10:17:39 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 10:17:39 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:17:39 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 10:17:39 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 10:17:39 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 10:17:39 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1267 ms
+WARN  25-07-08 10:17:40 [main]  [AnnotationConfigServletWebServerApplicationContext:599] - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+INFO  25-07-08 10:17:40 [main]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 10:17:40 [main]  [ConditionEvaluationReportLoggingListener:136] - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+ERROR 25-07-08 10:17:40 [main]  [SpringApplication:818] - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentController': Unsatisfied dependency expressed through field 'service'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:713)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:693)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:929)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:591)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:732)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:409)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at kr.co.junko.JunkoApplication.main(JunkoApplication.java:30)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'accountDepartmentService' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentService.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:224)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:710)
+	... 20 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'accountDepartmentDAO' defined in file [C:\smart_stock\junko_back\Junko\target\classes\kr\co\junko\accountDepartment\AccountDepartmentDAO.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:342)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:113)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1707)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1452)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 33 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionTemplate' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionTemplate' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:801)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:330)
+	... 47 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:788)
+	... 57 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 71 common frames omitted
+Caused by: java.io.IOException: Failed to parse mapping resource: 'file [C:\smart_stock\junko_back\Junko\target\classes\mapper\document_mapper.xml]'
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:700)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:577)
+	at org.mybatis.spring.SqlSessionFactoryBean.getObject(SqlSessionFactoryBean.java:720)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.sqlSessionFactory(MybatisAutoConfiguration.java:187)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$6770e2c2.CGLIB$sqlSessionFactory$1(<generated>)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$6770e2c2$$FastClassBySpringCGLIB$$768f0be4.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$6770e2c2.sqlSessionFactory(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 72 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error creating document instance.  Cause: org.xml.sax.SAXParseException; 예기치 않은 파일의 끝입니다.
+	at org.apache.ibatis.parsing.XPathParser.createDocument(XPathParser.java:262)
+	at org.apache.ibatis.parsing.XPathParser.<init>(XPathParser.java:127)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.<init>(XMLMapperBuilder.java:85)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:697)
+	... 85 common frames omitted
+Caused by: org.xml.sax.SAXParseException: 예기치 않은 파일의 끝입니다.
+	at java.xml/com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:204)
+	at java.xml/com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:178)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:400)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1465)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$DTDDriver.dispatch(XMLDocumentScannerImpl.java:1199)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$DTDDriver.next(XMLDocumentScannerImpl.java:1040)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:943)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:605)
+	at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:534)
+	at java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:888)
+	at java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:824)
+	at java.xml/com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
+	at java.xml/com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:246)
+	at java.xml/com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at org.apache.ibatis.parsing.XPathParser.createDocument(XPathParser.java:260)
+	... 88 common frames omitted
+INFO  25-07-08 10:19:42 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 6912 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 10:19:42 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 10:19:43 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 10:19:43 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:19:43 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 10:19:43 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 10:19:43 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 10:19:43 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1120 ms
+INFO  25-07-08 10:19:44 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:19:44 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-08 10:19:44 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.44 seconds (JVM running for 3.124)
+INFO  25-07-08 10:21:40 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-08 10:21:40 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-08 10:21:40 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+WARN  25-07-08 10:21:40 [http-nio-8080-exec-1]  [DefaultHandlerExceptionResolver:208] - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported]
+WARN  25-07-08 10:21:49 [http-nio-8080-exec-2]  [DefaultHandlerExceptionResolver:208] - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported]
+INFO  25-07-08 10:21:54 [http-nio-8080-exec-3]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-08 10:21:54 [http-nio-8080-exec-3]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-08 10:21:54 [http-nio-8080-exec-3]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 1 AND del_yn = 0 
+ {executed in 7 msec}
+INFO  25-07-08 10:22:01 [http-nio-8080-exec-4]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 1 AND del_yn = 0 
+ {executed in 5 msec}
+INFO  25-07-08 10:22:53 [http-nio-8080-exec-7]  [DocumentController:28] - dto : TemplatePreviewDTO(template_idx=3, variables={user_name=홍길동, resign_date=2025-07-10})
+INFO  25-07-08 10:22:53 [http-nio-8080-exec-7]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 3 AND del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-08 10:22:59 [http-nio-8080-exec-9]  [DocumentController:28] - dto : TemplatePreviewDTO(template_idx=1, variables={user_name=홍길동, resign_date=2025-07-10})
+INFO  25-07-08 10:22:59 [http-nio-8080-exec-9]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 1 AND del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-08 10:26:40 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-08 11:19:27 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 12016 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 11:19:27 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 11:19:28 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 11:19:28 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:19:28 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 11:19:28 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 11:19:29 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 11:19:29 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1057 ms
+INFO  25-07-08 11:19:29 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:19:29 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-08 11:19:29 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.291 seconds (JVM running for 2.959)
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [DocumentController:41] - dto : DocumentCreateDTO(template_idx=2, user_idx=1, variables={user_name=홍길동, resign_date=2025-07-08, department=영업부}, approver_ids=[2])
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-08 11:21:05 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 2 AND del_yn = 0 
+ {executed in 6 msec}
+ERROR 25-07-08 11:21:05 [http-nio-8080-exec-1]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'content' in 'class kr.co.junko.dto.DocumentCreateDTO'] with root cause
+org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'content' in 'class kr.co.junko.dto.DocumentCreateDTO'
+	at org.apache.ibatis.reflection.Reflector.getGetInvoker(Reflector.java:385)
+	at org.apache.ibatis.reflection.MetaClass.getGetInvoker(MetaClass.java:160)
+	at org.apache.ibatis.reflection.wrapper.BeanWrapper.getBeanProperty(BeanWrapper.java:153)
+	at org.apache.ibatis.reflection.wrapper.BeanWrapper.get(BeanWrapper.java:49)
+	at org.apache.ibatis.reflection.MetaObject.getValue(MetaObject.java:116)
+	at org.apache.ibatis.scripting.defaults.DefaultParameterHandler.setParameters(DefaultParameterHandler.java:82)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.parameterize(PreparedStatementHandler.java:97)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.parameterize(RoutingStatementHandler.java:65)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:91)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:49)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425)
+	at com.sun.proxy.$Proxy64.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:62)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy73.documentInsert(Unknown Source)
+	at kr.co.junko.document.DocumentService.documentInsert(DocumentService.java:69)
+	at kr.co.junko.document.DocumentService$$FastClassBySpringCGLIB$$a6c31809.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at kr.co.junko.document.DocumentService$$EnhancerBySpringCGLIB$$924d2f9e.documentInsert(<generated>)
+	at kr.co.junko.document.DocumentController.documentInsert(DocumentController.java:44)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:22:02 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-08 11:22:03 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-08 11:23:02 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 9644 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 11:23:02 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 11:23:03 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 11:23:03 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:23:03 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 11:23:03 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 11:23:04 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 11:23:04 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1032 ms
+INFO  25-07-08 11:23:04 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:23:04 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-08 11:23:04 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.326 seconds (JVM running for 3.07)
+INFO  25-07-08 11:23:07 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-08 11:23:07 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-08 11:23:07 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-08 11:23:08 [http-nio-8080-exec-1]  [DocumentController:41] - dto : DocumentCreateDTO(template_idx=2, user_idx=1, variables={user_name=홍길동, resign_date=2025-07-08, department=영업부}, approver_ids=[2])
+INFO  25-07-08 11:23:08 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-08 11:23:08 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-08 11:23:08 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 2 AND del_yn = 0 
+ {executed in 10 msec}
+ERROR 25-07-08 11:23:08 [http-nio-8080-exec-1]  [[dispatcherServlet]:175] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'content' in 'class kr.co.junko.dto.DocumentCreateDTO'] with root cause
+org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'content' in 'class kr.co.junko.dto.DocumentCreateDTO'
+	at org.apache.ibatis.reflection.Reflector.getGetInvoker(Reflector.java:385)
+	at org.apache.ibatis.reflection.MetaClass.getGetInvoker(MetaClass.java:160)
+	at org.apache.ibatis.reflection.wrapper.BeanWrapper.getBeanProperty(BeanWrapper.java:153)
+	at org.apache.ibatis.reflection.wrapper.BeanWrapper.get(BeanWrapper.java:49)
+	at org.apache.ibatis.reflection.MetaObject.getValue(MetaObject.java:116)
+	at org.apache.ibatis.scripting.defaults.DefaultParameterHandler.setParameters(DefaultParameterHandler.java:82)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.parameterize(PreparedStatementHandler.java:97)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.parameterize(RoutingStatementHandler.java:65)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:91)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:49)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425)
+	at com.sun.proxy.$Proxy64.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:62)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at com.sun.proxy.$Proxy73.documentInsert(Unknown Source)
+	at kr.co.junko.document.DocumentService.documentInsert(DocumentService.java:69)
+	at kr.co.junko.document.DocumentService$$FastClassBySpringCGLIB$$a6c31809.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at kr.co.junko.document.DocumentService$$EnhancerBySpringCGLIB$$ac1f54f.documentInsert(<generated>)
+	at kr.co.junko.document.DocumentController.documentInsert(DocumentController.java:44)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-08 11:24:08 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-08 11:24:25 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 7284 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 11:24:25 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 11:24:26 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 11:24:26 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:24:26 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 11:24:26 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 11:24:26 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 11:24:26 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1200 ms
+INFO  25-07-08 11:24:27 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:24:27 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-08 11:24:27 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.547 seconds (JVM running for 3.256)
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 0 ms
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [DocumentController:41] - dto : DocumentCreateDTO(template_idx=2, user_idx=1, variables={user_name=홍길동, resign_date=2025-07-08, department=영업부}, approver_ids=[2])
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 2 AND del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO document (user_idx, content, created_date, status) VALUES (1, '<p>홍길동님은 {{join_date}}부터 
+재직 중입니다.</p>', NOW(), '결재중') 
+ {executed in 5 msec}
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO document (user_idx, content, created_date, status) VALUES 
+(1, '<p>홍길동님은 {{join_date}}부터 재직 중입니다.</p>', NOW(), '결재중') 
+ {executed in 0 msec}
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO approval_line (document_idx, user_idx, step, status) VALUES (1, 2, 1, '미확인') 
+ {executed in 5 msec}
+INFO  25-07-08 11:24:28 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO approval_line (document_idx, user_idx, step, status) 
+VALUES (1, 2, 1, '미확인') 
+ {executed in 0 msec}
+INFO  25-07-08 11:25:36 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-08 11:25:37 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-08 11:26:19 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 12148 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 11:26:19 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 11:26:20 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 11:26:20 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:26:20 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 11:26:20 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 11:26:20 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 11:26:20 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1067 ms
+INFO  25-07-08 11:26:21 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:26:21 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-08 11:26:21 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.293 seconds (JVM running for 2.962)
+INFO  25-07-08 11:26:23 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-08 11:26:23 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-08 11:26:23 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-08 11:26:23 [http-nio-8080-exec-1]  [DocumentController:41] - dto : DocumentCreateDTO(template_idx=2, user_idx=1, variables={user_name=홍길동, join_date=2025-07-08, department=영업부}, approver_ids=[2])
+INFO  25-07-08 11:26:23 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-08 11:26:24 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-08 11:26:24 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 2 AND del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-08 11:26:24 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO document (user_idx, content, created_date, status) VALUES (1, '<p>홍길동님은 2025-07-08부터 
+재직 중입니다.</p>', NOW(), '결재중') 
+ {executed in 6 msec}
+INFO  25-07-08 11:26:24 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO document (user_idx, content, created_date, status) VALUES 
+(1, '<p>홍길동님은 2025-07-08부터 재직 중입니다.</p>', NOW(), '결재중') 
+ {executed in 0 msec}
+INFO  25-07-08 11:26:24 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO approval_line (document_idx, user_idx, step, status, approved_date) VALUES (2, 
+2, 1, '미확인', NOW()) 
+ {executed in 5 msec}
+INFO  25-07-08 11:26:24 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO approval_line (document_idx, user_idx, step, status, 
+approved_date) VALUES (2, 2, 1, '미확인', NOW()) 
+ {executed in 0 msec}
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-08 11:26:56 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+INFO  25-07-08 11:49:14 [main]  [JunkoApplication:55] - Starting JunkoApplication using Java 11.0.26 on 09-06 with PID 6892 (C:\smart_stock\junko_back\Junko\target\classes started by hi in C:\smart_stock\junko_back\Junko)
+INFO  25-07-08 11:49:14 [main]  [JunkoApplication:632] - No active profile set, falling back to 1 default profile: "default"
+INFO  25-07-08 11:49:15 [main]  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+INFO  25-07-08 11:49:15 [main]  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:49:15 [main]  [StandardService:173] - Starting service [Tomcat]
+INFO  25-07-08 11:49:15 [main]  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.83]
+INFO  25-07-08 11:49:15 [main]  [[/]:173] - Initializing Spring embedded WebApplicationContext
+INFO  25-07-08 11:49:15 [main]  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1245 ms
+INFO  25-07-08 11:49:16 [main]  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:49:16 [main]  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+INFO  25-07-08 11:49:16 [main]  [JunkoApplication:61] - Started JunkoApplication in 2.68 seconds (JVM running for 3.394)
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [DispatcherServlet:547] - Completed initialization in 1 ms
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [DocumentController:41] - dto : DocumentCreateDTO(template_idx=2, user_idx=1, variables={user_name=홍길동, join_date=2025-07-08, department=영업부}, approver_ids=[2])
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [HikariDataSource:110] - HikariPool-1 - Starting...
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [HikariDataSource:123] - HikariPool-1 - Start completed.
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [sqltiming:373] - SELECT * FROM template WHERE template_idx = 2 AND del_yn = 0 
+ {executed in 6 msec}
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO document (user_idx, content, created_date, status) VALUES (1, '<p>홍길동님은 2025-07-08부터 
+재직 중입니다.</p>', NOW(), '결재중') 
+ {executed in 5 msec}
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO document (user_idx, content, created_date, status) VALUES 
+(1, '<p>홍길동님은 2025-07-08부터 재직 중입니다.</p>', NOW(), '결재중') 
+ {executed in 1 msec}
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [sqltiming:373] - INSERT INTO approval_line (document_idx, user_idx, step, status, approved_date) VALUES (3, 
+2, 1, '미확인', NOW()) 
+ {executed in 5 msec}
+INFO  25-07-08 11:49:37 [http-nio-8080-exec-1]  [sqltiming:373] - getGeneratedKeys on query: INSERT INTO approval_line (document_idx, user_idx, step, status, 
+approved_date) VALUES (3, 2, 1, '미확인', NOW()) 
+ {executed in 0 msec}
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin:159] - Application shutdown requested.
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Pausing ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [StandardService:173] - Stopping service [Tomcat]
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [[/]:173] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+WARN  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [WebappClassLoaderBase:173] - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.26/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.26/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.26/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.26/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.26/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.26/java.lang.Thread.run(Thread.java:829)
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Stopping ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [Http11NioProtocol:173] - Destroying ProtocolHandler ["http-nio-8080"]
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+INFO  25-07-08 11:50:12 [RMI TCP Connection(2)-127.0.0.1]  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
