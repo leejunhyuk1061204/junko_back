@@ -92,6 +92,8 @@ public class StockService {
 		boolean shipResult = shipmentDAO.shipmentUpdate(dto)>0;
 		if(!shipResult) throw new RuntimeException("출고 상태변경 실패");
 		
+		// 3. 주문 상태 변경
+		
 		return true;
 	}
 
