@@ -128,8 +128,16 @@
 	</select>
 
 	<insert id="salesProductInsert" parameterType="kr.co.junko.dto.SalesProductDTO">
-		insert into sales_product (sales_idx, product_idx, product_cnt, product_price)
-		values (#{sales_idx},#{product_idx},#{product_cnt},#{product_price})
+		insert into sales_product (sales_idx, product_idx, product_cnt, product_price
+		<if test="product_option_idx != null and product_option_idx != 0">
+			, product_option_idx
+		</if>
+		)
+		values (#{sales_idx},#{product_idx},#{product_cnt},#{product_price}
+		<if test="product_option_idx != null and product_option_idx != 0">
+			, #{product_option_idx}
+		</if>
+		)
 	</insert>
 
 	<update id="salesProductUpdate" parameterType="kr.co.junko.dto.SalesProductDTO">
@@ -185,7 +193,10 @@
 	</select>
 
 	<update id="salesProductDel">
-		update slaes_product set del_yn = true where sales_product_idx = #{sales_product_idx}
+		update sales_product set del_yn = true where sales_product_idx = #{sales_product_idx}
 	</update>
 
+	<select id="searchPrice">
+		select selling_price from product where product_idx = #{product_idx}
+	</select>
 </mapper>

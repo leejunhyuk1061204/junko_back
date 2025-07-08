@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.WaybillDTO;
@@ -20,6 +21,15 @@ public class WaybillController {
 
 	private final WaybillService service;
 	Map<String, Object>result = null;
+	
+	@PostMapping(value="/waybill/insert")
+	public Map<String, Object> waybillInsert(@RequestBody WaybillDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.waybillInsert(dto);
+		result.put("success", success);
+		return result;
+	}
 	
 	@PostMapping(value="/waybill/update")
 	public Map<String, Object>waybillUpdate(@RequestBody WaybillDTO dto){

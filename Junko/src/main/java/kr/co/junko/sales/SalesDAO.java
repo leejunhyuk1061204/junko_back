@@ -33,4 +33,6 @@ public interface SalesDAO {
 
 	int salesProductDel(int sales_product_idx);
 
+	int searchPrice(int product_idx);
+
 }

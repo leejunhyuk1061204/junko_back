@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.junko.waybill.WaybillDAO">
 
-	<insert id="waybillInsert" parameterType="kr.co.junko.dto.SalesDTO"
+	<insert id="waybillInsert" parameterType="kr.co.junko.dto.WaybillDTO"
 	useGeneratedKeys="true"
 	keyColumn="waybill_idx"
 	keyProperty="waybill_idx">
@@ -47,7 +47,7 @@
 				and waybill_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="waybill_date != null and waybill_date != ''">
-				and waybill_date = #{reg_date}
+				and waybill_date = #{waybill_date}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
@@ -79,7 +79,7 @@
 				and waybill_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="waybill_date != null and waybill_date != ''">
-				and waybill_date = #{reg_date}
+				and waybill_date = #{waybill_date}
 			</if>
 		</where>
 	</select>

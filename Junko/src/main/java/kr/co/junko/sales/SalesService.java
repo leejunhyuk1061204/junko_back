@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SalesService {
 
 	private final SalesDAO dao;
-	private final WaybillService waybillService;
 
 	@Transactional
 	public boolean salesInsert(FullSalesDTO dto) {
@@ -34,28 +33,20 @@ public class SalesService {
 		if(!salesResult) throw new RuntimeException("주문 등록 실패");
 		
 		for(SalesProductDTO product : dto.getProducts()) {
+			product.setProduct_price(dao.searchPrice(product.getProduct_idx())*product.getProduct_cnt()); ;
 			product.setSales_idx(dto.getSales().getSales_idx());
 			boolean productResult = dao.salesProductInsert(product)>0;
 			if(!productResult) throw new RuntimeException("상품 등록 실패");
 		} 
-		
-		if("결제 완료".equals(dto.getSales().getStatus())) {
-			waybillService.waybillInsert(dto.getSales());
-		}
 		
 		return true; 
 	}
 
 	public boolean salesUpdate(SalesDTO dto) {
 		if("결제 완료".equals(dto.getStatus())) {
-			String curState = salesDetailByIdx(dto.getSales_idx()).getStatus();
-			if("결제 대기".equals(curState)) {
-				return waybillService.waybillInsert(dto);
-			}
-			return dao.salesUpdate(dto)>0;
-		} else {
-			return dao.salesUpdate(dto)>0;
+			dto.setPayment_date(LocalDate.now());
 		}
+			return dao.salesUpdate(dto)>0;
 	}
 
 	public Map<String, Object> salesList(Map<String, Object> param) {

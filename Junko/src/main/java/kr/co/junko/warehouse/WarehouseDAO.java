@@ -33,4 +33,7 @@ public interface WarehouseDAO {
 
 	int getWarehouseByZoneIdx(int idx);
 
+	WarehouseDTO getWarehouseByIdx(int idx);
+
+
 }

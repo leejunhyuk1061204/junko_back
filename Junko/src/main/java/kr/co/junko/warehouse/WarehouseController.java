@@ -50,6 +50,15 @@ public class WarehouseController {
 		return service.warehouseList(param);
 	}
 	
+	@GetMapping(value="/warehouse/detail/{warehouse_idx}")
+	public Map<String, Object> getWarehouseByIdx(@PathVariable int warehouse_idx){
+		log.info("idx = "+warehouse_idx);
+		result = new HashMap<String, Object>();
+		WarehouseDTO dto = service.getWarehouseByIdx(warehouse_idx);
+		result.put("dto", dto);
+		return result;
+	}
+	
 	// 창고 삭제
 	@GetMapping(value="/warehouse/del/{warehouse_idx}")
 	public Map<String, Object>warehouseDel(@PathVariable int warehouse_idx){
@@ -92,5 +101,6 @@ public class WarehouseController {
 		result.put("success", success);
 		return result;
 	}
+	
 	
 }

@@ -3,4 +3,107 @@
 
 <mapper namespace="kr.co.junko.shipment.ShipmentDAO">
 
+	<insert id="shipmentInsert" parameterType="kr.co.junko.dto.ShipmentDTO">
+		insert into shipment (user_idx, sales_idx, waybill_idx, shipment_date, warehouse_idx)
+		values (#{user_idx},#{sales_idx},#{waybill_idx},#{shipment_date},#{warehouse_idx})
+	</insert>
+	
+	<update id="shipmentUpdate" parameterType="kr.co.junko.dto.ShipmentDTO">
+		update shipment
+		<trim prefix="set" suffixOverrides=",">
+			<if test="user_idx != null and user_idx != 0">
+				user_idx = #{user_idx},
+			</if>
+			<if test="sales_idx != null and sales_idx != 0">
+				sales_idx = #{sales_idx},
+			</if>
+			<if test="waybill_idx != null and waybill_idx != 0">
+				waybill_idx = #{waybill_idx},
+			</if>
+			<if test="shipment_date != null">
+				shipment_date = #{shipment_date},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				warehouse_idx = #{warehouse_idx}
+			</if>
+		</trim>
+		where shipment_idx = #{shipment_idx}
+	</update>
+	
+	<select id="shipmentList" parameterType="map" resultType="kr.co.junko.dto.ShipmentDTO">
+		select * from shipment
+		<where>
+			del_yn = false
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="waybill_idx != null and waybill_idx != 0">
+				and waybill_idx = #{waybill_idx}
+			</if>
+			<if test="start_date != null and start_date !=''">
+				and shipment_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and shipment_date <![CDATA[<]]> = {end_date}
+			</if>
+			<if test="shipment_date != null">
+				and shipment_date = #{shipment_date}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="shipmentListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from shipment
+		<where>
+			del_yn = false
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="waybill_idx != null and waybill_idx != 0">
+				and waybill_idx = #{waybill_idx}
+			</if>
+			<if test="start_date != null and start_date !=''">
+				and shipment_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and shipment_date <![CDATA[<]]> = {end_date}
+			</if>
+			<if test="shipment_date != null">
+				and shipment_date = #{shipment_date}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+		</where>
+	</select>
+
+	<update id="shipmentDel">
+		update shipment set del_yn = true where shipment_idx = #{shipment_idx}
+	</update>
+	
 </mapper>

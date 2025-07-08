@@ -122,4 +122,7 @@
 		select warehouse_idx from `zone` where zone_idx = #{param1}
 	</select>
 	
+	<select id="getWarehouseByIdx" resultType="kr.co.junko.dto.WarehouseDTO">
+		select * from warehouse where warehouse_idx = #{warehouse_idx}
+	</select>
 </mapper>
