@@ -12,4 +12,6 @@ public interface DocumentDAO {
 
 	void insertApprovalLine(ApprovalLineDTO line);
 
+	DocumentDTO documentIdx(int document_idx);
+
 }

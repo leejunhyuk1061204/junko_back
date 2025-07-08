@@ -3,6 +3,8 @@ package kr.co.junko.document;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.DocumentCreateDTO;
+import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.TemplatePreviewDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,5 +49,23 @@ public class DocumentController {
 		
 		return result;
 	}
+	
+	// 결재 문서 PDF 파일 생성
+	@PostMapping(value="/document/pdf")
+	public Map<String, Object> documentPDF(@RequestBody DocumentDTO dto, HttpServletResponse response){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		
+		try {
+			String filePath = service.documentPDF(dto);
+			result.put("success", true);
+			result.put(filePath, filePath);			
+		} catch (Exception e) {
+			result.put("success", false);
+		}
+		
+		return result;
+	}
+	
 	
 }
