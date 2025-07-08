@@ -59,7 +59,7 @@ public class ChartController {
 	public void chartExcel(@RequestParam Map<String, Object> param,
 			HttpServletResponse res, @RequestHeader Map<String, String> header) throws IOException {
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
-		Integer categoryIdx = (Integer) param.get("categoryIdx");
+		Integer categoryIdx = param.get("categoryIdx") != null ? Integer.parseInt(param.get("categoryIdx").toString()) : null;
 		String startDate = (String) param.get("startDate");
 		String endDate = (String) param.get("endDate");
 		
