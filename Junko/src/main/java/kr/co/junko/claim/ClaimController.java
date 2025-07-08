@@ -25,8 +25,14 @@ public class ClaimController {
 	public Map<String, Object>claimInsert(@RequestBody ClaimDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.claimInsert(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.claimInsert(dto);
+			result.put("success", success);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	

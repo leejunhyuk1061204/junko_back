@@ -17,4 +17,6 @@ public class ClaimHandleDTO {
 	// 클레임 상태 변경을 위한 입력값
 	private String status;
 	
+	// 송장 자동생성을 위한 입력값
+	private int custom_idx;
 }

@@ -7,7 +7,7 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.junko.claim.ClaimDAO;
+import kr.co.junko.claim.ClaimService;
 import kr.co.junko.dto.ClaimDTO;
 import kr.co.junko.dto.ClaimHandleDTO;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ClaimHandleService {
 
 	private final ClaimHandleDAO dao;
-	private final ClaimDAO claimDAO;
+	private final ClaimService claimService;
 
 	@Transactional
 	public boolean claimHandleInsert(ClaimHandleDTO dto) {
@@ -29,7 +29,9 @@ public class ClaimHandleService {
 		ClaimDTO claimDTO = new ClaimDTO();
 		claimDTO.setClaim_idx(dto.getClaim_idx());
 		claimDTO.setStatus(dto.getStatus());
-		boolean updateResult = claimDAO.claimUpdate(claimDTO)>0;
+		claimDTO.setCustom_idx(dto.getCustom_idx());
+		
+		boolean updateResult = claimService.claimUpdate(claimDTO);
 		if(!updateResult) throw new RuntimeException("클레임 상태 변경 실패");
 		
 		return true;

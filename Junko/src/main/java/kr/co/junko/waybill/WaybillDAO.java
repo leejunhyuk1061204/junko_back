@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.junko.dto.ReturnWaybillDTO;
 import kr.co.junko.dto.SalesDTO;
 import kr.co.junko.dto.WaybillDTO;
 
@@ -20,5 +21,7 @@ public interface WaybillDAO {
 	int waybillListTotalPage(Map<String, Object> param);
 
 	int waybillDel(int idx);
+
+	int returnWaybillInsert(ReturnWaybillDTO returnDTO);
 
 }

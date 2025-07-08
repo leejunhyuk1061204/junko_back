@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import kr.co.junko.dto.ClaimDTO;
+import kr.co.junko.waybill.WaybillService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,13 +17,18 @@ import lombok.extern.slf4j.Slf4j;
 public class ClaimService {
 
 	private final ClaimDAO dao;
+	private final WaybillService waybillService;
 
 	public boolean claimInsert(ClaimDTO dto) {
 		return dao.claimInsert(dto)>0;
 	}
 
 	public boolean claimUpdate(ClaimDTO dto) {
-		return dao.claimUpdate(dto)>0;
+		if("처리완료".equals(dto.getStatus())) {
+			return waybillService.returnWaybillInsert(dto);
+		}else {
+			return dao.claimUpdate(dto)>0;
+		}
 	}
 
 	public Map<String, Object> claimList(Map<String, Object> param) {
