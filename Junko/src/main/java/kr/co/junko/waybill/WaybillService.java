@@ -76,6 +76,9 @@ public class WaybillService {
 	@Transactional
 	public boolean returnWaybillInsert(ClaimDTO dto) {
 
+		// claim_handle insert 시 status 에 '처리완료' 일 경우 송장 자동생성
+		// 아직 테스트 안함
+		
 		// 1. return 송장 등록
 		// claim_idx, pickup_com_date, custom_idx
 		ReturnWaybillDTO returnDTO = new ReturnWaybillDTO();
@@ -89,6 +92,7 @@ public class WaybillService {
 		// 어떤 상품 교환하는지 product_idx, product_option_idx 가 테이블에 있어야하지 않을까 ?
 		// 있다면 어느 테이블에 있을까 ?
 		// 1:N이면 목록 새로 만들어야하는데 ..
+
 		
 		// 3. 클레임 상태 변경
 		boolean claimResult = claimDAO.claimUpdate(dto)>0;
