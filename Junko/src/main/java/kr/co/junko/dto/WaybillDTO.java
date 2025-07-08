@@ -14,4 +14,8 @@ public class WaybillDTO {
 	private LocalDate waybill_date;
 	private boolean del_yn;
 	
+	// 송장 등록 시 입력받을 값
+	// custom_idx(택배사), warehouse_idx(출고할 창고)
+	private int warehouse_idx;
+	
 }

@@ -76,6 +76,10 @@ public class WarehouseService {
 	public int getWarehouseByZoneIdx(int idx) {
 		return dao.getWarehouseByZoneIdx(idx);
 	}
+
+	public WarehouseDTO getWarehouseByIdx(int idx) {
+		return dao.getWarehouseByIdx(idx);
+	}
 	
 	
 	

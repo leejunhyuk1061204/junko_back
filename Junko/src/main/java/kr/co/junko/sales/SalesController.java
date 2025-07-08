@@ -45,15 +45,8 @@ public class SalesController {
 	public Map<String, Object>salesUpdate(@RequestBody SalesDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		
-		try {
-			boolean success =service.salesUpdate(dto);
-			result.put("success", success);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("msg", e.getMessage());
-		}
+		boolean success =service.salesUpdate(dto);
+		result.put("success", success);
 		return result;
 	}
 	

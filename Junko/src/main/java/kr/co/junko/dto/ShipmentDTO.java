@@ -14,5 +14,6 @@ public class ShipmentDTO {
 	private LocalDate shipment_date;
 	private String status;
 	private boolean del_yn;
+	private int warehouse_idx;
 	
 }

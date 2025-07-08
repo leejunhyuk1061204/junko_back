@@ -11,7 +11,7 @@ import kr.co.junko.dto.WaybillDTO;
 @Mapper
 public interface WaybillDAO {
 
-	int waybillInsert(SalesDTO dto);
+	int waybillInsert(WaybillDTO dto);
 
 	int waybillUpdate(WaybillDTO dto);
 
