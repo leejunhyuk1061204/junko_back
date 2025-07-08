@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.claim.ClaimDAO">
+
+	<insert id="claimInsert" parameterType="kr.co.junko.dto.ClaimDTO">
+		insert into claim (sales_idx, type, claim_reson)
+		values (#{sales_idx},#{type},#{claim_reson})
+	</insert>
+
+	<update id="claimUpdate" parameterType="kr.co.junko.dto.ClaimDTO">
+		update claim
+		<trim prefix="set" suffixOverrides=",">
+			<if test="sales_idx != null and sales_idx != 0">
+				sales_idx = #{sales_idx},
+			</if>
+			<if test="type != null and type != ''">
+				type = #{type},
+			</if>
+			<if test="claim_reson != null and claim_reson != ''">
+				claim_reson = #{claim_reson},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status}
+			</if>
+		</trim>
+		where claim_idx = #{claim_idx}
+	</update>
+
+	<select id="claimList" parameterType="map" resultType="kr.co.junko.dto.ClaimDTO">
+		select * from claim
+		<where>
+			del_yn = false
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+			<if test="claim_reson != null and claim_reson != ''">
+				and claim_reson like concat('%',#{claim_reson},'%')
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and claim_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date !=''">
+				and claim_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="claim_date != null and claim_date !=''">
+				and claim_date = #{claim_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+
+	<select id="claimListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from claim
+		<where>
+			del_yn = false
+			<if test="sales_idx != null and sales_idx != 0">
+				and sales_idx = #{sales_idx}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+			<if test="claim_reson != null and claim_reson != ''">
+				and claim_reson like concat('%',#{claim_reson},'%')
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and claim_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date !=''">
+				and claim_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="claim_date != null and claim_date !=''">
+				and claim_date = #{claim_date}
+			</if>
+		</where>
+	</select>
+	
+	<update id="claimDel">
+		update claim set del_yn = true where claim_idx = #{param1}
+	</update>
+</mapper>
