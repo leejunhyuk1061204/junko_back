@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.claimHandle.ClaimHandleDAO">
+
+	<insert id="claimHandleInsert" parameterType="kr.co.junko.dto.ClaimHandleDTO">
+		insert into claim_handle (claim_idx, user_idx, handle_detail)
+		values (#{claim_idx},#{user_idx},#{handle_detail})
+	</insert>
+
+	<update id="claimHandleUpdate" parameterType="kr.co.junko.dto.ClaimHandleDTO">
+		update claim_handle
+		<trim prefix="set" suffixOverrides=",">
+			<if test="claim_idx != null and claim_idx != 0">
+				claim_idx = #{claim_idx},
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				user_idx = #{user_idx},
+			</if>
+			<if test="handle_detail != null and handle_detail != ''">
+				handle_detail = #{handle_detail}
+			</if>
+		</trim>
+		where claim_handle_idx = #{claim_handle_idx}
+	</update>
+
+	<select id="claimHandleList" parameterType="map" resultType="kr.co.junko.dto.ClaimHandleDTO">
+		select * from claim_handle
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx = #{claim_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and handle_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and handle_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="handle_date != null and handle_date != ''">
+				and handle_date = #{handle_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="claimHandleListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from claim_handle
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx = #{claim_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and handle_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and handle_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="handle_date != null and handle_date != ''">
+				and handle_date = #{handle_date}
+			</if>
+		</where>
+	</select>
+	
+	<update id="claimHandleDel">
+		update claim_handle set del_yn = true where claim_handle_idx = #{param1}
+	</update>
+</mapper>

@@ -1,0 +1,59 @@
+package kr.co.junko.claimHandle;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections4.map.HashedMap;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import kr.co.junko.claim.ClaimDAO;
+import kr.co.junko.dto.ClaimDTO;
+import kr.co.junko.dto.ClaimHandleDTO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class ClaimHandleService {
+
+	private final ClaimHandleDAO dao;
+	private final ClaimDAO claimDAO;
+
+	@Transactional
+	public boolean claimHandleInsert(ClaimHandleDTO dto) {
+		boolean insertResult = dao.claimHandleInsert(dto)>0;
+		if(!insertResult) throw new RuntimeException("클레임 처리 등록 실패");
+		
+		ClaimDTO claimDTO = new ClaimDTO();
+		claimDTO.setClaim_idx(dto.getClaim_idx());
+		claimDTO.setStatus(dto.getStatus());
+		boolean updateResult = claimDAO.claimUpdate(claimDTO)>0;
+		if(!updateResult) throw new RuntimeException("클레임 상태 변경 실패");
+		
+		return true;
+	}
+
+	public boolean claimHandleUpdate(ClaimHandleDTO dto) {
+		return dao.claimHandleUpdate(dto)>0;
+	}
+
+	public Map<String, Object> claimHandleList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset =((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<ClaimHandleDTO>list = dao.claimHandleList(param);
+		int total = dao.claimHandleListTotalPage(param);
+		Map<String, Object>result = new HashedMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+
+	public boolean claimHandleDel(int idx) {
+		return dao.claimHandleDel(idx)>0;
+	} 
+}

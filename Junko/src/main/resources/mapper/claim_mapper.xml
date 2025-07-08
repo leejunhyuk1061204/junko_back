@@ -54,7 +54,7 @@
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
-			${orderColumn}
+			order by ${orderColumn}
 			<if test="orderDirection != null and orderDirection !=''">
 				${orderDirection}
 			</if>
