@@ -24,4 +24,12 @@ public interface WaybillDAO {
 
 	int returnWaybillInsert(ReturnWaybillDTO returnDTO);
 
+	int returnWaybillUpdate(ReturnWaybillDTO dto);
+
+	List<WaybillDTO> returnWaybillList(Map<String, Object> param);
+
+	int returnWaybillListTotalPage(Map<String, Object> param);
+
+	int returnWaybillDel(int idx);
+
 }

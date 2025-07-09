@@ -149,5 +149,27 @@ public class WaybillService {
 		
 		return true;
 	}
+
+	public boolean returnWaybillUpdate(ReturnWaybillDTO dto) {
+		return dao.returnWaybillUpdate(dto)>0;
+	}
+
+	public Map<String, Object> returnWaybillList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<WaybillDTO>list = dao.returnWaybillList(param);
+		int total = dao.returnWaybillListTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+
+	public boolean returnWaybillDel(int idx) {
+		return dao.returnWaybillDel(idx)>0;
+	}
 	
 }

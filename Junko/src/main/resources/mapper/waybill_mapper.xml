@@ -96,4 +96,93 @@
 		values (#{claim_idx},#{pickup_com_date},#{custom_idx})
 	</insert>
 
+	<update id="returnWaybillUpdate" parameterType="kr.co.junko.dto.ReturnWaybillDTO">
+		update return_waybill
+		<trim prefix="set" suffixOverrides=",">
+		<if test="claim_idx != null and claim_idx != 0">
+			claim_idx = #{claim_idx},
+		</if>
+		<if test="custom_idx != null and custom_idx != 0">
+			custom_idx = #{custom_idx},
+		</if>
+		<if test="status != null and status !=''">
+			status = #{status},
+		</if>
+		<if test="pickup_req_date != null and pickup_req_date != ''">
+			pickup_req_date= #{pickup_req_date},
+		</if>
+		<if test="pickup_com_date != null and pickup_com_date != ''">
+			pickup_com_date = #{pickup_com_date}
+		</if>
+		</trim>
+		where return_waybill_idx = #{return_waybill_idx}
+	</update>
+	
+	<select id="returnWaybillList" parameterType="map" resultType="kr.co.junko.dto.ReturnWaybillDTO">
+		select * from return_waybill
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx = #{claim_idx}
+			</if>
+			<if test="custom_idx != null and custom_idx != 0">
+				and custom_idx = #{custom_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="pickup_req_date != null and pickup_req_date != ''">
+				and pickup_req_date = #{pickup_req_date}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and pickup_com_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and pickup_com_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="pickup_com_date != null and pickup_com_date != ''">
+				and pickup_com_date = #{pickup_com_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="returnWaybillListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from return_waybill
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx = #{claim_idx}
+			</if>
+			<if test="custom_idx != null and custom_idx != 0">
+				and custom_idx = #{custom_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="pickup_req_date != null and pickup_req_date != ''">
+				and pickup_req_date = #{pickup_req_date}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and pickup_com_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and pickup_com_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="pickup_com_date != null and pickup_com_date != ''">
+				and pickup_com_date = #{pickup_com_date}
+			</if>
+		</where>
+	</select>
+
+	<update id="returnWaybillDel">
+		update return_waybill set del_yn = true where return_waybill_idx = #{param1} 
+	</update>
+
 </mapper>

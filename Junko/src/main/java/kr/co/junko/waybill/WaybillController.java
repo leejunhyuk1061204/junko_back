@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.junko.dto.ReturnWaybillDTO;
 import kr.co.junko.dto.WaybillDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,30 @@ public class WaybillController {
 		log.info("idx = "+waybill_idx);
 		result = new HashMap<String, Object>();
 		boolean success = service.waybillDel(waybill_idx);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/returnWaybill/update")
+	public Map<String, Object>returnWaybillUpdate(@RequestBody ReturnWaybillDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.returnWaybillUpdate(dto);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/returnWaybill/list")
+	public Map<String, Object>returnWaybillList(@RequestBody Map<String, Object> param){
+		log.info("param : {}",param);
+		return service.returnWaybillList(param);
+	}
+	
+	@GetMapping(value="/returnWaybill/del/{return_waybill_idx}")
+	public Map<String, Object>returnWaybillDel(@PathVariable int return_waybill_idx){
+		log.info("idx = "+return_waybill_idx);
+		result = new HashMap<String, Object>();
+		boolean success = service.returnWaybillDel(return_waybill_idx);
 		result.put("success", success);
 		return result;
 	}
