@@ -3,9 +3,21 @@
 
 <mapper namespace="kr.co.junko.adminLog.AdminLogDAO">
 
-	<insert id="insertAdminLog" parameterType="kr.co.junko.dto.AdminLogDTO">
+	<insert id="saveLog" parameterType="kr.co.junko.dto.AdminLogDTO">
 	    INSERT INTO adminLog(admin_idx, log_type, target_table, operation_detail, log_time, ip_address)
 	    	VALUES(#{admin_idx}, #{log_type},#{target_table},#{operation_detail}, #{log_time}, #{ip_address})
 	</insert>
+	
+	<select id="logList" resultType="map">
+		SELECT u.user_name, al.* FROM adminLog al JOIN user u ON al.admin_idx = u.user_idx
+			<where>
+				<if test="startDate != null and startDate != ''">
+		            AND al.log_time &gt;= CONCAT(#{startDate}, ' 00:00:00')
+		        </if>
+		        <if test="endDate != null and endDate != ''">
+		            AND al.log_time &lt;= CONCAT(#{endDate}, ' 23:59:59')
+		        </if>
+			</where>
+	</select>
 
 </mapper>

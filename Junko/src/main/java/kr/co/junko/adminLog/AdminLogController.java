@@ -1,5 +1,6 @@
 package kr.co.junko.adminLog;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.co.junko.dto.AdminLogDTO;
 import kr.co.junko.util.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +22,21 @@ public class AdminLogController {
 	
 	// 로그 리스트 불러오기
 	@GetMapping("/admin/logs/list")
-	public List<AdminLogDTO> LogList(@RequestParam Map<String, Object> param,
+	public Map<String, Object> logList(@RequestParam Map<String, Object> param,
 			@RequestHeader Map<String, String> header) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
-		String log_type = (String) param.get("log_type");
-		String target_table = (String) param.get("target_table");
+		boolean login = false;
 		
 		if (loginId != null && !loginId.isEmpty()) {
-			
+			List<Map<String, Object>> list = service.logList(param);
+			login = true;
+			result.put("startDate", param.get("startDate"));
+			result.put("endDate", param.get("endDate"));
+			result.put("list", list);
+			result.put("loginYN", login);
 		}
-		
-		
-		
-		return null;
+		return result;
 	}
 	
 	

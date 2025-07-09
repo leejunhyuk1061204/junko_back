@@ -1,9 +1,10 @@
 package kr.co.junko.adminLog;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.dto.AdminLogDTO;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,11 @@ public class AdminLogService {
         dto.setLog_time(LocalDateTime.now());
         dto.setIp_address(ip_address);
         
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!log_type : "+dto.getLog_type());
-        dao.insertAdminLog(dto); // DB 저장
+        dao.saveLog(dto); // DB 저장
     }
+
+	public List<Map<String, Object>> logList(Map<String, Object> param) {
+		return dao.logList(param);
+	}
 
 }
