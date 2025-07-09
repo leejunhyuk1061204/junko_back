@@ -8,4 +8,80 @@
 		values (#{claim_idx},#{return_waybill_idx},#{warehouse_idx},#{user_idx})
 	</insert>
 
+	<update id="returnReceiveUpdate" parameterType="kr.co.junko.dto.ReturnReceiveDTO">
+		update return_receive
+		<trim prefix="set" suffixOverrides=",">
+		<if test="claim_idx != null and claim_idx != 0">
+			claim_idx = #{claim_idx},
+		</if>
+		<if test="return_waybill_idx != null and return_waybill_idx != 0">
+			return_waybill_idx = #{return_waybill_idx},
+		</if>
+		<if test="warehouse_idx != null and warehouse_idx != 0">
+			warehouse_idx = #{warehouse_idx},
+		</if>
+		<if test="user_idx != null and user_idx != 0">
+			user_idx = #{user_idx},
+		</if>
+		<if test="status != null and status != ''">
+			status = #{status}
+		</if>
+		</trim>
+		where return_receive_idx = #{return_receive_idx}		
+	</update>
+	
+	<select id="returnReceiveList" parameterType="map" resultType="kr.co.junko.dto.ReturnReceiveDTO">
+		select * from return_receive
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx = #{claim_idx}
+			</if>
+			<if test="return_waybill_idx != null and return_waybill_idx != 0">
+				and return_waybill_idx = #{return_waybill_idx}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+
+	<select id="returnReceiveListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from return_receive
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx = #{claim_idx}
+			</if>
+			<if test="return_waybill_idx != null and return_waybill_idx != 0">
+				and return_waybill_idx = #{return_waybill_idx}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<update id="returnReceiveDel">
+		update return_receive set del_yn = true where return_receive_idx = #{param1}
+	</update>
 </mapper>
