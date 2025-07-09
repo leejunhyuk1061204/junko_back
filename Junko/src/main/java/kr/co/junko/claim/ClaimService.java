@@ -88,5 +88,13 @@ public class ClaimService {
 	public boolean returnProductDel(int idx) {
 		return dao.returnProductDel(idx)>0;
 	}
+
+	public ClaimDTO claimDetailByIdx(int idx) {
+		return dao.claimDetailByIdx(idx);
+	}
+
+	public List<ReturnProductDTO> returnProductByClaimIdx(int idx) {
+		return dao.returnProductByClaimIdx(idx);
+	}
 	
 }

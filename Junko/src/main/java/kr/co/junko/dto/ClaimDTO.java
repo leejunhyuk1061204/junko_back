@@ -17,4 +17,7 @@ public class ClaimDTO {
 	
 	// 반품송장 자동생성 시 입력값
 	private int custom_idx;
+	
+	// 반품 자동 생성을 위한 입력값
+	private int warehouse_idx;
 }

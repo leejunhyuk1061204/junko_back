@@ -1,6 +1,7 @@
 package kr.co.junko.waybill;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,13 +10,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.claim.ClaimDAO;
-import kr.co.junko.claim.ClaimService;
 import kr.co.junko.dto.ClaimDTO;
+import kr.co.junko.dto.FullSalesDTO;
+import kr.co.junko.dto.ReturnProductDTO;
+import kr.co.junko.dto.ReturnReceiveDTO;
 import kr.co.junko.dto.ReturnWaybillDTO;
 import kr.co.junko.dto.SalesDTO;
+import kr.co.junko.dto.SalesProductDTO;
+import kr.co.junko.dto.WarehouseDTO;
 import kr.co.junko.dto.WaybillDTO;
+import kr.co.junko.returnReceive.ReturnReceiveDAO;
 import kr.co.junko.sales.SalesDAO;
+import kr.co.junko.sales.SalesService;
 import kr.co.junko.shipment.ShipmentService;
+import kr.co.junko.warehouse.WarehouseDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,9 +34,12 @@ public class WaybillService {
 
 	private final WaybillDAO dao;
 	private final SalesDAO salesDAO;
-	private final ShipmentService shipmentService;
 	private final ClaimDAO claimDAO;
-
+	private final WarehouseDAO warehouseDAO;
+	private final ReturnReceiveDAO returnReceiveDAO;
+	private final ShipmentService shipmentService;
+	private final SalesService salesService;
+	
 	@Transactional
 	public boolean waybillInsert(WaybillDTO dto) {
 		
@@ -81,22 +92,58 @@ public class WaybillService {
 		
 		// 1. return 송장 등록
 		// claim_idx, pickup_com_date, custom_idx
-		ReturnWaybillDTO returnDTO = new ReturnWaybillDTO();
-		returnDTO.setClaim_idx(dto.getClaim_idx());
-		returnDTO.setPickup_com_date(LocalDate.now().plusDays(1));
-		returnDTO.setCustom_idx(dto.getCustom_idx());
+		ReturnWaybillDTO returnWaybillDTO = new ReturnWaybillDTO();
+		returnWaybillDTO.setClaim_idx(dto.getClaim_idx());
+		returnWaybillDTO.setPickup_com_date(LocalDate.now().plusDays(1));
+		returnWaybillDTO.setCustom_idx(dto.getCustom_idx());
 		
-		boolean returnResult = dao.returnWaybillInsert(returnDTO)>0;
+		log.info("returnWaybillDTO : {}",returnWaybillDTO);
+		boolean waybillResult = dao.returnWaybillInsert(returnWaybillDTO)>0;
+		if(!waybillResult) throw new RuntimeException("송장 등록 실패");
 		
-		// 2. 교환 시 주문 등록
-		// 어떤 상품 교환하는지 product_idx, product_option_idx 가 테이블에 있어야하지 않을까 ?
-		// 있다면 어느 테이블에 있을까 ?
-		// 1:N이면 목록 새로 만들어야하는데 ..
+		// 2. 반품 등록
+		// claim_idx, return_waybill_idx, warehouse_idx, user_idx
+		ReturnReceiveDTO returnReceiveDTO = new ReturnReceiveDTO();
+		returnReceiveDTO.setClaim_idx(dto.getClaim_idx());
+		returnReceiveDTO.setReturn_waybill_idx(returnWaybillDTO.getReturn_waybill_idx());
+		WarehouseDTO warehouse =  warehouseDAO.getWarehouseByIdx(dto.getWarehouse_idx());
+		returnReceiveDTO.setWarehouse_idx(dto.getWarehouse_idx());
+		returnReceiveDTO.setUser_idx(warehouse.getUser_idx());
 		
+		boolean receiveResult = returnReceiveDAO.returnReceiveInsert(returnReceiveDTO)>0;
+		if(!receiveResult) throw new RuntimeException("반품 등록 실패");
+	
 		
-		
-		
-		// 3. 클레임 상태 변경
+		// 3. 교환 시 주문 등록
+		ClaimDTO claimDTO = claimDAO.claimDetailByIdx(dto.getClaim_idx());
+		if("교환".equals(claimDTO.getType())) {
+			FullSalesDTO fullSalesDTO = new FullSalesDTO();
+			
+			// 주문
+			// customer, customer_phone, customer_address, payment_option, payment_date, status
+			SalesDTO salesDTO = salesDAO.salesDetailByIdx(claimDTO.getSales_idx());
+			salesDTO.setPayment_date(LocalDate.now());
+			salesDTO.setStatus("결제 완료");
+			fullSalesDTO.setSales(salesDTO);
+			
+			// 상품
+			// product_idx, product_cnt, product_option_idx
+			List<ReturnProductDTO>returnProduct = claimDAO.returnProductByClaimIdx(dto.getClaim_idx());
+			List<SalesProductDTO>productList = new ArrayList<SalesProductDTO>();
+			for(ReturnProductDTO p : returnProduct) {
+				SalesProductDTO salesProduct = new SalesProductDTO();
+				salesProduct.setProduct_idx(p.getProduct_idx());
+				salesProduct.setProduct_cnt(p.getReturn_cnt());
+				if(p.getExchange_idx() != 0) {
+					salesProduct.setProduct_option_idx(p.getExchange_idx());
+				}
+				productList.add(salesProduct);
+			}
+			
+			fullSalesDTO.setProducts(productList);
+			salesService.salesInsert(fullSalesDTO);
+		}
+		// 4. 클레임 상태 변경
 		boolean claimResult = claimDAO.claimUpdate(dto)>0;
 		if(!claimResult) throw new RuntimeException("클레임 상태 변경 실패");
 		

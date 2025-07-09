@@ -31,4 +31,8 @@ public interface ClaimDAO {
 
 	int returnProductDel(int idx);
 
+	ClaimDTO claimDetailByIdx(int idx);
+
+	List<ReturnProductDTO> returnProductByClaimIdx(int idx);
+
 }

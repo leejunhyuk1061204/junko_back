@@ -1,6 +1,7 @@
 package kr.co.junko.claim;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,6 +69,15 @@ public class ClaimController {
 		return result;
 	}
 	
+	@GetMapping(value="/claim/detail/{claim_idx}")
+	public Map<String, Object>claimDetailByIdx(@PathVariable int claim_idx){
+		log.info("idx = "+ claim_idx);
+		result= new HashMap<String, Object>();
+		ClaimDTO dto = service.claimDetailByIdx(claim_idx);
+		result.put("dto", dto);
+		return result;
+	}
+	
 	@PostMapping(value="/returnProduct/update")
 	public Map<String, Object>returnProductUpdate(@RequestBody ReturnProductDTO dto){
 		log.info("dto : {}",dto);
@@ -92,4 +102,12 @@ public class ClaimController {
 		return result;
 	}
 	
+	@GetMapping(value="/returnProduct/byClaimIdx/{claim_idx}")
+	public Map<String, Object>returnProductByClaimIdx(@PathVariable int claim_idx){
+		log.info("idx = "+ claim_idx);
+		result = new HashMap<String, Object>();
+		List<ReturnProductDTO>list = service.returnProductByClaimIdx(claim_idx);
+		result.put("list", list);
+		return result;
+	}
 }

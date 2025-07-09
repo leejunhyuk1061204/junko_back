@@ -88,7 +88,10 @@
 		update waybill set del_yn = true where waybill_idx = #{param1}
 	</update>
 
-	<insert id="returnWaybillInsert" parameterType="kr.co.junko.dto.ReturnWaybillDTO">
+	<insert id="returnWaybillInsert" parameterType="kr.co.junko.dto.ReturnWaybillDTO"
+	useGeneratedKeys="true"
+	keyColumn="return_waybill_idx"
+	keyProperty="return_waybill_idx">
 		insert into return_waybill (claim_idx, pickup_com_date, custom_idx)
 		values (#{claim_idx},#{pickup_com_date},#{custom_idx})
 	</insert>
