@@ -10,7 +10,7 @@ public class ClaimDTO {
 	private int claim_idx;
 	private int	sales_idx;
 	private String	type;
-	private String claim_reson;
+	private String claim_reason;
 	private LocalDate claim_date;
 	private String status;
 	private boolean del_yn;

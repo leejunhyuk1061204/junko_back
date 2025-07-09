@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.ClaimDTO;
+import kr.co.junko.dto.FullClaimDTO;
+import kr.co.junko.dto.ReturnProductDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +24,7 @@ public class ClaimController {
 	Map<String, Object>result = null;
 	
 	@PostMapping(value="/claim/insert")
-	public Map<String, Object>claimInsert(@RequestBody ClaimDTO dto){
+	public Map<String, Object>claimInsert(@RequestBody FullClaimDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
 		try {
@@ -40,8 +42,14 @@ public class ClaimController {
 	public Map<String, Object>claimUpdate(@RequestBody ClaimDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.claimUpdate(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.claimUpdate(dto);
+			result.put("success", success);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	
@@ -56,6 +64,30 @@ public class ClaimController {
 		log.info("idx = "+ claim_idx);
 		result= new HashMap<String, Object>();
 		boolean success = service.claimDel(claim_idx);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/returnProduct/update")
+	public Map<String, Object>returnProductUpdate(@RequestBody ReturnProductDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.returnProductUpdate(dto);
+		result.put("success", success);	
+		return result;
+	}
+	
+	@PostMapping(value="/returnProduct/list")
+	public Map<String, Object>returnProductList(@RequestBody Map<String, Object> param){
+		log.info("param : {}",param);
+		return service.returnProductList(param);
+	}
+	
+	@GetMapping(value="/returnProduct/del/{return_product_idx}")
+	public Map<String, Object>returnProductDel(@PathVariable int return_product_idx){
+		log.info("idx = "+ return_product_idx);
+		result= new HashMap<String, Object>();
+		boolean success = service.returnProductDel(return_product_idx);
 		result.put("success", success);
 		return result;
 	}

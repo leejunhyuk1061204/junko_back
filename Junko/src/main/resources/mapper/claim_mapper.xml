@@ -3,9 +3,12 @@
 
 <mapper namespace="kr.co.junko.claim.ClaimDAO">
 
-	<insert id="claimInsert" parameterType="kr.co.junko.dto.ClaimDTO">
-		insert into claim (sales_idx, type, claim_reson)
-		values (#{sales_idx},#{type},#{claim_reson})
+	<insert id="claimInsert" parameterType="kr.co.junko.dto.ClaimDTO"
+	useGeneratedKeys="true"
+	keyColumn="claim_idx"
+	keyProperty="claim_idx">
+		insert into claim (sales_idx, type, claim_reason)
+		values (#{sales_idx},#{type},#{claim_reason})
 	</insert>
 
 	<update id="claimUpdate" parameterType="kr.co.junko.dto.ClaimDTO">
@@ -93,4 +96,80 @@
 	<update id="claimDel">
 		update claim set del_yn = true where claim_idx = #{param1}
 	</update>
+	
+	<insert id="returnProductInsert" parameterType="kr.co.junko.dto.ReturnProductDTO">
+		insert into return_product (claim_idx,product_idx, return_cnt 
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,product_option_idx
+		</if>
+		)
+		values (#{claim_idx},#{product_idx},#{return_cnt}
+		<if test="product_option_idx != null and product_option_idx != 0">
+		,#{product_option_idx}
+		</if>
+		)
+	</insert>
+	
+	<update id="returnProductUpdate" parameterType="map">
+		update return_product
+		<trim prefix="set" suffixOverrides=",">
+			<if test="claim_idx != null and claim_idx != 0">
+				claim_idx != #{claim_idx},
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				product_idx = #{product_idx},
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				product_option_idx = #{product_option_idx},
+			</if>
+			<if test="return_cnt != null and return_cnt != 0">
+				return_cnt =#{return_cnt}
+			</if>
+		</trim>
+		where return_product_idx = #{return_product_idx}
+	</update>
+	
+	<select id="returnProductList" parameterType="map" resultType="kr.co.junko.dto.ReturnProductDTO">
+		select * from return_product
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx != #{claim_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn !=''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="returnProductListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from return_product
+		<where>
+			del_yn = false
+			<if test="claim_idx != null and claim_idx != 0">
+				and claim_idx != #{claim_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
+			</if>
+		</where>
+	</select>
+	
+	<update id="returnProductDel">
+		update return_product set del_yn = true where return_product_idx = #{param1}
+	</update>
+	
 </mapper>

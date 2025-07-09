@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.junko.dto.ClaimDTO;
+import kr.co.junko.dto.ReturnProductDTO;
 
 @Mapper
 public interface ClaimDAO {
@@ -19,5 +20,15 @@ public interface ClaimDAO {
 	int claimListTotalPage(Map<String, Object> param);
 
 	int claimDel(int claim_idx);
+
+	int returnProductInsert(ReturnProductDTO product);
+
+	int returnProductUpdate(ReturnProductDTO dto);
+
+	List<ClaimDTO> returnProductList(Map<String, Object> param);
+
+	int returnProductListTotalPage(Map<String, Object> param);
+
+	int returnProductDel(int idx);
 
 }

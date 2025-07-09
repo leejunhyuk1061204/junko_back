@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.dto.ClaimDTO;
+import kr.co.junko.dto.FullClaimDTO;
+import kr.co.junko.dto.ReturnProductDTO;
 import kr.co.junko.waybill.WaybillService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +22,23 @@ public class ClaimService {
 	private final ClaimDAO dao;
 	private final WaybillService waybillService;
 
-	public boolean claimInsert(ClaimDTO dto) {
-		return dao.claimInsert(dto)>0;
+	@Transactional
+	public boolean claimInsert(FullClaimDTO dto) {
+		
+		ClaimDTO claimDTO = dto.getClaim();
+		List<ReturnProductDTO> productDTO = dto.getProducts();
+		boolean claimResult = dao.claimInsert(claimDTO)>0;
+		if(!claimResult) throw new RuntimeException("클레임 등록 실패");
+		
+		log.info("claim_idx : " + claimDTO.getClaim_idx());
+		
+		for(ReturnProductDTO product : productDTO) {
+			product.setClaim_idx(claimDTO.getClaim_idx());
+			boolean productResult = dao.returnProductInsert(product)>0;
+			if(!productResult) throw new RuntimeException("반품 상품 등록 실패");
+		}
+		
+		return true;
 	}
 
 	public boolean claimUpdate(ClaimDTO dto) {
@@ -47,6 +65,28 @@ public class ClaimService {
 
 	public boolean claimDel(int claim_idx) {
 		return dao.claimDel(claim_idx)>0;
+	}
+
+	public boolean returnProductUpdate(ReturnProductDTO dto) {
+		return dao.returnProductUpdate(dto)>0;
+	}
+
+	public Map<String, Object> returnProductList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<ClaimDTO>list = dao.returnProductList(param);
+		int total = dao.returnProductListTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+
+	public boolean returnProductDel(int idx) {
+		return dao.returnProductDel(idx)>0;
 	}
 	
 }
