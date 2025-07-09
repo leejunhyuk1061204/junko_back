@@ -3,4 +3,8 @@
 
 <mapper namespace="kr.co.junko.admin.AdminDAO">
 
+	<update id="updateJobNdept">
+		UPDATE user SET job_idx = #{job_idx}, dept_idx = #{dept_idx} WHERE user_idx = #{user_idx}
+	</update>
+
 </mapper>

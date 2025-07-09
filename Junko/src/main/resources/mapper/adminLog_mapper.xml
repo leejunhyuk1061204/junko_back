@@ -3,4 +3,9 @@
 
 <mapper namespace="kr.co.junko.adminLog.AdminLogDAO">
 
+	<insert id="insertAdminLog" parameterType="kr.co.junko.dto.AdminLogDTO">
+	    INSERT INTO adminLog(admin_idx, log_type, target_table, operation_detail, log_time, ip_address)
+	    	VALUES(#{admin_idx}, #{log_type},#{target_table},#{operation_detail}, #{log_time}, #{ip_address})
+	</insert>
+
 </mapper>
