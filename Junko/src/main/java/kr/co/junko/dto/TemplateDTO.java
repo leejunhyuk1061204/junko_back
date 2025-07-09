@@ -15,5 +15,6 @@ public class TemplateDTO {
 	private Date created_date;
 	private Date update_date;
 	private int del_yn;
+	private String category;
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TemplateHistoryDTO;
 import kr.co.junko.dto.TemplateVarDTO;
 
 @Mapper
@@ -27,5 +28,13 @@ public interface TemplateDAO {
 	TemplateDTO templateDetail(int template_idx);
 
 	List<TemplateVarDTO> templateVarList(int template_idx);
+
+	void insertTemplateHistory(TemplateDTO before);
+
+	List<TemplateHistoryDTO> templateHistory(int template_idx);
+
+	List<TemplateDTO> templateListCategory(String category);
+
+	List<String> templateCategoryList();
 
 }

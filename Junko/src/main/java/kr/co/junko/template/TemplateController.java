@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TemplateHistoryDTO;
 import kr.co.junko.dto.TemplateVarDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,10 +67,11 @@ public class TemplateController {
 	
 	// 템플릿 리스트
 	@GetMapping(value="/template/list")
-	public Map<String, Object> templateList(){
+	public Map<String, Object> templateList(@RequestParam(required = false)  String category){
 		result = new HashMap<String, Object>();
 		
-		List<TemplateDTO> list = service.templateList();
+		List<TemplateDTO> list = (category == null || category.isEmpty())
+				? service.templateList() : service.templateListCategory(category);
 		result.put("list", list);
 		return result;
 	}
@@ -105,6 +107,24 @@ public class TemplateController {
 	    result.put("success", html != null);
 	    
 		return result;
+	}
+
+	// 템플릿 히스토리 리스트
+	@GetMapping(value="/template/history")
+	public Map<String, Object> templateHistory(@RequestParam int template_idx) {
+	    result = new HashMap<String, Object>();
+	    List<TemplateHistoryDTO> list = service.templateHistory(template_idx);
+	    result.put("list", list);
+	    return result;
+	}
+
+	// 템플릿 카테고리 목록 조회
+	@GetMapping("/template/category/list")
+	public Map<String, Object> templateCategoryList() {
+	    result = new HashMap<String, Object>();
+	    List<String> categories = service.templateCategoryList();
+	    result.put("list", categories);
+	    return result;
 	}
 	
 }

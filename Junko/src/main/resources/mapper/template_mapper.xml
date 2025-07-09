@@ -7,10 +7,10 @@
     <insert id="templateInsert" parameterType="kr.co.junko.dto.TemplateDTO" useGeneratedKeys="true" keyProperty="template_idx">
         INSERT INTO template (
             user_idx, template_name, template_desc,
-            template_html, created_date)
+            template_html, category, created_date)
         VALUES (
             #{user_idx}, #{template_name}, #{template_desc},
-            #{template_html}, NOW())
+            #{template_html}, #{category}, NOW())
     </insert>
     
     <!-- 변수 등록 -->
@@ -31,6 +31,7 @@
         SET template_name = #{template_name},
             template_desc = #{template_desc},
             template_html = #{template_html},
+            category = #{category},
             update_date = NOW()
         WHERE template_idx = #{template_idx} AND del_yn = 0
     </update>
@@ -66,5 +67,36 @@
     	SELECT * FROM template_variable
         WHERE template_idx = #{template_idx} AND del_yn = 0
     </select>
+    
+    <!-- 히스토리 저장 -->
+    <insert id="insertTemplateHistory" parameterType="kr.co.junko.dto.TemplateDTO">
+	    INSERT INTO template_history (template_idx, user_idx, template_name, template_desc, template_html)
+	    VALUES (#{template_idx}, #{user_idx}, #{template_name}, #{template_desc}, #{template_html})
+	</insert>
 
+	<!-- 히스토리 목록 조회 -->
+	<select id="templateHistory" parameterType="int" resultType="kr.co.junko.dto.TemplateHistoryDTO">
+	    SELECT *
+	    FROM template_history
+	    WHERE template_idx = #{template_idx}
+	    ORDER BY saved_at DESC
+	</select>
+	
+	<!-- 카테고리에 따라서 템플릿 보기 -->
+	<select id="templateListCategory" parameterType="string" resultType="kr.co.junko.dto.TemplateDTO">
+		SELECT *
+		FROM template
+		WHERE del_yn = 0
+		  AND category = #{category}
+		ORDER BY created_date DESC
+	</select>
+
+	<!-- 카테고리 목록만 보는 리스트 -->
+	<select id="templateCategoryList" resultType="string">
+	    SELECT DISTINCT category
+	    FROM template
+	    WHERE del_yn = 0
+	    ORDER BY category
+	</select>
+	
 </mapper>

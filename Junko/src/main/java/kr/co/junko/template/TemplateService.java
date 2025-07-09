@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TemplateHistoryDTO;
 import kr.co.junko.dto.TemplateVarDTO;
 
 @Service
@@ -67,6 +68,9 @@ public class TemplateService {
 		// 기존 템플릿 불러오기
 		TemplateDTO before = dao.selectTemplate(dto.getTemplate_idx());
 		if (before == null) return false;
+		
+		// 변경 사항 저장
+	    dao.insertTemplateHistory(before);
 		
 		// 본문 수정
 		int row = dao.templateUpdate(dto);
@@ -129,6 +133,18 @@ public class TemplateService {
 	// 다른 패키지에서 사용하기 위해 메서드 생성
 	public TemplateDTO getTemplate(int template_idx) {
 		return dao.selectTemplate(template_idx);
+	}
+
+	public List<TemplateHistoryDTO> templateHistory(int template_idx) {
+		return dao.templateHistory(template_idx);
+	}
+
+	public List<TemplateDTO> templateListCategory(String category) {
+		return dao.templateListCategory(category);
+	}
+
+	public List<String> templateCategoryList() {
+		return dao.templateCategoryList();
 	}
 
 }
