@@ -6,9 +6,14 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,7 +84,7 @@ public class DocumentService {
 		DocumentDTO doc = new DocumentDTO();
 		doc.setUser_idx(dto.getUser_idx());
 		doc.setContent(html);
-		doc.setStatus("결재중");
+		doc.setStatus("미확인");
 		
 		// 문서 DB 저장
 		int row = dao.documentInsert(doc);
@@ -174,6 +179,11 @@ public class DocumentService {
 		int user_idx = (int) req.get("user_idx");
 		String comment = (String) req.getOrDefault("comment", "");
 		
+	    String status = dao.getDocStatus(document_idx);
+	    if ("승인".equals(status) || "반려".equals(status)) {
+	        return false;
+	    }
+		
 		ApprovalLineDTO line = dao.documentApprove(document_idx, user_idx);
 		if (line == null || !"미확인".equals(line.getStatus())) {
 			return false;
@@ -183,6 +193,11 @@ public class DocumentService {
 		int minStep = dao.getMinStep(document_idx);
 		if (line.getStep() != minStep) {
 			return false; // 본인 차례 아직임.
+		}
+		
+		String docStatus = dao.getDocStatus(document_idx);
+		if ("미확인".equals(docStatus)) {
+			dao.updateDocStatus(document_idx, "결재중");
 		}
 		
 		line.setStatus("승인");
@@ -210,6 +225,15 @@ public class DocumentService {
 		int document_idx = (int) req.get("document_idx");
 		int user_idx = (int) req.get("user_idx");
 		String comment = (String) req.getOrDefault("comment", "");
+		
+	    String status = dao.getDocStatus(document_idx);
+	    if ("승인".equals(status) || "반려".equals(status)) {
+	        return false;
+	    }
+	    
+		if (comment == null || comment.trim().isEmpty()) {
+			return false;
+		}
 		
 		ApprovalLineDTO line = dao.documentApprove(document_idx, user_idx);
 		if (line == null || !"미확인".equals(line.getStatus())) {
@@ -240,8 +264,45 @@ public class DocumentService {
 		return true;
 	}
 
-	public String getDocStatus(int document_idx) {
-		return dao.getDocStatus(document_idx);
+	public List<ApprovalLogDTO> getApprovalLogs(int document_idx) {
+		return dao.getApprovalLogs(document_idx);
 	}
-	
+
+	public String documentDOCX(int document_idx) {
+		DocumentDTO doc = dao.documentIdx(document_idx);
+		if (doc == null || doc.getContent() == null || doc.getContent().trim().isEmpty()) {
+			throw new IllegalArgumentException("문서 내용이 비어있습니다.");
+		}
+		
+		String html = doc.getContent().trim();
+		
+		String uploadRoot = "C:/upload/docx";
+		new File(uploadRoot).mkdirs();
+		String fileName = "document_"+UUID.randomUUID().toString().substring(0,8)+".docx";
+		String filePath = Paths.get(uploadRoot, fileName).toString();
+		
+		try (FileOutputStream out = new FileOutputStream(filePath)){
+			XWPFDocument document = new XWPFDocument();
+			
+			String plainText = Jsoup.parse(html).text();
+			
+			XWPFParagraph paragraph = document.createParagraph();
+			XWPFRun run = paragraph.createRun();
+			run.setText(plainText);
+			
+			document.write(out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		FileDTO file = new FileDTO();
+		file.setOri_filename("문서 DOCX");
+		file.setNew_filename(fileName);
+		file.setType("document");
+		file.setIdx(document_idx);
+		filedao.insertFile(file);
+		
+		return filePath;
+	}
+
 }

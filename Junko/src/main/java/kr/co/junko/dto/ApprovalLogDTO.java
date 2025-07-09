@@ -11,4 +11,7 @@ public class ApprovalLogDTO {
     private String status; // 승인, 반려
     private String comment;
     private Date approved_date;
+    
+    private String user_name;
+    
 }

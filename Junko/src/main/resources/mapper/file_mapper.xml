@@ -3,9 +3,21 @@
 
 <mapper namespace="kr.co.junko.file.FileDAO">
 
+	<!-- 파일 삽입 -->
 	<insert id="insertFile" parameterType="kr.co.junko.dto.FileDTO">
 		INSERT INTO file (ori_filename, new_filename, reg_date, type, idx) 
 			VALUES (#{ori_filename}, #{new_filename}, NOW(), #{type}, #{idx})
 	</insert>
+	
+	<!-- 파일 정보 조회 -->
+	<select id="selectTypeIdx" resultType="kr.co.junko.dto.FileDTO">
+		SELECT * FROM file
+		WHERE type = #{type}
+		  AND idx = #{idx}
+		  AND new_filename LIKE CONCAT('%.', #{ext})
+		  AND del_yn = 0
+		ORDER BY file_idx DESC
+		LIMIT 1
+	</select>
 	
 </mapper>

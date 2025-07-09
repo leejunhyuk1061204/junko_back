@@ -1,5 +1,7 @@
 package kr.co.junko.document;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.junko.dto.ApprovalLineDTO;
@@ -28,5 +30,7 @@ public interface DocumentDAO {
 	void insertLog(ApprovalLogDTO log);
 
 	int getMinStep(int document_idx);
+
+	List<ApprovalLogDTO> getApprovalLogs(int document_idx);
 
 }
