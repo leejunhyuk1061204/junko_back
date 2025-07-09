@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.junko.dto.ReturnReceiveDTO;
 import kr.co.junko.dto.WaybillDTO;
+import kr.co.junko.returnHandle.ReturnHandleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,9 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 public class ReturnReceiveService {
 	
 	private final ReturnReceiveDAO dao;
-
+	private final ReturnHandleService returnHandleService;
+	
 	public boolean returnReceiveUpdate(ReturnReceiveDTO dto) {
-		return dao.returnReceiveUpdate(dto)>0;
+		
+		if("반품완료".equals(dto.getStatus())) {
+			return returnHandleService.returnHandleInsert(dto);
+		}else {
+			return dao.returnReceiveUpdate(dto)>0;
+		}
 	}
 
 	public Map<String, Object> returnReceiveList(Map<String, Object> param) {
