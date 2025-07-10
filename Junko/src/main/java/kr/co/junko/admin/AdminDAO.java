@@ -26,5 +26,7 @@ public interface AdminDAO {
 	int updatePower(int power_idx, String power_name);
 
 	int delPower(int power_idx);
+	
+	int resignUpdate(Map<String, Object> param);
 
 }

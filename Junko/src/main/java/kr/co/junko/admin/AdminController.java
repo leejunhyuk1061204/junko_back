@@ -27,7 +27,7 @@ public class AdminController {
 	Map<String, Object> result = null;
 	
 	// 직책, 부서 등록 & 수정
-	@PostMapping("/JobNdept/update/")
+	@PostMapping("/JobNdept/update")
 	public Map<String, Object> updateJobNdept(@RequestBody MemberDTO dto,
 			@RequestHeader Map<String, String> header) {
 		log.info("dto : {}", dto);
@@ -186,6 +186,25 @@ public class AdminController {
 		result.put("success", success);
 		result.put("loginYN", login);
 		
+		return result;
+	}
+	
+	// 사원 퇴사 처리
+	@PostMapping("/resign/update")
+	public Map<String, Object> resignUpdate(@RequestBody Map<String, Object> param,
+			@RequestHeader Map<String, String> header) {
+		log.info("퇴사 처리 : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = false;
+		boolean login = false;
+		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+		
+		if (loginId != null && !loginId.isEmpty()) {
+			success = service.resignUpdate(param);
+			login = true;
+		}
+		result.put("success", success);
+		result.put("loginYN", login);
 		return result;
 	}
 	

@@ -42,5 +42,16 @@
 		UPDATE power SET del_yn = 1
 		WHERE power_idx = #{power_idx}
 	</update>
+	
+	<update id="resignUpdate">
+		UPDATE user SET
+			user_id=''
+			,pw=''
+			,email=''
+			,phone=''
+			,address=''
+			,status='퇴사'
+		WHERE user_idx = #{user_idx}
+	</update>
 
 </mapper>
