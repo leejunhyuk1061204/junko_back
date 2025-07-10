@@ -4,16 +4,34 @@
 <mapper namespace="kr.co.junko.member.MemberDAO">
 
 	<insert id="join" parameterType="kr.co.junko.dto.MemberDTO">
-		insert into user (user_id,pw,user_name,email,phone,address,hire_date,job_idx,dept_idx)
-		values (#{user_id},#{pw},#{user_name},#{email},#{phone},#{address},#{hire_date},#{job_idx},#{dept_idx})
+		insert into user (user_id,pw,user_name,email,phone,address,hire_date)
+		values (#{user_id},#{pw},#{user_name},#{email},#{phone},#{address},#{hire_date})
 	</insert>
 
 	<select id="overlay">
 		select count(user_idx) from user where user_id = #{param1}
 	</select>
 
-	<select id="login" parameterType="kr.co.junko.dto.MemberDTO">
-		select count(user_idx) from user where user_id = #{user_id} and pw = #{pw}
+	<select id="login" resultType="kr.co.junko.dto.MemberDTO" parameterType="kr.co.junko.dto.MemberDTO">
+		SELECT user_idx, user_id FROM user WHERE user_id = #{user_id} AND pw = #{pw}
 	</select>
+	
+	<select id="getUserIdxById" resultType="int" parameterType="String">
+		SELECT user_idx FROM user WHERE user_id = #{user_id}
+	</select>
+	
+	<insert id="insertAdminLog" parameterType="kr.co.junko.dto.AdminLogDTO">
+	    INSERT INTO adminLog(admin_idx, log_type, log_time, ip_address)
+	    	VALUES(#{admin_idx}, #{log_type}, #{log_time}, #{ip_address})
+	</insert>
+	
+	<select id="findPw" resultType="String" parameterType="map">
+		SELECT pw FROM user WHERE user_id=#{user_id} AND email=#{email} AND status='재직'
+	</select>
+	
+	<update id="pwUpdate">
+		UPDATE user SET pw = #{param2} WHERE user_id = #{param1}
+	</update>
+	
 
 </mapper>

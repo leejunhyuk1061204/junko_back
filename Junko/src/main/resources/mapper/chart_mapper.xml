@@ -70,11 +70,11 @@
 	
 	<!-- 반품율 높은 상품 순 5개 -->
 	<select id="getHighReturnProduct" resultType="map">
-		SELECT p.product_idx, c.category_name, p.product_name, SUM(rr.quantity) AS return_cnt
-		FROM return_receive rr JOIN product p ON rr.product_idx = p.product_idx
+		SELECT p.product_idx, c.category_name, p.product_name, SUM(rp.return_cnt) AS return_cnt
+		FROM return_product rp JOIN product p ON rp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
 			<where>
-				rr.status IN ('반품예정', '반품완료') AND p.del_yn = 0
+				rp.del_yn = 0
 				<if test="categoryIdx != null">
 			        AND p.category_idx = #{categoryIdx}
 			    </if>
@@ -110,11 +110,11 @@
 	
 	<!-- 반품률 분석 -->
 	<select id="returnProduct" resultType="map">
-		SELECT p.product_idx, c.category_name, p.product_name, SUM(rr.quantity) AS return_cnt
-		FROM return_receive rr JOIN product p ON rr.product_idx = p.product_idx
+		SELECT p.product_idx, c.category_name, p.product_name, SUM(rp.return_cnt) AS return_cnt
+		FROM return_product rp JOIN product p ON rp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
 			<where>
-				rr.status IN ('반품예정', '반품완료') AND p.del_yn = 0
+				rp.del_yn = 0
 				<if test="categoryIdx != null">
 			        AND p.category_idx = #{categoryIdx}
 			    </if>

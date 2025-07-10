@@ -8,9 +8,13 @@ import kr.co.junko.util.Jwt;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableScheduling
+@Configuration
+@EnableAspectJAutoProxy
 public class JunkoApplication extends SpringBootServletInitializer {
 
     @Override

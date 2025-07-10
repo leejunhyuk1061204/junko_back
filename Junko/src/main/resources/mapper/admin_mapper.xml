@@ -3,4 +3,44 @@
 
 <mapper namespace="kr.co.junko.admin.AdminDAO">
 
+	<update id="updateJobNdept">
+		UPDATE user SET job_idx = #{job_idx}, dept_idx = #{dept_idx} WHERE user_idx = #{user_idx}
+	</update>
+	
+	<insert id="insertPower" parameterType="String">
+		INSERT INTO power (power_name) VALUES (#{power_name})
+	</insert>
+	
+	<insert id="grantPower">
+		INSERT INTO `grant` (user_idx, power_idx) VALUES(#{user_idx}, #{power_idx})
+	</insert>
+	
+	<select id="powerList" resultType="kr.co.junko.dto.PowerDTO">
+		SELECT p.power_name, p.power_idx
+		FROM `grant` g
+		JOIN power p ON g.power_idx = p.power_idx
+		WHERE g.user_idx =  #{user_idx} AND g.del_yn=0
+	</select>
+	
+	<update id="delUserPower">
+		UPDATE `grant` SET del_yn = 1 WHERE user_idx = #{user_idx}
+	</update>
+	
+	<select id="getUserPower" resultType="kr.co.junko.dto.MemberDTO">
+		SELECT u.*
+		from `grant` g
+		JOIN user u ON g.user_idx = u.user_idx
+		WHERE g.power_idx = #{power_idx} AND g.del_yn = 0
+	</select>
+
+	<update id="updatePower">
+		UPDATE power SET power_name = #{power_name}
+		WHERE power_idx = #{power_idx}
+	</update>
+	
+	<update id="delPower">
+		UPDATE power SET del_yn = 1
+		WHERE power_idx = #{power_idx}
+	</update>
+
 </mapper>
