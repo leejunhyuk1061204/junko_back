@@ -12,5 +12,4 @@ public class DocumentCreateDTO {
 	private int user_idx;
 	private Map<String, String> variables; // key: 변수명, value: 입력값
 	private List<Integer> approver_ids;    // 결재자 user_idx 리스트
-	
 }

@@ -7,10 +7,10 @@
     <insert id="customInsert" parameterType="kr.co.junko.dto.CustomDTO">
         INSERT INTO custom (
             custom_name, custom_owner, custom_phone, custom_fax, custom_type,
-            business_number, account_number, bank)
+            business_number, account_number, bank, email)
         VALUES (
             #{custom_name}, #{custom_owner}, #{custom_phone}, #{custom_fax}, #{custom_type},
-            #{business_number}, #{account_number}, #{bank})
+            #{business_number}, #{account_number}, #{bank}, #{email})
     </insert>
 
 	<!-- 거래처 수정 -->
@@ -40,6 +40,9 @@
 	        </if>
 	        <if test="bank != null and bank != ''">
 	            bank = #{bank},
+	        </if>
+	        <if test="email != null and email != ''">
+	        	email = #{email}
 	        </if>
 	    </trim>
 	    WHERE custom_idx = #{custom_idx}
