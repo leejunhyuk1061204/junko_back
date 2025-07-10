@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.junko.account.TaxInvoiceDAO">
+<mapper namespace="kr.co.junko.taxInvoice.TaxInvoiceDAO">
 	
 <select id="taxInvoiceList" resultType="kr.co.junko.dto.TaxInvoiceDTO">
     SELECT *
@@ -24,7 +24,7 @@
     AND del_yn = false
 </select>
 	
-	<insert id="insertInvoice" parameterType="kr.co.junko.dto.TaxInvoiceDTO" useGeneratedKeys="true" keyProperty="invoice_idx">
+	<insert id="taxInvoiceAdd" parameterType="kr.co.junko.dto.TaxInvoiceDTO" useGeneratedKeys="true" keyProperty="invoice_idx">
     INSERT INTO taxInvoice (custom_idx, entry_idx, total_amount, status, reg_date, mod_date, issued_by, del_yn)
     VALUES (#{custom_idx}, #{entry_idx}, #{total_amount}, #{status}, NOW(), NOW(), #{issued_by}, false)
 </insert>

@@ -65,10 +65,10 @@ public class TaxInvoiceService {
 	    return result;
 	}
 
-	public Map<String, Object> taxInvoicUpdate(TaxInvoiceDTO dto) {
+	public Map<String, Object> taxInvoiceUpdate(TaxInvoiceDTO dto) {
 		result = new HashMap<String, Object>();
 		
-		int rwo = dao.taxInvoicUpdate(dto);
+		int rwo = dao.taxInvoiceUpdate(dto);
 
 	    if (rwo > 0) {
 	        result.put("success", true);

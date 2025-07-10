@@ -1,4 +1,4 @@
-package kr.co.junko.collectonAndPayment;
+package kr.co.junko.collectionAndPayment;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
@@ -100,7 +100,7 @@ public class CollectionAndPaymentService {
             String ext = oriName.substring(oriName.lastIndexOf("."));
             String newName = uuid + ext;
 
-            Path filePath = Paths.get(dir + newName);
+            Path filePath = Paths.get(dir , newName);
             Files.createDirectories(filePath.getParent());
             file.transferTo(filePath.toFile());
 

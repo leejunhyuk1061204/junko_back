@@ -1,4 +1,4 @@
-package kr.co.junko.collectonAndPayment;
+package kr.co.junko.collectionAndPayment;
 
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;

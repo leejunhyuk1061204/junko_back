@@ -47,8 +47,8 @@ public class AccountEntryService {
 		return dao.acountDetail(entry_idx);
 	}
 
-	public boolean accoutUpdate(int entry_idx, AccountingEntryDTO dto, String user_id) {
-		return dao.accoutUpdate(entry_idx,dto,user_id);
+	public boolean accountUpdate(int entry_idx, AccountingEntryDTO dto, String user_id) {
+		return dao.accountUpdate(entry_idx,dto,user_id);
 	}
 
 	public boolean accountDelete(int entry_idx, String user_id) {
@@ -89,13 +89,14 @@ public class AccountEntryService {
 			String new_filename = uuid + ext;
 			String paths = "C:/upload"; 
 			
-			file.transferTo(new File(paths));
+			File saveFile = new File(paths, new_filename);
+			file.transferTo(saveFile);
 			
 			FileDTO dto = new FileDTO();
 			dto.setOri_filename(ori_filename);
 			dto.setNew_filename(new_filename);
 			dto.setReg_date(LocalDateTime.now());
-			dto.setType("accounnting");
+			dto.setType("accounting");
 			dto.setIdx(entry_idx);
 			dto.setDel_yn(false);
 			

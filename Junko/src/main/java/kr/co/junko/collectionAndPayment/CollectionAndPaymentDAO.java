@@ -1,4 +1,4 @@
-package kr.co.junko.collectonAndPayment;
+package kr.co.junko.collectionAndPayment;
 
 import java.time.LocalDate;
 import java.util.List;

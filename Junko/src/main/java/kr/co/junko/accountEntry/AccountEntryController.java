@@ -25,14 +25,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.junko.dto.AccountingEntryDTO;
 import kr.co.junko.dto.FileDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @RestController
 @Slf4j
 public class AccountEntryController {
 	
 	@Autowired
-	private final AccountEntryService service = null;
+	private final AccountEntryService service;
 	Map<String, Object> result = null;
 	
 	// 전표 리스트 페이징
@@ -57,18 +59,18 @@ public class AccountEntryController {
 	
 	// 전표 상세조회 
 	@GetMapping(value="/accoutDetail/{entry_idx}")
-	public Map<String, Object> accoutDetail(@PathVariable int entry_idx){
+	public Map<String, Object> accountDetail(@PathVariable int entry_idx){
 		return service.accountDetail(entry_idx);
 	}
 	
 	// 전표 수정
 	@PutMapping(value="/accountUpdate/{entry_idx}")
-	public Map<String, Object> accoutUpdate(@PathVariable int entry_idx,
+	public Map<String, Object> accountUpdate(@PathVariable int entry_idx,
 			@RequestBody AccountingEntryDTO dto,
             @RequestParam String user_id){
 		
 		result = new HashMap<String, Object>();
-		boolean success = service.accoutUpdate(entry_idx, dto, user_id);
+		boolean success = service.accountUpdate(entry_idx, dto, user_id);
 		result.put("success", success);
 		
 		return result;

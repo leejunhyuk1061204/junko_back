@@ -19,7 +19,7 @@ public interface TaxInvoiceDAO {
 
 	int taxInvoiceAdd(TaxInvoiceDTO dto);
 
-	int taxInvoicUpdate(TaxInvoiceDTO dto);
+	int taxInvoiceUpdate(TaxInvoiceDTO dto);
 
 	int taxInvoiceDel(int invoice_idx);
 

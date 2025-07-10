@@ -13,17 +13,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.PurchaseSettlementDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @RestController
 @Slf4j
 public class PurchasesettlementController {
 	
 	@Autowired
-	private final PurchasesettlementService service =null;
+	private final PurchasesettlementService service;
 	Map<String, Object> result = null;
 	
 	
+	//리스
 	@GetMapping("/{settlement_id}")
 	public Map<String, Object> getSettlement(@PathVariable int settlement_id) {
 		result = new HashMap<String, Object>();
@@ -39,6 +42,7 @@ public class PurchasesettlementController {
 		return result;
 	}
 	
+	// 정산 등록 
 	@PostMapping(value="/psRegister")
 	public Map<String, Object> psRegister(@RequestBody PurchaseSettlementDTO dto) {
 		result = new HashMap<String, Object>();
@@ -50,7 +54,7 @@ public class PurchasesettlementController {
 		return result;
 	}
 	
-	
+	// 정산 업데이트 
 	@PutMapping(value="/settlementUpdate/{settlement_id}")
 	public Map<String, Object> settlementUpdate(@PathVariable("settlement_id") int settlement_id,
 	                                            @RequestBody PurchaseSettlementDTO dto) {
@@ -70,6 +74,8 @@ public class PurchasesettlementController {
 		return result;
 	}
 	
+	
+	// 정산 삭제 
 	@DeleteMapping(value="/settlementDel/{settlement_id}")
 	public Map<String, Object> settlementDel(@PathVariable("settlement_id") int settlement_id) {
 		result = new HashMap<String, Object>();

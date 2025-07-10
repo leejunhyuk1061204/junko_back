@@ -94,7 +94,7 @@ public class TaxInvoiceFileService {
 		}
 		try {
 		String paths = "C:/upload";
-		Path filePath = Paths.get(paths + dto.getNew_filename());
+		Path filePath = Paths.get(paths , dto.getNew_filename());
 		UrlResource resource = new UrlResource(filePath.toUri());
 		
 		if (!resource.exists()) {

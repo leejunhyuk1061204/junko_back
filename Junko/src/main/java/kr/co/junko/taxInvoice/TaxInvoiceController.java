@@ -14,14 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.TaxInvoiceDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @RestController
 @Slf4j
 public class TaxInvoiceController {
 
 	@Autowired
-	private final TaxInvoiceService service = null;
+	private final TaxInvoiceService service;
 	Map<String, Object> result = null;
 	
 	
@@ -47,10 +49,10 @@ public class TaxInvoiceController {
 
 	
 	// 세금계산서 수정
-	@PutMapping(value="/taxInvoicUpdate/{invoice_idx}")
-	public Map<String, Object> taxInvoicUpdate(@PathVariable int invoice_idx, @RequestBody TaxInvoiceDTO dto) {
+	@PutMapping(value="/taxInvoiceUpdate/{invoice_idx}")
+	public Map<String, Object> taxInvoiceUpdate(@PathVariable int invoice_idx, @RequestBody TaxInvoiceDTO dto) {
 	    dto.setInvoice_idx(invoice_idx);
-	    return service.taxInvoicUpdate(dto);
+	    return service.taxInvoiceUpdate(dto);
 	}
 
 	
@@ -61,7 +63,7 @@ public class TaxInvoiceController {
 	}
 
 	// 상태 변경 & 로그 저장
-	@PatchMapping(value="/taxStatusUpdate/{ivoice_idx}/status")
+	@PatchMapping(value="/taxStatusUpdate/{invoice_idx}/status")
 	public Map<String, Object>taxStatusUpdate(@PathVariable int invoice_idx ,@RequestBody Map<String, String> req){
 		result = new HashMap<String, Object>();
 		
