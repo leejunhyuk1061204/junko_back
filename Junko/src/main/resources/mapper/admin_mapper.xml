@@ -53,5 +53,41 @@
 			,status='퇴사'
 		WHERE user_idx = #{user_idx}
 	</update>
+	
+	<update id="empUpdate">
+	    UPDATE user
+	    <trim prefix="SET" suffixOverrides=",">
+	        <if test="user_name != null and user_name != ''">
+	            user_name = #{user_name},
+	        </if>
+	        <if test="email != null and email != ''">
+	            email = #{email},
+	        </if>
+	        <if test="phone != null and phone != ''">
+	            phone = #{phone},
+	        </if>
+	        <if test="address != null and address != ''">
+	            address = #{address},
+	        </if>
+	        <if test="status != null and status != ''">
+	            status = #{status},
+	        </if>
+	        <if test="annual_cnt != null">
+	            annual_cnt = #{annual_cnt},
+	        </if>
+	    </trim>
+	    WHERE user_idx = #{user_idx}
+	</update>
+	
+	<select id="userList" resultType="map" parameterType="int">
+		SELECT d.dept_name, j.job_name, u.* FROM user u JOIN dept d ON d.dept_idx = u.dept_idx
+		JOIN job j ON j.job_idx = u.job_idx WHERE u.dept_idx = #{dept_idx}
+			ORDER BY j.job_idx ASC, u.hire_date ASC
+	</select>
+	
+	<select id="userDetail" resultType="map" parameterType="int">
+	    SELECT d.dept_name, j.job_name, u.* FROM user u JOIN dept d ON d.dept_idx = u.dept_idx
+	    JOIN job j ON j.job_idx = u.job_idx WHERE u.user_idx = #{user_idx}
+	</select>
 
 </mapper>
