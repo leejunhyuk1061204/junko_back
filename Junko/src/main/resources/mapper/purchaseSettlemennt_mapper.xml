@@ -5,7 +5,7 @@
 	
 <select id="getSettlementById" parameterType="int" resultType="kr.co.junko.dto.PurchaseSettlementDTO">
 	SELECT * FROM purchaseSettlement
-	WHERE settlement_id = #{settlement_id} AND del_yn = false
+	WHERE settlement_idx = #{settlement_idx} AND del_yn = false
 </select>
 
 	
@@ -38,5 +38,67 @@
       AND del_yn = false
       AND status = '미정산'
 </update>
+	
+	<!-- 정산 확정 -->
+	<update id="finalizeSettlement" parameterType="int">
+    UPDATE purchaseSettlement
+    SET status = '확정'
+    WHERE settlement_idx = #{settlement_idx}
+      AND del_yn = false
+      AND status = '진행중'
+</update>
+	
+	<!-- 재정산 요청  -->
+	<update id="settlementReq" parameterType="int">
+    UPDATE purchaseSettlement
+    SET status = '재정산요청'
+    WHERE settlement_idx = #{settlement_idx}
+      AND status IN ('확정', '마감')
+      AND del_yn = false
+</update>
+	
+	<!-- 관리자 재정산 승  -->
+	<update id="settlementAdminReq" parameterType="int">
+    UPDATE purchaseSettlement
+    SET status = '진행중'
+    WHERE settlement_idx = #{settlement_idx}
+      AND status = '재정산요청'
+      AND del_yn = false
+</update>
+	
+	<!-- 파일 업로드   -->
+	<insert id="settlementFileUpload" parameterType="kr.co.junko.dto.FileDTO">
+    INSERT INTO file (
+        ori_filename, new_filename, reg_date, type, idx, del_yn
+    ) VALUES (
+        #{ori_filename}, #{new_filename}, #{reg_date}, #{type}, #{idx}, false
+    )
+</insert>
+	
+	<!-- 첨부 파일 조회 -->
+	<select id="settlementFileList" parameterType="int" resultType="kr.co.junko.dto.FileDTO">
+    SELECT * FROM file
+    WHERE idx = #{idx}
+      AND del_yn = false
+</select>
+	
+	<!-- 첨부 파일 삭제 -->
+	<update id="settlementFileDel" parameterType="int">
+    UPDATE file
+    SET del_yn = true
+    WHERE idx = #{idx}
+      AND del_yn = false
+</update>
+	
+	<!-- 첨부 파일 다운로드 -->
+	<select id="settlementFileDown" parameterType="int" resultType="kr.co.junko.dto.FileDTO">
+    SELECT * FROM file_table
+    WHERE file_idx = #{file_idx}
+</select>
+	
+	
+	
+	
+	
 	
 </mapper>
