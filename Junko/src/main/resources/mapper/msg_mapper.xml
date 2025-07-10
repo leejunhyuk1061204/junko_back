@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.msg.MsgDAO">
+
+	<insert id="msgSend" parameterType="kr.co.junko.dto.MsgDTO">
+		INSERT INTO msg (sender_idx, receiver_idx, msg_title, msg_content, sent_at) 
+			VALUES (#{sender_idx}, #{receiver_idx}, #{msg_title}, #{msg_content}, NOW())
+	</insert>
+	
+	<select id="msgReceived" parameterType="int" resultType="kr.co.junko.dto.MsgDTO">
+		SELECT * from msg
+		WHERE receiver_idx = #{user_idx}
+		AND receiver_del = 0
+   		ORDER BY sent_at DESC
+	</select>
+	
+	<select id="msgSent" parameterType="int" resultType="kr.co.junko.dto.MsgDTO">
+		SELECT * from msg
+		WHERE sender_idx = #{user_idx}
+		AND sender_del = 0
+		ORDER BY sent_at DESC
+	</select>
+	
+	<update id="senderDel">
+	  UPDATE msg
+	  SET sender_del = 1
+	  WHERE msg_idx = #{msg_idx} AND sender_idx = #{sender_idx}
+	</update>
+	
+	<update id="receiverDel">
+	  UPDATE msg
+	  SET receiver_del = 1
+	  WHERE msg_idx = #{msg_idx} 
+	  	AND receiver_idx = #{receiver_idx}
+	</update>
+	
+	<update id="msgRead">
+		UPDATE msg
+		SET read_yn = 1
+		WHERE msg_idx = #{msg_idx}
+			AND read_yn = 0
+	</update>
+	
+</mapper>
