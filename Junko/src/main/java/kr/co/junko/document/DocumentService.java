@@ -98,16 +98,16 @@ public class DocumentService {
 		
 		// 결재자 리스트를 기반으로 결재 라인에 등록
 		int step = 1;
-		for (int approval_id : dto.getApprover_ids()) {
-			ApprovalLineDTO line = new ApprovalLineDTO();
-			line.setDocument_idx(document_idx);
-			line.setUser_idx(approval_id);
-			line.setStep(step++);
-			line.setStatus("미확인");
-			dao.insertApprovalLine(line);
-			
+		if(dto.getApprover_ids() != null) {
+			for (int approval_id : dto.getApprover_ids()) {
+				ApprovalLineDTO line = new ApprovalLineDTO();
+				line.setDocument_idx(document_idx);
+				line.setUser_idx(approval_id);
+				line.setStep(step++);
+				line.setStatus("미확인");
+				dao.insertApprovalLine(line);
+			}
 		}
-		
 		result.put("success", true);
 		result.put("preview", html);
 		result.put("document_idx", document_idx);
