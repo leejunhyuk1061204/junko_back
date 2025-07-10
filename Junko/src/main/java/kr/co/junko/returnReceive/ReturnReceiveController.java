@@ -1,5 +1,6 @@
 package kr.co.junko.returnReceive;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
@@ -24,7 +25,7 @@ public class ReturnReceiveController {
 	@PostMapping(value="/returnReceive/update")
 	public Map<String, Object>returnReceiveUpdate(@RequestBody ReturnReceiveDTO dto){
 		log.info("dto : {}",dto);
-		result = new HashedMap<String, Object>();
+		result = new HashMap<String, Object>();
 		boolean success = service.returnReceiveUpdate(dto);
 		result.put("success", success);
 		return result;
@@ -39,7 +40,7 @@ public class ReturnReceiveController {
 	@GetMapping(value="/returnReceive/del/{return_receive_idx}")
 	public Map<String, Object>returnReceiveDel(@PathVariable int return_receive_idx){
 		log.info("dto : {}",return_receive_idx);
-		result = new HashedMap<String, Object>();
+		result = new HashMap<String, Object>();
 		boolean success = service.returnReceiveDel(return_receive_idx);
 		result.put("success", success);
 		return result;

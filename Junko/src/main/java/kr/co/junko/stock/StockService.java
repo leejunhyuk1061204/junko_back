@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.dto.ReceiveDTO;
+import kr.co.junko.dto.ReturnHandleDTO;
 import kr.co.junko.dto.SalesDTO;
 import kr.co.junko.dto.ShipmentDTO;
 import kr.co.junko.dto.StockDTO;
+import kr.co.junko.dto.WarehouseDTO;
 import kr.co.junko.dto.WaybillDTO;
 import kr.co.junko.receive.ReceiveDAO;
+import kr.co.junko.returnReceive.ReturnReceiveDAO;
 import kr.co.junko.sales.SalesDAO;
 import kr.co.junko.shipment.ShipmentDAO;
 import kr.co.junko.shipment.ShipmentService;
@@ -31,6 +34,7 @@ public class StockService {
 	private final ShipmentDAO shipmentDAO;
 	private final SalesDAO salesDAO;
 	private final WaybillDAO waybillDAO;
+	private final ReturnReceiveDAO returnReceiveDAO;
 
 	@Transactional
 	public boolean stockInsert(ReceiveDTO dto) {
@@ -121,6 +125,35 @@ public class StockService {
 	
 	public StockDTO stockDetailByIdx(int idx) {
 		return dao.stockDetailByIdx(idx);
+	}
+
+	public boolean stockInsert(ReturnHandleDTO dto) {
+		
+		// 1. 재고 등록
+		// stock_idx, product_idx, product_option_idx, manufacture,	expiration, stock_cnt, warehouse_idx, zone_idx, type, user_idx,	del_yn
+		StockDTO stock = new StockDTO();
+		stock.setProduct_idx(dto.getProduct_idx());
+		if(dto.getProduct_option_idx() != 0) {
+			stock.setProduct_option_idx(dto.getProduct_option_idx());
+		}
+		stock.setStock_cnt(dto.getResell_cnt());
+		stock.setUser_idx(dto.getUser_idx());
+		stock.setType("반품");
+		
+		if(dto.getManufacture() != null) {
+			stock.setManufacture(dto.getManufacture());
+		}
+		if(dto.getExpiration() != null) {
+			stock.setExpiration(dto.getExpiration());
+		}
+		int warehouse_idx = warehouseService.getWarehouseByZoneIdx(dto.getZone_idx());
+		stock.setWarehouse_idx(warehouse_idx);
+		stock.setZone_idx(dto.getZone_idx());
+		
+		boolean stockResult = dao.stockInsert(stock)>0;
+		if(!stockResult) throw new RuntimeException("재고 등록 실패");
+		
+		return true;
 	}
 	
 }

@@ -16,7 +16,10 @@ public class ReturnReceiveDTO {
 	private boolean del_yn;
 	
 	// 반품 처리 입력을 위해 입력받는 값
-	// return_receive_idx, disposal_reson, user_idx, product_idx,product_option_idx, disposal_cnt, resell_cnt
-	List<ReturnHandleDTO>handle;
+	// return_receive_idx, user_idx
+	// 리스트 : product_idx,product_option_idx, resell_cnt, disposal_cnt, disposal_reason
+	// resell_cnt > 0 이면 재고등록을 위해 아래 3개도 입력해야 함
+	// zone_idx , manufacture , expiration
+	private List<ReturnHandleDTO>handle;
 	
 }

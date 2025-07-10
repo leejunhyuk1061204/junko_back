@@ -3,4 +3,127 @@
 
 <mapper namespace="kr.co.junko.returnHandle.ReturnHandleDAO">
 
+	<insert id="returnHandleInsert" parameterType="kr.co.junko.dto.ReturnHandleDTO">
+		insert into return_handle (return_receive_idx, disposal_reason, user_idx, product_idx, disposal_cnt, resell_cnt
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,product_option_idx
+		</if>
+		)
+		values (#{return_receive_idx},#{disposal_reason},#{user_idx},#{product_idx},#{disposal_cnt},#{resell_cnt}
+		<if test="product_option_idx != null and product_option_idx != 0">
+			,#{product_option_idx}
+		</if>
+		)
+	</insert>
+	
+	<update id="returnHandleUpdate" parameterType="kr.co.junko.dto.ReturnHandleDTO">
+		update return_handle
+		<trim prefix="set" suffixOverrides=",">
+			<if test="return_receive_idx != null and return_receive_idx != 0">
+				return_receive_idx = #{return_receive_idx},
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				user_idx = #{user_idx},
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				product_idx = #{product_idx},
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				product_option_idx = #{product_option_idx},
+			</if>
+			<if test="resell_cnt != null and resell_cnt != 0">
+				resell_cnt = #{resell_cnt},
+			</if>
+			<if test="disposal_cnt != null and disposal_cnt != 0">
+				disposal_cnt = #{disposal_cnt},
+			</if>
+			<if test="disposal_reason != null and disposal_reason != ''">
+				disposal_reason = #{disposal_reason},
+			</if>
+			<if test="handle_date != null and handle_date != ''">
+				handle_date = #{handle_date}
+			</if>
+		</trim>
+		where return_handle_idx = #{return_handle_idx}
+	</update>
+	
+	<select id="returnHandleList" parameterType="map" resultType="kr.co.junko.dto.ReturnHandleDTO">
+		select * from return_handle
+		<where>
+		del_yn = false
+		<if test="return_receive_idx != null and return_receive_idx != 0">
+				and return_receive_idx = #{return_receive_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
+			</if>
+			<if test="resell_cnt != null and resell_cnt != 0">
+				and resell_cnt = #{resell_cnt}
+			</if>
+			<if test="disposal_cnt != null and disposal_cnt != 0">
+				and disposal_cnt = #{disposal_cnt}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and handle_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and handle_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="handle_date != null and handle_date != ''">
+				and handle_date = #{handle_date}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="returnHandleListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from return_handle
+		<where>
+		del_yn = false
+		<if test="return_receive_idx != null and return_receive_idx != 0">
+				and return_receive_idx = #{return_receive_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
+			</if>
+			<if test="resell_cnt != null and resell_cnt != 0">
+				and resell_cnt = #{resell_cnt}
+			</if>
+			<if test="disposal_cnt != null and disposal_cnt != 0">
+				and disposal_cnt = #{disposal_cnt}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and handle_date > #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and handle_date <![CDATA[<]]> #{end_date}
+			</if>
+			<if test="handle_date != null and handle_date != ''">
+				and handle_date = #{handle_date}
+			</if>
+		</where>
+	</select>
+	
+	<update id="returnHandleDel">
+		update return_handle set del_yn = true where return_handle_idx = #{param1}
+	</update>
+	
 </mapper>

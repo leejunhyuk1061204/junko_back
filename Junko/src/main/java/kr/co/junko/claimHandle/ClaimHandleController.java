@@ -1,5 +1,6 @@
 package kr.co.junko.claimHandle;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
@@ -24,7 +25,7 @@ public class ClaimHandleController {
 	@PostMapping(value="/claimHandle/insert")
 	public Map<String, Object>claimHandleInsert(@RequestBody ClaimHandleDTO dto){
 		log.info("dto : {}",dto);
-		result = new HashedMap<String, Object>();
+		result = new HashMap<String, Object>();
 		try {
 			boolean success = service.claimHandleInsert(dto);
 			result.put("success", success);	
@@ -39,7 +40,7 @@ public class ClaimHandleController {
 	@PostMapping(value="/claimHandle/update")
 	public Map<String, Object>claimHandleUpdate(@RequestBody ClaimHandleDTO dto){
 		log.info("dto : {}",dto);
-		result = new HashedMap<String, Object>();
+		result = new HashMap<String, Object>();
 		boolean success = service.claimHandleUpdate(dto);
 		result.put("success", success);
 		return result;
@@ -54,7 +55,7 @@ public class ClaimHandleController {
 	@GetMapping(value="/claimHandle/del/{claim_handle_idx}")
 	public Map<String, Object>claimHandleDel(@PathVariable int claim_handle_idx){
 		log.info("idx = "+claim_handle_idx);
-		result = new HashedMap<String, Object>();
+		result = new HashMap<String, Object>();
 		boolean success = service.claimHandleDel(claim_handle_idx);
 		result.put("success", success);
 		return result;
