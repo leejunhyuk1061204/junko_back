@@ -18,5 +18,4 @@ public class StockDTO {
 	private String type;
 	private int user_idx;
 	private boolean del_yn;
-	private int stock_sum;
 }

@@ -203,4 +203,42 @@
 		) as stock_group
 	</select>
 	
+	<update id="stockUpdate" parameterType="kr.co.junko.dto.StockDTO">
+		update stock
+		<trim prefix="set" suffixOverrides=",">
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				warehouse_idx = #{warehouse_idx},
+			</if>
+			<if test="zone_idx != null and zone_idx != 0">
+				zone_idx = #{zone_idx},
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				user_idx = #{user_idx},
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				product_idx = #{product_idx},
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				product_option_idx = #{product_option_idx},
+			</if>
+			<if test="manufacture != null and manufacture != ''">
+				manufacture = #{manufacture},
+			</if>
+			<if test="expiration != null and expiration != ''">
+				expiration = #{expiration},
+			</if>
+			<if test="type != null and type != ''">
+				type = #{type},
+			</if>
+			<if test="stock_cnt != null and stock_cnt != 0">
+				stock_cnt = #{stock_cnt}
+			</if>
+		</trim>
+		where stock_idx = #{stock_idx}
+	</update>
+	
+	<update id="stockDel">
+		update stock set del_yn = true where stock_idx = #{param1}
+	</update>
+	
 </mapper>

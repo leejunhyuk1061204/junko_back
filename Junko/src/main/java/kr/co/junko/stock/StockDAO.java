@@ -23,7 +23,7 @@ public interface StockDAO {
 
 	int StockSumListTotalPage(Map<String, Object> param);
 
-	
+	int stockUpdate(StockDTO dto);
 
-
+	int stockDel(int idx);
 }

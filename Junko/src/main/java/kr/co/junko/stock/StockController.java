@@ -44,4 +44,30 @@ public class StockController {
 		return service.StockSumList(param);
 	}
 	
+	@PostMapping(value="/stock/update")
+	public Map<String, Object>stockUpdate(@RequestBody StockDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.stockUpdate(dto);
+		result.put("success", success);
+		return result;
+	}
+
+	@PostMapping(value="/stock/insert")
+	public Map<String, Object>stockInsert(@RequestBody StockDTO dto){
+		log.info("dto : {}",dto);
+		result = new HashMap<String, Object>();
+		boolean success = service.stockInsert(dto);
+		result.put("success", success);
+		return result;
+	}
+	
+	@GetMapping(value="/stock/del/{stock_idx}")
+	public Map<String, Object>stockDel(@PathVariable int stock_idx){
+		result = new HashMap<String, Object>();
+		boolean success = service.stockDel(stock_idx);
+		result.put("success", success);
+		return result;
+	}
+	
 }

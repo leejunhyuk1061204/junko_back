@@ -185,5 +185,17 @@ public class StockService {
 		result.put("page", param.get("page"));
 		return result;
 	}
+
+	public boolean stockUpdate(StockDTO dto) {
+		return dao.stockUpdate(dto)>0;
+	}
+
+	public boolean stockInsert(StockDTO dto) {
+		return dao.stockInsert(dto)>0;
+	}
+
+	public boolean stockDel(int idx) {
+		return dao.stockDel(idx)>0;
+	}
 	
 }
