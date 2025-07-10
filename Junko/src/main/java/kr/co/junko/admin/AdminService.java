@@ -57,5 +57,9 @@ public class AdminService {
 		int row = dao.delPower(power_idx);
 		return row>0;
 	}
+	
+	public boolean resignUpdate(Map<String, Object> param) {
+		return dao.resignUpdate(param)>0;
+	}
 
 }
