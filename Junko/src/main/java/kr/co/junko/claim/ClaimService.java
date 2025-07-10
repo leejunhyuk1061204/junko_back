@@ -76,7 +76,7 @@ public class ClaimService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<ClaimDTO>list = dao.returnProductList(param);
+		List<ReturnProductDTO>list = dao.returnProductList(param);
 		int total = dao.returnProductListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
 		result.put("list", list);

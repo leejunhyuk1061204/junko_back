@@ -34,7 +34,7 @@ public class ReturnReceiveService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<WaybillDTO>list = dao.returnReceiveList(param);
+		List<ReturnReceiveDTO>list = dao.returnReceiveList(param);
 		int total = dao.returnReceiveListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
 		result.put("list", list);

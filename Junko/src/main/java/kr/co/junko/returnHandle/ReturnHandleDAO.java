@@ -15,7 +15,7 @@ public interface ReturnHandleDAO {
 
 	int returnHandleUpdate(ReturnHandleDTO dto);
 
-	List<WaybillDTO> returnHandleList(Map<String, Object> param);
+	List<ReturnHandleDTO> returnHandleList(Map<String, Object> param);
 
 	int returnHandleListTotalPage(Map<String, Object> param);
 

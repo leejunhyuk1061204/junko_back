@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.StockDTO;
@@ -26,6 +28,20 @@ public class StockController {
 		StockDTO dto = service.stockDetailByIdx(stock_idx);
 		result.put("dto", dto);
 		return result;
+	}
+	
+	// 기록 보기
+	@PostMapping(value="/stock/list")
+	public Map<String, Object>stockList(@RequestBody Map<String, Object>param){
+		log.info("param : {}",param);
+		return service.stockList(param);
+	}
+	
+	// 재고 보기 ("group" : ["option","manufacture","expiration","warehouse","zone"])
+	@PostMapping(value="/stock/sum/list")
+	public Map<String, Object>StockListByProduct(@RequestBody Map<String, Object> param){
+		log.info("param : {}",param);
+		return service.StockSumList(param);
 	}
 	
 }

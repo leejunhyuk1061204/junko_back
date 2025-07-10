@@ -15,7 +15,7 @@ public interface ReturnReceiveDAO {
 
 	int returnReceiveUpdate(ReturnReceiveDTO dto);
 
-	List<WaybillDTO> returnReceiveList(Map<String, Object> param);
+	List<ReturnReceiveDTO> returnReceiveList(Map<String, Object> param);
 
 	int returnReceiveListTotalPage(Map<String, Object> param);
 

@@ -81,4 +81,126 @@
 			sum(stock_cnt)>0
 	</select>
 	
+	<!-- 창고,구역,담당자,상품,타입 별 기록 검색 -->
+	<select id="StockList" parameterType="map" resultType="kr.co.junko.dto.StockDTO">
+		select * from stock
+		<where>
+			del_yn = false
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="zone_idx != null and zone_idx != 0">
+				and zone_idx = #{zone_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection !=''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="StockListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from stock
+		<where>
+			del_yn = false
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="zone_idx != null and zone_idx != 0">
+				and zone_idx = #{zone_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="StockSumList" parameterType="map" resultType="map">
+		select
+		s.product_idx
+		,p.product_name 
+		<if test="group != null and group.contains('option')">
+		,s.product_option_idx
+		</if>
+		<if test="group != null and group.contains('manufacture')">
+		,s.manufacture
+		</if>
+		<if test="group != null and group.contains('expiration')">
+		,s.expiration
+		</if>
+		<if test="group != null and group.contains('warehouse')">
+		,s.warehouse_idx
+		</if>
+		<if test="group != null and group.contains('zone')">
+		,s.zone_idx
+		</if>
+		,sum(s.stock_cnt) as stock_sum
+		from stock s
+		join product p on s.product_idx = p.product_idx
+		left join product_option po on p.product_idx = po.product_idx
+		where s.del_yn = false
+		group by product_idx 
+		<if test="group != null and group.contains('option')">
+		,s.product_option_idx
+		</if>
+		<if test="group != null and group.contains('manufacture')">
+		,s.manufacture
+		</if>
+		<if test="group != null and group.contains('expiration')">
+		,s.expiration
+		</if>
+		<if test="group != null and group.contains('warehouse')">
+		,s.warehouse_idx
+		</if>
+		<if test="group != null and group.contains('zone')">
+		,s.zone_idx
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="StockSumListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from (
+			select s.product_idx 
+			from stock s
+			join product p on s.product_idx = p.product_idx
+			left join product_option po on p.product_idx = po.product_idx
+			where s.del_yn = false
+			group by product_idx 
+			<if test="group != null and group.contains('option')">
+			,s.product_option_idx
+			</if>
+			<if test="group != null and group.contains('manufacture')">
+			,s.manufacture
+			</if>
+			<if test="group != null and group.contains('expiration')">
+			,s.expiration
+			</if>
+			<if test="group != null and group.contains('warehouse')">
+			,s.warehouse_idx
+			</if>
+			<if test="group != null and group.contains('zone')">
+			,s.zone_idx
+			</if>
+		) as stock_group
+	</select>
+	
 </mapper>

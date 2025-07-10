@@ -26,7 +26,7 @@ public interface WaybillDAO {
 
 	int returnWaybillUpdate(ReturnWaybillDTO dto);
 
-	List<WaybillDTO> returnWaybillList(Map<String, Object> param);
+	List<ReturnWaybillDTO> returnWaybillList(Map<String, Object> param);
 
 	int returnWaybillListTotalPage(Map<String, Object> param);
 

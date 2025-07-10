@@ -60,7 +60,7 @@ public class ReturnHandleService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<WaybillDTO>list = dao.returnHandleList(param);
+		List<ReturnHandleDTO>list = dao.returnHandleList(param);
 		int total = dao.returnHandleListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
 		result.put("list", list);

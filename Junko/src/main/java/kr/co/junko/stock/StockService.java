@@ -1,6 +1,8 @@
 package kr.co.junko.stock;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -154,6 +156,34 @@ public class StockService {
 		if(!stockResult) throw new RuntimeException("재고 등록 실패");
 		
 		return true;
+	}
+
+	public Map<String, Object> stockList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<StockDTO>list = dao.StockList(param);
+		int total = dao.StockListTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+
+	public Map<String, Object> StockSumList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<Map<String, Object>>list = dao.StockSumList(param);
+		int total = dao.StockSumListTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
 	}
 	
 }

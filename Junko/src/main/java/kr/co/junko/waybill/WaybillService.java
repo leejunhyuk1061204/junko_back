@@ -159,7 +159,7 @@ public class WaybillService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<WaybillDTO>list = dao.returnWaybillList(param);
+		List<ReturnWaybillDTO>list = dao.returnWaybillList(param);
 		int total = dao.returnWaybillListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
 		result.put("list", list);
