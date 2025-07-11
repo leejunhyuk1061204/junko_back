@@ -24,4 +24,6 @@ public interface AccountDepartmentDAO {
 
 	FileDTO deptfileDown(int file_idx);
 
+	AccountingDepartmentDTO accountDeptDetailByDeptIdx(int dept_idx);
+
 }

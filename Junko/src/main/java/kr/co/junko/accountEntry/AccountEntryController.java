@@ -58,7 +58,7 @@ public class AccountEntryController {
 	}
 	
 	// 전표 상세조회 
-	@GetMapping(value="/accoutDetail/{entry_idx}")
+	@GetMapping(value="/accountDetail/{entry_idx}")
 	public Map<String, Object> accountDetail(@PathVariable int entry_idx){
 		return service.accountDetail(entry_idx);
 	}
@@ -141,7 +141,23 @@ public class AccountEntryController {
 	    return service.accountLog(entry_idx);
 	}
 	
-	
+	// 전표 pdf 생성
+	@PostMapping(value="/accountPdf")
+	public Map<String, Object> accountPdf(@RequestParam int entry_idx, @RequestParam int template_idx) {
+	    result = new HashMap<String, Object>();
+	    try {
+	    	FileDTO file = service.accountPdf(entry_idx, template_idx);
+	    	result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
+	    	result.put("file_idx", file.getFile_idx());
+	    	result.put("filename", file.getOri_filename());
+	    } catch (Exception e) {
+	        log.error("전표 PDF 생성 오류", e);
+	        result.put("success", false);
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
+	}
+
 	
 	
 	

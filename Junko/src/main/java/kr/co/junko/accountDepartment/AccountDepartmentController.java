@@ -173,5 +173,27 @@ public class AccountDepartmentController {
 	    }
 	}
 	
+	// 분개 pdf 생성
+	@PostMapping("/accountDeptPdf")
+	public Map<String, Object> accountDeptPdf(@RequestParam int dept_idx, @RequestParam int template_idx) {
+	    result = new HashMap<String, Object>();
+	    try {
+	        FileDTO file = service.accountDeptPdf(dept_idx, template_idx);
+	        result.put("success", true);
+	        result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
+	        result.put("file_idx", file.getFile_idx());
+	        result.put("filename", file.getOri_filename());
+	    } catch (Exception e) {
+	        log.error("분개 PDF 생성 오류", e);
+	        result.put("success", false);
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
+	}
+
+	
+	
+	
+	
 	
 }

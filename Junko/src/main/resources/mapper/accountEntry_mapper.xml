@@ -28,7 +28,7 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
 	</insert>
 	
 	<select id="accountDetail" resultType="map">
-    SELECT
+     SELECT
         ae.entry_idx,
         ae.account_idx,
         ae.entry_type,
@@ -103,6 +103,19 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
         created_at DESC
 </select>
 	
+	<insert id="accountPdf"
+        parameterType="kr.co.junko.dto.FileDTO"
+        useGeneratedKeys="true"
+        keyProperty="file_idx">
+    INSERT INTO file (
+        ori_filename, new_filename, reg_date,
+        type, idx, del_yn
+    )
+    VALUES (
+        #{ori_filename}, #{new_filename}, #{reg_date},
+        #{type}, #{idx}, #{del_yn}
+    )
+</insert>
 	
 	
 </mapper>

@@ -19,7 +19,7 @@ public interface AccountEntryDAO {
 
 	int accountRegist(AccountingEntryDTO dto);
 
-	Map<String, Object> acountDetail(int entry_idx);
+	Map<String, Object> accountDetail(int entry_idx);
 
 	boolean accountUpdate(int entry_idx, AccountingEntryDTO dto, String user_id);
 
@@ -41,5 +41,7 @@ public interface AccountEntryDAO {
 	FileDTO entryFileDown(int file_idx);
 
 	List<AccountingEntryLogDTO> accountLog(int entry_idx);
+
+	void accountPdf(FileDTO file);
 
 }
