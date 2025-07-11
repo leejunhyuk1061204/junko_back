@@ -35,4 +35,6 @@ public interface AdminDAO {
 
 	Map<String, Object> userDetail(int user_idx);
 
+	int revokeGrant();
+
 }

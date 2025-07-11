@@ -263,4 +263,24 @@ public class AdminController {
 	    return result;
 	}
 	
+	// 퇴사 인 애들 권한 다 뺏기
+	@GetMapping("/admin/revoke/grant")
+	public Map<String, Object> revokeGrant(@RequestHeader Map<String, String> header){
+	    result = new HashMap<String, Object>();
+	    boolean login = false;
+	    Map<String, Object> userDetail = null;
+	    String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+	    int cnt = 0;
+	    
+	    if (loginId != null && !loginId.isEmpty()) {
+	    	cnt = service.revokeGrant();
+	    	login = true;
+	    }
+	    
+	    result.put("updated_cnt", cnt);
+	    result.put("success", true);
+	    
+		return result;
+	}
+	
 }

@@ -74,4 +74,8 @@ public class AdminService {
 	    return dao.userDetail(user_idx);
 	}
 
+	public int revokeGrant() {
+		return dao.revokeGrant();
+	}
+
 }

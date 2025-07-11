@@ -89,5 +89,12 @@
 	    SELECT d.dept_name, j.job_name, u.* FROM user u JOIN dept d ON d.dept_idx = u.dept_idx
 	    JOIN job j ON j.job_idx = u.job_idx WHERE u.user_idx = #{user_idx}
 	</select>
+	
+	<update id="revokeGrant">
+	    UPDATE `grant` g
+	    JOIN `user` u ON g.user_idx = u.user_idx
+	    SET g.del_yn = 1
+	    WHERE u.status = '퇴사' AND g.del_yn = 0
+	</update>
 
 </mapper>
