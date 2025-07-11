@@ -91,7 +91,7 @@
 		  	,CASE 
 			    WHEN st.stock_cnt = 0 THEN '품절'
 			    WHEN SUM(sp.product_cnt) / NULLIF(st.stock_cnt, 0) <![CDATA[<]]> 0.2 THEN '과잉'
-			    WHEN SUM(sp.product_cnt) / NULLIF(st.stock_cnt, 0) > 5 THEN '부족'
+			    WHEN SUM(sp.product_cnt) / NULLIF(st.stock_cnt, 0) > p.min_cnt THEN '부족'
 			    ELSE '적정' END AS stock_status
 		FROM product p
 		JOIN category c ON p.category_idx = c.category_idx
