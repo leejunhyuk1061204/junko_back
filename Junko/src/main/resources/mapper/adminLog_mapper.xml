@@ -9,8 +9,12 @@
 	</insert>
 	
 	<select id="logList" resultType="map">
-		SELECT u.user_name, al.* FROM adminLog al JOIN user u ON al.admin_idx = u.user_idx
+		SELECT d.dept_name, u.user_name, al.* FROM adminLog al JOIN user u ON al.admin_idx = u.user_idx
+		JOIN dept d ON d.dept_idx = u.dept_idx
 			<where>
+				<if test="dept_idx != null">
+		            AND u.dept_idx = #{dept_idx}
+		        </if>
 				<if test="startDate != null and startDate != ''">
 		            AND al.log_time &gt;= CONCAT(#{startDate}, ' 00:00:00')
 		        </if>
@@ -18,6 +22,7 @@
 		            AND al.log_time &lt;= CONCAT(#{endDate}, ' 23:59:59')
 		        </if>
 			</where>
+		ORDER BY log_idx DESC LIMIT 100
 	</select>
 
 </mapper>

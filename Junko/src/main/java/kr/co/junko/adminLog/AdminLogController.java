@@ -31,6 +31,7 @@ public class AdminLogController {
 		if (loginId != null && !loginId.isEmpty()) {
 			List<Map<String, Object>> list = service.logList(param);
 			login = true;
+			result.put("dept_idx", param.get("dept_idx"));
 			result.put("startDate", param.get("startDate"));
 			result.put("endDate", param.get("endDate"));
 			result.put("list", list);
