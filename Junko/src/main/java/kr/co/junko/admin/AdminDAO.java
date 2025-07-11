@@ -29,4 +29,10 @@ public interface AdminDAO {
 	
 	int resignUpdate(Map<String, Object> param);
 
+	int empUpdate(Map<String, Object> param);
+
+	List<Map<String, Object>> userList(int dept_idx);
+
+	Map<String, Object> userDetail(int user_idx);
+
 }

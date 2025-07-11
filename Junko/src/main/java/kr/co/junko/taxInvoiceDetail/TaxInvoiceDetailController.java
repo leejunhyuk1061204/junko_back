@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.TaxInvoiceDetailDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @RestController
 @Slf4j
 public class TaxInvoiceDetailController {
 
 	@Autowired
-	private final TaxInvoiceDetailService service = null;
+	private final TaxInvoiceDetailService service;
 	Map<String, Object> result = null;
 	
 	// 해당 세금계산서의 품목 리스트 조회;

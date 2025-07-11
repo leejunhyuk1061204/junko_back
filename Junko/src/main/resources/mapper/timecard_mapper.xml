@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.timecard.TimecardDAO">
+
+	<!-- 출근 도장 -->
+	<insert id="attendInsert">
+		INSERT INTO timecard(user_idx, start_time, status)
+			VALUES(#{user_idx}, NOW(), #{status})
+	</insert>
+	
+	<!-- 퇴근 도장 -->
+	<insert id="endTimeInsert">
+		INSERT INTO timecard(user_idx, end_time, status)
+			VALUES(#{user_idx},  NOW(), #{status})
+	</insert>
+	
+	<!-- 연차/반차 등록 -->
+	<insert id="leaveStatusInsert">
+	    INSERT INTO timecard(user_idx, status)VALUES(#{user_idx}, #{status})
+	</insert>
+
+	<!-- 금일 출근 여부 확인 -->
+	<select id="checkTodayAttend" resultType="int">
+	    SELECT COUNT(*) FROM timecard WHERE user_idx = #{user_idx} AND work_date = CURRENT_DATE
+	    AND status IN
+	    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+	    		#{item}
+	    	</foreach>
+	</select>
+	
+	<!-- 사원별 근태 내역 -->
+	<select id="attendList" resultType="map" parameterType="int">
+	    SELECT d.dept_name, u.user_name, t.* FROM timecard t JOIN user u ON t.user_idx = u.user_idx
+    	JOIN dept d ON u.dept_idx = d.dept_idx
+    	WHERE u.user_idx = #{user_idx} ORDER BY t.work_date DESC, t.attend_idx DESC
+	</select>
+
+	<!-- 부서별 근태 내역 -->
+	<select id="attendListDept" resultType="map" parameterType="int">
+	    SELECT d.dept_name, u.user_name, t.* FROM timecard t JOIN user u ON t.user_idx = u.user_idx
+    	JOIN dept d ON u.dept_idx = d.dept_idx
+    	WHERE u.dept_idx = #{dept_idx} ORDER BY t.work_date DESC, t.attend_idx DESC
+	</select>
+	
+	<!-- 기간별 근태 내역 -->
+	<select id="attendListDate" resultType="map" parameterType="map">
+	    SELECT d.dept_name, u.user_name, t.* FROM timecard t JOIN user u ON t.user_idx = u.user_idx
+	    JOIN dept d ON u.dept_idx = d.dept_idx
+	    WHERE work_date BETWEEN #{start_date} AND #{end_date} ORDER BY t.work_date DESC, t.attend_idx DESC
+	</select>
+	
+	<!-- 근태 수정 -->
+	<update id="timecardUpdate" parameterType="kr.co.junko.dto.TimecardDTO">
+		UPDATE timecard
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="work_date != null">
+					work_date = #{work_date},
+				</if>
+				<if test="start_time != null">
+					start_time = #{start_time},
+				</if>
+				<if test="end_time != null">
+					end_time = #{end_time},
+				</if>
+				<if test="status != null and status != ''">
+					status = #{status},
+				</if>
+			</trim>
+		WHERE attend_idx = #{attend_idx}
+	</update>
+	
+</mapper>

@@ -1,5 +1,6 @@
 package kr.co.junko.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,6 +207,60 @@ public class AdminController {
 		result.put("success", success);
 		result.put("loginYN", login);
 		return result;
+	}
+	
+	// 사원 정보 수정
+	@PostMapping("/emp/update")
+	public Map<String, Object> empUpdate(@RequestBody Map<String, Object> param,
+			@RequestHeader Map<String, String> header) {
+		result = new HashMap<String, Object>();
+		boolean success = false;
+		boolean login = false;
+		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+		
+		if (loginId != null && !loginId.isEmpty()) {
+			success = service.empUpdate(param);
+			login = true;
+		}
+		result.put("success", success);
+		result.put("loginYN", login);
+		return result;
+	}
+	
+	// 부서별 직원 리스트 조회
+	@PostMapping("/user/list")
+	public Map<String, Object> userList(@RequestBody Map<String, Object> param,
+	        @RequestHeader Map<String, String> header) {
+		result = new HashMap<String, Object>();
+		boolean login = false;
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+		
+		if (loginId != null && !loginId.isEmpty()) {
+			int dept_idx = (int) param.get("dept_idx");
+			list = service.userList(dept_idx);
+			login = true;
+		}
+		result.put("list", list);
+		result.put("loginYN", login);
+		return result;
+	}
+	
+	// 직원 상세보기
+	@GetMapping("/user/detail/{user_idx}")
+	public Map<String, Object> userDetail(@PathVariable int user_idx, @RequestHeader Map<String, String> header) {
+	    result = new HashMap<String, Object>();
+	    boolean login = false;
+	    Map<String, Object> userDetail = null;
+	    String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+
+	    if (loginId != null && !loginId.isEmpty()) {
+	    	userDetail = service.userDetail(user_idx);
+	        login = true;
+	    }
+	    result.put("userDetail", userDetail);
+	    result.put("loginYN", login);
+	    return result;
 	}
 	
 }

@@ -21,7 +21,7 @@ public interface AccountEntryDAO {
 
 	Map<String, Object> acountDetail(int entry_idx);
 
-	boolean accoutUpdate(int entry_idx, AccountingEntryDTO dto, String user_id);
+	boolean accountUpdate(int entry_idx, AccountingEntryDTO dto, String user_id);
 
 	boolean accountDelete(int entry_idx, String user_id);
 

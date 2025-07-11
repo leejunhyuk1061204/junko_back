@@ -15,5 +15,6 @@ public class CustomDTO {
     private String account_number;
     private String bank;
     private int del_yn;
+    private String email;
 	
 }

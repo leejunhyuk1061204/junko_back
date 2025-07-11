@@ -1,17 +1,26 @@
 package kr.co.junko.order;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.collections4.map.HashedMap;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.custom.CustomDAO;
 import kr.co.junko.document.DocumentService;
 import kr.co.junko.dto.DocumentCreateDTO;
+import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FullOrderDTO;
 import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
@@ -33,6 +42,7 @@ public class OrderService {
 	private final DocumentService documentService;
 	private final ProductDAO productDAO;
 	private final CustomDAO customDAO;
+	private final JavaMailSender mailSender;
 
 	public boolean orderInsert(OrderDTO dto) {
 		int row = dao.orderInsert(dto);
@@ -160,7 +170,7 @@ public class OrderService {
 	}
 
 	@Transactional
-	public boolean orderFullInsert(FullOrderDTO dto) {
+	public boolean orderFullInsert(FullOrderDTO dto){
 		
 		Map<String, OrderProductDTO> productMap = new HashMap<String, OrderProductDTO>();
 		
@@ -192,7 +202,6 @@ public class OrderService {
 		// orderProduct : 4개 product_idx, 	product_name, product_option_idx, order_cnt
 		// orderPlan : 5개 delivery_date, product_idx, 	product_name, product_option_idx, order_cnt
 		
-		String order ="";
 		String orderProduct="";
 		String orderPlan="";
 		Map<String, String>variables = null;
@@ -246,8 +255,20 @@ public class OrderService {
 		documentCreateDTO.setVariables(variables);
 		Map<String, Object> documentResult = documentService.documentInsert(documentCreateDTO);
 		if(!(boolean)documentResult.get("success")) throw new RuntimeException("문서 등록 실패");
+		DocumentDTO documentDTO = new DocumentDTO();
+		documentDTO.setDocument_idx((int)documentResult.get("document_idx"));
 		
+		String filePath;
+		try {
+			filePath = documentService.documentPDF(documentDTO);
+			if(filePath == null || filePath.equals("")) throw new RuntimeException("pdf 생성 및 저장 실패");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("pdf 생성 중 예외 발생");
+		}
 		
+		boolean sendEmailResult = sendEmail(customDAO.customSelect(dto.getOrder().getCustom_idx()).getEmail(),"발주서","발주서입니다",filePath);
+		if(!sendEmailResult) throw new RuntimeException("email 전송 실패");
 		
 		return true;
 	}
@@ -264,6 +285,34 @@ public class OrderService {
 	}
 
 	
+	public boolean sendEmail(String to, String subject, String text, String pdfFilePath) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            // 첨부파일 허용 + 인코딩 설정
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text);
+            // helper.setText(text, true); // true : html 메일 ?
+
+            // 첨부파일 추가
+            FileSystemResource file = new FileSystemResource(new File(pdfFilePath));
+            if (!file.exists()) {
+                throw new RuntimeException("첨부할 PDF 파일이 존재하지 않습니다.");
+            }
+
+            helper.addAttachment("order.pdf", file);  // 이름은 이메일에서 보일 이름
+
+            mailSender.send(message);
+
+        } catch (MessagingException e) { // 메일 전송 과정에서 발생하는 예외 최상위 클래스
+            e.printStackTrace();
+            throw new RuntimeException("이메일 전송 실패", e);
+        }
+        
+        return true;
+    }
 
 	
 

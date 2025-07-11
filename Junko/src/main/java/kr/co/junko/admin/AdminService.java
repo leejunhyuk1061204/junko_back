@@ -62,4 +62,16 @@ public class AdminService {
 		return dao.resignUpdate(param)>0;
 	}
 
+	public boolean empUpdate(Map<String, Object> param) {
+		return dao.empUpdate(param)>0;
+	}
+
+	public List<Map<String, Object>> userList(int dept_idx) {
+		return dao.userList(dept_idx);
+	}
+	
+	public Map<String, Object> userDetail(int user_idx) {
+	    return dao.userDetail(user_idx);
+	}
+
 }

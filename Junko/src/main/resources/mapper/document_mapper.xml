@@ -4,7 +4,7 @@
 <mapper namespace="kr.co.junko.document.DocumentDAO">
 
 	<!-- 문서 저장 -->
-	<insert id="documentInsert" useGeneratedKeys="true" keyProperty="document_idx" parameterType="kr.co.junko.dto.DocumentDTO">
+	<insert id="documentInsert" useGeneratedKeys="true" keyProperty="document_idx" keyColumn="document_idx" parameterType="kr.co.junko.dto.DocumentDTO">
 		INSERT INTO document (user_idx, content, created_date, status)
 			VALUES (#{user_idx}, #{content}, NOW(), #{status})
 	</insert>
