@@ -8,17 +8,26 @@
 			VALUES (#{sender_idx}, #{receiver_idx}, #{msg_title}, #{msg_content}, NOW())
 	</insert>
 	
+	<update id="oldMsgDel">
+		UPDATE msg
+		SET del_yn = 1
+		WHERE del_yn = 0
+			AND DATEDIFF(NOW(), sent_at) >= 30
+	</update>
+	
 	<select id="msgReceived" parameterType="int" resultType="kr.co.junko.dto.MsgDTO">
 		SELECT * from msg
 		WHERE receiver_idx = #{user_idx}
-		AND receiver_del = 0
+		    AND receiver_del = 0
+    		AND del_yn = 0
    		ORDER BY sent_at DESC
 	</select>
 	
 	<select id="msgSent" parameterType="int" resultType="kr.co.junko.dto.MsgDTO">
 		SELECT * from msg
 		WHERE sender_idx = #{user_idx}
-		AND sender_del = 0
+			AND sender_del = 0
+    		AND del_yn = 0
 		ORDER BY sent_at DESC
 	</select>
 	
@@ -41,5 +50,48 @@
 		WHERE msg_idx = #{msg_idx}
 			AND read_yn = 0
 	</update>
+	
+	<select id="userAuto" resultType="map" parameterType="string">
+		SELECT
+			u.user_idx, 
+    		CONCAT(d.dept_name, ' ', u.user_name, ' ', j.job_name) AS label FROM user u
+		JOIN dept d ON u.dept_idx = d.dept_idx
+		JOIN job j ON u.job_idx = j.job_idx
+		WHERE u.status = '재직'
+			AND (
+				      u.user_name LIKE CONCAT('%', #{keyword}, '%')
+				      OR d.dept_name LIKE CONCAT('%', #{keyword}, '%')
+				      OR j.job_name LIKE CONCAT('%', #{keyword}, '%')
+					)
+	</select>
+	
+	<update id="yImportant">
+		UPDATE msg
+		SET important_yn = 1
+		WHERE msg_idx = #{msg_idx} AND sender_idx = #{user_idx}
+	</update>
+	
+	<update id="nImportant">
+		UPDATE msg
+		SET important_yn = 0
+		WHERE msg_idx = #{msg_idx} AND sender_idx = #{user_idx}
+	</update>
+	
+	<select id="msgImportantView" parameterType="int" resultType="kr.co.junko.dto.MsgDTO">
+	    SELECT * FROM msg
+	    WHERE sender_idx = #{user_idx}
+	      AND sender_del = 0
+	      AND important_yn = 1
+   		  AND del_yn = 0
+	    ORDER BY sent_at DESC
+	</select>
+	
+	<select id="msgUnreadCnt" parameterType="int" resultType="int">
+	  SELECT COUNT(*) FROM msg
+	  WHERE receiver_idx = #{user_idx}
+	    AND read_yn = 0
+	    AND receiver_del = 0
+	    AND del_yn = 0
+	</select>
 	
 </mapper>
