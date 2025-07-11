@@ -26,6 +26,7 @@ import kr.co.junko.dto.CollectionAndPaymentLogDTO;
 import kr.co.junko.dto.CollectionAndPaymentRequestDTO;
 import kr.co.junko.dto.CollectionAndPaymentResponseDTO;
 import kr.co.junko.dto.CustomDTO;
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.LinkedItemDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -158,7 +159,23 @@ public class CollectionAndPaymentController {
 	
 	
 	// pdf 자동 생성
-    
+    @PostMapping("/capPdf")
+    public Map<String, Object> capPdf(@RequestParam int cap_idx, @RequestParam int template_idx) {
+        result = new HashMap<String, Object>();
+        try {
+            FileDTO file = service.capPdf(cap_idx, template_idx);
+            result.put("success", true);
+            result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
+            result.put("file_idx", file.getFile_idx());
+            result.put("filename", file.getOri_filename());
+        } catch (Exception e) {
+            log.error("수금/지급 PDF 생성 오류", e);
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
 	
 	// 이력 관리 
     @GetMapping("/{cap_idx}")

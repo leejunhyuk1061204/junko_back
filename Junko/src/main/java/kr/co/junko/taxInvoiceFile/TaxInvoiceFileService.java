@@ -1,6 +1,8 @@
 package kr.co.junko.taxInvoiceFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,9 +21,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+
 import kr.co.junko.dto.FileDTO;
+import kr.co.junko.dto.TaxInvoiceDTO;
+import kr.co.junko.dto.TaxInvoiceDetailDTO;
+import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TemplateVarDTO;
+import kr.co.junko.taxInvoice.TaxInvoiceDAO;
+import kr.co.junko.taxInvoiceDetail.TaxInvoiceDetailDAO;
+import kr.co.junko.template.TemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +44,9 @@ public class TaxInvoiceFileService {
 
 	@Autowired
 	private final TaxInvoiceFileDAO dao;
+	private final TaxInvoiceDAO invoiceDao;
+	private final TaxInvoiceDetailDAO invoiceDetailDao;
+	private final TemplateService templateService;
 	Map<String, Object> result = null;
 	
 	public Map<String, Object> taxInvoiceFile(int invoice_idx, MultipartFile file) {
@@ -114,6 +129,77 @@ public class TaxInvoiceFileService {
 		
 		
 	}
+
+	@Transactional
+	public FileDTO taxInvoicePdf(int invoice_idx, int template_idx) throws Exception {
+	    // 1. 세금계산서 본문 정보
+	    TaxInvoiceDTO invoice = invoiceDao.taxInvoice(invoice_idx);
+	    if (invoice == null) throw new IllegalArgumentException("세금계산서 정보 없음");
+
+	    // 2. 품목 목록
+	    List<TaxInvoiceDetailDTO> items = invoiceDetailDao.taxProductList(invoice_idx);
+
+	    // 3. 템플릿 조회
+	    TemplateDTO template = templateService.getTemplate(template_idx);
+	    if (template == null) throw new IllegalArgumentException("템플릿 없음");
+	    String html = template.getTemplate_html();
+
+	    // 4. 템플릿 변수 치환 (단일)
+	    List<TemplateVarDTO> vars = templateService.templateVarList(template_idx);
+	    for (TemplateVarDTO var : vars) {
+	        String key = var.getVariable_name();
+	        String value;
+	        switch (key) {
+	            case "invoice_idx": value = String.valueOf(invoice.getInvoice_idx()); break;
+	            case "total_amount": value = String.valueOf(invoice.getTotal_amount()); break;
+	            case "status": value = invoice.getStatus(); break;
+	            case "issued_by": value = invoice.getIssued_by(); break;
+	            default: value = "N/A"; break;
+	        }
+	        html = html.replace("{{" + key + "}}", value);
+	    }
+
+	    // 5. 품목 테이블 반복 영역 구성
+	    StringBuilder itemHtml = new StringBuilder();
+	    for (TaxInvoiceDetailDTO item : items) {
+	        itemHtml.append("<tr>")
+	                .append("<td>").append(item.getItem_name()).append("</td>")
+	                .append("<td>").append(item.getQuantity()).append("</td>")
+	                .append("<td>").append(item.getPrice()).append("</td>")
+	                .append("<td>").append(item.getTotal_amount()).append("</td>")
+	                .append("</tr>");
+	    }
+	    html = html.replace("{{items}}", itemHtml.toString());
+
+	    // 6. PDF 경로 생성
+	    String uploadRoot = "C:/upload/pdf";
+	    new File(uploadRoot).mkdirs();
+	    String fileName = "tax_" + UUID.randomUUID().toString().substring(0, 8) + ".pdf";
+	    String filePath = Paths.get(uploadRoot, fileName).toString();
+
+	    // 7. PDF 생성
+	    try (OutputStream os = new FileOutputStream(filePath)) {
+	        PdfRendererBuilder builder = new PdfRendererBuilder();
+	        builder.useFastMode();
+	        builder.withHtmlContent(html, null);
+	        builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "malgun");
+	        builder.toStream(os);
+	        builder.run();
+	    }
+
+	    // 8. file 테이블 저장
+	    FileDTO file = new FileDTO();
+	    file.setOri_filename("세금계산서 PDF");
+	    file.setNew_filename(fileName);
+	    file.setReg_date(LocalDateTime.now());
+	    file.setType("tax_invoice");
+	    file.setIdx(invoice_idx);
+	    file.setDel_yn(false);
+	    dao.taxInvoiceFile(file);
+
+	    return file;
+	}
+
 	
 	
 	

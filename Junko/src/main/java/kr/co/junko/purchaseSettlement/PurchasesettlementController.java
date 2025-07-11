@@ -35,8 +35,8 @@ public class PurchasesettlementController {
 	private final PurchasesettlementService service;
 	Map<String, Object> result = null;
 	
-	
-	//리스
+
+	//리스트 
 	@GetMapping("/{settlement_idx}")
 	public Map<String, Object> getSettlement(@PathVariable int settlement_idx) {
 		result = new HashMap<String, Object>();
@@ -237,8 +237,24 @@ public class PurchasesettlementController {
 	            .body(resource);
 	}
 
-	
-	
+	// pdf 자동생성 
+	@PostMapping("/settlementPdf")
+	public Map<String, Object> settlementPdf(@RequestParam int settlement_idx, @RequestParam int template_idx) {
+	    result = new HashMap<String, Object>();
+	    try {
+	        FileDTO file = service.settlementPdf(settlement_idx, template_idx);
+	        result.put("success", true);
+	        result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
+	        result.put("file_idx", file.getFile_idx());
+	        result.put("filename", file.getOri_filename());
+	    } catch (Exception e) {
+	        log.error("정산 PDF 생성 실패", e);
+	        result.put("success", false);
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
+	}
+
 	
 	
 	

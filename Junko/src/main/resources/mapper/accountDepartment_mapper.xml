@@ -76,6 +76,20 @@
     AND del_yn = false
 </select>
 	
+	<select id="accountDeptDetailByDeptIdx" parameterType="int" resultType="kr.co.junko.dto.AccountingDepartmentDTO">
+    SELECT 
+        d.dept_idx,
+        d.entry_idx,
+        d.as_idx,
+        s.as_name,
+        d.amount,
+        d.type,
+        d.del_yn
+    FROM accountingDepartment d
+    JOIN accountSubject s ON d.as_idx = s.as_idx
+    WHERE d.dept_idx = #{dept_idx}
+    AND d.del_yn = false
+</select>
 	
 	
 	

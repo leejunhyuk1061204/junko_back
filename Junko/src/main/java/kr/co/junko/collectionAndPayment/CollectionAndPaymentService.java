@@ -1,6 +1,9 @@
 package kr.co.junko.collectionAndPayment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,7 +20,10 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import kr.co.junko.dto.CollectionAndPaymentLogDTO;
 import kr.co.junko.dto.CollectionAndPaymentRequestDTO;
@@ -25,6 +31,9 @@ import kr.co.junko.dto.CollectionAndPaymentResponseDTO;
 import kr.co.junko.dto.CustomDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.LinkedItemDTO;
+import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TemplateVarDTO;
+import kr.co.junko.template.TemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +44,7 @@ public class CollectionAndPaymentService {
 
 	@Autowired
 	private final CollectionAndPaymentDAO dao;
+	private final TemplateService templateService;
 	private final String dir = "c:/upload";
 	Map<String, Object> result = null;
 	
@@ -158,6 +168,67 @@ public class CollectionAndPaymentService {
 	public List<CollectionAndPaymentLogDTO> getLogsByCapIdx(int cap_idx) {
 		return dao.getLogsByCapIdx(cap_idx);
 	}
+
+	@Transactional
+	public FileDTO capPdf(int cap_idx, int template_idx) throws Exception {
+	    // 1. 수금/지급 상세 조회
+	    CollectionAndPaymentResponseDTO dto = dao.capList(cap_idx);
+	    if (dto == null) throw new IllegalArgumentException("수금/지급 정보 없음");
+
+	    // 2. 템플릿 조회
+	    TemplateDTO template = templateService.getTemplate(template_idx);
+	    if (template == null) throw new IllegalArgumentException("템플릿 없음");
+	    String html = template.getTemplate_html();
+
+	    // 3. 템플릿 변수 치환
+	    List<TemplateVarDTO> vars = templateService.templateVarList(template_idx);
+	    for (TemplateVarDTO var : vars) {
+	        String key = var.getVariable_name();
+	        String value;
+	        switch (key) {
+	            case "cap_idx": value = String.valueOf(dto.getCap_idx()); break;
+	            case "type": value = dto.getType(); break;
+	            case "date": value = String.valueOf(dto.getDate()); break;
+	            case "amount": value = String.valueOf(dto.getAmount()); break;
+	            case "customName": value = dto.getCustomName(); break;
+	            case "accountBank": value = dto.getAccountBank(); break;
+	            case "accountNumber": value = dto.getAccountNumber(); break;
+	            case "entryTitle": value = dto.getEntryTitle(); break;
+	            case "memo": value = dto.getMemo(); break;
+	            default: value = "N/A"; break;
+	        }
+	        html = html.replace("{{" + key + "}}", value);
+	    }
+
+	    // 4. PDF 경로
+	    String uploadRoot = "C:/upload/pdf";
+	    new File(uploadRoot).mkdirs();
+	    String fileName = "cap_" + UUID.randomUUID().toString().substring(0, 8) + ".pdf";
+	    String filePath = Paths.get(uploadRoot, fileName).toString();
+
+	    // 5. PDF 생성
+	    try (OutputStream os = new FileOutputStream(filePath)) {
+	        PdfRendererBuilder builder = new PdfRendererBuilder();
+	        builder.useFastMode();
+	        builder.withHtmlContent(html, null);
+	        builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "malgun");
+	        builder.toStream(os);
+	        builder.run();
+	    }
+
+	    // 6. 파일 테이블 저장
+	    FileDTO file = new FileDTO();
+	    file.setOri_filename("수금/지급 PDF");
+	    file.setNew_filename(fileName);
+	    file.setReg_date(LocalDateTime.now());
+	    file.setType("collection");
+	    file.setIdx(cap_idx);
+	    file.setDel_yn(false);
+	    dao.insertFile(file);
+
+	    return file;
+	}
+
 
 
 	

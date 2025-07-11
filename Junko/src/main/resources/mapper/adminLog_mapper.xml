@@ -12,9 +12,7 @@
 		SELECT d.dept_name, u.user_name, al.* FROM adminLog al JOIN user u ON al.admin_idx = u.user_idx
 		JOIN dept d ON d.dept_idx = u.dept_idx
 			<where>
-				<if test="dept_idx != null">
-		            AND u.dept_idx = #{dept_idx}
-		        </if>
+		            u.dept_idx = #{dept_idx}
 				<if test="startDate != null and startDate != ''">
 		            AND al.log_time &gt;= CONCAT(#{startDate}, ' 00:00:00')
 		        </if>
