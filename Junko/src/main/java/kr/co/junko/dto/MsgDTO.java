@@ -1,6 +1,7 @@
 package kr.co.junko.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -16,7 +17,10 @@ public class MsgDTO {
     private int receiver_del;
     private int sender_del;
     private int read_yn;
+    private int important_yn;
     
     private String role;
+    
+    private List<Integer> receiver_list; // 수신자 여러 명용 리스트
 	
 }

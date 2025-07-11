@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.collections4.map.HashedMap;
-import org.apache.tomcat.jni.File;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,14 +37,26 @@ public class MsgController {
 	@Autowired MsgService service;
 	@Autowired FileDAO filedao;
 
+	@Value("${spring.servlet.multipart.location}") 
+	private String root;
+	
 	// 쪽지 보내기
 	@PostMapping(value="/msg/send")
 	public Map<String, Object> msgSend(@RequestBody MsgDTO dto){
 		log.info("dto : {}", dto);
 		result = new HashedMap<String, Object>();
 		
-		boolean success = service.msgSend(dto);
-		result.put("success", success);
+		int cnt = 0;
+		for (int receiver_idx : dto.getReceiver_list()) {
+			dto.setReceiver_idx(receiver_idx);
+			boolean success = service.msgSend(dto);
+			if (success) {
+				cnt++;
+			}
+		}
+		
+		result.put("success", cnt == dto.getReceiver_list().size());
+		result.put("sent_cnt", cnt);
 		
 		return result;
 	}
@@ -53,6 +65,8 @@ public class MsgController {
 	@GetMapping(value="/msg/received/{user_idx}")
 	public Map<String, Object> msgReceived(@PathVariable int user_idx){
 	    result = new HashedMap<>();
+	    
+	    service.oldMsgDel(); // 받은 쪽지 매번 볼 때마다 검사
 	    List<MsgDTO> list = service.msgReceived(user_idx);
 	    
 	    result.put("success", list != null);
@@ -111,7 +125,7 @@ public class MsgController {
 			String ext = OriName.substring(OriName.lastIndexOf("."));
 			String newName = uuid + ext;
 			
-			Path uploadPath = Paths.get("C:/upload/msg");
+			Path uploadPath = Paths.get(root);
 			Files.createDirectories(uploadPath); // 디렉토리 없으면 생성
 			
 			Path filePath = uploadPath.resolve(newName);
@@ -135,5 +149,53 @@ public class MsgController {
 		
 		return result;
 	}
+	
+	// 수신인 자동 완성
+	@GetMapping(value="/msg/auto")
+	public Map<String, Object> userAuto(@RequestParam String keyword){
+		result = new HashedMap<String, Object>();
+		
+		List<Map<String, Object>> list = service.userAuto(keyword);
+		result.put("list", list);
+		
+		return result;
+	}
+	
+	// 쪽지 중요 표시
+	@PutMapping(value="/msg/important/{msg_idx}")
+	public Map<String, Object>msgImportant(
+			@PathVariable int msg_idx,
+			@RequestParam int user_idx,
+			@RequestParam boolean important_yn){
+		result = new HashedMap<String, Object>();
+		
+		boolean success = service.msgImportant(msg_idx, user_idx, important_yn);
+		result.put("success", success);
+		
+		return result;
+	}
+	
+	// 중요 쪽지 조회
+	@GetMapping(value="/msg/important/view/{user_idx}")
+	public Map<String, Object> msgImportantView(@PathVariable int user_idx){
+		result = new HashedMap<String, Object>();
+		
+		List<MsgDTO> list = service.msgImportantView(user_idx);
+		result.put("list", list);
+		
+		return result;
+	}
+	
+	// 안 읽은 쪽지
+	@GetMapping("/msg/unread/cnt/{user_idx}")
+	public Map<String, Object> msgUnreadCnt(@PathVariable int user_idx){
+		result = new HashedMap<String, Object>();
+		
+		int cnt = service.msgUnreadCnt(user_idx);
+		result.put("cnt", cnt);
+		
+		return result;
+	}
+	
 	
 }
