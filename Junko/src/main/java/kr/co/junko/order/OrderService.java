@@ -27,6 +27,7 @@ import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
 import kr.co.junko.dto.PlanProductDTO;
 import kr.co.junko.dto.ProductDTO;
+import kr.co.junko.option.OptionDAO;
 import kr.co.junko.product.ProductDAO;
 import kr.co.junko.receive.ReceiveService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class OrderService {
 	private final ReceiveService ReceiveService;
 	private final DocumentService documentService;
 	private final ProductDAO productDAO;
+	private final OptionDAO optionDAO;
 	private final CustomDAO customDAO;
 	private final JavaMailSender mailSender;
 
@@ -216,7 +218,7 @@ public class OrderService {
 				if(productMap.get(pp.getProductTempId()).getProduct_option_idx() == 0) {
 					variables.put("product_option_idx", "없음");
 				} else {
-					variables.put("product_option_idx", productDAO.searchOptionName(productMap.get(pp.getProductTempId()).getOrder_product_idx()));
+					variables.put("product_option_idx", optionDAO.searchOptionName(productMap.get(pp.getProductTempId()).getProduct_option_idx()));
 				}
 				variables.put("order_cnt", String.valueOf(pp.getOrder_cnt()));
 				
@@ -226,15 +228,15 @@ public class OrderService {
 		
 		//orderProduct
 		for(OrderProductDTO product : dto.getOrderProduct()) {
+			log.info("product : {}",product);
 			variables = new HashMap<String, String>();
 			variables.put("product_idx", String.valueOf(product.getProduct_idx()));
 			variables.put("product_name", productDAO.selectProductIdx(product.getProduct_idx()).getProduct_name());
-			if(product.getOrder_product_idx() == 0) {
+			if(product.getProduct_option_idx() == 0) {
 				variables.put("product_option_idx", "없음");	
 			}else {
-				variables.put("product_option_idx", productDAO.searchOptionName(product.getProduct_option_idx()));
+				variables.put("product_option_idx", optionDAO.searchOptionName(product.getProduct_option_idx()));
 			}
-			// variables.put("product_option_idx", String.valueOf(product.getOrder_product_idx()));
 			variables.put("order_cnt", String.valueOf(product.getOrder_cnt()));
 			
 			orderProduct += documentService.documentPreview(7, variables);

@@ -45,5 +45,7 @@ public interface OptionDAO {
     List<CombinedDTO> combinedList();
 
     List<CombinedDTO> combinedListProduct(int product_idx);
+    
+    String searchOptionName(int product_option_idx);
 
 }

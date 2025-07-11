@@ -41,6 +41,4 @@ public interface ProductDAO {
 
 	int LoginUserIdx(String loginId);
 
-	String searchOptionName(int product_option_idx);
-
 }
