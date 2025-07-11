@@ -19,4 +19,6 @@ public class ProductDTO {
 	
 	private MultipartFile[] images; // 여러 장 이미지 업로드용
 	
+	private String category_name;
+	
 }
