@@ -42,6 +42,9 @@
 			<if test="category_idx != null and category_idx != 0">
 				category_idx = #{category_idx},
 			</if>
+			<if test="min_cnt != null and min_cnt != 0">
+				min_cnt = #{min_cnt}
+			</if>
 		</trim>
 		WHERE product_idx = #{product_idx}
 	</update>
