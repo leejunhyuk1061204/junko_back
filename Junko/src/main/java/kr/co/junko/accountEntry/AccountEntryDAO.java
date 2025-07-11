@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.co.junko.dto.AccountingEntryDTO;
 import kr.co.junko.dto.AccountingEntryLogDTO;
@@ -21,7 +22,10 @@ public interface AccountEntryDAO {
 
 	Map<String, Object> accountDetail(int entry_idx);
 
-	boolean accountUpdate(int entry_idx, AccountingEntryDTO dto, String user_id);
+	boolean accountUpdate(
+			@Param("entry_idx") int entry_idx, 
+			@Param("dto") AccountingEntryDTO dto, 
+			@Param("user_id") String user_id);
 
 	boolean accountDelete(int entry_idx, String user_id);
 
@@ -29,7 +33,9 @@ public interface AccountEntryDAO {
 	Map<String, Object> getEntryWriterAndStatus(int entry_idx);
 
 	// 상태변경 
-	void accountStatusUpdate(int entry_idx, String newStatus);
+	void accountStatusUpdate(@Param("entry_idx") int entry_idx,
+            @Param("status") String status);
+
 
 	// 로그 기록 
 	void saveLog(AccountingEntryLogDTO dto);

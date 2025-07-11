@@ -15,6 +15,6 @@ public class AccountingEntryLogDTO {
 	    private String after_status;     // 변경 후 상태
 	    private String log_message;      // 사유/비고(옵션)
 	    private LocalDateTime created_at;// 로그 시각
-	
+	    private Integer user_idx;
 	
 }

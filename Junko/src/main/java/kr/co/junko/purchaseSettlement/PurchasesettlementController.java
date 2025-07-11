@@ -37,7 +37,7 @@ public class PurchasesettlementController {
 	
 
 	//리스트 
-	@GetMapping("/{settlement_idx}")
+	@GetMapping("/{settlement_idx:[0-9]+}")
 	public Map<String, Object> getSettlement(@PathVariable int settlement_idx) {
 		result = new HashMap<String, Object>();
 		PurchaseSettlementDTO dto = service.getSettlementById(settlement_idx);

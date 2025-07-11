@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,12 @@ public class AccountEntryController {
 	@Autowired
 	private final AccountEntryService service;
 	Map<String, Object> result = null;
+	
+	
+	@GetMapping("/favicon.ico")
+    public void favicon() {
+        
+    }
 	
 	// 전표 리스트 페이징
 	@GetMapping(value="accountList/{page}")
@@ -92,14 +100,15 @@ public class AccountEntryController {
 	@PatchMapping(value="/accountStatusUpdate/{entry_idx}/status")
 	public ResponseEntity<?> accountStatusUpdate(@PathVariable int entry_idx,
 			@RequestBody Map<String, String> map,
-			@RequestParam String user_id){
+			@RequestParam int user_idx){
 		
 		String newStatus = map.get("status");
 		String logMsg = map.getOrDefault("logMsg", null);
-		service.accountStatusUpdate(entry_idx, newStatus, user_id, logMsg);
+		service.accountStatusUpdate(entry_idx, newStatus, user_idx, logMsg);
 		
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(Map.of("success", true, "message", "상태 변경 완료!"));
+
 		
 	}
 	
@@ -117,22 +126,40 @@ public class AccountEntryController {
 	    return service.entryFileList(entry_idx);
 	}
 	
-	@GetMapping(value="/entryFileDown/{file_idx}")
-	public ResponseEntity<InputStreamResource> entryFileDown(@PathVariable int file_idx) throws IOException{
-		
-		FileDTO dto = service.entryFileDown(file_idx);
-		File file = new File("C:/upload" + dto.getNew_filename());
-		
-		if (!file.exists()) {
-			throw new FileNotFoundException("존재하지 않 파일");
-		}
-		
 	
-		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+	@GetMapping("/entryFileDown/{file_idx}")
+	public ResponseEntity<InputStreamResource> entryFileDown(@PathVariable int file_idx) throws IOException {
+	    FileDTO dto = service.entryFileDown(file_idx);
+
+	    // 파일 경로 확인
+	    String rootPath = "C:/upload";
+	    if ("pdf".equalsIgnoreCase(dto.getType())) {
+	        rootPath = "C:/upload/pdf";
+	    }
+	    File file = new File(rootPath, dto.getNew_filename().trim());
+
+	    if (!file.exists()) {
+	        throw new FileNotFoundException("존재하지 않는 파일");
+	    }
+
+	    // 파일명 인코딩
+	    String filename = dto.getOri_filename();
+	    String encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
+
+	    // 헤더 세팅
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set(HttpHeaders.CONTENT_TYPE, java.nio.file.Files.probeContentType(file.toPath()));
+	    headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFilename);
+
+	    // 파일 스트림 리턴
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 	    return ResponseEntity.ok()
-	            .header("Content-Disposition", "attachment; filename=\"" + dto.getOri_filename() + "\"")
+	            .headers(headers)
 	            .body(resource);
 	}
+
+
+
 	
 	
 	// 전표 변경 이력 및 상태 변경 로그 조회 

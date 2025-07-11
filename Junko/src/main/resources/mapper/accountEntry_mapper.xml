@@ -28,28 +28,39 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
 	</insert>
 	
 	<select id="accountDetail" resultType="map">
-     SELECT
-        ae.entry_idx,
-        ae.account_idx,
-        ae.entry_type,
-        ae.amount,
-        ae.entry_date,
-        ae.custom_idx,
-        c.custom_name,
-        ae.sales_idx,
-        s.customer as customer_name
-    FROM accountingEntry ae
-    LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
-    LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
-    WHERE ae.entry_idx = #{entry_idx}
-    </select>
+  SELECT
+    ae.entry_idx,
+    ae.account_idx,
+    ae.entry_type,
+    ae.amount,
+    ae.entry_date,
+    ae.custom_idx,
+    c.custom_name,
+    ae.sales_idx,
+    s.customer as customer_name,
+    ae.user_idx,
+    u.user_id,
+    u.user_name,
+     ae.status,
+  ae.del_yn
+  FROM
+    accountingEntry ae
+  LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
+  LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
+  LEFT JOIN user u ON ae.user_idx = u.user_idx
+  WHERE ae.entry_idx = #{entry_idx}
+</select>
+
 	
 	
-	<update id="accountUpdate" parameterType="kr.co.junko.dto.AccountingEntryDTO">
-	UPDATE accountingEntry SET 
-	entry_type=#{entry_type}, amount=#{amount}, custom_idx=#{custom_idx}, sales_idx=#{sales_idx}
-	WHERE entry_idx=#{entry_idx}
-	</update>
+	<update id="accountUpdate" parameterType="map">
+    UPDATE accountingEntry SET 
+        entry_type=#{dto.entry_type}, 
+        amount=#{dto.amount}, 
+        custom_idx=#{dto.custom_idx}, 
+        sales_idx=#{dto.sales_idx}
+    WHERE entry_idx=#{entry_idx}
+</update>
 	
 	<delete id="accountDelete" parameterType="int">
 	DELETE FROM accountingEntry WHERE entry_idx=#{entry_idx}
@@ -57,12 +68,22 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
 	
 	
 	<select id="getEntryWriterAndStatus" parameterType="int" resultType="map">
-    SELECT user_id, status FROM accountingEntry WHERE entry_idx = #{entry_idx}
+    SELECT 
+      ae.user_idx, 
+      u.user_id, 
+      ae.status 
+    FROM 
+      accountingEntry ae
+    LEFT JOIN user u ON ae.user_idx = u.user_idx
+    WHERE 
+      ae.entry_idx = #{entry_idx}
 </select>
+
 	
 	<update id="accountStatusUpdate" parameterType="map">
     UPDATE accountingEntry SET status = #{status} WHERE entry_idx = #{entry_idx}
 </update>
+
 	
 	<insert id="saveLog" parameterType="kr.co.junko.dto.AccountingEntryLogDTO">
     INSERT INTO accountingEntryLog

@@ -14,6 +14,7 @@ public class AccountingEntryDTO {
 	private String entry_type;	// 전표유형 (매입,매출,환불)
 	private int amount;			// 금액
 	private Date entry_date;		// 전표생성일자
+	private Integer user_idx;
 	
 	private Integer custom_idx;
 	// 고객명 - 매출,환불일 경우 거래처 항목이 null이기에 가져옴

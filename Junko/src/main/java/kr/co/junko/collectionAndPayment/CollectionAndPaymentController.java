@@ -178,7 +178,7 @@ public class CollectionAndPaymentController {
 
 	
 	// 이력 관리 
-    @GetMapping("/{cap_idx}")
+    @GetMapping("/{cap_idx:[0-9]+}")
     public Map<String, Object> getLogs(@PathVariable int cap_idx) {
        result = new HashMap<String, Object>();
         List<CollectionAndPaymentLogDTO> logList = service.getLogsByCapIdx(cap_idx);

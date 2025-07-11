@@ -65,12 +65,12 @@ public class AccountEntryService {
 		return dao.accountDelete(entry_idx, user_id);
 	}
 
-	public void accountStatusUpdate(int entry_idx, String newStatus, String user_id, String logMsg) {
+	public void accountStatusUpdate(int entry_idx, String newStatus, int user_idx, String logMsg) {
 		Map<String, Object> entryInfo = dao.getEntryWriterAndStatus(entry_idx);
-		String writerId = (String) entryInfo.get("user_id");
+		Integer writerIdx = (Integer) entryInfo.get("user_idx");
 		String beforeStatus = (String) entryInfo.get("status");
 		
-		if (!user_id.equals(writerId)) {
+		if (writerIdx == null || user_idx != writerIdx) {
 			throw new RuntimeException("작성자만 상태를 변경할 수 있습니다.");
 		}
 		
@@ -78,7 +78,7 @@ public class AccountEntryService {
 		
 		AccountingEntryLogDTO dto = new AccountingEntryLogDTO();
 		dto.setEntry_idx(entry_idx);
-		dto.setUser_id(user_id);
+		dto.setUser_idx(user_idx);
 		dto.setAction("상태변경");
 		dto.setBefore_status(beforeStatus);
 		dto.setAfter_status(newStatus);
@@ -170,12 +170,14 @@ public class AccountEntryService {
 
 	    // 변수 치환
 	    List<TemplateVarDTO> varList = templateService.templateVarList(template_idx);
+	    log.info(("치환 전 html: \n" + html));
 	    for (TemplateVarDTO var : varList) {
 	        String key = var.getVariable_name();
 	        String value = String.valueOf(data.getOrDefault(key, "N/A"));
+	        log.info(("치환 변수: " + key + " = " + value));
 	        html = html.replace("{{" + key + "}}", value);
 	    }
-
+	    log.info("치환 후 html: \n" + html);
 	    // PDF 경로 설정
 	    String uploadRoot = "C:/upload/pdf";
 	    new File(uploadRoot).mkdirs();
