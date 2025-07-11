@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +38,9 @@ public class DocumentController {
 
 	@Autowired DocumentService service;
 	@Autowired FileDAO filedao;
+	
+	@Value("${spring.servlet.multipart.location}") 
+	private String root;
 	
 	Map<String, Object> result = null;
 	
@@ -164,7 +168,7 @@ public class DocumentController {
         }
 
         // 업로드된 실제 파일의 경로 만들기
-        File actualFile = new File("C:/upload/" + ext + "/" + file.getNew_filename());
+        File actualFile = new File(root+"/" + ext + "/" + file.getNew_filename());
         // 파일 없으면?
         if (!actualFile.exists()) {
             result.put("success", false);

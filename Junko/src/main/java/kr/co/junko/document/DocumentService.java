@@ -15,6 +15,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,9 @@ public class DocumentService {
 	@Autowired DocumentDAO dao;
     @Autowired TemplateService temService;
     @Autowired FileDAO filedao;
+    
+    @Value("${spring.servlet.multipart.location}") 
+    private String root;
 	
 	public String documentPreview(int template_idx, Map<String, String> variables) {
 		// 해당 템플릿 가져오기
@@ -143,7 +147,7 @@ public class DocumentService {
 		}
 		
 		// 파일 경로 생성
-		String uploadRoot = "C:/upload/pdf";
+		String uploadRoot = root+"/pdf";
 		new File(uploadRoot).mkdirs(); // 폴더 없으면 생성
 		String fileName = "document_"+UUID.randomUUID().toString().substring(0, 8)+".pdf";
 		String filePath = Paths.get(uploadRoot, fileName).toString();
@@ -276,7 +280,7 @@ public class DocumentService {
 		
 		String html = doc.getContent().trim();
 		
-		String uploadRoot = "C:/upload/docx";
+		String uploadRoot = root+"/docx";
 		new File(uploadRoot).mkdirs();
 		String fileName = "document_"+UUID.randomUUID().toString().substring(0,8)+".docx";
 		String filePath = Paths.get(uploadRoot, fileName).toString();

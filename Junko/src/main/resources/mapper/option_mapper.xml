@@ -142,4 +142,9 @@
         AND c.del_yn = 0
     </select>
 
+	<!-- 옵션 번호로 옵션 이름 검색 -->
+	<select id="searchOptionName">
+		select c.combined_name from product_option po join combined c on po.combined_idx = c.combined_idx where po.product_option_idx = #{param1}
+	</select>
+
 </mapper>

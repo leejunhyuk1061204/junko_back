@@ -157,7 +157,27 @@
 		from stock s
 		join product p on s.product_idx = p.product_idx
 		left join product_option po on p.product_idx = po.product_idx
-		where s.del_yn = false
+		<where>
+			del_yn = false
+			<if test="product_idx != null and product_idx != 0">
+				and product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and product_option_idx = #{product_option_idx}
+			</if>
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="zone_idx != null and zone_idx != 0">
+				and zone_idx = #{zone_idx}
+			</if>
+			<if test="manufacture != null and manufacture != ''">
+				and manufacture = #{manufacture}
+			</if>
+			<if test="expiration != null and expiration != 0">
+				and expiration = #{expiration}
+			</if>
+		</where>
 		group by product_idx 
 		<if test="group != null and group.contains('option')">
 		,s.product_option_idx

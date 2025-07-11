@@ -204,7 +204,11 @@ public class OrderService {
 				variables.put("delivery_date", plan.getDelivery_date().toString());
 				variables.put("product_idx", String.valueOf(productMap.get(pp.getProductTempId()).getProduct_idx()));
 				variables.put("product_name", productDAO.selectProductIdx(productMap.get(pp.getProductTempId()).getProduct_idx()).getProduct_name());
-				variables.put("product_option_idx", String.valueOf(productMap.get(pp.getProductTempId()).getProduct_option_idx()));
+				if(productMap.get(pp.getProductTempId()).getProduct_option_idx() == 0) {
+					variables.put("product_option_idx", "없음");
+				} else {
+					variables.put("product_option_idx", productDAO.searchOptionName(productMap.get(pp.getProductTempId()).getOrder_product_idx()));
+				}
 				variables.put("order_cnt", String.valueOf(pp.getOrder_cnt()));
 				
 				orderPlan += documentService.documentPreview(8, variables);
@@ -216,7 +220,12 @@ public class OrderService {
 			variables = new HashMap<String, String>();
 			variables.put("product_idx", String.valueOf(product.getProduct_idx()));
 			variables.put("product_name", productDAO.selectProductIdx(product.getProduct_idx()).getProduct_name());
-			variables.put("product_option_idx", String.valueOf(product.getOrder_product_idx()));
+			if(product.getOrder_product_idx() == 0) {
+				variables.put("product_option_idx", "없음");	
+			}else {
+				variables.put("product_option_idx", productDAO.searchOptionName(product.getProduct_option_idx()));
+			}
+			// variables.put("product_option_idx", String.valueOf(product.getOrder_product_idx()));
 			variables.put("order_cnt", String.valueOf(product.getOrder_cnt()));
 			
 			orderProduct += documentService.documentPreview(7, variables);
