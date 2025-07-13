@@ -29,11 +29,9 @@ public interface CollectionAndPaymentDAO {
 
 	List<CustomDTO> capCustomList();
 
-	LinkedItemDTO getEntryList();
-
-	LinkedItemDTO getSettlementList();
-
-	LinkedItemDTO getInvoiceList();
+	List<LinkedItemDTO> getEntryList();
+	List<LinkedItemDTO> getSettlementList();
+	List<LinkedItemDTO> getInvoiceList();
 
 	void insertFile(FileDTO dto);
 

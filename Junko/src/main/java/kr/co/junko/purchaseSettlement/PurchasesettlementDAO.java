@@ -12,7 +12,8 @@ public interface PurchasesettlementDAO {
 
 	PurchaseSettlementDTO getSettlementById(int settlement_idx);
 
-	Object psRegister(PurchaseSettlementDTO dto);
+	int psRegister(PurchaseSettlementDTO dto);
+
 
 	int settlementUpdate(PurchaseSettlementDTO dto);
 

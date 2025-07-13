@@ -38,7 +38,7 @@ public class TaxInvoiceController {
 	}
 	
 	// 단건 조회
-	@GetMapping(value="/taxInvoice/{invoiceId}")
+	@GetMapping(value="/taxInvoice/{invoice_idx}")
 	public Map<String, Object> taxInvoice(@PathVariable int invoice_idx) {
 	    return service.taxInvoice(invoice_idx);
 	}

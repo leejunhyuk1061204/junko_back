@@ -53,10 +53,11 @@
 	
 	<update id="taxStatusUpdate">
     UPDATE taxInvoice
-    SET status = #{status}, mod_date = NOW()
+    SET status = #{newStatus}, mod_date = NOW()
     WHERE invoice_idx = #{invoice_idx}
     AND del_yn = false
 </update>
+
 	
 	<insert id="saveLog" parameterType="kr.co.junko.dto.TaxInvoiceLogDTO">
     INSERT INTO taxInvoiceLog (invoice_idx, status, status_by, status_time, memo)

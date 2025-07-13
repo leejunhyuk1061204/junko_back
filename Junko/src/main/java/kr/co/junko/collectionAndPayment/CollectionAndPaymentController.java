@@ -127,10 +127,10 @@ public class CollectionAndPaymentController {
 	// 전표 / 정산 / 세금계산서 연동
 	@GetMapping(value="/linked/all")
 	public Map<String, Object> linkedItem() {
-	    List<LinkedItemDTO> resultList = new ArrayList();
-	    resultList.add(service.getEntryList());
-	    resultList.add(service.getSettlementList());
-	    resultList.add(service.getInvoiceList());
+		List<LinkedItemDTO> resultList = new ArrayList<>();
+	    resultList.addAll(service.getEntryList());
+	    resultList.addAll(service.getSettlementList());
+	    resultList.addAll(service.getInvoiceList());
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("success", true);
@@ -180,7 +180,7 @@ public class CollectionAndPaymentController {
 
 	
 	// 이력 관리 
-    @GetMapping("/{cap_idx:[0-9]+}")
+    @GetMapping(value="/capLog/{cap_idx:[0-9]+}")
     public Map<String, Object> getLogs(@PathVariable int cap_idx) {
        result = new HashMap<String, Object>();
         List<CollectionAndPaymentLogDTO> logList = service.getLogsByCapIdx(cap_idx);

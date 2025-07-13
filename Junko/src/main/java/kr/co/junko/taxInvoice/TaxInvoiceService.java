@@ -68,9 +68,9 @@ public class TaxInvoiceService {
 	public Map<String, Object> taxInvoiceUpdate(TaxInvoiceDTO dto) {
 		result = new HashMap<String, Object>();
 		
-		int rwo = dao.taxInvoiceUpdate(dto);
+		int row = dao.taxInvoiceUpdate(dto);
 
-	    if (rwo > 0) {
+	    if (row > 0) {
 	        result.put("success", true);
 	        result.put("message", "세금계산서 수정완");
 	    } else {
@@ -127,6 +127,7 @@ public class TaxInvoiceService {
 
 	public Map<String, Object> taxLogList(int invoice_idx) {
 		List<TaxInvoiceLogDTO> dto = dao.taxLogList(invoice_idx);
+		result = new HashMap<String, Object>();
 		
 		 if (dto == null) {
 		        result.put("success", false);

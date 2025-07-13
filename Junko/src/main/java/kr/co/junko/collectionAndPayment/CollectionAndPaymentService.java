@@ -89,16 +89,14 @@ public class CollectionAndPaymentService {
 		return dao.capCustomList();
 	}
 
-	public LinkedItemDTO getEntryList() {
-		return dao.getEntryList();
+	public List<LinkedItemDTO> getEntryList() {
+	    return dao.getEntryList();
 	}
-
-	public LinkedItemDTO getSettlementList() {
-		return dao.getSettlementList();
+	public List<LinkedItemDTO> getSettlementList() {
+	    return dao.getSettlementList();
 	}
-
-	public LinkedItemDTO getInvoiceList() {
-		return dao.getInvoiceList();
+	public List<LinkedItemDTO> getInvoiceList() {
+	    return dao.getInvoiceList();
 	}
 
 	public Map<String, Object> capFile(String string, int cap_idx, MultipartFile file) {

@@ -16,15 +16,17 @@
 	
 	 <!-- 입출금 등록 -->
   <insert id="insert"
-          parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO"
-          useGeneratedKeys="true"
-          keyProperty="cap_idx">
-    INSERT INTO collectionAndPayment (
-      type, date, amount, custom_idx, entry_idx, memo, del_yn
-    ) VALUES (
-      #{type}, #{date}, #{amount}, #{custom_idx}, #{entry_idx}, #{memo}, false
-    )
-  </insert>
+        parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO"
+        useGeneratedKeys="true"
+        keyProperty="cap_idx">
+  INSERT INTO collectionAndPayment (
+    type, date, amount, custom_idx, entry_idx, memo, del_yn
+  ) VALUES (
+    #{type}, #{date}, #{amount}, #{custom_idx},
+    #{entry_idx, jdbcType=INTEGER}, #{memo}, false
+  )
+</insert>
+
 	
 	<select id="capList" parameterType="int"
         resultType="kr.co.junko.dto.CollectionAndPaymentResponseDTO">
@@ -34,11 +36,11 @@
     cp.date,
     cp.amount,
     cp.custom_idx,
-    c.name AS custom_name,
-    c.account_bank,
+    c.custom_name AS customName,
+    c.bank AS accountBank,
     c.account_number,
     cp.entry_idx,
-    ae.entry_title,
+    ae.entry_type AS entryTitle,
     cp.memo,
     cp.del_yn AS deleted
   FROM collectionAndPayment cp
@@ -47,6 +49,8 @@
   WHERE cp.cap_idx = #{cap_idx}
     AND cp.del_yn = false
 </select>
+
+
 	
 	<update id="capUpdate" parameterType="kr.co.junko.dto.CollectionAndPaymentRequestDTO">
   UPDATE collectionAndPayment
@@ -95,24 +99,31 @@
 	
 	<!-- 전표 -->
 <select id="getEntryList" resultType="kr.co.junko.dto.LinkedItemDTO">
-  SELECT entry_idx AS idx, entry_title AS title, 'entry' AS type
+  SELECT entry_idx AS idx, entry_type AS title, 'entry' AS type
   FROM accountingEntry
   WHERE del_yn = 0
 </select>
 
+
 <!-- 정산 -->
 <select id="getSettlementList" resultType="kr.co.junko.dto.LinkedItemDTO">
-  SELECT settlement_id AS idx, settlement_title AS title, 'settlement' AS type
+  SELECT settlement_id AS idx,
+         DATE_FORMAT(settlement_day, '%Y-%m-%d 정산') AS title,
+         'settlement' AS type
   FROM purchaseSettlement
   WHERE del_yn = 0
 </select>
 
+
 <!-- 세금계산서 -->
 <select id="getInvoiceList" resultType="kr.co.junko.dto.LinkedItemDTO">
-  SELECT invoice_idx AS idx, invoice_title AS title, 'invoice' AS type
+  SELECT invoice_idx AS idx,
+         DATE_FORMAT(reg_date, '%Y-%m-%d 세금계산서') AS title,
+         'invoice' AS type
   FROM taxInvoice
   WHERE del_yn = 0
 </select>
+
 	
 	 <insert id="insertFile" parameterType="kr.co.junko.dto.FileDTO">
     INSERT INTO file (
@@ -144,9 +155,9 @@
 
   <select id="getLogsByCapIdx" parameterType="int" resultType="kr.co.junko.dto.CollectionAndPaymentLogDTO">
     SELECT *
-    FROM capLog
-    WHERE cap_idx = #{cap_idx}
-    ORDER BY log_date DESC
+FROM capLog
+WHERE cap_idx = #{cap_idx}
+ORDER BY reg_date DESC
   </select>
 	
 	

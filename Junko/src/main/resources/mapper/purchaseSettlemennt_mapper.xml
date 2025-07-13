@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.junko.Purchasesttlement.PurchasesettlementDAO">
+<mapper namespace="kr.co.junko.purchaseSettlement.PurchasesettlementDAO">
+
 	
 <select id="getSettlementById" parameterType="int" resultType="kr.co.junko.dto.PurchaseSettlementDTO">
 	SELECT * FROM purchaseSettlement
-	WHERE settlement_idx = #{settlement_idx} AND del_yn = false
+	WHERE settlement_id = #{settlement_idx} AND del_yn = false
 </select>
 
 	
@@ -34,38 +35,40 @@
 <update id="settlementDel" parameterType="int">
     UPDATE purchaseSettlement
     SET del_yn = true
-    WHERE settlement_id = #{settlement_id}
+    WHERE settlement_id = #{settlement_idx}
       AND del_yn = false
       AND status = '미정산'
 </update>
 	
 	<!-- 정산 확정 -->
-	<update id="finalizeSettlement" parameterType="int">
+	<update id="settlementFinal" parameterType="int">
     UPDATE purchaseSettlement
-    SET status = '확정'
-    WHERE settlement_idx = #{settlement_idx}
+    SET status = '정산'
+    WHERE settlement_id = #{settlement_idx}
       AND del_yn = false
-      AND status = '진행중'
+      AND status IN ('미정산', '부분정산')
 </update>
+
 	
 	<!-- 재정산 요청  -->
 	<update id="settlementReq" parameterType="int">
     UPDATE purchaseSettlement
-    SET status = '재정산요청'
-    WHERE settlement_idx = #{settlement_idx}
-      AND status IN ('확정', '마감')
+    SET status = '부분정산'
+    WHERE settlement_id = #{settlement_idx}
+      AND status = '정산'
       AND del_yn = false
 </update>
+
 	
 	<!-- 관리자 재정산 승  -->
 	<update id="settlementAdminReq" parameterType="int">
     UPDATE purchaseSettlement
-    SET status = '진행중'
-    WHERE settlement_idx = #{settlement_idx}
-      AND status = '재정산요청'
+    SET status = '미정산'
+    WHERE settlement_id = #{settlement_idx}
+      AND status = '부분정산'
       AND del_yn = false
 </update>
-	
+
 	<!-- 파일 업로드   -->
 	<insert id="settlementFileUpload" parameterType="kr.co.junko.dto.FileDTO">
     INSERT INTO file (
@@ -92,7 +95,7 @@
 	
 	<!-- 첨부 파일 다운로드 -->
 	<select id="settlementFileDown" parameterType="int" resultType="kr.co.junko.dto.FileDTO">
-    SELECT * FROM file_table
+    SELECT * FROM file
     WHERE file_idx = #{file_idx}
 </select>
 	

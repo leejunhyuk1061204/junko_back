@@ -43,9 +43,8 @@ public class PurchasesettlementService {
 		return dao.getSettlementById(settlement_idx);
 	}
 	
-	public Object psRegister(PurchaseSettlementDTO dto) {
+	public int psRegister(PurchaseSettlementDTO dto) {
 		return dao.psRegister(dto);
-		
 	}
 	
 	public int settlementUpdate(PurchaseSettlementDTO dto) {
@@ -66,9 +65,10 @@ public class PurchasesettlementService {
 	    if (dto == null) return false;
 
 	    // 확정 또는 마감 상태에서만 요청 가능
-	    if ("확정".equals(dto.getStatus()) || "마감".equals(dto.getStatus())) {
+	    if ("정산".equals(dto.getStatus())) {
 	        return dao.settlementReq(settlement_idx) > 0;
 	    }
+	    log.info("현재 상태: {}", dto.getStatus());
 
 	    return false;
 	}
@@ -77,9 +77,10 @@ public class PurchasesettlementService {
 		 PurchaseSettlementDTO dto = dao.getSettlementById(settlement_idx);
 		    if (dto == null) return false;
 
-		    if ("재정산요청".equals(dto.getStatus())) {
+		    if ("부분정산".equals(dto.getStatus())) {
 		        return dao.settlementAdminReq(settlement_idx) > 0;
 		    }
+
 
 		    return false;
 	}
