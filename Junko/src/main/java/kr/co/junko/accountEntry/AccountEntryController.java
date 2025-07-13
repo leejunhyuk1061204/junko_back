@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.junko.dto.AccountingEntryDTO;
+import kr.co.junko.dto.AccountingEntrySearchDTO;
 import kr.co.junko.dto.FileDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +73,15 @@ public class AccountEntryController {
 	public Map<String, Object> accountDetail(@PathVariable int entry_idx){
 		return service.accountDetail(entry_idx);
 	}
+	
+	//회계 전표 리스트에 검색, 필터, 정렬 기능
+	@PostMapping("/accountListSearch")
+	public Map<String, Object> accountListSearch(@RequestBody AccountingEntrySearchDTO dto) {
+		result = new HashMap<String, Object>();
+		result = service.accountListSearch(dto);
+		return result;
+	}
+
 	
 	// 전표 수정
 	@PutMapping(value="/accountUpdate/{entry_idx}")

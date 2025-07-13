@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.junko.dto.CapSearchDTO;
 import kr.co.junko.dto.CollectionAndPaymentLogDTO;
 import kr.co.junko.dto.CollectionAndPaymentRequestDTO;
 import kr.co.junko.dto.CollectionAndPaymentResponseDTO;
@@ -75,6 +76,20 @@ public class CollectionAndPaymentController {
 
 	    return result;
 	}
+	
+	// 수금지급 검색 정렬
+	@PostMapping("/searchCap")
+	public Map<String, Object> searchCap(@RequestBody CapSearchDTO dto) {
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    List<CollectionAndPaymentResponseDTO> list = service.searchCap(dto);
+
+	    result.put("success", true);
+	    result.put("data", list);
+	    return result;
+	}
+
+	
+	
 	// 수정
 	@PutMapping(value="/capUpdate/{cap_idx}")
 	public Map<String, Object> capUpdate(@PathVariable int cap_idx,

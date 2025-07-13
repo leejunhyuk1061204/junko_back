@@ -51,6 +51,23 @@ public class PurchasesettlementController {
 		return result;
 	}
 
+	
+	@GetMapping("/settlementList")
+	public Map<String, Object> getSettlementList(
+	    @RequestParam(required = false) String status,
+	    @RequestParam(required = false) String customName,
+	    @RequestParam(required = false) String startDate,
+	    @RequestParam(required = false) String endDate
+	) {
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    List<PurchaseSettlementDTO> list = service.getFilteredSettlements(status, customName, startDate, endDate);
+	    result.put("result", "success");
+	    result.put("data", list);
+	    return result;
+	}
+
+	
+	
 	@PostMapping(value="/psRegister")
 	public Map<String, Object> psRegister(@RequestBody PurchaseSettlementDTO dto) {
 		Map<String, Object> result = new HashMap<>();

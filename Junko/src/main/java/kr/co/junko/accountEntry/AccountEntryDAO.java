@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.co.junko.dto.AccountingEntryDTO;
 import kr.co.junko.dto.AccountingEntryLogDTO;
+import kr.co.junko.dto.AccountingEntrySearchDTO;
 import kr.co.junko.dto.FileDTO;
 
 @Mapper
@@ -49,5 +50,9 @@ public interface AccountEntryDAO {
 	List<AccountingEntryLogDTO> accountLog(int entry_idx);
 
 	void accountPdf(FileDTO file);
+
+	List<AccountingEntryDTO> accountListSearch(AccountingEntrySearchDTO dto);
+
+	int accountListSearchCount(AccountingEntrySearchDTO dto);
 
 }

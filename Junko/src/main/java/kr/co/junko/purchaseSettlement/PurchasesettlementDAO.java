@@ -33,4 +33,7 @@ public interface PurchasesettlementDAO {
 
 	FileDTO settlementFileDown(int idx);
 
+	List<PurchaseSettlementDTO> getFilteredSettlements(String status, String customName, String startDate,
+			String endDate);
+
 }

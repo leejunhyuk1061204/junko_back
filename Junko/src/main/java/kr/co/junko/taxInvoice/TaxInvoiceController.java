@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.TaxInvoiceDTO;
@@ -36,6 +37,18 @@ public class TaxInvoiceController {
 	    result = service.taxInvoiceList(page);
 	    return result;
 	}
+	
+	// 검색
+	@GetMapping("/taxInvoiceSearch")
+	public Map<String, Object> taxInvoiceSearch(
+	    @RequestParam int page,
+	    @RequestParam(required = false) String status,
+	    @RequestParam(required = false) String search,
+	    @RequestParam(required = false) String sort
+	) {
+	    return service.taxInvoiceSearch(page, status, search, sort);
+	}
+
 	
 	// 단건 조회
 	@GetMapping(value="/taxInvoice/{invoice_idx}")

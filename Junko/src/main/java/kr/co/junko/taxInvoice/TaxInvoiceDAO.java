@@ -29,4 +29,14 @@ public interface TaxInvoiceDAO {
 
 	List<TaxInvoiceLogDTO> taxLogList(@Param("invoice_idx") int invoice_idx);
 
+	List<TaxInvoiceDTO> taxInvoiceSearch(@Param("offset") int offset,
+            @Param("limit") int limit,
+            @Param("status") String status,
+            @Param("search") String search,
+            @Param("sort") String sort);
+
+int taxInvoicePages(@Param("limit") int limit,
+@Param("status") String status,
+@Param("search") String search);
+
 }

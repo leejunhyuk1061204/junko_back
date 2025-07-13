@@ -20,6 +20,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import kr.co.junko.dto.AccountingEntryDTO;
 import kr.co.junko.dto.AccountingEntryLogDTO;
+import kr.co.junko.dto.AccountingEntrySearchDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.TemplateDTO;
 import kr.co.junko.dto.TemplateVarDTO;
@@ -206,6 +207,22 @@ public class AccountEntryService {
 	    
 	    
 	    return file;
+	}
+
+	public Map<String, Object> accountListSearch(AccountingEntrySearchDTO dto) {
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		int offset = (dto.getPage() - 1) * dto.getLimit();
+		dto.setPage(offset); // offset 처리
+
+		List<AccountingEntryDTO> list = dao.accountListSearch(dto);
+		int total = dao.accountListSearchCount(dto);
+
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", dto.getPage() / dto.getLimit() + 1);
+		result.put("pages", (int)Math.ceil((double) total / dto.getLimit()));
+		return result;
 	}
 
 

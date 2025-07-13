@@ -17,6 +17,51 @@
     WHERE del_yn = false
 </select>
 	
+	<select id="taxInvoiceSearch" resultType="kr.co.junko.dto.TaxInvoiceDTO">
+    SELECT *
+    FROM taxInvoice
+    <where>
+        del_yn = false
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="search != null and search != ''">
+            AND (issued_by LIKE CONCAT('%', #{search}, '%')
+                 OR custom_idx IN (
+                     SELECT custom_idx FROM custom WHERE custom_name LIKE CONCAT('%', #{search}, '%')
+                 ))
+        </if>
+    </where>
+    <choose>
+        <when test="sort != null and sort != ''">
+            ORDER BY ${sort}
+        </when>
+        <otherwise>
+            ORDER BY reg_date DESC
+        </otherwise>
+    </choose>
+    LIMIT #{limit} OFFSET #{offset}
+</select>
+
+<select id="taxInvoicePages" resultType="int">
+    SELECT CEIL(COUNT(*) * 1.0 / #{limit})
+    FROM taxInvoice
+    <where>
+        del_yn = false
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="search != null and search != ''">
+            AND (issued_by LIKE CONCAT('%', #{search}, '%')
+                 OR custom_idx IN (
+                     SELECT custom_idx FROM custom WHERE custom_name LIKE CONCAT('%', #{search}, '%')
+                 ))
+        </if>
+    </where>
+</select>
+	
+	
+	
 	<select id="taxInvoice" resultType="kr.co.junko.dto.TaxInvoiceDTO">
     SELECT *
     FROM taxInvoice

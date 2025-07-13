@@ -203,6 +203,12 @@ public class PurchasesettlementService {
 	    return file;
 	}
 
+	public List<PurchaseSettlementDTO> getFilteredSettlements(String status, String customName, String startDate,
+			String endDate) {
+	
+		return dao.getFilteredSettlements(status, customName, startDate, endDate);
+	}
+
 	
 	
 }

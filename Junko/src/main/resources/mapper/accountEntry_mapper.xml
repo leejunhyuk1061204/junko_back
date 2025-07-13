@@ -22,6 +22,59 @@
 		SELECT CEIL(COUNT(entry_idx)/#{param1}) AS pages FROM accountingEntry
 	</select>
 	
+	
+	<select id="accountListSearch" parameterType="kr.co.junko.dto.AccountingEntrySearchDTO" resultType="kr.co.junko.dto.AccountingEntryDTO">
+	SELECT * 
+	FROM accountingEntry 
+	WHERE del_yn = false
+	<if test="status != null and status != ''">
+		AND status = #{status}
+	</if>
+	<if test="user_id != null and user_id != ''">
+		AND user_id = #{user_id}
+	</if>
+	<if test="keyword != null and keyword != ''">
+		AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+	</if>
+	<if test="start_date != null">
+		AND reg_date &gt;= #{start_date}
+	</if>
+	<if test="end_date != null">
+		AND reg_date &lt;= #{end_date}
+	</if>
+	<choose>
+		<when test="orderBy != null and orderDir != null">
+			ORDER BY ${orderBy} ${orderDir}
+		</when>
+		<otherwise>
+			ORDER BY reg_date DESC
+		</otherwise>
+	</choose>
+	LIMIT #{limit} OFFSET #{page}
+</select>
+
+<select id="accountListSearchCount" parameterType="kr.co.junko.dto.AccountingEntrySearchDTO" resultType="int">
+	SELECT COUNT(*)
+	FROM accountingEntry
+	WHERE del_yn = false
+	<if test="status != null and status != ''">
+		AND status = #{status}
+	</if>
+	<if test="user_id != null and user_id != ''">
+		AND user_id = #{user_id}
+	</if>
+	<if test="keyword != null and keyword != ''">
+		AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+	</if>
+	<if test="start_date != null">
+		AND reg_date &gt;= #{start_date}
+	</if>
+	<if test="end_date != null">
+		AND reg_date &lt;= #{end_date}
+	</if>
+</select>
+	
+	
 	<insert id="accountRegist" parameterType="kr.co.junko.dto.AccountingEntryDTO">
 	INSERT INTO accountingEntry (account_idx, entry_type, amount, entry_date, custom_idx, sales_idx)
 VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, #{sales_idx})

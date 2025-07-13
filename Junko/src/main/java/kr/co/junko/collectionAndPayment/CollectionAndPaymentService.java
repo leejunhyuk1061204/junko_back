@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
+import kr.co.junko.dto.CapSearchDTO;
 import kr.co.junko.dto.CollectionAndPaymentLogDTO;
 import kr.co.junko.dto.CollectionAndPaymentRequestDTO;
 import kr.co.junko.dto.CollectionAndPaymentResponseDTO;
@@ -225,6 +226,10 @@ public class CollectionAndPaymentService {
 	    dao.insertFile(file);
 
 	    return file;
+	}
+
+	public List<CollectionAndPaymentResponseDTO> searchCap(CapSearchDTO dto) {
+		return dao.searchCap(dao);
 	}
 
 

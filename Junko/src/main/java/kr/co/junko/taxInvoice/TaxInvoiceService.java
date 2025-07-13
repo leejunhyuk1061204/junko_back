@@ -140,6 +140,26 @@ public class TaxInvoiceService {
 		    return result;
 		
 	}
+
+	public Map<String, Object> taxInvoiceSearch(int page2, String status, String search, String sort) {
+		result = new HashMap<String, Object>();
+		
+		int limit = 10;
+	    int offset = (page - 1) * limit;
+
+	    // 기본값 설정
+	    if (sort == null || sort.isEmpty()) sort = "reg_date DESC";
+
+	    List<TaxInvoiceDTO> list = dao.taxInvoiceSearch(offset, limit, status, search, sort);
+	    int pages = dao.taxInvoicePages(limit, status, search);
+
+	    result.put("page", page);
+	    result.put("list", list);
+	    result.put("pages", pages);
+	    result.put("success", true);
+
+	    return result;
+	}
 	
 	
 }

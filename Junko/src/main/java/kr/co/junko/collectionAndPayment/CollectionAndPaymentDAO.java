@@ -42,6 +42,8 @@ public interface CollectionAndPaymentDAO {
 	List<CollectionAndPaymentLogDTO> getLogsByCapIdx(int cap_idx);
 
 	void insertLog(CollectionAndPaymentLogDTO dto);
+
+	List<CollectionAndPaymentResponseDTO> searchCap(CollectionAndPaymentDAO dao);
 	
 	
 }

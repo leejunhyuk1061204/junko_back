@@ -27,6 +27,71 @@
   )
 </insert>
 
+	<!-- 검색  -->
+	<select id="searchCap"
+        parameterType="kr.co.junko.dto.CapSearchDTO"
+        resultType="kr.co.junko.dto.CollectionAndPaymentResponseDTO">
+  SELECT
+    cp.cap_idx,
+    cp.type,
+    cp.date,
+    cp.amount,
+    cp.custom_idx,
+    c.custom_name AS customName,
+    c.bank AS accountBank,
+    c.account_number,
+    cp.entry_idx,
+    ae.entry_type AS entryTitle,
+    cp.memo,
+    cp.del_yn AS deleted
+  FROM collectionAndPayment cp
+  LEFT JOIN custom c ON cp.custom_idx = c.custom_idx
+  LEFT JOIN accountingEntry ae ON cp.entry_idx = ae.entry_idx
+  <where>
+    cp.del_yn = false
+    <if test="type != null and type != ''">
+      AND cp.type = #{type}
+    </if>
+    <if test="minAmount != null">
+      AND cp.amount &gt;= #{minAmount}
+    </if>
+    <if test="maxAmount != null">
+      AND cp.amount &lt;= #{maxAmount}
+    </if>
+    <if test="startDate != null">
+      AND cp.date &gt;= #{startDate}
+    </if>
+    <if test="endDate != null">
+      AND cp.date &lt;= #{endDate}
+    </if>
+    <if test="keyword != null and keyword != ''">
+      AND (
+        c.custom_name LIKE CONCAT('%', #{keyword}, '%')
+        OR cp.memo LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+  </where>
+  
+  <choose>
+    <when test='"amount".equals(sortBy) and "asc".equals(sortOrder)'>
+      ORDER BY cp.amount ASC
+    </when>
+    <when test='"amount".equals(sortBy) and "desc".equals(sortOrder)'>
+      ORDER BY cp.amount DESC
+    </when>
+    <when test='"date".equals(sortBy) and "asc".equals(sortOrder)'>
+      ORDER BY cp.date ASC
+    </when>
+    <when test='"date".equals(sortBy) and "desc".equals(sortOrder)'>
+      ORDER BY cp.date DESC
+    </when>
+    <otherwise>
+      ORDER BY cp.cap_idx DESC
+    </otherwise>
+  </choose>
+</select>
+
+	
 	
 	<select id="capList" parameterType="int"
         resultType="kr.co.junko.dto.CollectionAndPaymentResponseDTO">
