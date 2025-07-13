@@ -332,6 +332,16 @@ public class ProductController {
 	    }
 	}
 
+	// 상품 상세보기
+	@GetMapping("/product/detail/{product_idx}")
+	public Map<String, Object> productDetail(@PathVariable int product_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		ProductDTO dto = service.productDetail(product_idx);
+		result.put("data", dto);
+		result.put("success", dto != null);
+		return result;
+	}
+
 
 	
 }

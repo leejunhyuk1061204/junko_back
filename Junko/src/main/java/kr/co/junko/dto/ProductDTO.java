@@ -1,5 +1,7 @@
 package kr.co.junko.dto;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -20,5 +22,7 @@ public class ProductDTO {
 	private MultipartFile[] images; // 여러 장 이미지 업로드용
 	
 	private String category_name;
+
+	private List<String> imageUrls; // 이미지 URL 목록
 	
 }

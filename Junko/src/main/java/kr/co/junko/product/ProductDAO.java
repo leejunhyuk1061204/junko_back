@@ -41,4 +41,8 @@ public interface ProductDAO {
 
 	int LoginUserIdx(String loginId);
 
+    ProductDTO productDetail(int product_idx);
+
+	List<String> selectProductImages(int product_idx);
+
 }

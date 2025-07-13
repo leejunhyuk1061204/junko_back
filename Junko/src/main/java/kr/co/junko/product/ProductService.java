@@ -274,4 +274,13 @@ public class ProductService {
 		return dao.downloadProductDoc(fileName);
 	}
 
+	public ProductDTO productDetail(int product_idx) {
+		ProductDTO dto = dao.productDetail(product_idx);
+		if (dto != null) {
+			List<String> imageUrls = dao.selectProductImages(product_idx);
+			dto.setImageUrls(imageUrls);
+		}
+		return dto;
+	}
+
 }
