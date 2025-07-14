@@ -80,28 +80,13 @@
 VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, #{sales_idx})
 	</insert>
 	
-	<select id="accountDetail" resultType="map">
-  SELECT
-    ae.entry_idx,
-    ae.account_idx,
-    ae.entry_type,
-    ae.amount,
-    ae.entry_date,
-    ae.custom_idx,
-    c.custom_name,
-    ae.sales_idx,
-    s.customer as customer_name,
-    ae.user_idx,
-    u.user_id,
-    u.user_name,
-     ae.status,
-  ae.del_yn
-  FROM
-    accountingEntry ae
-  LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
-  LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
-  LEFT JOIN user u ON ae.user_idx = u.user_idx
-  WHERE ae.entry_idx = #{entry_idx}
+	<select id="accountDetail" parameterType="int" resultType="map">
+    SELECT 
+        ae.entry_idx, ae.account_idx, ae.entry_type, ae.amount,
+        ae.entry_date, ae.custom_idx, ae.sales_idx,
+        ae.status, ae.user_idx, ae.del_yn
+    FROM accountingEntry ae
+    WHERE ae.entry_idx = #{entry_idx}
 </select>
 
 	
@@ -177,19 +162,12 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
         created_at DESC
 </select>
 	
-	<insert id="accountPdf"
-        parameterType="kr.co.junko.dto.FileDTO"
-        useGeneratedKeys="true"
-        keyProperty="file_idx">
+	<insert id="accountPdf" parameterType="kr.co.junko.dto.FileDTO" useGeneratedKeys="true" keyProperty="file_idx">
     INSERT INTO file (
-        ori_filename, new_filename, reg_date,
-        type, idx, del_yn
-    )
-    VALUES (
-        #{ori_filename}, #{new_filename}, #{reg_date},
-        #{type}, #{idx}, #{del_yn}
+        ori_filename, new_filename, reg_date, type, idx, del_yn
+    ) VALUES (
+        #{ori_filename}, #{new_filename}, #{reg_date}, #{type}, #{idx}, #{del_yn}
     )
 </insert>
-	
 	
 </mapper>
