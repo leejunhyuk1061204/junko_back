@@ -14,6 +14,10 @@ public class CollectionAndPaymentRequestDTO {
     private int custom_idx; // 거래처
     private int entry_idx; // 전표 (nullable)
     private String memo; // 비고 (optional)
+	public void setUser_idx(int user_idx) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

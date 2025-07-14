@@ -19,4 +19,6 @@ public interface TaxInvoiceDetailDAO {
 
 	int prodDetailDel(int invoice_idx, int detail_idx);
 
+	int userIdxByLoginId(String loginId);
+
 }

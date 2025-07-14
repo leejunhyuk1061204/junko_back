@@ -164,5 +164,10 @@ public class AccountDepartmentService {
 	    return file;
 	}
 
+
+	public int userIdxByLoginId(String loginId) {
+		return dao.userIdxByLoginId(loginId); 
+	}
+
 	
 }

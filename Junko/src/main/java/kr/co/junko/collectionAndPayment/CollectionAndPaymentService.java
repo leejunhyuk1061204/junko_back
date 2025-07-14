@@ -232,6 +232,10 @@ public class CollectionAndPaymentService {
 		return dao.searchCap(dao);
 	}
 
+	public int userIdxByLoginId(String loginId) {
+		return dao.userIdxByLoginId(loginId);
+	}
+
 
 
 	

@@ -160,6 +160,10 @@ public class TaxInvoiceService {
 
 	    return result;
 	}
+
+	public int userIdxByLoginId(String loginId) {
+		return dao.userIdxByLoginId(loginId);
+	}
 	
 	
 }

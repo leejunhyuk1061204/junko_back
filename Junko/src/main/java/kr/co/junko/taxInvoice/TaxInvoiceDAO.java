@@ -39,4 +39,6 @@ int taxInvoicePages(@Param("limit") int limit,
 @Param("status") String status,
 @Param("search") String search);
 
+int userIdxByLoginId(String loginId);
+
 }

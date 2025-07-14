@@ -26,4 +26,6 @@ public interface AccountDepartmentDAO {
 
 	AccountingDepartmentDTO accountDeptDetailByDeptIdx(int dept_idx);
 
+	int userIdxByLoginId(String loginId);
+
 }

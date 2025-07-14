@@ -18,6 +18,10 @@ public class PurchaseSettlementDTO {
 	private BigDecimal total_amount;		// 정산금액
 	private String status;						// 정산상태
 	private boolean del_yn; // 삭제여부
+	public void setUser_idx(int user_idx) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

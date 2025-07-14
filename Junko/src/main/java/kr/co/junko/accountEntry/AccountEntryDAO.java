@@ -55,4 +55,6 @@ public interface AccountEntryDAO {
 
 	int accountListSearchCount(AccountingEntrySearchDTO dto);
 
+	int userIdxByLoginId(String loginId);
+
 }
