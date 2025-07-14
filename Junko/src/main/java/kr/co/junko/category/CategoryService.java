@@ -1,6 +1,8 @@
 package kr.co.junko.category;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,51 @@ public class CategoryService {
 
 		int row = dao.cateDel(dto);
 		return row > 0;
+	}
+
+    public List<CategoryDTO> cateTree() {
+		List<CategoryDTO> flatList = dao.cateList();
+		Map<Integer, CategoryDTO> map = new HashMap<>();
+
+		// 먼저 모든 카테고리를 Map에 저장
+		for (CategoryDTO cate : flatList) {
+			map.put(cate.getCategory_idx(), cate);
+		}
+
+		// 트리 구조 만들기
+		List<CategoryDTO> rootList = new ArrayList<>();
+		for (CategoryDTO cate : flatList) {
+			Integer parentIdx = cate.getCategory_parent();
+			if (parentIdx == null) {
+				// 루트 카테고리
+				rootList.add(cate);
+			} else {
+				CategoryDTO parent = map.get(parentIdx);
+				if (parent != null) {
+					if (parent.getChildren() == null) parent.setChildren(new ArrayList<>());
+					parent.getChildren().add(cate);
+				}
+			}
+		}
+
+		return rootList;
+	}
+
+	public ArrayList<Integer> childCategoryIdx(int category_idx) {
+		ArrayList<Integer> result = new ArrayList<>();
+		collectChildren(category_idx, result);
+		log.info("최종 하위 카테고리: {}", result);
+		return result;
+	}
+
+	private void collectChildren(int category_idx, ArrayList<Integer> acc) {
+		ArrayList<CategoryDTO> children = dao.childCategoryIdx(category_idx);
+		log.info("현재 category_idx: {}, children.size={}", category_idx, children.size());
+
+		for (CategoryDTO child : children) {
+			acc.add(child.getCategory_idx());
+			collectChildren(child.getCategory_idx(), acc); // 재귀 호출
+		}
 	}
 
 }

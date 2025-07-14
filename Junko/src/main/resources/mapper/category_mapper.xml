@@ -34,5 +34,9 @@
 	<select id="childCnt" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM category WHERE category_parent = #{category_idx}
 	</select>
-	
+
+	<select id="childCategoryIdx" parameterType="int" resultType="kr.co.junko.dto.CategoryDTO">
+		SELECT * FROM category WHERE category_parent = #{category_idx}
+	</select>
+
 </mapper>

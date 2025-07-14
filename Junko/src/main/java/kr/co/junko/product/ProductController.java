@@ -163,8 +163,9 @@ public class ProductController {
 	public Map<String, Object> updateProductImg(
 		@PathVariable("product_idx") int product_idx,
 		@RequestParam(value = "images", required = false) MultipartFile[] files,
+		@RequestParam(value = "remainImageUrls", required = false) List<String> remainImageUrls,
 		@RequestHeader Map<String, String> header) {
-		log.info("이미지 수정 요청: product_idx={}, files={}", product_idx, files != null ? files.length : 0);
+
 		result = new HashMap<String,Object>();
 
 		String token = header.get("authorization");
@@ -175,7 +176,7 @@ public class ProductController {
 		boolean success = false;
 
 		if (login) {
-			success = service.updateProductImg(product_idx, files);
+			success = service.updateProductImg(product_idx, files, remainImageUrls);
 		}
 
 		result.put("success", success);
@@ -183,7 +184,6 @@ public class ProductController {
 
 		return result;
 	}
-
 	// 상품 이미지 소프트 삭제
 	@PutMapping("/product/{product_idx}/imgDel")
 	public Map<String, Object> softDelProductImg(
@@ -232,9 +232,30 @@ public class ProductController {
 		return result;
 	}
 
+	// 상품 목록
 	@PostMapping("/product/list")
-	public Map<String, Object> productList(@RequestBody Map<String, Object> param) {
-		return service.productList(param);
+	public Map<String, Object> productList(
+		@RequestBody Map<String, Object> param,
+		@RequestHeader Map<String, String> header) {
+
+		result = new HashMap<>();
+
+		String token = header.get("authorization");
+
+		String loginId = null;
+		if (token != null && !token.equals("null")) {
+			Map<String, Object> payload = Jwt.readToken(token);
+			loginId = (String) payload.get("user_id");
+		}
+
+		boolean login = loginId != null && !loginId.isEmpty();
+		result.put("loginYN", login);
+
+		Map<String, Object> data = service.productList(param);
+		result.putAll(data);
+		result.put("success", true);
+
+		return result;
 	}
 	
 	// 문서 업로드

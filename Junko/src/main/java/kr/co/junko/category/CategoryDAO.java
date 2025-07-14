@@ -19,4 +19,6 @@ public interface CategoryDAO {
 
 	int childCnt(int category_idx);
 
+    ArrayList<CategoryDTO> childCategoryIdx(int category_idx);
+
 }

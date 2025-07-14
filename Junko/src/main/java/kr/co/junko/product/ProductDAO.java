@@ -45,4 +45,6 @@ public interface ProductDAO {
 
 	List<String> selectProductImages(int product_idx);
 
+    void softDelProductImgByFileName(String fileName);
+
 }

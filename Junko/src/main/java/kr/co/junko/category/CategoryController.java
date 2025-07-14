@@ -2,6 +2,7 @@ package kr.co.junko.category;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.CategoryDTO;
@@ -128,4 +130,27 @@ public class CategoryController {
 		return result;
 	}
 	
+	// 카테고리 트리
+	@GetMapping("/cate/tree")
+	public Map<String, Object> cateTree() {
+		result = new HashMap<String, Object>();
+		
+		List<CategoryDTO> treeList = service.cateTree();
+		result.put("list", treeList);
+
+		return result;
+	}
+
+	// 특정 카테고리의 하위 카테고리 ID 가져오기
+	@GetMapping("/cate/childList")
+	public Map<String, Object> childCategoryIdx(@RequestParam int category_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		ArrayList<Integer> childIdx = service.childCategoryIdx(category_idx);
+		result.put("childIdx", childIdx);
+
+		return result;
+	}
+
+
 }

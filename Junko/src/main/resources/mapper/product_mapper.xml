@@ -180,4 +180,14 @@
 		AND idx = #{product_idx}
 		AND del_yn = 0
 	</select>
+
+	<!-- 상품 이미지 파일명으로 삭제 (일부 삭제) -->
+	<update id="softDelProductImgByFileName" parameterType="string">
+		UPDATE file
+		SET del_yn = 1
+		WHERE new_filename = #{fileName}
+		AND type = 'product'
+		AND del_yn = 0
+	</update>
+
 </mapper>

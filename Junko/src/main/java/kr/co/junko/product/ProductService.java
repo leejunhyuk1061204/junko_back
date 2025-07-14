@@ -176,14 +176,26 @@ public class ProductService {
 
 	// 상품 이미지 수정
 	@Transactional
-	public boolean updateProductImg(int product_idx, MultipartFile[] files) {
-		dao.softDelProductImg(product_idx); 
+	public boolean updateProductImg(int product_idx, MultipartFile[] files, List<String> remainFileNames) {
+		log.info("남겨야 할 이미지 파일명 목록: {}", remainFileNames);
 
-		// 새 이미지 없으면 여기서 종료 (기존 이미지 숨김 처리만 하고 끝)
-		if (files == null || files.length == 0) return true;
+		// 1. 현재 DB에 있는 이미지들 조회
+		List<String> dbFileNames = dao.selectProductImages(product_idx);
 
-		// 새 이미지가 있으면 저장
-		return fileSave(files, product_idx);
+		// 2. 남기지 않을 이미지만 soft delete
+		for (String fileName : dbFileNames) {
+			if (!remainFileNames.contains(fileName)) {
+				log.info("삭제 대상 이미지: {}", fileName);
+				dao.softDelProductImgByFileName(fileName); // 파일명 기준 삭제
+			}
+		}
+
+		// 3. 새 이미지가 있다면 저장
+		if (files != null && files.length > 0) {
+			return fileSave(files, product_idx); // 새 이미지 저장
+		}
+
+		return true; // 새 이미지가 없어도 기존 것 남겼으면 OK
 	}
 
 	// 상품 소프트 삭제
