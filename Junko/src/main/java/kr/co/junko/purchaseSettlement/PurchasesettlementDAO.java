@@ -36,4 +36,6 @@ public interface PurchasesettlementDAO {
 	List<PurchaseSettlementDTO> getFilteredSettlements(String status, String customName, String startDate,
 			String endDate);
 
+	int userIdxByLoginId(String loginId);
+
 }

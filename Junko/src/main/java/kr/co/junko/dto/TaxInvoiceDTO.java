@@ -16,6 +16,10 @@ public class TaxInvoiceDTO {
 	    private LocalDateTime mod_date;
 	    private String issued_by;     // 발행자
 	    private boolean del_yn;
+		public void setUser_idx(int user_idx) {
+			// TODO Auto-generated method stub
+			
+		}
 
 	
 	

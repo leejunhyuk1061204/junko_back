@@ -209,6 +209,10 @@ public class PurchasesettlementService {
 		return dao.getFilteredSettlements(status, customName, startDate, endDate);
 	}
 
+	public int userIdxByLoginId(String loginId) {
+				return dao.userIdxByLoginId(loginId);
+	}
+
 	
 	
 }

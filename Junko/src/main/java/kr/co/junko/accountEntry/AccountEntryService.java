@@ -225,6 +225,10 @@ public class AccountEntryService {
 		return result;
 	}
 
+	public int userIdxByLoginId(String loginId) {
+		return dao.userIdxByLoginId(loginId);
+	}
+
 
 	
 	

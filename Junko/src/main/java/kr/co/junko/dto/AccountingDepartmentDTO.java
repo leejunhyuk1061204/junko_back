@@ -17,6 +17,11 @@ public class AccountingDepartmentDTO {
 	
 	// 계정과목
 	private String as_name;	// 계정과목명
+
+	public void setUser_idx(int user_idx) {
+		// TODO Auto-generated method stub
+		
+	}
 		
 	
 	

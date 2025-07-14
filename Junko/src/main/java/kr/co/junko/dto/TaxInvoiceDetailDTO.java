@@ -11,6 +11,10 @@ public class TaxInvoiceDetailDTO {
     private int quantity;         // 수량
     private int price;            // 단가
     private int total_amount;     // 총 금액 = 수량 * 단가
+	public void setUser_idx(int user_idx) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
