@@ -363,6 +363,13 @@ public class ProductController {
 		return result;
 	}
 
-
+	// 상품 + 옵션 + 컴바인드
+	@PostMapping(value="/productNoption/list")
+	public Map<String, Object> productNoptionList(@RequestBody Map<String, Object>param){
+		log.info("param : {}",param);
+		return service.productNoptionList(param);
+	}
+	
+	
 	
 }

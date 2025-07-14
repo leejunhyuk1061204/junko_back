@@ -295,4 +295,18 @@ public class ProductService {
 		return dto;
 	}
 
+	public Map<String, Object> productNoptionList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset",offset);
+		List<Map<String, Object>>list = dao.productNoptionList(param);
+		int total = dao.productNoptionListTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		result.put("page", param.get("page"));
+		return result;
+	}
+
 }

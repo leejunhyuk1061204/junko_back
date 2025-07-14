@@ -1,6 +1,7 @@
 package kr.co.junko.product;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -46,5 +47,9 @@ public interface ProductDAO {
 	List<String> selectProductImages(int product_idx);
 
     void softDelProductImgByFileName(String fileName);
+	
+	List<Map<String, Object>> productNoptionList(Map<String, Object> param);
+
+	int productNoptionListTotalPage(Map<String, Object> param);
 
 }
