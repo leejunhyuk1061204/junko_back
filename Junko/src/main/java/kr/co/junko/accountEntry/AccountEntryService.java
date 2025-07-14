@@ -180,7 +180,7 @@ public class AccountEntryService {
 	    }
 	    log.info("치환 후 html: \n" + html);
 	    // PDF 경로 설정
-	    String uploadRoot = "C:/upload/pdf";
+	    String uploadRoot = "c:/upload/pdf";
 	    new File(uploadRoot).mkdirs();
 	    String fileName = "account_" + UUID.randomUUID().toString().substring(0, 8) + ".pdf";
 	    String filePath = Paths.get(uploadRoot, fileName).toString();
