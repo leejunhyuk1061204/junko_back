@@ -182,14 +182,13 @@ public class AccountEntryController {
 	
 	// 전표 pdf 생성
 	@PostMapping(value="/accountPdf")
-	public Map<String, Object> accountPdf(@RequestBody Map<String, Integer> map) {
+	public Map<String, Object> accountPdf(@RequestParam int entry_idx, @RequestParam int template_idx) {
 	    result = new HashMap<String, Object>();
 	    try {
-	        FileDTO file = service.accountPdf(map);  // service 호출
-	        result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
-	        result.put("file_idx", file.getFile_idx());
-	        result.put("filename", file.getOri_filename());
-	        result.put("success", true);
+	    	FileDTO file = service.accountPdf(entry_idx, template_idx);
+	    	result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
+	    	result.put("file_idx", file.getFile_idx());
+	    	result.put("filename", file.getOri_filename());
 	    } catch (Exception e) {
 	        log.error("전표 PDF 생성 오류", e);
 	        result.put("success", false);

@@ -153,7 +153,61 @@ public class AccountEntryService {
 		    return result;
 	}
 
+	@Transactional
+	public FileDTO accountPdf(int entry_idx, int template_idx) throws Exception {
+	    // 전표 상세 정보 조회
+	    Map<String, Object> data = dao.accountDetail(entry_idx);
+	    if (data == null || data.isEmpty()) {
+	        throw new IllegalArgumentException("전표 정보가 없습니다.");
+	    }
 
+	    // 템플릿 조회
+	    TemplateDTO template = templateService.getTemplate(template_idx);
+	    if (template == null) {
+	        throw new IllegalArgumentException("템플릿이 존재하지 않습니다.");
+	    }
+
+	    String html = template.getTemplate_html();
+
+	    // 변수 치환
+	    List<TemplateVarDTO> varList = templateService.templateVarList(template_idx);
+	    log.info(("치환 전 html: \n" + html));
+	    for (TemplateVarDTO var : varList) {
+	        String key = var.getVariable_name();
+	        String value = String.valueOf(data.getOrDefault(key, "N/A"));
+	        log.info(("치환 변수: " + key + " = " + value));
+	        html = html.replace("{{" + key + "}}", value);
+	    }
+	    log.info("치환 후 html: \n" + html);
+	    // PDF 경로 설정
+	    String uploadRoot = "C:/upload/pdf";
+	    new File(uploadRoot).mkdirs();
+	    String fileName = "account_" + UUID.randomUUID().toString().substring(0, 8) + ".pdf";
+	    String filePath = Paths.get(uploadRoot, fileName).toString();
+
+	    // PDF 생성
+	    try (OutputStream os = new FileOutputStream(filePath)) {
+	        PdfRendererBuilder builder = new PdfRendererBuilder();
+	        builder.useFastMode();
+	        builder.withHtmlContent(html, null);
+	        builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "malgun");
+	        builder.toStream(os);
+	        builder.run();
+	    }
+
+	    // 파일 테이블 저장
+	    FileDTO file = new FileDTO();
+	    file.setOri_filename("전표 PDF");
+	    file.setNew_filename(fileName);
+	    file.setReg_date(LocalDateTime.now());
+	    file.setType("pdf");
+	    file.setIdx(entry_idx);
+	    file.setDel_yn(false);
+	    dao.accountPdf(file);
+	    
+	    
+	    return file;
+	}
 
 	public Map<String, Object> accountListSearch(AccountingEntrySearchDTO dto) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -169,62 +223,6 @@ public class AccountEntryService {
 		result.put("page", dto.getPage() / dto.getLimit() + 1);
 		result.put("pages", (int)Math.ceil((double) total / dto.getLimit()));
 		return result;
-	}
-
-	@Transactional
-	public FileDTO accountPdf(Map<String, Integer> map) throws Exception {
-	    int entry_idx = map.get("entry_idx");
-	    int template_idx = map.get("template_idx");
-
-	    // 전표 정보 조회
-	    Map<String, Object> data = dao.accountDetail(entry_idx);
-	    if (data == null || data.isEmpty()) {
-	        throw new IllegalArgumentException("전표 정보가 없습니다.");
-	    }
-
-	    // 템플릿 조회
-	    TemplateDTO template = templateService.getTemplate(template_idx);
-	    if (template == null) {
-	        throw new IllegalArgumentException("템플릿이 존재하지 않습니다.");
-	    }
-
-	    String html = template.getTemplate_html();
-
-	    // 템플릿 변수 치환
-	    List<TemplateVarDTO> varList = templateService.templateVarList(template_idx);
-	    for (TemplateVarDTO var : varList) {
-	        String key = var.getVariable_name();
-	        String value = String.valueOf(data.getOrDefault(key, "N/A"));
-	        html = html.replace("{{" + key + "}}", value);
-	    }
-
-	    // PDF 생성
-	    String uploadRoot = "C:/upload/pdf";
-	    new File(uploadRoot).mkdirs();
-	    String fileName = "account_" + UUID.randomUUID().toString().substring(0, 8) + ".pdf";
-	    String filePath = Paths.get(uploadRoot, fileName).toString();
-
-	    try (OutputStream os = new FileOutputStream(filePath)) {
-	        PdfRendererBuilder builder = new PdfRendererBuilder();
-	        builder.useFastMode();
-	        builder.withHtmlContent(html, null);
-	        builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "malgun");
-	        builder.toStream(os);
-	        builder.run();
-	    }
-
-	    // 파일 DB 저장
-	    FileDTO file = new FileDTO();
-	    file.setOri_filename("전표 PDF");
-	    file.setNew_filename(fileName);
-	    file.setReg_date(LocalDateTime.now());
-	    file.setType("pdf");
-	    file.setIdx(entry_idx);
-	    file.setDel_yn(false);
-
-	    dao.accountPdf(file);  // insert
-
-	    return file;
 	}
 
 
