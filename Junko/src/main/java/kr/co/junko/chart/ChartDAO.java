@@ -32,4 +32,16 @@ public interface ChartDAO {
 
 	List<Map<String, Object>> getMonthlySalesYoY(Map<String, Object> param);
 
+	List<Map<String, Object>> getLowStockProduct(Map<String, Object> param);
+
+	List<Map<String, Object>> getSalesThisMonth(Map<String, Object> param);
+
+	List<Map<String, Object>> newOrder(Map<String, Object> param);
+
+	List<Map<String, Object>> getPendingShipment(Map<String, Object> param);
+
+	List<Map<String, Object>> getShippedToday(Map<String, Object> param);
+
+	List<Map<String, Object>> getReceiveThisMonth(Map<String, Object> param);
+
 }

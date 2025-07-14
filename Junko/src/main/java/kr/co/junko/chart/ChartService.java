@@ -50,6 +50,12 @@ public class ChartService {
 		list.put("getNetProfitStats", safeList(dao.getNetProfitStats(param)));
 		list.put("getInOutProduct", safeList(dao.getInOutProduct(param)));
 		list.put("getMonthlySalesYoY", safeList(dao.getMonthlySalesYoY(param)));
+		list.put("getLowStockProduct", safeList(dao.getLowStockProduct(param)));
+		list.put("getSalesThisMonth", safeList(dao.getSalesThisMonth(param)));
+		list.put("newOrder", safeList(dao.newOrder(param)));
+		list.put("getPendingShipment", safeList(dao.getPendingShipment(param)));
+		list.put("getShippedToday", safeList(dao.getShippedToday(param)));
+		list.put("getReceiveThisMonth", safeList(dao.getReceiveThisMonth(param)));
 		
 		return list;
 	}

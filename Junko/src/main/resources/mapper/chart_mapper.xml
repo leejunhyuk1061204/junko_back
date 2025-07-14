@@ -5,29 +5,38 @@
 
 	<!-- 어제와 오늘 매출 -->
 	<select id="getDaySales" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT
 		    CURDATE() AS date, c.category_name, p.product_name
 		    <!-- 금일 총 매출 -->
-		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() THEN sp.product_price*sp.product_cnt 
-		        ELSE 0 END) AS sales_today
+		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() THEN sp.product_price * sp.product_cnt ELSE 0 END) AS sales_today
 		    <!-- 전일 총 매출 -->
-		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() - INTERVAL 1 DAY
-		        THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_yesterday
-		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
-		JOIN product p ON sp.product_idx = p.product_idx
-		JOIN category c ON c.category_idx = p.category_idx
-			<where>
-				s.status IN ('결제 완료', '배송중', '배송완료')
-				<!-- 전날이랑 오늘 데이터만 필터링 -->
-		    	AND s.payment_date IN (CURDATE(), CURDATE() - INTERVAL 1 DAY)
-		    	<if test="categoryIdx != null">
-			        AND p.category_idx = #{categoryIdx}
-			    </if>
-			</where>
+		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() - INTERVAL 1 DAY THEN sp.product_price * sp.product_cnt ELSE 0 END) AS sales_yesterday
+		FROM sales s left JOIN sales_product sp ON s.sales_idx = sp.sales_idx
+		JOIN product p ON sp.product_idx = p.product_idx JOIN category c ON c.category_idx = p.category_idx
+		WHERE s.status IN ('결제 완료', '배송중', '배송완료') AND p.category_idx IN (SELECT category_idx FROM category_tree)
+		GROUP BY c.category_name, p.product_name
 	</select>
 	
 	<!-- 일일 기준 주문건수와 취소건수 -->
 	<select id="getRecentOrderStats" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT date, category_name, product_name, order_cnt, cancel_cnt
 		FROM (
 		    SELECT 
@@ -39,51 +48,64 @@
 		    FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
 		    JOIN product p ON sp.product_idx = p.product_idx
 		    JOIN category c ON p.category_idx = c.category_idx
-		    	<where>
-		    		<if test="categoryIdx != null">
-				        AND p.category_idx = #{categoryIdx}
-				    </if>
+		    WHERE p.category_idx IN (SELECT category_idx FROM category_tree)
 				    <if test="startDate != null and endDate != null">
 				        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 				    </if>
-		    	</where>
 		    GROUP BY date, c.category_idx, p.product_name ORDER BY date DESC LIMIT 5) t ORDER BY date
 	</select>
 	
 	<!-- 판매율 높은 상품 순 5개 -->
 	<select id="getPopularProduct" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT sp.product_idx, c.category_name, p.product_name, SUM(sp.product_cnt) AS total_sales
 		FROM sales_product sp JOIN sales s ON sp.sales_idx = s.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				s.status IN ('결제 완료', '배송중', '배송완료')
-				<if test="categoryIdx != null">
-				    AND p.category_idx = #{categoryIdx}
-				</if>
+		WHERE s.status IN ('결제 완료', '배송중', '배송완료') AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				<if test="startDate != null and endDate != null">
 				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 				</if>
-			</where>
 		GROUP BY sp.product_idx, c.category_idx ORDER BY total_sales DESC LIMIT 5
 	</select>
 	
 	<!-- 반품율 높은 상품 순 5개 -->
 	<select id="getHighReturnProduct" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT p.product_idx, c.category_name, p.product_name, SUM(rp.return_cnt) AS return_cnt
 		FROM return_product rp JOIN product p ON rp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				rp.del_yn = 0
-				<if test="categoryIdx != null">
-			        AND p.category_idx = #{categoryIdx}
-			    </if>
-			</where>
+		WHERE rp.del_yn = 0 AND p.category_idx IN (SELECT category_idx FROM category_tree)
 		GROUP BY p.product_idx, c.category_idx ORDER BY return_cnt DESC LIMIT 5
 	</select>
 	
 	<!-- 재고 회전율 -->
 	<select id="getInventoryTurnoverStats" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT c.category_name, p.product_name
 		  	,IFNULL(SUM(sp.product_cnt), 0) AS total_sales, st.stock_cnt AS current_stock <!-- 최근 30일간 총 출고 수량 (없으면 0) -->
 		  	<!-- 재고 수량이 0인 경우 0으로 처리하여 0으로 나누는 오류 방지 -->
@@ -99,66 +121,91 @@
 		LEFT JOIN sales_product sp ON p.product_idx = sp.product_idx
 		<!-- 출고 이력에서 최근 30일 데이터만 조회 -->
 		LEFT JOIN sales sl ON sp.sales_idx = sl.sales_idx AND sl.payment_date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()
-			<where>
-				p.del_yn = 0
-				<if test="categoryIdx != null">
-			        AND p.category_idx = #{categoryIdx}
-			    </if>
-			</where>
+		WHERE p.del_yn = 0 AND p.category_idx IN (SELECT category_idx FROM category_tree)
 		GROUP BY p.product_idx, c.category_idx
 	</select>
 	
 	<!-- 반품률 분석 -->
 	<select id="returnProduct" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT p.product_idx, c.category_name, p.product_name, SUM(rp.return_cnt) AS return_cnt
 		FROM return_product rp JOIN product p ON rp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				rp.del_yn = 0
-				<if test="categoryIdx != null">
-			        AND p.category_idx = #{categoryIdx}
-			    </if>
-			</where>
+		WHERE rp.del_yn = 0 AND p.category_idx IN (SELECT category_idx FROM category_tree)
 		GROUP BY p.product_idx, c.category_idx
 	</select>
 	
 	<!-- 처리 지연 상품 -->
 	<select id="getDelayedProduct" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT p.product_idx, c.category_name, p.product_name, s.status, s.payment_date
 		    ,DATEDIFF(NOW(), s.payment_date) AS delay_days <!-- 날짜 간격 일 단위로 반환 -->
 		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-			    s.status IN ('결제 완료', '배송중') <!-- 아직 처리 중 -->
-			    AND DATEDIFF(NOW(), s.payment_date) >= 3 <!-- 3일 이상 -->
-			    AND p.del_yn = 0
-				<if test="categoryIdx != null">
-		            AND p.category_idx = #{categoryIdx}
-		        </if>
+		WHERE s.status IN ('결제 완료', '배송중') <!-- 아직 처리 중 -->
+			AND DATEDIFF(NOW(), s.payment_date) >= 3 <!-- 3일 이상 -->
+		    AND p.del_yn = 0
+		    AND p.category_idx IN (SELECT category_idx FROM category_tree)
 		        <if test="startDate != null and endDate != null">
 		            AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 		        </if>
-			</where>
 		ORDER BY delay_days DESC
 	</select>
 	
-	<!-- 기간별 주문 상태 분석 -->
+	<!-- 주문 상태 분포 -->
 	<select id="getOrderStatus" resultType="map">
-		SELECT 
-		    DATE(s.payment_date) AS date,
-		    COUNT(CASE WHEN s.status IN ('결제 대기', '결제 완료') THEN 1 END) AS complete,
-		    COUNT(CASE WHEN s.status = '배송중' THEN 1 END) AS shipping,
-		    COUNT(CASE WHEN s.status = '배송완료' THEN 1 END) AS shipped,
-		    COUNT(CASE WHEN s.status = '결제취소' THEN 1 END) AS cancelled
-		FROM sales s
-		WHERE DATE(s.payment_date) BETWEEN '2025-07-01' AND '2025-07-31'
-		GROUP BY DATE(s.payment_date)
-		ORDER BY date
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT DATE(s.payment_date) AS date, c.category_name
+		    ,COUNT(CASE WHEN s.status IN ('결제 대기', '결제 완료') THEN 1 END) AS complete
+		    ,COUNT(CASE WHEN s.status = '배송중' THEN 1 END) AS shipping
+		    ,COUNT(CASE WHEN s.status = '배송완료' THEN 1 END) AS shipped
+		    ,COUNT(CASE WHEN s.status = '결제취소' THEN 1 END) AS cancelled
+		FROM sales s JOIN sales_product sp ON sp.sales_idx = s.sales_idx
+		JOIN product p ON sp.product_idx = p.product_idx
+		JOIN category c ON p.category_idx = c.category_idx
+		WHERE p.category_idx IN (SELECT category_idx FROM category_tree)
+			<if test="startDate != null and endDate != null">
+				AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+			</if>
+		GROUP BY DATE(s.payment_date) ORDER BY date
 	</select>
 	
 	<!-- 마진율 계산 -->
 	<select id="getProductMarginStats" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT c.category_name, p.product_name
 		    ,SUM(sp.product_price * sp.product_cnt) AS total_sales <!-- 총 매출액 -->
 		    ,SUM(p.purchase_price * sp.product_cnt) AS total_cost <!-- 총 매입원가 -->
@@ -169,20 +216,24 @@
 		JOIN sales s ON sp.sales_idx = s.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				s.status IN ('결제 완료', '배송중', '배송완료')
-				<if test="categoryIdx != null">
-					AND p.category_idx = #{categoryIdx}
-				</if>
-				<if test="startDate != null and endDate != null">
-					AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
-				</if>
-			</where>
+		WHERE s.status IN ('결제 완료', '배송중', '배송완료') AND p.category_idx IN (SELECT category_idx FROM category_tree)
+			<if test="startDate != null and endDate != null">
+				AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+			</if>
 		GROUP BY c.category_name, p.product_name
 	</select>
 	
 	<!-- 순이익률 계산 -->
 	<select id="getNetProfitStats" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT c.category_name, p.product_name
 		    ,SUM(sp.product_price * sp.product_cnt) AS total_sales <!-- 총매출 = 판매가*수량 -->
 		    ,SUM(p.purchase_price * sp.product_cnt) AS total_cost <!-- 총원가 = 매입가*수량 -->
@@ -194,20 +245,25 @@
 		JOIN sales s ON sp.sales_idx = s.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				s.status IN ('결제 완료', '배송중', '배송완료')
-				<if test="categoryIdx != null">
-					AND p.category_idx = #{categoryIdx}
-				</if>
+		WHERE s.status IN ('결제 완료', '배송중', '배송완료')
+			AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				<if test="startDate != null and endDate != null">
 					AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 				</if>
-			</where>
 		GROUP BY c.category_name, p.product_name
 	</select>
 	
 	<!-- 입출고 현황 -->
 	<select id="getInOutProduct" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
 		SELECT p.product_idx, c.category_name, p.product_name
 		    <!-- 입고 수량 -->
 		    ,(SELECT SUM(rp.receive_cnt) FROM receive_product rp JOIN receive r ON rp.receive_idx = r.receive_idx
@@ -227,40 +283,161 @@
 			        </if>
 		    ) AS total_shipment_cnt
 		FROM product p JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				p.del_yn = 0
-				<if test="categoryIdx != null">
-					AND p.category_idx = #{categoryIdx}
-				</if>
-			</where>
+		WHERE p.del_yn = 0 AND p.category_idx IN (SELECT category_idx FROM category_tree)
 		ORDER BY p.product_idx
 	</select>
 
 	<!-- 전년도 대비 월별 매출 비교 -->
 	<select id="getMonthlySalesYoY" resultType="map">
-		SELECT c.category_name
-			,DATE_FORMAT(s.payment_date, '%Y-%m') AS month
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, DATE_FORMAT(s.payment_date, '%Y-%m') AS month
+			,COUNT(sp.sales_product_idx) AS order_cnt
 			<!-- 전년도 매출 -->
-			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1
-				THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_last_year
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1 THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_last_year
 			<!-- 이번년도 매출 -->
-			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())
-        		THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_this_year
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE()) THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_this_year
 		FROM sales s JOIN sales_product sp ON s.sales_idx=sp.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
-			<where>
-				s.status IN ('결제 완료','배송중','배송완료')
-				<!-- 올해하고 작년 데이터만 -->
-				AND YEAR(s.payment_date) IN (YEAR(CURDATE()), YEAR(CURDATE())-1)
-				<if test="categoryIdx != null">
-			        AND p.category_idx = #{categoryIdx}
-			    </if>
+		WHERE s.status IN ('결제 완료','배송중','배송완료')
+			<!-- 올해하고 작년 데이터만 -->
+			AND YEAR(s.payment_date) IN (YEAR(CURDATE()), YEAR(CURDATE())-1)
+			AND p.category_idx IN (SELECT category_idx FROM category_tree)
 			    <if test="startDate != null and endDate != null">
 			        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 			    </if>
-			</where>
 		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m') ORDER BY month
+	</select>
+	
+	<!-- 전체 상품 중 부족 재고 현황 -->
+	<select id="getLowStockProduct" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT p.product_idx, c.category_name, p.product_name, p.min_cnt, IFNULL(SUM(s.stock_cnt), 0) AS total_stock
+		FROM product p LEFT JOIN stock s ON p.product_idx = s.product_idx AND s.del_yn = 0
+		JOIN category c ON c.category_idx = p.category_idx
+		WHERE p.del_yn = 0 AND p.category_idx IN (SELECT category_idx FROM category_tree)
+		GROUP BY p.product_idx, p.product_name, p.min_cnt
+		HAVING total_stock <![CDATA[<]]> p.min_cnt ORDER BY total_stock LIMIT 50
+	</select>
+	
+	<!-- 이번 달 총 매출 -->
+	<select id="getSalesThisMonth" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, DATE_FORMAT(CURDATE(), '%m') AS current_month
+		    ,SUM(sp.product_price * sp.product_cnt) AS total_sales
+		FROM sales s
+		JOIN sales_product sp ON s.sales_idx = sp.sales_idx JOIN product p ON p.product_idx = sp.product_idx 
+		JOIN category c ON c.category_idx = p.category_idx 
+		WHERE s.status IN ('결제완료', '배송중', '배송완료')
+			AND YEAR(s.payment_date) = YEAR(CURDATE())
+			AND MONTH(s.payment_date) = MONTH(CURDATE())
+			AND p.category_idx IN (SELECT category_idx FROM category_tree)
+	</select>
+	
+	<!-- 신규 주문 수 (5일 기준) -->
+	<select id="newOrder" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, COUNT(*) AS new_order_cnt
+		FROM sales s JOIN sales_product sp ON sp.sales_idx = s.sales_idx
+		JOIN product p ON p.product_idx = sp.product_idx
+		JOIN category c ON c.category_idx = p.category_idx
+		WHERE s.status = '결제 완료'
+			AND DATE(payment_date) >= CURDATE() - INTERVAL 5 DAY
+			AND s.del_yn = 0
+			AND p.category_idx IN (SELECT category_idx FROM category_tree)
+	</select>
+	
+	<!-- 출고 대기 수량 -->
+	<select id="getPendingShipment" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+			SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, SUM(sp.product_cnt) AS waiting_cnt
+		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
+		JOIN product p ON sp.product_idx = p.product_idx JOIN category c ON p.category_idx = c.category_idx
+		WHERE s.status = '출고 예정'
+			AND s.del_yn = 0 AND DATE(s.payment_date) = CURDATE() <!-- 오늘 실적 -->
+			AND p.category_idx IN (SELECT category_idx FROM category_tree)
+		GROUP BY c.category_name ORDER BY c.category_name
+	</select>
+	
+	<!-- 오늘 출고 처리된 수 -->
+	<select id="getShippedToday" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+			SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, p.product_name, COUNT(*) AS shipped_today_cnt
+		FROM shipment smt JOIN sales s ON smt.sales_idx = s.sales_idx JOIN sales_product sp ON sp.sales_idx = s.sales_idx
+		JOIN product p ON p.product_idx = sp.product_idx JOIN category c ON p.category_idx = c.category_idx
+		WHERE DATE(smt.shipment_date) = CURDATE() AND s.status = '배송중' AND smt.del_yn = 0
+			AND s.del_yn = 0 AND p.category_idx IN (SELECT category_idx FROM category_tree)
+		GROUP BY c.category_name
+	</select>
+	
+	<!-- 이번달 매입 현황 -->
+	<select id="getReceiveThisMonth" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+			SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name
+		,DATE_FORMAT(r.receive_date, '%m') AS month
+		,COUNT(DISTINCT r.receive_idx) AS receive_cnt
+		FROM receive r JOIN receive_product rp ON r.receive_idx = rp.receive_idx
+		JOIN product p ON rp.product_idx = p.product_idx JOIN category c ON p.category_idx = c.category_idx
+		WHERE r.del_yn = 0 AND rp.del_yn = 0 AND r.status = '입고완료'
+		  	AND YEAR(r.receive_date) = YEAR(CURDATE()) AND MONTH(r.receive_date) = MONTH(CURDATE())
+		  	AND p.category_idx IN (SELECT category_idx FROM category_tree)
+		GROUP BY c.category_name
 	</select>
 
 </mapper>
