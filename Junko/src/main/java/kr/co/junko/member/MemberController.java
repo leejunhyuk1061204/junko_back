@@ -131,7 +131,7 @@ public class MemberController {
 	}
 
 	// 비밀번호 변경
-	@PostMapping("pw/update")
+	@PostMapping("/pw/update")
 	public Map<String, Object> pwUpdate(@RequestBody Map<String, Object> param) {
 		log.info("reset pw : {}", param);
 		result = new HashMap<String, Object>();
@@ -141,6 +141,12 @@ public class MemberController {
 		boolean success = service.pwUpdate(user_id, new_pw);
 		result.put("success", success);
 		return result;
+	}
+	
+	@PostMapping(value="/users/list")
+	public Map<String, Object>userList(@RequestBody Map<String, Object> param){
+		log.info("param : {}",param);
+		return service.userList(param);
 	}
 
 }

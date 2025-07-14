@@ -1,5 +1,6 @@
 package kr.co.junko.member;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -23,6 +24,10 @@ public interface MemberDAO {
 	String findPw(Map<String, Object> param);
 
 	int pwUpdate(String user_id, String new_pw);
+
+	List<MemberDTO> userList(Map<String, Object> param);
+
+	int userListTotalPage(Map<String, Object> param);
 
 
 }

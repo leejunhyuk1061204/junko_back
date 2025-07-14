@@ -2,6 +2,7 @@ package kr.co.junko.member;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -144,6 +145,19 @@ public class MemberService {
 	
 	public boolean pwUpdate(String user_id, String new_pw) {
 		return dao.pwUpdate(user_id, new_pw) > 0;
+	}
+
+	public Map<String, Object> userList(Map<String, Object> param) {
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		List<MemberDTO>list = dao.userList(param);
+		int total = dao.userListTotalPage(param);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("total", total);
+		return result;
 	}
 
 

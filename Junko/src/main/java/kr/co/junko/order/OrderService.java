@@ -96,7 +96,7 @@ public class OrderService {
 		List<OrderDTO>list = dao.orderList(param);
 		int total = dao.orderTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("orederList", list);
+		result.put("orderList", list);
 		result.put("total", total);
 		result.put("page", param.get("page"));
 		return result;
@@ -110,7 +110,7 @@ public class OrderService {
 		List<OrderProductDTO>list = dao.orderProductList(param);
 		int total = dao.orderProductTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("orederProductList", list);
+		result.put("orderProductList", list);
 		result.put("total", total);
 		result.put("page", param.get("page"));
 		return result;
@@ -124,7 +124,7 @@ public class OrderService {
 		List<OrderPlanDTO>list = dao.orderPlanList(param);
 		int total = dao.orderPlanListTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("orederPlanList", list);
+		result.put("orderPlanList", list);
 		result.put("total", total);
 		result.put("page", param.get("page"));
 		return result;
@@ -138,7 +138,7 @@ public class OrderService {
 		List<PlanProductDTO>list = dao.planProductList(param);
 		int total = dao.planProductListTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("orederPlanList", list);
+		result.put("orderPlanList", list);
 		result.put("total", total);
 		result.put("page", param.get("page"));
 		return result;
