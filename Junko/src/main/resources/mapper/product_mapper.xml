@@ -180,4 +180,51 @@
 		AND idx = #{product_idx}
 		AND del_yn = 0
 	</select>
+	
+	<!-- 상품 + 옵션 + 컴바인드 -->
+	<select id="productNoptionList" resultType="map" parameterType="map">
+		select * from product p
+		left join product_option po on p.product_idx = po.product_idx 
+		left join combined c on po.combined_idx = c.combined_idx
+		<where>
+			p.del_yn= false
+			<if test="product_idx != null and product_idx != 0">
+				and p.product_idx = #{product_idx}
+			</if>
+			<if test="category_idx != null and category_idx != 0">
+				and p.category_idx = #{category_idx}
+			</if>
+			<if test="search != null and search != ''">
+				AND (p.product_name LIKE CONCAT('%', #{search}, '%')
+				OR p.product_idx LIKE CONCAT('%', #{search}, '%'))
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>
+		limit #{cnt} offset #{offset}
+	</select>
+	
+	<select id="productNoptionListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from product p
+		left join product_option po on p.product_idx = po.product_idx 
+		left join combined c on po.combined_idx = c.combined_idx
+		<where>
+			p.del_yn= false
+			<if test="product_idx != null and product_idx != 0">
+				and p.product_idx = #{product_idx}
+			</if>
+			<if test="category_idx != null and category_idx != 0">
+				and p.category_idx = #{category_idx}
+			</if>
+			<if test="search != null and search != ''">
+				AND (p.product_name LIKE CONCAT('%', #{search}, '%')
+				OR p.product_idx LIKE CONCAT('%', #{search}, '%'))
+			</if>
+		</where>
+	</select>
+	
 </mapper>

@@ -1,6 +1,7 @@
 package kr.co.junko.product;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -44,5 +45,9 @@ public interface ProductDAO {
     ProductDTO productDetail(int product_idx);
 
 	List<String> selectProductImages(int product_idx);
+
+	List<Map<String, Object>> productNoptionList(Map<String, Object> param);
+
+	int productNoptionListTotalPage(Map<String, Object> param);
 
 }
