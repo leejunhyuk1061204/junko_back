@@ -70,6 +70,7 @@ public class AccountDepartmentController {
 			dto.setUser_idx(user_idx);
 			boolean success = service.accountDeptAdd(entry_idx, dto);
 			result.put("result", success ? "success" : "fail");
+			result.put("dept_idx", dto.getDept_idx()); 
 			result.put("message", success ? "분개 등록 완료" : "분개 등록 실패");
 			result.put("loginYN", true);
 		} else {
@@ -178,4 +179,14 @@ public class AccountDepartmentController {
 		}
 		return result;
 	}
+	
+	// 개정과목 리스트 조회 
+	@GetMapping("/accountSubjectList")
+	public List<Map<String, Object>> getAccountSubjectList() {
+	    return service.getAccountSubjectList();
+	}
+	
+	
+	
+	
 }

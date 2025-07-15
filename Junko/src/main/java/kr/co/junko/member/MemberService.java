@@ -37,22 +37,20 @@ public class MemberService {
 		return row == 0 ;
 	}
 
-	public boolean login(MemberDTO dto, String loginId, String ip) {
-		MemberDTO user = dao.login(dto);
-		
-		if (user != null) {
-			int user_idx = user.getUser_idx();
-			
-			AdminLogDTO log = new AdminLogDTO();
-			log.setAdmin_idx(user_idx);
-			log.setLog_type("login");
-			log.setLog_time(LocalDateTime.now());
-			log.setIp_address(ip);
-			
-			dao.insertAdminLog(log);
-			return true;
-		}		
-		return false;
+	public MemberDTO login(MemberDTO dto, String ip) {
+	    MemberDTO user = dao.login(dto); // 로그인 성공한 사용자 정보 가져오기
+
+	    if (user != null) {
+	        AdminLogDTO log = new AdminLogDTO();
+	        log.setAdmin_idx(user.getUser_idx());
+	        log.setLog_type("login");
+	        log.setLog_time(LocalDateTime.now());
+	        log.setIp_address(ip);
+
+	        dao.insertAdminLog(log); // 로그인 이력 저장
+	    }
+
+	    return user; // 성공 여부는 Controller에서 판단
 	}
 
 	public boolean logout(String loginId, String ip) {
@@ -159,6 +157,8 @@ public class MemberService {
 		result.put("total", total);
 		return result;
 	}
+
+	
 
 
 }

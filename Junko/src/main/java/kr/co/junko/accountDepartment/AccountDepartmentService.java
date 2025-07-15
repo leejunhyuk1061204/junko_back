@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,6 +168,11 @@ public class AccountDepartmentService {
 
 	public int userIdxByLoginId(String loginId) {
 		return dao.userIdxByLoginId(loginId); 
+	}
+
+
+	public List<Map<String, Object>> getAccountSubjectList() {
+		return dao.getAccountSubjectList();
 	}
 
 	

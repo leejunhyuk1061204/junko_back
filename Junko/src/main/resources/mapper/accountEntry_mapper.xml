@@ -59,6 +59,15 @@ LIMIT #{limit} OFFSET #{offset}
 </select>
 	
 	
+	<update id="updateEntryStatus" parameterType="map">
+    UPDATE accountingEntry SET status = #{status} WHERE entry_idx = #{entry_idx}
+</update>
+
+<select id="getUserIdByIdx" parameterType="int" resultType="String">
+    SELECT user_id FROM user WHERE user_idx = #{user_idx}
+</select>
+	
+	
 	<select id="accountListSearch" parameterType="kr.co.junko.dto.AccountingEntrySearchDTO" resultType="kr.co.junko.dto.AccountingEntryDTO">
 	SELECT ae.*,ae.status,  c.custom_name, s.customer AS customer_name,u.user_name
 	FROM accountingEntry ae

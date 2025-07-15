@@ -50,26 +50,28 @@ public class MemberController {
 	// 로그인 (+로그 저장)
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody MemberDTO dto, HttpServletRequest req){
-		log.info("dto : {}", dto);
-		result = new HashMap<String, Object>();
-		String loginId = dto.getUser_id();
-		boolean success = false;
-		boolean login = false;
-		
-		if(loginId != null && !loginId.isEmpty()) {
-			String ip = service.getClientIp(req); // IP 정보
-			success = service.login(dto, loginId, ip);
-			
-			if (success) {
-				String token = Jwt.setToken("user_id",loginId);
-				result.put("user_idx", dto.getUser_idx()); 
-				result.put("token", token);
-				login = true;
-			}
-			result.put("success", success);
-			result.put("login", login);
-		}
-		return result;
+	    log.info("dto : {}", dto);
+	    result = new HashMap<>();
+
+	    String loginId = dto.getUser_id();
+
+	    if (loginId != null && !loginId.isEmpty()) {
+	        String ip = service.getClientIp(req);
+	        MemberDTO loginUser = service.login(dto, ip); 
+
+	        if (loginUser != null) {
+	            String token = Jwt.setToken("user_id", loginUser.getUser_id());
+	            result.put("token", token);
+	            result.put("user_idx", loginUser.getUser_idx()); 
+	            result.put("success", true);
+	            result.put("login", true);
+	        } else {
+	            result.put("success", false);
+	            result.put("login", false);
+	        }
+	    }
+
+	    return result;
 	}
 	
 	// 로그아웃 (+로그 저장)

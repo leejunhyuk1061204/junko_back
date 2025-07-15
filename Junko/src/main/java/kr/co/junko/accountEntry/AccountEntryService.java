@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
+import kr.co.junko.dto.AccountingDepartmentDTO;
 import kr.co.junko.dto.AccountingEntryDTO;
 import kr.co.junko.dto.AccountingEntryLogDTO;
 import kr.co.junko.dto.AccountingEntrySearchDTO;
@@ -307,6 +308,49 @@ public class AccountEntryService {
 	        log.error("❌ 전표 PDF 자동 생성 실패", e);
 	        throw new RuntimeException("PDF 생성 중 오류", e); // 전체 트랜잭션 롤백
 	    }
+	}
+
+	public boolean approveEntry(int entry_idx, int user_idx) {
+		// 상태 변경: 작성중 → 승인됨
+	    int updated = dao.updateEntryStatus(entry_idx, "승인됨");
+
+	    // 로그 저장
+	    if (updated > 0) {
+	        AccountingEntryLogDTO log = new AccountingEntryLogDTO();
+	        log.setEntry_idx(entry_idx);
+	        log.setUser_id(dao.getUserIdByIdx(user_idx));
+	        log.setAction("승인");
+	        log.setBefore_status("작성중"); // 실제 이전 상태를 조회해도 좋음
+	        log.setAfter_status("승인됨");
+	        log.setLog_message("관리자가 승인함");
+	        log.setCreated_at(LocalDateTime.now());
+
+	        dao.saveLog(log);
+	        return true;
+	    }
+
+	    return false;
+	}
+
+	public boolean isBalanced(int entry_idx) {
+		 List<AccountingDepartmentDTO> deptList = dao.accountDeptList(entry_idx);
+		    int debitSum = 0;
+		    int creditSum = 0;
+
+		    for (AccountingDepartmentDTO dept : deptList) {
+		        if ("차변".equals(dept.getType())) {
+		            debitSum += dept.getAmount();
+		        } else if ("대변".equals(dept.getType())) {
+		            creditSum += dept.getAmount();
+		        }
+		    }
+
+		    return debitSum == creditSum;
+		}
+
+	public boolean hasDept(int entry_idx) {
+		int count = dao.countDeptByEntryIdx(entry_idx);
+	    return count > 0;
 	}
 
 

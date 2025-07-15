@@ -91,7 +91,11 @@
     AND d.del_yn = false
 </select>
 	
-	
+	<select id="countDeptByEntryIdx" parameterType="int" resultType="int">
+  SELECT COUNT(*) FROM accountingDepartment
+  WHERE entry_idx = #{entry_idx}
+  AND del_yn = false
+</select>
 	
 	
 </mapper>

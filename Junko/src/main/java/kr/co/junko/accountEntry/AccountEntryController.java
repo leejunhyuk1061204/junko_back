@@ -75,7 +75,7 @@ public class AccountEntryController {
 		log.info("🔵 전표 등록 API 호출됨!");
 	    log.info("entry_type: {}, amount: {}, entry_date: {}, custom_idx: {}, sales_idx: {}", entry_type, amount, entry_date, custom_idx, sales_idx);
 		// 사용자 토큰에서 user_idx 추출해서 등록
-	    int user_idx = Jwt.getUserIdx(request);
+	    int user_idx = Integer.parseInt(request.getHeader("user_idx"));
 	    log.info("👉 추출된 user_idx: {}", user_idx);
 
 	    
@@ -92,7 +92,24 @@ public class AccountEntryController {
 	    return Map.of("success", true);
 	}
 
+	// 전표 상태 승인 여부 
+	@PatchMapping("/accountApprove/{entry_idx}")
+	public ResponseEntity<?> approveEntry(@PathVariable int entry_idx,
+	                                      HttpServletRequest request) {
+	    int user_idx = Integer.parseInt(request.getHeader("user_idx"));
 
+	    boolean result = service.approveEntry(entry_idx, user_idx);
+	    if (result) {
+	        return ResponseEntity.ok(Map.of("success", true, "message", "승인 완료!"));
+	    } else {
+	        return ResponseEntity.badRequest().body(Map.of("success", false, "message", "승인 실패"));
+	    }
+	}
+
+	
+	
+	
+	
 	// 전표 상세조회
 	@GetMapping("/accountDetail/{entry_idx}")
 	public Map<String, Object> accountDetail(@PathVariable int entry_idx) {
@@ -176,7 +193,23 @@ public class AccountEntryController {
 
 	    String newStatus = map.get("status");
 	    String logMsg = map.getOrDefault("logMsg", null);
+	    
+	 //  분개 유무 체크
+	    if (!service.hasDept(entry_idx)) {
+	        return ResponseEntity.badRequest().body(Map.of(
+	            "success", false,
+	            "message", "분개가 1건 이상 등록되어야 상태 변경이 가능합니다."
+	        ));
+	    }
 
+	    // 차/대변 검증 추가
+	    if (!service.isBalanced(entry_idx)) {
+	        return ResponseEntity.badRequest().body(Map.of(
+	            "success", false,
+	            "message", "차변과 대변의 금액이 일치하지 않아 상태 변경이 불가능합니다."
+	        ));
+	    }
+	    
 	    service.accountStatusUpdate(entry_idx, newStatus, user_idx, logMsg);
 	    return ResponseEntity.ok().body(Map.of("success", true, "message", "상태 변경 완료!"));
 	}

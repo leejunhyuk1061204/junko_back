@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import kr.co.junko.dto.AccountingDepartmentDTO;
 import kr.co.junko.dto.AccountingEntryDTO;
 import kr.co.junko.dto.AccountingEntryLogDTO;
 import kr.co.junko.dto.AccountingEntrySearchDTO;
@@ -68,5 +69,13 @@ public interface AccountEntryDAO {
 	FileDTO getPdfFileByEntryIdx(int entry_idx);
 
 	void deletePdfPhysicallyByEntryIdx(int entry_idx);
+
+	int updateEntryStatus(int entry_idx, String string);
+
+	String getUserIdByIdx(int user_idx);
+
+	List<AccountingDepartmentDTO> accountDeptList(int entry_idx);
+
+	int countDeptByEntryIdx(int entry_idx);
 
 }
