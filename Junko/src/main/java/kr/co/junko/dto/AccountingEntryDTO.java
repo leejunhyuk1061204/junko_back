@@ -26,5 +26,9 @@ public class AccountingEntryDTO {
 	private String custom_name;
 	private String customer_name;
 	private String customer;
+	private Boolean has_file;
+
+	private String user_name;
+	private String user_id;
 }
 

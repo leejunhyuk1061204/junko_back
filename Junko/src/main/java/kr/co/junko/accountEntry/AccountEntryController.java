@@ -6,8 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -42,25 +45,53 @@ public class AccountEntryController {
 		return service.accountList(page);
 	}
 
+	//거래처 명 idx와 연결
+	// AccountEntryController.java
+	@GetMapping("/custom/findByName")
+	public Map<String, Object> findCustomIdx(@RequestParam String name) {
+		log.info("거래처명 검색 요청 name: {}", name); 
+	    int idx = service.findCustomIdxByName(name); // DAO 직접 호출도 가능
+	    return Map.of("custom_idx", idx);
+	}
+	//고객명 idx와 연결
+	@GetMapping("/sales/findByName")
+	public Map<String, Object> findSalesIdx(@RequestParam String name) {
+	    int idx = service.findSalesIdxByName(name); // 또는 dao 직접 호출 가능
+	    return Map.of("sales_idx", idx);
+	}
+	
+	
 	// 전표 등록 (토큰 기반 유저 인증 포함)
 	@PostMapping("/accountRegist")
-	public Map<String, Object> accountRegist(@RequestBody AccountingEntryDTO dto,
-	                                         @RequestHeader Map<String, String> header) {
-		result = new HashMap<>();
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+	public Map<String, Object> regist(
+	    @RequestParam String entry_type,
+	    @RequestParam int amount,
+	    @RequestParam String entry_date,
+	    @RequestParam(required = false) Integer custom_idx,
+	    @RequestParam(required = false) Integer sales_idx,
+	    @RequestPart(required = false) MultipartFile file,
+	    HttpServletRequest request
+	) throws Exception {
+		log.info("🔵 전표 등록 API 호출됨!");
+	    log.info("entry_type: {}, amount: {}, entry_date: {}, custom_idx: {}, sales_idx: {}", entry_type, amount, entry_date, custom_idx, sales_idx);
+		// 사용자 토큰에서 user_idx 추출해서 등록
+	    int user_idx = Jwt.getUserIdx(request);
+	    log.info("👉 추출된 user_idx: {}", user_idx);
 
-		if (loginId != null && !loginId.isEmpty()) {
-			int user_idx = service.userIdxByLoginId(loginId);
-			dto.setUser_idx(user_idx);
-			boolean success = service.accountRegist(dto);
-			result.put("success", success);
-			result.put("loginYN", true);
-		} else {
-			result.put("success", false);
-			result.put("loginYN", false);
-		}
-		return result;
+	    
+	    AccountingEntryDTO dto = new AccountingEntryDTO();
+	    dto.setEntry_type(entry_type);
+	    dto.setAmount(amount);
+	    dto.setEntry_date(Date.valueOf(entry_date));
+	    dto.setCustom_idx(custom_idx);
+	    dto.setSales_idx(sales_idx);
+	    dto.setUser_idx(user_idx);
+
+	    service.insertAccountingEntry(dto, file); // ← file 처리 포함
+
+	    return Map.of("success", true);
 	}
+
 
 	// 전표 상세조회
 	@GetMapping("/accountDetail/{entry_idx}")
@@ -77,20 +108,39 @@ public class AccountEntryController {
 	// 전표 수정
 	@PutMapping("/accountUpdate/{entry_idx}")
 	public Map<String, Object> accountUpdate(@PathVariable int entry_idx,
-	                                         @RequestBody AccountingEntryDTO dto,
+	                                         @RequestBody Map<String, Object> body,
 	                                         @RequestHeader Map<String, String> header) {
-		result = new HashMap<>();
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+	    result = new HashMap<>();
 
-		if (loginId != null && !loginId.isEmpty()) {
-			boolean success = service.accountUpdate(entry_idx, dto, loginId);
-			result.put("success", success);
-			result.put("loginYN", true);
-		} else {
-			result.put("success", false);
-			result.put("loginYN", false);
-		}
-		return result;
+	    String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+
+	    if (loginId != null && !loginId.isEmpty()) {
+	        // entry DTO 구성
+	        String entry_type = (String) body.get("entry_type");
+	        int amount = (int) body.get("amount");
+	        String entry_date = (String) body.get("entry_date");
+	        String custom_name = (String) body.get("custom_name");
+	        String customer_name = (String) body.get("customer_name");
+
+	        // idx 조회
+	        Integer custom_idx = service.findCustomIdxByName(custom_name);
+	        Integer sales_idx = service.findSalesIdxByName(customer_name);
+
+	        AccountingEntryDTO dto = new AccountingEntryDTO();
+	        dto.setEntry_type(entry_type);
+	        dto.setAmount(amount);
+	        dto.setEntry_date(Date.valueOf(entry_date));
+	        dto.setCustom_idx(custom_idx);
+	        dto.setSales_idx(sales_idx);
+
+	        boolean success = service.accountUpdate(entry_idx, dto, loginId);
+	        result.put("success", success);
+	        result.put("loginYN", true);
+	    } else {
+	        result.put("success", false);
+	        result.put("loginYN", false);
+	    }
+	    return result;
 	}
 
 	// 전표 삭제
@@ -113,21 +163,22 @@ public class AccountEntryController {
 
 	// 전표 상태 변경
 	@PatchMapping("/accountStatusUpdate/{entry_idx}/status")
-	public ResponseEntity<?> accountStatusUpdate(@PathVariable int entry_idx,
-	                                             @RequestBody Map<String, String> map,
-	                                             @RequestHeader Map<String, String> header) {
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+	public ResponseEntity<?> accountStatusUpdate(
+	    @PathVariable int entry_idx,
+	    @RequestBody Map<String, String> map,
+	    HttpServletRequest request
+	) {
+	    Integer user_idx = Jwt.getUserIdx(request);
 
-		if (loginId != null && !loginId.isEmpty()) {
-			int user_idx = service.userIdxByLoginId(loginId);
-			String newStatus = map.get("status");
-			String logMsg = map.getOrDefault("logMsg", null);
+	    if (user_idx == 0) {
+	        return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인 필요"));
+	    }
 
-			service.accountStatusUpdate(entry_idx, newStatus, user_idx, logMsg);
-			return ResponseEntity.ok().body(Map.of("success", true, "message", "상태 변경 완료!"));
-		} else {
-			return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인 필요"));
-		}
+	    String newStatus = map.get("status");
+	    String logMsg = map.getOrDefault("logMsg", null);
+
+	    service.accountStatusUpdate(entry_idx, newStatus, user_idx, logMsg);
+	    return ResponseEntity.ok().body(Map.of("success", true, "message", "상태 변경 완료!"));
 	}
 
 	// 전표 증빙파일 첨부 등록

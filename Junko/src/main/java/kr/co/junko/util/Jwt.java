@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServletRequest;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -51,6 +52,25 @@ private static SecretKey priKey = null;
 			result.put("id", "");
 		}
 		return result;
+	}
+
+	public static int getUserIdx(HttpServletRequest request) {
+	    String authHeader = request.getHeader("Authorization");
+	    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+	        String token = authHeader.substring(7);
+	        try {
+	            Claims claims = Jwts.parserBuilder()
+	                    .setSigningKey(priKey) 
+	                    .build()
+	                    .parseClaimsJws(token)
+	                    .getBody();
+
+	            return (int) claims.get("user_idx");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return 0;
 	}
 
 }

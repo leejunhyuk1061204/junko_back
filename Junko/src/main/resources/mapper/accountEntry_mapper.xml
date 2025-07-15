@@ -15,6 +15,8 @@
   ae.status,  
   c.custom_name,
   s.customer AS customer_name,
+  u.user_name,  
+  u.user_id, 
   CASE 
     WHEN f.cnt > 0 THEN true
     ELSE false
@@ -22,10 +24,11 @@
 FROM accountingEntry ae
 LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
 LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
+LEFT JOIN user u ON ae.user_idx = u.user_idx 
 LEFT JOIN (
     SELECT idx, COUNT(*) as cnt
     FROM file
-    WHERE del_yn = 0 AND type = 'accounting'
+    WHERE del_yn = 0 AND (type = 'accounting' OR type = 'pdf')
     GROUP BY idx
 ) f ON ae.entry_idx = f.idx
 WHERE ae.del_yn = false
@@ -40,11 +43,28 @@ LIMIT #{limit} OFFSET #{offset}
   SELECT COUNT(*) FROM accountingEntry WHERE del_yn = false
 </select>
 	
+	
+	<select id="findCustomIdxByName" parameterType="String" resultType="int">
+    SELECT custom_idx FROM custom
+    WHERE custom_name = #{name}
+    AND del_yn = 0
+    LIMIT 1
+</select>
+	
+	<select id="findSalesIdxByName" parameterType="String" resultType="int">
+    SELECT sales_idx FROM sales
+    WHERE customer = #{name}
+    AND del_yn = 0
+    LIMIT 1
+</select>
+	
+	
 	<select id="accountListSearch" parameterType="kr.co.junko.dto.AccountingEntrySearchDTO" resultType="kr.co.junko.dto.AccountingEntryDTO">
-	SELECT ae.*,ae.status,  c.custom_name, s.customer AS customer_name
+	SELECT ae.*,ae.status,  c.custom_name, s.customer AS customer_name,u.user_name
 	FROM accountingEntry ae
 	LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
 	LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
+	LEFT JOIN user u ON ae.user_idx = u.user_idx
 	WHERE ae.del_yn = false
 
 	<if test="keyword != null and keyword != ''">
@@ -61,12 +81,12 @@ LIMIT #{limit} OFFSET #{offset}
 <if test="customer_name != null and customer_name != ''">
   AND s.customer LIKE CONCAT('%', #{customer_name}, '%')
 </if>
-	<if test="start_date != null">
-		AND ae.entry_date &gt;= #{start_date}
-	</if>
-	<if test="end_date != null">
-		AND ae.entry_date &lt;= #{end_date}
-	</if>
+	<if test="startDate != null">
+	AND ae.entry_date &gt;= #{startDate}
+</if>
+<if test="endDate != null">
+	AND ae.entry_date &lt;= #{endDate}
+</if>
 <if test="entry_type != null and entry_type != ''">
   AND ae.entry_type = #{entry_type}
 </if>
@@ -92,19 +112,25 @@ LIMIT #{limit} OFFSET #{offset}
 <if test="customer_name != null and customer_name != ''">
   AND s.customer LIKE CONCAT('%', #{customer_name}, '%')
 </if>
-  <if test="start_date != null">
-    AND ae.entry_date &gt;= #{start_date}
-  </if>
-  <if test="end_date != null">
-    AND ae.entry_date &lt;= #{end_date}
-  </if>
+  <if test="startDate != null">
+	AND ae.entry_date &gt;= #{startDate}
+</if>
+<if test="endDate != null">
+	AND ae.entry_date &lt;= #{endDate}
+</if>
 </select>
 	
 	
-	<insert id="accountRegist" parameterType="kr.co.junko.dto.AccountingEntryDTO">
-	INSERT INTO accountingEntry (account_idx, entry_type, amount, entry_date, custom_idx, sales_idx)
-VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, #{sales_idx})
-	</insert>
+<insert id="accountRegist" parameterType="kr.co.junko.dto.AccountingEntryDTO"
+        useGeneratedKeys="true"
+        keyProperty="entry_idx">
+    INSERT INTO accountingEntry (
+        account_idx, entry_type, amount, entry_date, custom_idx, sales_idx, user_idx
+    ) VALUES (
+        #{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, #{sales_idx}, #{user_idx}
+    )
+</insert>
+
 	
 	<select id="accountDetail" resultType="map">
   SELECT
@@ -145,7 +171,22 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
 	DELETE FROM accountingEntry WHERE entry_idx=#{entry_idx}
 	</delete>
 	
+	<delete id="deletePdfPhysicallyByEntryIdx" parameterType="int">
+    DELETE FROM file
+    WHERE idx = #{entry_idx} AND type = 'pdf'
+</delete>
+
+	<update id="deletePdfByEntryIdx" parameterType="int">
+  UPDATE file
+  SET del_yn = 1
+  WHERE idx = #{entry_idx} AND type = 'pdf'
+</update>
 	
+	<select id="getPdfFileByEntryIdx" parameterType="int" resultType="kr.co.junko.dto.FileDTO">
+  SELECT * FROM file
+  WHERE idx = #{entry_idx} AND type = 'pdf' AND del_yn = 0
+</select>
+
 	<select id="getEntryWriterAndStatus" parameterType="int" resultType="map">
     SELECT 
       ae.user_idx, 
@@ -181,9 +222,12 @@ VALUES (#{account_idx}, #{entry_type}, #{amount}, #{entry_date}, #{custom_idx}, 
 	
 	<select id="entryFileList" resultType="kr.co.junko.dto.FileDTO">
     SELECT *
-    FROM file
-    WHERE idx = #{entry_idx} AND type = 'accounting' AND del_yn = 0
-    ORDER BY file_idx DESC
+FROM file
+WHERE idx = #{entry_idx} 
+  AND del_yn = 0 
+  AND (type = 'accounting' OR type = 'pdf')
+ORDER BY file_idx DESC
+
 </select>
 	
 	<select id="entryFileDown" resultType="kr.co.junko.dto.FileDTO">
