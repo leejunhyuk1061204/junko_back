@@ -1,7 +1,9 @@
 package kr.co.junko.order;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
 import kr.co.junko.dto.PlanProductDTO;
 import kr.co.junko.dto.ProductDTO;
+import kr.co.junko.file.FileDAO;
 import kr.co.junko.option.OptionDAO;
 import kr.co.junko.product.ProductDAO;
 import kr.co.junko.receive.ReceiveService;
@@ -45,6 +48,7 @@ public class OrderService {
 	private final OptionDAO optionDAO;
 	private final CustomDAO customDAO;
 	private final JavaMailSender mailSender;
+	private final FileDAO fileDAO;
 
 	public boolean orderInsert(OrderDTO dto) {
 		int row = dao.orderInsert(dto);
@@ -93,7 +97,7 @@ public class OrderService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<OrderDTO>list = dao.orderList(param);
+		List<Map<String, Object>>list = dao.orderList(param);
 		int total = dao.orderTotalPage(param);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orderList", list);
@@ -269,6 +273,9 @@ public class OrderService {
 			throw new RuntimeException("pdf 생성 중 예외 발생");
 		}
 		
+		String fileName = Paths.get(filePath).getFileName().toString();
+		boolean fileUpdateResult = fileDAO.orderFileUpdate(dto.getOrder().getOrder_idx(),fileName)>0;
+		
 		boolean sendEmailResult = sendEmail(customDAO.customSelect(dto.getOrder().getCustom_idx()).getEmail(),"발주서","발주서입니다",filePath);
 		if(!sendEmailResult) throw new RuntimeException("email 전송 실패");
 		
@@ -315,6 +322,39 @@ public class OrderService {
         
         return true;
     }
+
+	public FullOrderDTO orderFullDetail(int order_idx) {
+		OrderDTO order = orderByIdx(order_idx);
+		List<OrderProductDTO>orderProducts = dao.orderProductsByIdx(order_idx);
+		List<OrderPlanDTO>opList = dao.orderPlansByIdx(order_idx);
+		List<OrderPlanDTO>orderPlans = new ArrayList<OrderPlanDTO>();
+		for(OrderPlanDTO op : opList) {
+			int plan_idx = op.getPlan_idx();
+			List<PlanProductDTO>planProducts = dao.planProductsByIdx(plan_idx);
+			op.setPlanProduct(planProducts);
+			orderPlans.add(op);
+		}
+		FullOrderDTO fullDTO = new FullOrderDTO();
+		fullDTO.setOrder(order);
+		fullDTO.setOrderPlan(orderPlans);
+		fullDTO.setOrderProduct(orderProducts);
+		return fullDTO;
+	}
+	
+
+
+//	public Map<String, Object> orderJoinList(Map<String, Object> param) {
+//		int cnt = 10;
+//		int offset = ((int)param.get("page")-1)*cnt;
+//		param.put("cnt", cnt);
+//		param.put("offset", offset);
+//		List<Map<String, Object>>list = dao.orderJoinList(param);
+//		int total = dao.orderJoinListTotalPage(param);
+//		Map<String, Object>result = new HashMap<String, Object>();
+//		result.put("list", list);
+//		result.put("total", total);
+//		return result;
+//	}
 
 	
 

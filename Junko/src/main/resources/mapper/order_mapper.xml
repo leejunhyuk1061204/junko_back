@@ -105,59 +105,104 @@
 	</update>
 
 	<select id="orderTotalPage" parameterType="map">
-		select ceil(count(order_idx)*1.0/#{cnt}) as total from `order`
-		<where>
-		del_yn = false
-			<if test="custom_idx != null and custom_idx != 0">
-				and custom_idx = #{custom_idx}
-			</if>
-			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx}
-			</if>
-			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
-			</if>
-			<if test="status != null and status !=''">
-				and status = #{status}
-			</if>
-			<if test="start_date != null and start_date != ''">
-				and reg_date >= #{start_date}
-			</if>
-			<if test="end_date != null and end_date != ''">
-				and reg_date <![CDATA[<]]>= #{end_date}
-			</if>
-			<if test="reg_date != null and reg_date != ''">
-				and reg_date = #{reg_date}
-			</if>
-		</where>
+		select ceil(count(*)*1.0/#{cnt}) as total
+		from (
+			select 
+				o.*,
+				c.custom_name,
+				w.warehouse_name,
+				u.user_name,
+				COUNT(op.order_product_idx) as cnt , 
+				p.product_name,
+				SUM(p.purchase_price*op.order_cnt) as price
+			from `order` o
+				join custom c ON c.custom_idx = o.custom_idx
+				join warehouse w on w.warehouse_idx = o.warehouse_idx
+				join `user` u on u.user_idx = o.user_idx 
+				join order_product op on o.order_idx = op.order_idx
+				join product p on op.product_idx = p.product_idx 
+			<where>
+			o.del_yn = false
+				<if test="custom_idx != null and custom_idx != 0">
+					and o.custom_idx = #{custom_idx}
+				</if>
+				<if test="warehouse_idx != null and warehouse_idx != 0">
+					and o.warehouse_idx = #{warehouse_idx}
+				</if>
+				<if test="user_idx != null and user_idx != 0">
+					and o.user_idx = #{user_idx}
+				</if>
+				<if test="status != null and status !=''">
+					and o.status = #{status}
+				</if>
+				<if test="start_date != null and start_date != ''">
+					and o.reg_date >= #{start_date}
+				</if>
+				<if test="end_date != null and end_date != ''">
+					and o.reg_date <![CDATA[<]]>= #{end_date}
+				</if>
+				<if test="reg_date != null and reg_date != ''">
+					and o.reg_date = #{reg_date}
+				</if>
+				<if test="search != null and search != ''">
+					AND (o.order_idx LIKE CONCAT('%', #{search}, '%')
+				OR c.custom_name LIKE CONCAT('%', #{search}, '%')
+				OR w.warehouse_name LIKE CONCAT('%', #{search}, '%')
+				OR u.user_name LIKE CONCAT('%', #{search}, '%')
+				)
+				</if>
+			</where>
+			group by o.order_idx
+		) as sub
 	</select>
 	
-	<select id="orderList" resultType="kr.co.junko.dto.OrderDTO" parameterType="map">
-		select * from `order`
+	<select id="orderList" resultType="map" parameterType="map">
+		select 
+			o.*,
+			c.custom_name,
+			w.warehouse_name,
+			u.user_name,
+			COUNT(op.order_product_idx) as cnt , 
+			p.product_name,
+			SUM(p.purchase_price*op.order_cnt) as price
+		from `order` o
+			join custom c ON c.custom_idx = o.custom_idx
+			join warehouse w on w.warehouse_idx = o.warehouse_idx
+			join `user` u on u.user_idx = o.user_idx 
+			join order_product op on o.order_idx = op.order_idx
+			join product p on op.product_idx = p.product_idx 
 		<where>
-		del_yn = false
+		o.del_yn = false
 			<if test="custom_idx != null and custom_idx != 0">
-				and custom_idx = #{custom_idx}
+				and o.custom_idx = #{custom_idx}
 			</if>
 			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx}
+				and o.warehouse_idx = #{warehouse_idx}
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and o.user_idx = #{user_idx}
 			</if>
 			<if test="status != null and status !=''">
-				and status = #{status}
+				and o.status = #{status}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and reg_date >= #{start_date}
+				and o.reg_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and reg_date <![CDATA[<]]>= #{end_date}
+				and o.reg_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="reg_date != null and reg_date != ''">
-				and reg_date = #{reg_date}
+				and o.reg_date = #{reg_date}
 			</if>
+			<if test="search != null and search != ''">
+					AND (o.order_idx LIKE CONCAT('%', #{search}, '%')
+				OR c.custom_name LIKE CONCAT('%', #{search}, '%')
+				OR w.warehouse_name LIKE CONCAT('%', #{search}, '%')
+				OR u.user_name LIKE CONCAT('%', #{search}, '%')
+				)
+				</if>
 		</where>
+		group by o.order_idx
 		<if test="orderColumn != null and orderColumn !=''">
 			order by ${orderColumn}
 			<if test="orderDirection != null and orderDirection !=''">
@@ -297,7 +342,11 @@
 	</select>
 
 	<select id="orderByIdx" resultType="kr.co.junko.dto.OrderDTO">
-		select * from `order` where order_idx = #{param1}
+		select * from `order` o 
+		join `user` u ON o.user_idx = u.user_idx
+		join warehouse w ON w.warehouse_idx = o.warehouse_idx 
+		join custom c ON c.custom_idx = o.custom_idx
+		where o.order_idx = #{param1}
 	</select>
 	
 	<select id="orderProductByIdx" resultType="kr.co.junko.dto.OrderProductDTO">
@@ -330,5 +379,20 @@
 		set o.del_yn = true, pp.del_yn = true where o.order_idx = #{param1}
 	</update>
 
+	<select id="orderProductsByIdx" resultType="kr.co.junko.dto.OrderProductDTO">
+		select op.*,p.product_name as product_name,c.combined_name as combined_name,p.purchase_price from order_product op 
+		join product p on op.product_idx = p.product_idx
+		left join product_option po on po.product_option_idx = op.product_option_idx 
+		left join combined c on c.combined_idx = po.combined_idx
+		where op.order_idx = #{param1}
+	</select>
+	
+	<select id="orderPlansByIdx" resultType="kr.co.junko.dto.OrderPlanDTO">
+		select * from order_plan where order_idx = #{param1}
+	</select>
+
+	<select id="planProductsByIdx" resultType="kr.co.junko.dto.PlanProductDTO">
+		select * from plan_product where plan_idx = #{param1}
+	</select>
 
 </mapper>

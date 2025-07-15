@@ -15,4 +15,7 @@ public class OrderDTO {
 	private String status;
 	private boolean del_yn;
 	
+	private String user_name;
+	private String custom_name;
+	private String warehouse_name;
 }

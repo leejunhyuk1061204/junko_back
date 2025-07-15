@@ -13,5 +13,8 @@ public class OrderProductDTO {
 	private boolean del_yn;
 	
 	private String tempId; // 매칭용 임시ID
+	private String product_name;
+	private String combined_name;
+	private int purchase_price;
 	
 }

@@ -31,7 +31,7 @@ public interface OrderDAO {
 
 	int orderTotalPage(Map<String, Object> param);
 
-	List<OrderDTO> orderList(Map<String, Object> param);
+	List<Map<String, Object>> orderList(Map<String, Object> param);
 
 	int orderProductTotalPage(Map<String, Object> param);
 
@@ -60,6 +60,16 @@ public interface OrderDAO {
 	int orderProductDelByOrderIdx(int idx);
 
 	int orderPlanDelByOrderIdx(int idx);
+
+	List<OrderProductDTO> orderProductsByIdx(int order_idx);
+
+	List<OrderPlanDTO> orderPlansByIdx(int order_idx);
+
+	List<PlanProductDTO> planProductsByIdx(int plan_idx);
+
+//	List<Map<String, Object>> orderJoinList(Map<String, Object> param);
+//
+//	int orderJoinListTotalPage(Map<String, Object> param);
 
 	
 

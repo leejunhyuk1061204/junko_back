@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.FullOrderDTO;
@@ -15,6 +16,7 @@ import kr.co.junko.dto.OrderDTO;
 import kr.co.junko.dto.OrderPlanDTO;
 import kr.co.junko.dto.OrderProductDTO;
 import kr.co.junko.dto.PlanProductDTO;
+import kr.co.junko.util.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,18 +61,26 @@ public class OrderController {
 	
 	// 발주 등록 트랜잭션
 	@PostMapping(value="/order/full/insert")
-	public Map<String, Object>orderFullInsert(@RequestBody FullOrderDTO dto){
+	public Map<String, Object>orderFullInsert(@RequestBody FullOrderDTO dto,@RequestHeader Map<String, String>header){
 		log.info("dto : {}",dto);
+		log.info("header : {}",header);
 		result = new HashMap<String, Object>(); 
 		
-		try {
-			boolean success = service.orderFullInsert(dto);
-			result.put("success", success);
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("msg", e.getMessage());
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			try {
+				success = service.orderFullInsert(dto);
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				result.put("success", false);
+				result.put("msg", e.getMessage());
+			}
 		}
+		result.put("success", success);
 		return result;
 	}
 	
@@ -225,8 +235,20 @@ public class OrderController {
 			return result;
 		}
 		
+//		@PostMapping(value="/order/join/list")
+//		public Map<String, Object>orderJoinList(@RequestBody Map<String, Object>param){
+//			log.info("param : {}",param);
+//			return service.orderJoinList(param);
+//		}
 	
-	
-	
+		// order_idx 로 전부 가져오기
+		@GetMapping(value="/order/full/detail/{order_idx}")
+		public Map<String, Object>orderFullDetail(@PathVariable int order_idx){
+			log.info("idx : "+order_idx);
+			FullOrderDTO full = service.orderFullDetail(order_idx);
+			Map<String, Object>result = new HashMap<String, Object>();
+			result.put("full", full);
+			return result;
+		}
 
 }

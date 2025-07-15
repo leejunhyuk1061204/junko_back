@@ -20,4 +20,14 @@
 		LIMIT 1
 	</select>
 	
+	<!-- 발주서 수정 -->
+	<update id="orderFileUpdate">
+		update file set type = "발주서", idx=#{param1} where new_filename = #{param2}
+	</update>
+	
+	<!-- 발주서 찾기 -->
+	<select id="fileSearchByOrderIdx" resultType="kr.co.junko.dto.FileDTO">
+		select * from file where type="발주서" and idx = #{param1}
+	</select>
+	
 </mapper>
