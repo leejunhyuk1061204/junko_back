@@ -45,6 +45,7 @@ public class AccountEntryService {
 		int offset = (this.page-1) * limit;
 		result.put("list", dao.accountList(offset,limit));
 		result.put("pages", dao.pages(limit));
+		result.put("total", dao.accountTotalCount());
 		
 		return result;
 	}

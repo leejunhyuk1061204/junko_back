@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,22 +145,29 @@ public class AccountEntryController {
 
 	// 전표 파일 다운로드
 	@GetMapping("/entryFileDown/{file_idx}")
-	public ResponseEntity<InputStreamResource> entryFileDown(@PathVariable int file_idx) throws IOException {
-		FileDTO dto = service.entryFileDown(file_idx);
-		String rootPath = "C:/upload";
-		if ("pdf".equalsIgnoreCase(dto.getType())) rootPath = "C:/upload/pdf";
-		File file = new File(rootPath, dto.getNew_filename().trim());
+	public ResponseEntity<InputStreamResource> entryFileDown(@PathVariable int file_idx,
+	                                                         @RequestParam(required = false) Boolean preview) throws IOException {
+	    FileDTO dto = service.entryFileDown(file_idx);
+	    String rootPath = "C:/upload";
+	    if ("pdf".equalsIgnoreCase(dto.getType())) rootPath = "C:/upload/pdf";
+	    File file = new File(rootPath, dto.getNew_filename());
 
-		if (!file.exists()) throw new FileNotFoundException("존재하지 않는 파일");
+	    if (!file.exists()) throw new FileNotFoundException("존재하지 않는 파일");
 
-		String encodedFilename = URLEncoder.encode(dto.getOri_filename(), "UTF-8").replaceAll("\\+", "%20");
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_TYPE, java.nio.file.Files.probeContentType(file.toPath()));
-		headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFilename);
+	    String encodedFilename = URLEncoder.encode(dto.getOri_filename(), "UTF-8").replaceAll("\\+", "%20");
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath()));
 
-		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-		return ResponseEntity.ok().headers(headers).body(resource);
+	    if (Boolean.TRUE.equals(preview)) {
+	        headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename*=UTF-8''" + encodedFilename); // 👈 미리보기
+	    } else {
+	        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFilename); // 👈 다운로드
+	    }
+
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+	    return ResponseEntity.ok().headers(headers).body(resource);
 	}
+
 
 	// 전표 이력 조회
 	@GetMapping("/accountLog/{entry_idx}")

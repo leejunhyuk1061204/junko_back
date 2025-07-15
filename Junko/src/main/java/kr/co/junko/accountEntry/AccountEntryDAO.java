@@ -57,4 +57,6 @@ public interface AccountEntryDAO {
 
 	int userIdxByLoginId(String loginId);
 
+	int accountTotalCount();
+
 }

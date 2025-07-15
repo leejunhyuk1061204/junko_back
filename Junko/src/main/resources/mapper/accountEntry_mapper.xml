@@ -4,74 +4,100 @@
 <mapper namespace="kr.co.junko.accountEntry.AccountEntryDAO">
 	
 	<select id="accountList" resultType="kr.co.junko.dto.AccountingEntryDTO">
-		SELECT entry_idx 
-		,account_idx
-		,entry_type
-		,amount
-		,entry_date 
-		,custom_idx
-        ,sales_idx
-		FROM accountingEntry
-		WHERE del_yn = false
-		ORDER BY entry_idx DESC
-		LIMIT #{limit} OFFSET #{offset}
-		
+	SELECT 
+  ae.entry_idx, 
+  ae.account_idx, 
+  ae.entry_type, 
+  ae.amount, 
+  ae.entry_date, 
+  ae.custom_idx, 
+  ae.sales_idx,
+  ae.status,  
+  c.custom_name,
+  s.customer AS customer_name,
+  CASE 
+    WHEN f.cnt > 0 THEN true
+    ELSE false
+  END AS has_file
+FROM accountingEntry ae
+LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
+LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
+LEFT JOIN (
+    SELECT idx, COUNT(*) as cnt
+    FROM file
+    WHERE del_yn = 0 AND type = 'accounting'
+    GROUP BY idx
+) f ON ae.entry_idx = f.idx
+WHERE ae.del_yn = false
+ORDER BY ae.entry_idx DESC
+LIMIT #{limit} OFFSET #{offset}
 	</select>
-	
 	<select id="pages" resultType="int">
 		SELECT CEIL(COUNT(entry_idx)/#{param1}) AS pages FROM accountingEntry
 	</select>
 	
+	<select id="accountTotalCount" resultType="int">
+  SELECT COUNT(*) FROM accountingEntry WHERE del_yn = false
+</select>
 	
 	<select id="accountListSearch" parameterType="kr.co.junko.dto.AccountingEntrySearchDTO" resultType="kr.co.junko.dto.AccountingEntryDTO">
-	SELECT * 
-	FROM accountingEntry 
-	WHERE del_yn = false
-	<if test="status != null and status != ''">
-		AND status = #{status}
-	</if>
-	<if test="user_id != null and user_id != ''">
-		AND user_id = #{user_id}
-	</if>
+	SELECT ae.*,ae.status,  c.custom_name, s.customer AS customer_name
+	FROM accountingEntry ae
+	LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
+	LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
+	WHERE ae.del_yn = false
+
 	<if test="keyword != null and keyword != ''">
-		AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+		AND (
+			ae.entry_type LIKE CONCAT('%', #{keyword}, '%')
+			OR c.custom_name LIKE CONCAT('%', #{keyword}, '%')
+			OR s.customer LIKE CONCAT('%', #{keyword}, '%')
+		)
 	</if>
+<if test="custom_name != null and custom_name != ''">
+  AND c.custom_name LIKE CONCAT('%', #{custom_name}, '%')
+</if>
+
+<if test="customer_name != null and customer_name != ''">
+  AND s.customer LIKE CONCAT('%', #{customer_name}, '%')
+</if>
 	<if test="start_date != null">
-		AND reg_date &gt;= #{start_date}
+		AND ae.entry_date &gt;= #{start_date}
 	</if>
 	<if test="end_date != null">
-		AND reg_date &lt;= #{end_date}
+		AND ae.entry_date &lt;= #{end_date}
 	</if>
-	<choose>
-		<when test="orderBy != null and orderDir != null">
-			ORDER BY ${orderBy} ${orderDir}
-		</when>
-		<otherwise>
-			ORDER BY reg_date DESC
-		</otherwise>
-	</choose>
+<if test="entry_type != null and entry_type != ''">
+  AND ae.entry_type = #{entry_type}
+</if>
+
+<if test="status != null and status != ''">
+  AND ae.status = #{status}
+</if>
+	ORDER BY ae.entry_date DESC
 	LIMIT #{limit} OFFSET #{page}
 </select>
 
 <select id="accountListSearchCount" parameterType="kr.co.junko.dto.AccountingEntrySearchDTO" resultType="int">
-	SELECT COUNT(*)
-	FROM accountingEntry
-	WHERE del_yn = false
-	<if test="status != null and status != ''">
-		AND status = #{status}
-	</if>
-	<if test="user_id != null and user_id != ''">
-		AND user_id = #{user_id}
-	</if>
-	<if test="keyword != null and keyword != ''">
-		AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
-	</if>
-	<if test="start_date != null">
-		AND reg_date &gt;= #{start_date}
-	</if>
-	<if test="end_date != null">
-		AND reg_date &lt;= #{end_date}
-	</if>
+  SELECT COUNT(*)
+  FROM accountingEntry ae
+  LEFT JOIN custom c ON ae.custom_idx = c.custom_idx
+  LEFT JOIN sales s ON ae.sales_idx = s.sales_idx
+  WHERE ae.del_yn = false
+
+  <if test="custom_name != null and custom_name != ''">
+  AND c.custom_name LIKE CONCAT('%', #{custom_name}, '%')
+</if>
+
+<if test="customer_name != null and customer_name != ''">
+  AND s.customer LIKE CONCAT('%', #{customer_name}, '%')
+</if>
+  <if test="start_date != null">
+    AND ae.entry_date &gt;= #{start_date}
+  </if>
+  <if test="end_date != null">
+    AND ae.entry_date &lt;= #{end_date}
+  </if>
 </select>
 	
 	
