@@ -36,9 +36,9 @@ public class OptionController {
     public Map<String, Object> optionInsert(
             @RequestBody OptionDTO dto,
             @RequestHeader Map<String, String> header) {
-        
+
         log.info("dto : {}", dto);
-        result = new HashMap<String, Object>();
+        result = new HashMap<>();
 
         String token = header.get("authorization");
         Map<String, Object> payload = Jwt.readToken(token);
@@ -46,12 +46,15 @@ public class OptionController {
 
         boolean login = loginId != null && !loginId.isEmpty();
         boolean success = false;
+        Integer option_idx = null;
 
         if (login) {
-            success = service.optionInsert(dto);
+            option_idx = service.ensureOptionExists(dto.getOption_name(), dto.getOption_value());
+            success = option_idx != null;
         }
 
         result.put("success", success);
+        result.put("option_idx", option_idx);
         result.put("loginYN", login);
         return result;
     }
@@ -106,11 +109,13 @@ public class OptionController {
     // 상품에 옵션 연결
     @PostMapping("/option/use")
     public Map<String, Object> optionUse(@RequestBody UsingOptionDTO dto) {
+        result = new HashMap<>();
 
-        result = new HashMap<String, Object>();
+        Integer using_idx = service.optionUseReturnIdx(dto);
+        boolean success = using_idx != null;
 
-        boolean success = service.optionUse(dto);
         result.put("success", success);
+        result.put("using_idx", using_idx);
         return result;
     }
 
@@ -231,6 +236,36 @@ public class OptionController {
         result = new HashMap<>();
         List<CombinedDTO> list = service.combinedListProduct(product_idx);
         result.put("list", list);
+        return result;
+    }
+    
+	 // 전체 옵션 리스트 조회
+    @GetMapping("/option/list")
+    public Map<String, Object> optionList() {
+        result = new HashMap<>();
+        List<OptionDTO> list = service.optionList();
+        result.put("list", list);
+        return result;
+    }
+
+    // 조합된 모든 옵션 삭제
+    @PutMapping("/option/combined/deleteAll/{product_idx}")
+    public Map<String, Object> deleteAllCombined(@PathVariable int product_idx,
+                                                 @RequestHeader Map<String, String> header) {
+        result = new HashMap<>();
+        String token = header.get("authorization");
+        Map<String, Object> payload = Jwt.readToken(token);
+        String loginId = (String) payload.get("user_id");
+
+        boolean login = loginId != null && !loginId.isEmpty();
+        boolean success = false;
+
+        if (login) {
+            success = service.deleteAllCombinedByProduct(product_idx);
+        }
+
+        result.put("success", success);
+        result.put("loginYN", login);
         return result;
     }
 

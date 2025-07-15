@@ -9,5 +9,7 @@ public class OptionDTO {
     private String option_name;
     private String option_value;
     private int del_yn;
+    
+    private Integer using_idx;
 
 }

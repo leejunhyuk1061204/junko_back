@@ -1,11 +1,13 @@
 package kr.co.junko.option;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.dto.CombinedDTO;
 import kr.co.junko.dto.OptionDTO;
@@ -38,12 +40,13 @@ public class OptionService {
     }
 
     // 옵션 사용 등록
-    public boolean optionUse(UsingOptionDTO dto) {
-            // 옵션이 실제 존재하고 del_yn = 0인지 검증
+    public Integer optionUseReturnIdx(UsingOptionDTO dto) {
         OptionDTO option = dao.selectOptionByIdx(dto.getOption_idx());
-        if (option == null || option.getDel_yn() != 0) return false;
+        // 옵션이 실제 존재하고 del_yn = 0인지 검증
+        if (option == null || option.getDel_yn() != 0) return null;
 
-        return dao.optionUse(dto) > 0;
+        dao.optionUse(dto);
+        return dao.getLastInsertId();
     }
 
     // 옵션 사용 삭제
@@ -161,4 +164,34 @@ public class OptionService {
         return dao.combinedListProduct(product_idx);
     }
 
+    public OptionDTO getOptionByNameValue(String name, String value) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("option_name", name);
+        param.put("option_value", value);
+        return dao.selectOptionByNameValue(param);
+    }
+
+    public Integer ensureOptionExists(String name, String value) {
+        OptionDTO exist = getOptionByNameValue(name, value);
+        if (exist != null) return exist.getOption_idx();
+
+        // 없으면 새로 등록
+        OptionDTO newOption = new OptionDTO();
+        newOption.setOption_name(name);
+        newOption.setOption_value(value);
+        dao.optionInsert(newOption); // 이 때 keyProperty="option_idx"로 newOption에 값 세팅
+        return newOption.getOption_idx();
+    }
+
+	public List<OptionDTO> optionList() {
+		return dao.optionList();
+	}
+
+	@Transactional
+	public boolean deleteAllCombinedByProduct(int product_idx) {
+	    int deletedProductOptions = dao.deleteProductOptionsByProduct(product_idx);
+	    int deletedCombined = dao.deleteCombinedByProduct(product_idx);
+	    return deletedProductOptions >= 0 && deletedCombined >= 0;
+	}
+	
 }

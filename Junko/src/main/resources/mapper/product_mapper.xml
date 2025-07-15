@@ -66,27 +66,46 @@
 	</update>
 
 	<!-- 상품 목록 조회 -->
-	<select id="productList" resultType="kr.co.junko.dto.ProductDTO">
-		SELECT 
-			p.*, 
-			c.category_name 
-		FROM product p
-		LEFT JOIN category c ON p.category_idx = c.category_idx
-		WHERE p.del_yn = '0'
-		<if test="search != null and search != ''">
-			AND (p.product_name LIKE CONCAT('%', #{search}, '%')
-				OR p.product_idx LIKE CONCAT('%', #{search}, '%'))
-		</if>
-		<if test="category != 0">
-			AND p.category_idx = #{category}
-		</if>
-		ORDER BY 
-		<choose>
-			<when test="sort == 'price_asc'">p.selling_price ASC</when>
-			<when test="sort == 'price_desc'">p.selling_price DESC</when>
-			<otherwise>p.product_idx DESC</otherwise>
-		</choose>
-		LIMIT #{start}, #{size}
+	<select id="getProductList" parameterType="map" resultType="kr.co.junko.dto.ProductDTO">
+	    SELECT 
+	        p.*, c.category_name
+	    FROM product p
+	    LEFT JOIN category c ON p.category_idx = c.category_idx
+	    WHERE p.category_idx IN
+	    <foreach item="id" collection="categoryList" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	    AND p.del_yn = 0
+	    <if test="search != null and search != ''">
+	        AND (
+	            p.product_name LIKE CONCAT('%', #{search}, '%')
+	            OR CAST(p.product_idx AS CHAR) LIKE CONCAT('%', #{search}, '%')
+	        )
+	    </if>
+	    ORDER BY 
+	    <choose>
+	        <when test="sort == 'oldest'">p.product_idx ASC</when>
+	        <when test="sort == 'price_asc'">p.selling_price ASC</when>
+	        <when test="sort == 'price_desc'">p.selling_price DESC</when>
+	        <otherwise>p.product_idx DESC</otherwise>
+	    </choose>
+	    LIMIT #{start}, #{size}
+	</select>
+	
+	<select id="getProductCateIdxTotal" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM product
+	    WHERE category_idx IN
+	    <foreach item="id" collection="categoryList" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	    AND del_yn = 0
+	    <if test="search != null and search != ''">
+	        AND (
+	            product_name LIKE CONCAT('%', #{search}, '%')
+	            OR CAST(product_idx AS CHAR) LIKE CONCAT('%', #{search}, '%')
+	        )
+	    </if>
 	</select>
 
 	<!-- 상품 총 개수 조회 -->
@@ -235,6 +254,23 @@
 				OR p.product_idx LIKE CONCAT('%', #{search}, '%'))
 			</if>
 		</where>
+	</select>
+	
+	<select id="getProductCateIdx" parameterType="map" resultType="kr.co.junko.dto.ProductDTO">
+	    SELECT 
+	        p.*, c.category_name
+	    FROM product p
+	    LEFT JOIN category c ON p.category_idx = c.category_idx
+	    WHERE p.category_idx IN
+	    <foreach item="id" collection="categoryList" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	    AND p.del_yn = 0
+	    ORDER BY 
+	    <choose>
+	        <when test="sort == 'oldest'">p.product_idx ASC</when>
+	        <otherwise>p.product_idx DESC</otherwise>
+	    </choose>
 	</select>
 	
 </mapper>

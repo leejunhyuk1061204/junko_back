@@ -56,5 +56,17 @@ public interface AccountEntryDAO {
 	int accountListSearchCount(AccountingEntrySearchDTO dto);
 
 	int userIdxByLoginId(String loginId);
+ 
+	int accountTotalCount();
+
+	int findCustomIdxByName(String name);
+
+	int findSalesIdxByName(String name);
+
+	void deletePdfByEntryIdx(int entry_idx);
+
+	FileDTO getPdfFileByEntryIdx(int entry_idx);
+
+	void deletePdfPhysicallyByEntryIdx(int entry_idx);
 
 }

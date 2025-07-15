@@ -38,5 +38,9 @@
 	<select id="childCategoryIdx" parameterType="int" resultType="kr.co.junko.dto.CategoryDTO">
 		SELECT * FROM category WHERE category_parent = #{category_idx}
 	</select>
+	
+	<select id="catePath" parameterType="int" resultType="kr.co.junko.dto.CategoryDTO">
+	    SELECT * FROM category WHERE category_idx = #{category_idx}
+	</select>
 
 </mapper>

@@ -1,6 +1,7 @@
 package kr.co.junko.option;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -47,5 +48,15 @@ public interface OptionDAO {
     List<CombinedDTO> combinedListProduct(int product_idx);
     
     String searchOptionName(int product_option_idx);
+
+	OptionDTO selectOptionByNameValue(Map<String, Object> param);
+
+	List<OptionDTO> optionList();
+
+	Integer getLastInsertId();
+
+	int deleteProductOptionsByProduct(int product_idx);
+
+	int deleteCombinedByProduct(int product_idx);
 
 }

@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,6 +180,8 @@ public class ProductService {
 	public boolean updateProductImg(int product_idx, MultipartFile[] files, List<String> remainFileNames) {
 		log.info("남겨야 할 이미지 파일명 목록: {}", remainFileNames);
 
+		if (remainFileNames == null) remainFileNames = new ArrayList<>();
+		
 		// 1. 현재 DB에 있는 이미지들 조회
 		List<String> dbFileNames = dao.selectProductImages(product_idx);
 
@@ -307,6 +310,14 @@ public class ProductService {
 		result.put("total", total);
 		result.put("page", param.get("page"));
 		return result;
+	}
+
+	public List<ProductDTO> getProductList(Map<String, Object> map) {
+		return dao.getProductList(map);
+	}
+
+	public int getProductCateIdxTotal(Map<String, Object> param) {
+	    return dao.getProductCateIdxTotal(param);
 	}
 
 }

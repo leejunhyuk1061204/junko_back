@@ -45,6 +45,7 @@ public class AccountEntryService {
 		int offset = (this.page-1) * limit;
 		result.put("list", dao.accountList(offset,limit));
 		result.put("pages", dao.pages(limit));
+		result.put("total", dao.accountTotalCount());
 		
 		return result;
 	}
@@ -59,11 +60,40 @@ public class AccountEntryService {
 	}
 
 	public boolean accountUpdate(int entry_idx, AccountingEntryDTO dto, String user_id) {
-		return dao.accountUpdate(entry_idx,dto,user_id);
+	    boolean result = dao.accountUpdate(entry_idx, dto, user_id);
+	    
+	    if (result) {
+	        //기존 PDF 삭제
+	        dao.deletePdfByEntryIdx(entry_idx);
+
+	        // 새 PDF 생성
+	        try {
+	            accountPdf(entry_idx, 10);
+	        } catch (Exception e) {
+	            log.error("❌ 수정 후 PDF 생성 실패", e);
+	            throw new RuntimeException("수정은 되었으나 PDF 재생성 실패");
+	        }
+	    }
+	    
+	    return result;
 	}
 
 	public boolean accountDelete(int entry_idx, String user_id) {
-		return dao.accountDelete(entry_idx, user_id);
+	    // 1. PDF 파일 삭제
+	    try {
+	        FileDTO pdfFile = dao.getPdfFileByEntryIdx(entry_idx);
+	        if (pdfFile != null) {
+	            String path = "C:/upload/pdf/" + pdfFile.getNew_filename();
+	            File file = new File(path);
+	            if (file.exists()) file.delete(); // 실제 파일 삭제
+	            dao.deletePdfPhysicallyByEntryIdx(entry_idx); // DB에서도 삭제
+	        }
+	    } catch (Exception e) {
+	        log.error("PDF 삭제 중 오류", e);
+	    }
+
+	    // 2. 전표 논리삭제
+	    return dao.accountDelete(entry_idx, user_id);
 	}
 
 	public void accountStatusUpdate(int entry_idx, String newStatus, int user_idx, String logMsg) {
@@ -155,37 +185,31 @@ public class AccountEntryService {
 
 	@Transactional
 	public FileDTO accountPdf(int entry_idx, int template_idx) throws Exception {
-	    // 전표 상세 정보 조회
 	    Map<String, Object> data = dao.accountDetail(entry_idx);
 	    if (data == null || data.isEmpty()) {
 	        throw new IllegalArgumentException("전표 정보가 없습니다.");
 	    }
 
-	    // 템플릿 조회
 	    TemplateDTO template = templateService.getTemplate(template_idx);
 	    if (template == null) {
 	        throw new IllegalArgumentException("템플릿이 존재하지 않습니다.");
 	    }
 
 	    String html = template.getTemplate_html();
-
-	    // 변수 치환
 	    List<TemplateVarDTO> varList = templateService.templateVarList(template_idx);
-	    log.info(("치환 전 html: \n" + html));
+
 	    for (TemplateVarDTO var : varList) {
 	        String key = var.getVariable_name();
 	        String value = String.valueOf(data.getOrDefault(key, "N/A"));
-	        log.info(("치환 변수: " + key + " = " + value));
 	        html = html.replace("{{" + key + "}}", value);
 	    }
-	    log.info("치환 후 html: \n" + html);
-	    // PDF 경로 설정
-	    String uploadRoot = "c:/upload/pdf";
+
+	    // ✅ PDF 저장 경로 처리
+	    String uploadRoot = "C:/upload/pdf";
 	    new File(uploadRoot).mkdirs();
 	    String fileName = "account_" + UUID.randomUUID().toString().substring(0, 8) + ".pdf";
 	    String filePath = Paths.get(uploadRoot, fileName).toString();
 
-	    // PDF 생성
 	    try (OutputStream os = new FileOutputStream(filePath)) {
 	        PdfRendererBuilder builder = new PdfRendererBuilder();
 	        builder.useFastMode();
@@ -195,7 +219,6 @@ public class AccountEntryService {
 	        builder.run();
 	    }
 
-	    // 파일 테이블 저장
 	    FileDTO file = new FileDTO();
 	    file.setOri_filename("전표 PDF");
 	    file.setNew_filename(fileName);
@@ -204,10 +227,10 @@ public class AccountEntryService {
 	    file.setIdx(entry_idx);
 	    file.setDel_yn(false);
 	    dao.accountPdf(file);
-	    
-	    
+
 	    return file;
 	}
+
 
 	public Map<String, Object> accountListSearch(AccountingEntrySearchDTO dto) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -228,25 +251,67 @@ public class AccountEntryService {
 	public int userIdxByLoginId(String loginId) {
 		return dao.userIdxByLoginId(loginId);
 	}
+	
+	public int findCustomIdxByName(String name) {
+		
+		return dao.findCustomIdxByName(name);
+	}
+
+	public int findSalesIdxByName(String name) {
+		return dao.findSalesIdxByName(name);
+	}
+
+	@Transactional
+	public void insertAccountingEntry(AccountingEntryDTO dto, MultipartFile file) {
+	    // 1. 전표 등록
+	    dao.accountRegist(dto); // entry_idx 생성됨
+
+	    // 2. 첨부파일 처리
+	    if (file != null && !file.isEmpty()) {
+	        try {
+	            String ori = file.getOriginalFilename();
+	            String ext = ori.substring(ori.lastIndexOf('.'));
+	            String uuid = UUID.randomUUID().toString();
+	            String newName = uuid + ext;
+
+	            String uploadPath = "C:/upload"; // 운영 환경이 Windows라서 유지
+	            new File(uploadPath).mkdirs();
+
+	            File saveFile = new File(uploadPath, newName);
+	            file.transferTo(saveFile);
+
+	            FileDTO fileDTO = new FileDTO();
+	            fileDTO.setOri_filename(ori);
+	            fileDTO.setNew_filename(newName);
+	            fileDTO.setReg_date(LocalDateTime.now());
+	            fileDTO.setType("accounting");
+	            fileDTO.setIdx(dto.getEntry_idx());
+	            fileDTO.setDel_yn(false);
+
+	            dao.accountFile(fileDTO);
+	        } catch (Exception e) {
+	            throw new RuntimeException("파일 저장 실패", e); // 예외 발생 시 전체 롤백
+	        }
+	    }
+
+	    // 3. PDF 자동 생성 (필수)
+	    try {
+	        log.info("✅ 전표 등록 완료, PDF 생성 시도");
+	        int defaultTemplateIdx = 10;
+	        FileDTO pdf = accountPdf(dto.getEntry_idx(), defaultTemplateIdx);
+
+	        if (pdf == null) {
+	            throw new RuntimeException("PDF 생성 실패: 결과 파일이 null");
+	        }
+	    } catch (Exception e) {
+	        log.error("❌ 전표 PDF 자동 생성 실패", e);
+	        throw new RuntimeException("PDF 생성 중 오류", e); // 전체 트랜잭션 롤백
+	    }
+	}
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
 	
 
 }
