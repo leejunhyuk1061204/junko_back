@@ -30,29 +30,23 @@ public class ChartController {
 	@PostMapping("/list/chart")
 	public Map<String, Object> chart(@RequestBody Map<String, Object> param,
 			@RequestHeader Map<String, String> header) {
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+		log.info("param : {}",param);
 		Map<String, Object> result = new HashMap<String, Object>();
 		Integer categoryIdx = (Integer) param.get("categoryIdx");
 		String startDate = (String) param.get("startDate");
 		String endDate = (String) param.get("endDate");
 		
-		if (loginId != null && !loginId.isEmpty()) {
-			if(categoryIdx != null) {
-				param.put("categoryIdx", categoryIdx);
-			}
-			if (startDate != null && endDate != null) {
-		        param.put("startDate", startDate);
-		        param.put("endDate", endDate);
-		    }
-			
-			Map<String, Object> chartData = service.chart(param);
-			result.put("success", true);
-			result.put("loginYN", true);
-			result.put("chartData", chartData);
-		}else {
-			result.put("success", false);
-			result.put("loginYN", false);
+		if(categoryIdx != null) {
+			param.put("categoryIdx", categoryIdx);
 		}
+		if (startDate != null && endDate != null) {
+	        param.put("startDate", startDate);
+	        param.put("endDate", endDate);
+	    }
+		Map<String, Object> chartData = service.chart(param);
+		result.put("success", true);
+		result.put("chartData", chartData);
+		
 		return result;
 	}
 	
