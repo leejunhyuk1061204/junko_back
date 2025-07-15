@@ -1,10 +1,17 @@
 package kr.co.junko.file;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.FileDTO;
@@ -26,7 +34,10 @@ import lombok.extern.slf4j.Slf4j;
 public class FileController {
 
 	private final FileService service;
+	private final FileDAO filedao;
 	Map<String, Object> result = null;
+	@Value("${spring.servlet.multipart.location}") 
+	private String root;
 	
 	@GetMapping(value="/file/search/{order_idx}")
 	public Map<String, Object>fileSearchByOrderIdx(@PathVariable int order_idx){
@@ -41,23 +52,90 @@ public class FileController {
 		}
 		return result;
 	}
-	
-	private final Path fileStorageLocation = Paths.get("C:/uploads/pdf"); // 파일 저장 경로
 
     @GetMapping("/pdf/preview/{fileName}")
-    public ResponseEntity<Resource> serveFile(@PathVariable String fileName) throws Exception {
-        Path filePath = fileStorageLocation.resolve(fileName).normalize();
-        Resource resource = new UrlResource(filePath.toUri());
+    public ResponseEntity<Resource> viewPdf(@PathVariable String fileName) throws Exception {
+        String filePath = "C:/upload/pdf/"+fileName;
+        File file = new File(filePath);
+        
+        if(!file.exists()) {
+        	ResponseEntity.notFound().build();
+        }
+        Resource resource = new InputStreamResource(new FileInputStream(file));
+        
+        return ResponseEntity.ok().
+        		header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""+fileName+"\"").
+        		contentType(MediaType.APPLICATION_PDF).
+        		body(resource);
+    }
+    
+ // PDF 다운로드
+    @GetMapping(value="/download/pdf")
+    public ResponseEntity<?> downloadPDF(@RequestParam String idx, String type) {
+        return sendFile(Integer.parseInt(idx), "pdf", "application/pdf",type);
+    }
 
-        if (resource.exists()) {
+    // DOCX 다운로드
+    @GetMapping(value="/download/docx")
+    public ResponseEntity<?> downloadDOCX(@RequestParam String idx, String type) {
+        return sendFile(Integer.parseInt(idx), "docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",type);
+    }
+    
+    // 파일 다운로드
+    private ResponseEntity<?> sendFile(int idx, String ext, String contentType, String type) {
+        Map<String, Object> result = new HashMap<>();
+        
+        Map<String, Object> param = new HashMap<>();
+        param.put("type", type);
+        param.put("idx", idx);
+        param.put("ext", ext); // "pdf" or "docx"
+
+        FileDTO file = filedao.selectTypeIdx(param);
+
+        if (file == null || !file.getNew_filename().endsWith("." + ext)) {
+            result.put("success", false);
+            result.put("message", ext.toUpperCase() + " 파일 정보가 없습니다.");
+            return ResponseEntity.status(404).body(result);
+        }
+
+        // 업로드된 실제 파일의 경로 만들기
+        File actualFile = new File(root+"/" + ext + "/" + file.getNew_filename());
+        // 파일 없으면?
+        if (!actualFile.exists()) {
+            result.put("success", false);
+            result.put("message", ext.toUpperCase() + " 파일이 존재하지 않습니다.");
+            return ResponseEntity.status(404).body(result);
+        }
+
+        // 파일 인코딩 하기 (한글 파일명 인식할 수 있도록)
+        try {
+            String encodedFilename = URLEncoder.encode(file.getOri_filename() + "." + ext, StandardCharsets.UTF_8.toString())
+                    .replaceAll("\\+", "%20");
+
+            // 어떤 파일인지 브라우저에 알려주기
+            // PDF 면 application/pdf
+            // DOCX 면 application/vnd.openxmlformats-officedocument.wordprocessingml.document
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            
+            // Content=Dixposition : 다운로드 하라고 브라우저에 알려주는 헤더
+            // attachment : 무조건 다운로드 하게 함.
+            // filename : 인코딩된 한글 파일명도 깨지지 않게 함.
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFilename);
+
+            // 실제 파일 Resource 객체로 감싸기
+            Resource resource = new FileSystemResource(actualFile);
+            
+            // 클라이언트로 파일 보내기
             return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .headers(headers)
                     .body(resource);
-        } else {
-            throw new Exception("파일을 찾을 수 없습니다.");
+
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "파일 전송 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(result);
         }
     }
-	
 	
 }
