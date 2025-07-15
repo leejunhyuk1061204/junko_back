@@ -312,8 +312,12 @@ public class ProductService {
 		return result;
 	}
 
-	public List<ProductDTO> getProductCateIdx(Map<String, Object> map) {
-		return dao.getProductCateIdx(map);
+	public List<ProductDTO> getProductList(Map<String, Object> map) {
+		return dao.getProductList(map);
+	}
+
+	public int getProductCateIdxTotal(Map<String, Object> param) {
+	    return dao.getProductCateIdxTotal(param);
 	}
 
 }

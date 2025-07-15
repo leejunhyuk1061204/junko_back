@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.junko.category.CategoryService;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.ProductDTO;
 import kr.co.junko.util.Jwt;
@@ -38,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductController {
 
 	@Autowired ProductService service;
+	@Autowired CategoryService categoryService;
 	
 	Map<String, Object> result = null;
 	
@@ -234,29 +236,30 @@ public class ProductController {
 
 	// 상품 목록
 	@PostMapping("/product/list")
-	public Map<String, Object> productList(
-		@RequestBody Map<String, Object> param,
-		@RequestHeader Map<String, String> header) {
+	public Map<String, Object> getProductList(@RequestBody Map<String, Object> param) {
+	    int category_idx = (int) param.getOrDefault("category_idx", 0);
+	    String search = (String) param.getOrDefault("search", "");
+	    String sort = (String) param.getOrDefault("sort", "latest");
+	    int page = (int) param.getOrDefault("page", 1);
+	    int size = (int) param.getOrDefault("size", 10);
 
-		result = new HashMap<>();
+	    // ✅ 카테고리 + 하위 포함 리스트 구하기
+	    List<Integer> categoryList = categoryService.getCategoryWithChildren(category_idx);
+	    int start = (page - 1) * size;
 
-		String token = header.get("authorization");
+	    param.put("categoryList", categoryList);
+	    param.put("start", start);
+	    param.put("size", size);
+	    param.put("search", search.trim());
+	    param.put("sort", sort);
 
-		String loginId = null;
-		if (token != null && !token.equals("null")) {
-			Map<String, Object> payload = Jwt.readToken(token);
-			loginId = (String) payload.get("user_id");
-		}
-
-		boolean login = loginId != null && !loginId.isEmpty();
-		result.put("loginYN", login);
-
-		Map<String, Object> data = service.productList(param);
-		result.putAll(data);
-		result.put("success", true);
-
-		return result;
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("list", service.getProductList(param));
+	    result.put("total", service.getProductCateIdxTotal(param));
+	    result.put("success", true);
+	    return result;
 	}
+
 	
 	// 문서 업로드
 	@PostMapping("/product/{product_idx}/docs")
@@ -314,20 +317,12 @@ public class ProductController {
 	    return result;
 	}
 
-	// 문서 다운로드
+	// 문서 미리보기 or 다운로드 - Authorization 없이 가능하게
 	@GetMapping("/product/docs/{fileName}")
-	public ResponseEntity<Resource> downloadProductDoc(
-	    @PathVariable("fileName") String fileName,
-	    @RequestHeader Map<String, String> header) {
+	public ResponseEntity<Resource> publicProductDoc(
+	    @PathVariable("fileName") String fileName) {
 
 	    try {
-	        String token = header.get("authorization");
-	        Map<String, Object> payload = Jwt.readToken(token);
-	        String loginId = (String) payload.get("user_id");
-
-	        boolean login = loginId != null && !loginId.isEmpty();
-	        if (!login) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
 	        // ori_filename 조회
 	        String oriFilename = service.downloadProductDoc(fileName);
 	        if (oriFilename == null) return ResponseEntity.notFound().build();
@@ -341,17 +336,17 @@ public class ProductController {
 	        String contentType = Files.probeContentType(filePath);
 	        if (contentType == null) contentType = "application/octet-stream";
 
-	        // 다운로드 응답 반환
 	        return ResponseEntity.ok()
 	                .contentType(MediaType.parseMediaType(contentType))
-	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + oriFilename + "\"")
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + oriFilename + "\"")
 	                .body(resource);
 
 	    } catch (Exception e) {
-	        log.error("문서 다운로드 실패: {}", fileName, e);
+	        log.error("문서 미리보기 실패: {}", fileName, e);
 	        return ResponseEntity.internalServerError().build();
 	    }
 	}
+
 
 	// 상품 상세보기
 	@GetMapping("/product/detail/{product_idx}")

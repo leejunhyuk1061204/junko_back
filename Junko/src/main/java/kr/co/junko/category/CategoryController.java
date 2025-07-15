@@ -156,41 +156,6 @@ public class CategoryController {
 		return result;
 	}
 	
-	// 특정 카테고리의 하위 카테고리 상품 전부 조회
-	@PostMapping("/cate/product/list")
-	public Map<String, Object> cateProductList(@RequestBody Map<String, Object> param){
-		Map<String, Object> result = new HashMap<String, Object>();
-		
-	    int category_idx = (int) param.get("category_idx");
-	    int page = (int) param.getOrDefault("page", 1);
-	    int size = (int) param.getOrDefault("size", 10);
-	    int start = (page - 1) * size;
-	    String sort = (String) param.getOrDefault("sort", "latest");
-
-	    // 자식 포함 전체 카테고리
-	    ArrayList<Integer> categoryList = service.childCategoryIdx(category_idx);
-	    categoryList.add(category_idx);
-
-	    Map<String, Object> map = new HashMap<>();
-	    map.put("categoryList", categoryList);
-	    map.put("sort", sort);
-	    
-	    // 전체 상품 가져오기
-	    List<ProductDTO> productList = productService.getProductCateIdx(map);
-	    int total = productList.size();
-
-	    // 페이징
-	    List<ProductDTO> pagedList = productList.stream()
-	        .skip(start)
-	        .limit(size)
-	        .collect(Collectors.toList());
-
-	    result.put("list", pagedList);
-	    result.put("total", total);
-		
-		return result;
-	}
-	
 	// 카테고리 경로 조회
 	@GetMapping("/cate/path")
 	public Map<String, Object> catePath(@RequestParam int category_idx){

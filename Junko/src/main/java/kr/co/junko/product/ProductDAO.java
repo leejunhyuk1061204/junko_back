@@ -53,6 +53,8 @@ public interface ProductDAO {
 
 	int productNoptionListTotalPage(Map<String, Object> param);
 
-	List<ProductDTO> getProductCateIdx(Map<String, Object> map);
+	List<ProductDTO> getProductList(Map<String, Object> map);
+
+	int getProductCateIdxTotal(Map<String, Object> param);
 
 }

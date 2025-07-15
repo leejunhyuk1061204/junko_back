@@ -108,5 +108,12 @@ public class CategoryService {
 	        }
 	    }
 	}
+	
+	public List<Integer> getCategoryWithChildren(int category_idx) {
+	    ArrayList<Integer> result = new ArrayList<>();
+	    result.add(category_idx); // 본인 포함
+	    collectChildren(category_idx, result); // 하위 카테고리 재귀 호출
+	    return result;
+	}
 
 }

@@ -4,10 +4,11 @@
 <mapper namespace="kr.co.junko.option.OptionDAO">
 
     <!-- 옵션 등록 -->
-    <insert id="optionInsert" parameterType="kr.co.junko.dto.OptionDTO">
-        INSERT INTO option (option_idx, option_name, option_value)
-            VALUES (#{option_idx}, #{option_name}, #{option_value})
-    </insert>
+	<insert id="optionInsert" parameterType="kr.co.junko.dto.OptionDTO"
+	        useGeneratedKeys="true" keyProperty="option_idx">
+	    INSERT INTO option (option_name, option_value)
+	    VALUES (#{option_name}, #{option_value})
+	</insert>
 
     <!-- 옵션 수정 -->
     <update id="optionUpdate" parameterType="kr.co.junko.dto.OptionDTO">
@@ -40,10 +41,16 @@
     </select>
 
     <!-- 상품에 옵션 연결 -->
-    <insert id="optionUse">
-        INSERT INTO using_option (product_idx, option_idx)
-            VALUES (#{product_idx}, #{option_idx})
-    </insert>
+	<insert id="optionUse" parameterType="kr.co.junko.dto.OptionDTO"
+	        useGeneratedKeys="true" keyProperty="using_idx">
+	    INSERT INTO using_option (product_idx, option_idx)
+	    VALUES (#{product_idx}, #{option_idx})
+	</insert>
+
+	<!-- 가장 최근 인서트 아이디 가져오기 -->
+	<select id="getLastInsertId" resultType="int">
+	    SELECT LAST_INSERT_ID()
+	</select>
 
     <!-- 상품에 연결된 옵션 해제 (소프트 딜리트) -->
     <update id="optionUseDel">
@@ -146,5 +153,42 @@
 	<select id="searchOptionName">
 		select c.combined_name from product_option po join combined c on po.combined_idx = c.combined_idx where po.product_option_idx = #{param1}
 	</select>
+	
+	<!-- 이름 + 값으로 옵션 존재 여부 조회 -->
+	<select id="selectOptionByNameValue" parameterType="map" resultType="kr.co.junko.dto.OptionDTO">
+	    SELECT *
+	    FROM option
+	    WHERE option_name = #{option_name}
+	      AND option_value = #{option_value}
+	      AND del_yn = 0
+	</select>
+	
+	<!-- 전체 옵션 리스트 조회 -->
+	<select id="optionList" resultType="kr.co.junko.dto.OptionDTO">
+	    SELECT *
+	    FROM option
+	    WHERE del_yn = 0
+	</select>
+	
+	<!-- 특정 상품의 모든 조합 삭제 -->
+	<!-- 1. product_option 삭제 -->
+	<update id="deleteProductOptionsByProduct" parameterType="int">
+	    UPDATE product_option
+	    SET del_yn = 1
+	    WHERE product_idx = #{product_idx}
+	</update>
+	
+	<!-- 2. combined 삭제 -->
+	<update id="deleteCombinedByProduct" parameterType="int">
+	    UPDATE combined
+	    SET del_yn = 1
+	    WHERE combined_idx IN (
+	        SELECT c.combined_idx
+	        FROM product_option po
+	        JOIN combined c ON po.combined_idx = c.combined_idx
+	        WHERE po.product_idx = #{product_idx}
+	    )
+	</update>
+	
 
 </mapper>
