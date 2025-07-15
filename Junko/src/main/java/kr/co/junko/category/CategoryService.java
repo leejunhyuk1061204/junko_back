@@ -1,6 +1,7 @@
 package kr.co.junko.category;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,24 @@ public class CategoryService {
 			acc.add(child.getCategory_idx());
 			collectChildren(child.getCategory_idx(), acc); // 재귀 호출
 		}
+	}
+
+	public List<String> catePath(int categoryIdx) {
+	    List<String> path = new ArrayList<>();
+	    buildPath(categoryIdx, path);
+	    Collections.reverse(path); // 상위부터 보여주기 위해 역순 정렬
+	    return path;
+	}
+
+	private void buildPath(int categoryIdx, List<String> path) {
+	    CategoryDTO category = dao.catePath(categoryIdx);
+	    if (category != null) {
+	        path.add(category.getCategory_name());
+	        
+	        if (category.getCategory_parent() != null) {
+	            buildPath(category.getCategory_parent(), path); // 재귀 호출
+	        }
+	    }
 	}
 
 }

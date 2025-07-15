@@ -1,5 +1,6 @@
 package kr.co.junko.product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,5 +52,7 @@ public interface ProductDAO {
 	List<Map<String, Object>> productNoptionList(Map<String, Object> param);
 
 	int productNoptionListTotalPage(Map<String, Object> param);
+
+	List<ProductDTO> getProductCateIdx(ArrayList<Integer> categoryIdx);
 
 }

@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -307,6 +308,10 @@ public class ProductService {
 		result.put("total", total);
 		result.put("page", param.get("page"));
 		return result;
+	}
+
+	public List<ProductDTO> getProductCateIdx(ArrayList<Integer> categoryIdx) {
+		return dao.getProductCateIdx(categoryIdx);
 	}
 
 }

@@ -237,4 +237,12 @@
 		</where>
 	</select>
 	
+	<select id="getProductCateIdx" parameterType="list" resultType="kr.co.junko.dto.ProductDTO">
+	    SELECT * FROM product
+	    WHERE category_idx IN
+	    <foreach item="id" collection="list" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	</select>
+	
 </mapper>

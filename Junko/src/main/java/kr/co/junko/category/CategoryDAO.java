@@ -21,4 +21,6 @@ public interface CategoryDAO {
 
     ArrayList<CategoryDTO> childCategoryIdx(int category_idx);
 
+	CategoryDTO catePath(int categoryIdx);
+
 }

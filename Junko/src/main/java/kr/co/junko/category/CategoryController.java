@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.CategoryDTO;
+import kr.co.junko.dto.ProductDTO;
+import kr.co.junko.product.ProductService;
 import kr.co.junko.util.Jwt;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryController {
 
 	@Autowired CategoryService service;
+	@Autowired ProductService productService;
 	
 	Map<String, Object> result = null;
 	
@@ -151,6 +154,31 @@ public class CategoryController {
 
 		return result;
 	}
-
+	
+	// 특정 카테고리의 하위 카테고리 상품 전부 조회
+	@GetMapping("/cate/product/list")
+	public Map<String, Object> cateProductList(@RequestParam int category_idx){
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		ArrayList<Integer> categoryIdx = service.childCategoryIdx(category_idx);
+		categoryIdx.add(category_idx); // 자기 자신도 포함
+		
+		List<ProductDTO> productList = productService.getProductCateIdx(categoryIdx);
+		result.put("list", productList);
+		
+		return result;
+	}
+	
+	// 카테고리 경로 조회
+	@GetMapping("/cate/path")
+	public Map<String, Object> catePath(@RequestParam int category_idx){
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<String> path = service.catePath(category_idx);
+		result.put("path", path);
+		
+		return result;
+	}
+	
 
 }
