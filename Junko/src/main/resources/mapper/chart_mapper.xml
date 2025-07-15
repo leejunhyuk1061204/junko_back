@@ -301,20 +301,50 @@
 		SELECT c.category_name, DATE_FORMAT(s.payment_date, '%Y-%m') AS month
 			,COUNT(sp.sales_product_idx) AS order_cnt
 			<!-- 전년도 매출 -->
-			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1 THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_last_year
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1 THEN IFNULL(sp.product_price, 0)*IFNULL(sp.product_cnt, 0) ELSE 0 END) AS sales_last_year
 			<!-- 이번년도 매출 -->
-			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE()) THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_this_year
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE()) THEN IFNULL(sp.product_price, 0)*IFNULL(sp.product_cnt, 0) ELSE 0 END) AS sales_this_year
 		FROM sales s JOIN sales_product sp ON s.sales_idx=sp.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
 		WHERE s.status IN ('결제 완료','배송중','배송완료')
 			<!-- 올해하고 작년 데이터만 -->
 			AND YEAR(s.payment_date) IN (YEAR(CURDATE()), YEAR(CURDATE())-1)
-			AND p.category_idx IN (SELECT category_idx FROM category_tree)
+				<if test="categoryIdx != null">
+					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
+				</if>
 			    <if test="startDate != null and endDate != null">
 			        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
 			    </if>
 		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m') ORDER BY month
+		
+		<!-- WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, DATE_FORMAT(s.payment_date, '%Y-%m') AS month
+			,COUNT(sp.sales_product_idx) AS order_cnt
+			전년도 매출
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE())-1 THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_last_year
+			이번년도 매출
+			,SUM(CASE WHEN YEAR(s.payment_date)=YEAR(CURDATE()) THEN sp.product_price*sp.product_cnt ELSE 0 END) AS sales_this_year
+		FROM sales s JOIN sales_product sp ON s.sales_idx=sp.sales_idx
+		JOIN product p ON sp.product_idx = p.product_idx
+		JOIN category c ON p.category_idx = c.category_idx
+		WHERE s.status IN ('결제 완료','배송중','배송완료')
+			올해하고 작년 데이터만
+			AND YEAR(s.payment_date) IN (YEAR(CURDATE()), YEAR(CURDATE())-1)
+			AND p.category_idx IN (SELECT category_idx FROM category_tree)
+			    <if test="startDate != null and endDate != null">
+			        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+			    </if>
+		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m') ORDER BY month -->
+		
 	</select>
 	
 	<!-- 전체 상품 중 부족 재고 현황 -->
