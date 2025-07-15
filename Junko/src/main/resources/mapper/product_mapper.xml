@@ -237,12 +237,21 @@
 		</where>
 	</select>
 	
-	<select id="getProductCateIdx" parameterType="list" resultType="kr.co.junko.dto.ProductDTO">
-	    SELECT * FROM product
-	    WHERE category_idx IN
-	    <foreach item="id" collection="list" open="(" separator="," close=")">
+	<select id="getProductCateIdx" parameterType="map" resultType="kr.co.junko.dto.ProductDTO">
+	    SELECT 
+	        p.*, c.category_name
+	    FROM product p
+	    LEFT JOIN category c ON p.category_idx = c.category_idx
+	    WHERE p.category_idx IN
+	    <foreach item="id" collection="categoryList" open="(" separator="," close=")">
 	        #{id}
 	    </foreach>
+	    AND p.del_yn = 0
+	    ORDER BY 
+	    <choose>
+	        <when test="sort == 'oldest'">p.product_idx ASC</when>
+	        <otherwise>p.product_idx DESC</otherwise>
+	    </choose>
 	</select>
 	
 </mapper>

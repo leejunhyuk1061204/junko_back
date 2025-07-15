@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -156,15 +157,36 @@ public class CategoryController {
 	}
 	
 	// 특정 카테고리의 하위 카테고리 상품 전부 조회
-	@GetMapping("/cate/product/list")
-	public Map<String, Object> cateProductList(@RequestParam int category_idx){
+	@PostMapping("/cate/product/list")
+	public Map<String, Object> cateProductList(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		ArrayList<Integer> categoryIdx = service.childCategoryIdx(category_idx);
-		categoryIdx.add(category_idx); // 자기 자신도 포함
-		
-		List<ProductDTO> productList = productService.getProductCateIdx(categoryIdx);
-		result.put("list", productList);
+	    int category_idx = (int) param.get("category_idx");
+	    int page = (int) param.getOrDefault("page", 1);
+	    int size = (int) param.getOrDefault("size", 10);
+	    int start = (page - 1) * size;
+	    String sort = (String) param.getOrDefault("sort", "latest");
+
+	    // 자식 포함 전체 카테고리
+	    ArrayList<Integer> categoryList = service.childCategoryIdx(category_idx);
+	    categoryList.add(category_idx);
+
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("categoryList", categoryList);
+	    map.put("sort", sort);
+	    
+	    // 전체 상품 가져오기
+	    List<ProductDTO> productList = productService.getProductCateIdx(map);
+	    int total = productList.size();
+
+	    // 페이징
+	    List<ProductDTO> pagedList = productList.stream()
+	        .skip(start)
+	        .limit(size)
+	        .collect(Collectors.toList());
+
+	    result.put("list", pagedList);
+	    result.put("total", total);
 		
 		return result;
 	}

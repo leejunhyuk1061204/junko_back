@@ -180,6 +180,8 @@ public class ProductService {
 	public boolean updateProductImg(int product_idx, MultipartFile[] files, List<String> remainFileNames) {
 		log.info("남겨야 할 이미지 파일명 목록: {}", remainFileNames);
 
+		if (remainFileNames == null) remainFileNames = new ArrayList<>();
+		
 		// 1. 현재 DB에 있는 이미지들 조회
 		List<String> dbFileNames = dao.selectProductImages(product_idx);
 
@@ -310,8 +312,8 @@ public class ProductService {
 		return result;
 	}
 
-	public List<ProductDTO> getProductCateIdx(ArrayList<Integer> categoryIdx) {
-		return dao.getProductCateIdx(categoryIdx);
+	public List<ProductDTO> getProductCateIdx(Map<String, Object> map) {
+		return dao.getProductCateIdx(map);
 	}
 
 }
