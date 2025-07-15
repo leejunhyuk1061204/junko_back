@@ -62,6 +62,7 @@ public class MemberController {
 			
 			if (success) {
 				String token = Jwt.setToken("user_id",loginId);
+				result.put("user_idx", dto.getUser_idx()); 
 				result.put("token", token);
 				login = true;
 			}
