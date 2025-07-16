@@ -23,4 +23,6 @@ public interface CategoryDAO {
 
 	CategoryDTO catePath(int categoryIdx);
 
+	int reorder(CategoryDTO dto);
+
 }

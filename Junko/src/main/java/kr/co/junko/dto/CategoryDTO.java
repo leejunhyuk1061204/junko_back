@@ -13,4 +13,6 @@ public class CategoryDTO {
 
 	private List<CategoryDTO> children;
 	
+	private int category_order;
+	
 }
