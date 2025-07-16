@@ -104,7 +104,7 @@ public class ReceiveService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<ReceiveDTO>list = dao.receiveList(param);
+		List<Map<String, Object>>list = dao.receiveList(param);
 		int total = dao.receiveTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
 		result.put("list", list);
@@ -114,16 +114,17 @@ public class ReceiveService {
 	}
 
 	public Map<String, Object> receiveProductList(Map<String, Object> param) {
-		int cnt = 5;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<ReceiveProductDTO>list = dao.receiveProductList(param);
-		int total = dao.receiveProductTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
+		if((boolean)param.get("limit")) {
+			int cnt = 5;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.receiveProductTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.receiveProductList(param);
 		result.put("list", list);
-		result.put("total", total);
-		result.put("page", param.get("page"));
 		return result;
 	}
 	

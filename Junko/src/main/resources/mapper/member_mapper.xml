@@ -13,7 +13,7 @@
 	</select>
 
 	<select id="login" resultType="kr.co.junko.dto.MemberDTO" parameterType="kr.co.junko.dto.MemberDTO">
-		SELECT user_idx, user_id FROM user WHERE user_id = #{user_id} AND pw = #{pw}
+		SELECT user_idx, user_id, user_name FROM user WHERE user_id = #{user_id} AND pw = #{pw}
 	</select>
 	
 	<select id="getUserIdxById" resultType="int" parameterType="String">
