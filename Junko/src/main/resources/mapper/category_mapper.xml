@@ -19,12 +19,15 @@
 		</insert>
 	
 	<update id="cateUpdate" parameterType="kr.co.junko.dto.CategoryDTO">
-		UPDATE category SET category_name=#{category_name}, category_parent=#{category_parent} 
-			where category_idx = #{category_idx}
+	    UPDATE category 
+	    SET category_name = #{category_name}, 
+	        category_parent = #{category_parent},
+	        category_order = #{category_order}
+	    WHERE category_idx = #{category_idx}
 	</update>
 	
 	<select id="cateList" resultType="kr.co.junko.dto.CategoryDTO">
-		SELECT * from category
+   	 	SELECT * FROM category ORDER BY category_parent, category_order
 	</select>
 	
 	<delete id="cateDel" parameterType="kr.co.junko.dto.CategoryDTO">
@@ -42,5 +45,12 @@
 	<select id="catePath" parameterType="int" resultType="kr.co.junko.dto.CategoryDTO">
 	    SELECT * FROM category WHERE category_idx = #{category_idx}
 	</select>
+	
+	<update id="reorder" parameterType="kr.co.junko.dto.CategoryDTO">
+	    UPDATE category 
+	    SET category_order = #{category_order}, category_parent = #{category_parent}
+	    WHERE category_idx = #{category_idx}
+	</update>
+	
 
 </mapper>

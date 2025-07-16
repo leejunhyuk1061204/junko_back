@@ -116,4 +116,12 @@ public class CategoryService {
 	    return result;
 	}
 
+	public boolean reorder(List<CategoryDTO> list) {
+	    int cnt = 0;
+	    for (CategoryDTO dto : list) {
+	        cnt += dao.reorder(dto);
+	    }
+	    return cnt == list.size();
+	}
+
 }

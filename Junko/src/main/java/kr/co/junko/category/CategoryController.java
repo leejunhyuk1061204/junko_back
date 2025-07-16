@@ -167,5 +167,25 @@ public class CategoryController {
 		return result;
 	}
 	
+	// 카테고리 순서
+	@PostMapping("/cate/reorder")
+	public Map<String, Object> reorder(@RequestBody List<CategoryDTO> list,
+	                                   @RequestHeader Map<String, String> header) {
+	    Map<String, Object> result = new HashMap<>();
+	    String token = header.get("authorization");
+	    String loginId = (String) Jwt.readToken(token).get("user_id");
+
+	    boolean login = loginId != null && !loginId.isEmpty();
+	    boolean success = false;
+
+	    if (login) {
+	        success = service.reorder(list);
+	    }
+
+	    result.put("success", success);
+	    result.put("loginYN", login);
+	    return result;
+	}
+
 
 }
