@@ -181,18 +181,28 @@
 		) as sub
 	</select>
 	
-	<select id="receiveProductList" parameterType="map" resultType="kr.co.junko.dto.ReceiveProductDTO">
-		select * from receive_product
+	<select id="receiveProductList" parameterType="map" resultType="map">
+		select 
+			rp.* ,
+			p.product_name,
+			c.combined_name 
+		from receive_product rp 
+			join product p on rp.product_idx = p.product_idx 
+			left join product_option po on rp.product_option_idx = po.product_option_idx
+			left join combined c on po.combined_idx = c.combined_idx
 		<where>
-			del_yn = false
+			rp.del_yn = false
 			<if test="receive_idx != null and receive_idx != 0">
-				and receive_idx=#{receive_idx}
+				and rp.receive_idx=#{receive_idx}
 			</if>
 			<if test="product_idx != null and product_idx != 0">
-				and product_idx=#{product_idx}
+				and rp.product_idx=#{product_idx}
 			</if>
 			<if test="product_option_idx != null and product_option_idx != 0">
-				and product_option_idx=#{product_option_idx}
+				and rp.product_option_idx=#{product_option_idx}
+			</if>
+			<if test="search != null and search != ''">
+				AND p.product_name LIKE CONCAT('%', #{search}, '%')
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn !=''">
@@ -201,7 +211,9 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="limit != null and limit != false">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<select id="receiveProductTotalPage" parameterType="map">
