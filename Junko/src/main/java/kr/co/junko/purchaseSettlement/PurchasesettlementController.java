@@ -53,22 +53,27 @@ public class PurchasesettlementController {
 	}
 
 	@GetMapping("/settlementList")
-	public Map<String, Object> getSettlementList(@RequestParam(required = false) String status,
-												 @RequestParam(required = false) String customName,
-												 @RequestParam(required = false) String startDate,
-												 @RequestParam(required = false) String endDate) {
-		Map<String, Object> result = new HashMap<>();
-		List<PurchaseSettlementDTO> list = service.getFilteredSettlements(status, customName, startDate, endDate);
-		result.put("result", "success");
-		result.put("data", list);
-		return result;
+	public Map<String, Object> getSettlementList(
+	    @RequestParam(required = false) String status,
+	    @RequestParam(required = false) String customName,
+	    @RequestParam(required = false, name = "start") String start,
+	    @RequestParam(required = false, name = "end") String end
+	) {
+	    Map<String, Object> result = new HashMap<>();
+	    List<PurchaseSettlementDTO> list = service.getFilteredSettlements(status, customName, start, end);
+	    result.put("result", "success");
+	    result.put("data", list);
+	    log.info("정산 리스트 사이즈: " + list.size());
+	    log.info("리턴 데이터 맵: " + result);
+
+	    return result;
 	}
 
 	// 정산 등록 (JWT)
 	@PostMapping("/psRegister")
 	public Map<String, Object> psRegister(@RequestBody PurchaseSettlementDTO dto,
 	                                      @RequestHeader Map<String, String> header) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
 		if (loginId != null && !loginId.isEmpty()) {
@@ -95,7 +100,7 @@ public class PurchasesettlementController {
 	public Map<String, Object> settlementUpdate(@PathVariable int settlement_idx,
 	                                            @RequestBody PurchaseSettlementDTO dto,
 	                                            @RequestHeader Map<String, String> header) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
 		if (loginId != null && !loginId.isEmpty()) {
@@ -122,7 +127,7 @@ public class PurchasesettlementController {
 	@DeleteMapping("/settlementDel/{settlement_idx}")
 	public Map<String, Object> settlementDel(@PathVariable int settlement_idx,
 	                                         @RequestHeader Map<String, String> header) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
 		if (loginId != null && !loginId.isEmpty()) {
@@ -140,7 +145,7 @@ public class PurchasesettlementController {
 	@PostMapping("/settlementFinal/{settlement_idx}")
 	public Map<String, Object> settlementFinal(@PathVariable int settlement_idx,
 	                                           @RequestHeader Map<String, String> header) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
 		if (loginId != null && !loginId.isEmpty()) {
@@ -169,7 +174,7 @@ public class PurchasesettlementController {
 	@PostMapping("/settlementReq/{settlement_idx}")
 	public Map<String, Object> settlementReq(@PathVariable int settlement_idx,
 	                                         @RequestHeader Map<String, String> header) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
 		if (loginId != null && !loginId.isEmpty()) {
@@ -187,7 +192,7 @@ public class PurchasesettlementController {
 	@PostMapping("/settlementAdminReq/{settlement_idx}")
 	public Map<String, Object> approveReopen(@PathVariable int settlement_idx,
 	                                         @RequestHeader Map<String, String> header) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
 		if (loginId != null && !loginId.isEmpty()) {
@@ -205,7 +210,7 @@ public class PurchasesettlementController {
 	public Map<String, Object> settlementFileUpload(@PathVariable int settlement_idx,
 	                                                @RequestParam("files") MultipartFile[] files,
 	                                                @RequestParam(value = "type", required = false) String type) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			List<FileDTO> uploaded = service.settlementFileUpload(settlement_idx, files, type);
 			result.put("result", "success");
@@ -219,7 +224,7 @@ public class PurchasesettlementController {
 
 	@GetMapping("/settlementFileList/{settlement_idx}")
 	public Map<String, Object> settlementFileList(@PathVariable int settlement_idx) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<FileDTO> files = service.settlementFileList(settlement_idx);
 		result.put("result", "success");
 		result.put("files", files);
@@ -228,7 +233,7 @@ public class PurchasesettlementController {
 
 	@DeleteMapping("/settlementFileDel/{idx}")
 	public Map<String, Object> settlementFileDel(@PathVariable int idx) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		int deleted = service.settlementFileDel(idx);
 		result.put("result", deleted > 0 ? "success" : "fail");
 		result.put("message", deleted > 0 ? "첨부파일 삭제됨" : "삭제 실패");
@@ -253,7 +258,7 @@ public class PurchasesettlementController {
 	@PostMapping("/settlementPdf")
 	public Map<String, Object> settlementPdf(@RequestParam int settlement_idx,
 	                                         @RequestParam int template_idx) {
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			FileDTO file = service.settlementPdf(settlement_idx, template_idx);
 			result.put("success", true);
