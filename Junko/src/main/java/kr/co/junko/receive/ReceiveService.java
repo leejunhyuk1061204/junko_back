@@ -104,7 +104,7 @@ public class ReceiveService {
 		int offset = ((int)param.get("page")-1)*cnt;
 		param.put("cnt", cnt);
 		param.put("offset", offset);
-		List<ReceiveDTO>list = dao.receiveList(param);
+		List<Map<String, Object>>list = dao.receiveList(param);
 		int total = dao.receiveTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
 		result.put("list", list);

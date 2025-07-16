@@ -3,7 +3,6 @@ package kr.co.junko.file;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.beans.factory.annotation.Value;
 
 import kr.co.junko.dto.FileDTO;
 

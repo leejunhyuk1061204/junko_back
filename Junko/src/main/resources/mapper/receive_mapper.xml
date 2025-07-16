@@ -78,29 +78,51 @@
 		where receive_product_idx=#{receive_product_idx}
 	</update>
 	
-	<select id="receiveList" parameterType="map" resultType="kr.co.junko.dto.ReceiveDTO">
-		select * from receive
+	<select id="receiveList" parameterType="map" resultType="map">
+		select 
+			r.*
+			,u.user_name
+			,p.product_name
+			,c.combined_name 
+			,w.warehouse_name
+			,count(r.receive_idx) as product_cnt
+		from receive r
+			join `user` u on r.user_idx = u.user_idx
+			join receive_product rp on r.receive_idx = rp.receive_idx
+			join product p on rp.product_idx = p.product_idx
+			join `order` o on r.order_idx = o.order_idx 
+			join warehouse w on o.warehouse_idx = w.warehouse_idx 
+			left join product_option po on po.product_option_idx = rp.product_option_idx
+			left join combined c on po.combined_idx = c.combined_idx
 		<where>
-			del_yn = false
+			r.del_yn = false
 			<if test="order_idx != null and order_idx != 0">
-				and order_idx = #{order_idx}
+				and r.order_idx = #{order_idx}
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and r.user_idx = #{user_idx}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and receive_date >= #{start_date}
+				and r.receive_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and receive_date <![CDATA[<]]>= #{end_date}
+				and r.receive_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="receive_date !=null and receive_date !=''">
-				and receive_date = #{receive_date}
+				and r.receive_date = #{receive_date}
 			</if>
 			<if test="status != null and status !=''">
-				and status = #{status}
+				and r.status = #{status}
+			</if>
+			<if test="search != null and search != ''">
+					AND (
+					 r.receive_idx LIKE CONCAT('%', #{search}, '%')
+				OR w.warehouse_name LIKE CONCAT('%', #{search}, '%')
+				OR u.user_name LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
+		GROUP by r.receive_idx
 		<if test="orderColumn != null and orderColumn !=''">
 			order by ${orderColumn}
 			<if test="orderDirection != null and orderDirection !=''">
@@ -111,28 +133,52 @@
 	</select>
 	
 	<select id="receiveTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) as total from receive
+		select ceil(count(*)*1.0/#{cnt}) as total from (
+		select 
+			r.*
+			,u.user_name
+			,p.product_name
+			,c.combined_name 
+			,w.warehouse_name
+			,count(r.receive_idx) as product_cnt
+		from receive r
+			join `user` u on r.user_idx = u.user_idx
+			join receive_product rp on r.receive_idx = rp.receive_idx
+			join product p on rp.product_idx = p.product_idx
+			join `order` o on r.order_idx = o.order_idx 
+			join warehouse w on o.warehouse_idx = w.warehouse_idx 
+			left join product_option po on po.product_option_idx = rp.product_option_idx
+			left join combined c on po.combined_idx = c.combined_idx
 		<where>
-			del_yn = false
+			r.del_yn = false
 			<if test="order_idx != null and order_idx != 0">
-				and order_idx = #{order_idx}
+				and r.order_idx = #{order_idx}
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and r.user_idx = #{user_idx}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and receive_date >= #{start_date}
+				and r.receive_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and receive_date <![CDATA[<]]>= #{end_date}
+				and r.receive_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="receive_date !=null and receive_date !=''">
-				and receive_date = #{receive_date}
+				and r.receive_date = #{receive_date}
 			</if>
 			<if test="status != null and status !=''">
-				and status = #{status}
+				and r.status = #{status}
+			</if>
+			<if test="search != null and search != ''">
+					AND (
+					 r.receive_idx LIKE CONCAT('%', #{search}, '%')
+				OR w.warehouse_name LIKE CONCAT('%', #{search}, '%')
+				OR u.user_name LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
+		GROUP by r.receive_idx
+		) as sub
 	</select>
 	
 	<select id="receiveProductList" parameterType="map" resultType="kr.co.junko.dto.ReceiveProductDTO">

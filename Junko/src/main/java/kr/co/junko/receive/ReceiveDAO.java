@@ -21,7 +21,7 @@ public interface ReceiveDAO {
 
 	int receiveProductUpdate(ReceiveProductDTO dto);
 	
-	List<ReceiveDTO> receiveList(Map<String, Object> param);
+	List<Map<String, Object>> receiveList(Map<String, Object> param);
 
 	int receiveTotalPage(Map<String, Object> param);
 
