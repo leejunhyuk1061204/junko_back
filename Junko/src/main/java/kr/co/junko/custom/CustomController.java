@@ -106,10 +106,17 @@ public class CustomController {
 	}
 	
 	// 거래처 리스트
-    @GetMapping("/custom/list")
-    public List<CustomDTO> customList(@RequestParam Map<String, Object> param) {
-        return service.customList(param);
-    }
+	@GetMapping("/custom/list")
+	public Map<String, Object> customList(@RequestParam Map<String, Object> param) {
+		List<CustomDTO> list = service.customList(param);
+		int total = service.customCnt(param);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("list", list);
+		result.put("total", total);
+
+		return result;
+	}
     
     // 거래처 총 갯수
     @GetMapping("/custom/cnt")
