@@ -1,6 +1,7 @@
 package kr.co.junko.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Data;
 
@@ -15,4 +16,6 @@ public class SalesDTO {
 	private LocalDate payment_date;
 	private String status;
 	private boolean del_yn;
+	private LocalDate reg_date;
+	
 }
