@@ -211,7 +211,7 @@
 				${orderDirection}
 			</if>
 		</if>
-		<if test="limit != null and limit != false">
+		<if test="page != null and page != ''">
 			limit #{cnt} offset #{offset}
 		</if>
 	</select>
