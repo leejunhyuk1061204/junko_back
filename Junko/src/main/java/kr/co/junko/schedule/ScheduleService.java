@@ -19,6 +19,7 @@ public class ScheduleService {
 
 	public boolean scheduleInsert(ScheduleDTO dto) {
 		String label_name = dao.getLabelName(dto.getLabel_idx());
+		log.info("label_name: " + label_name + ", label_idx: " + dto.getLabel_idx());
 		int row = 0;
 		
 		if (label_name != null && dto.getStart_date() != null && dto.getEnd_date() != null) {
