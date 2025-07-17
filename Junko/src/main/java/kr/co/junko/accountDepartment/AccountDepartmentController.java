@@ -163,21 +163,23 @@ public class AccountDepartmentController {
 
 	// 분개 PDF 생성
 	@PostMapping("/accountDeptPdf")
-	public Map<String, Object> accountDeptPdf(@RequestParam int dept_idx,
-	                                          @RequestParam int template_idx) {
-		result = new HashMap<>();
-		try {
-			FileDTO file = service.accountDeptPdf(dept_idx, template_idx);
-			result.put("success", true);
-			result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
-			result.put("file_idx", file.getFile_idx());
-			result.put("filename", file.getOri_filename());
-		} catch (Exception e) {
-			log.error("분개 PDF 생성 오류", e);
-			result.put("success", false);
-			result.put("message", e.getMessage());
-		}
-		return result;
+	public Map<String, Object> accountDeptPdf(@RequestBody Map<String, Integer> map) {
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        int dept_idx = map.get("dept_idx");
+	        int template_idx = map.get("template_idx");
+
+	        FileDTO file = service.accountDeptPdf(dept_idx, template_idx);
+	        result.put("success", true);
+	        result.put("file_path", "C:/upload/pdf/" + file.getNew_filename());
+	        result.put("file_idx", file.getFile_idx());
+	        result.put("filename", file.getOri_filename());
+	    } catch (Exception e) {
+	        log.error("분개 PDF 생성 오류", e);
+	        result.put("success", false);
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
 	}
 	
 	// 개정과목 리스트 조회 

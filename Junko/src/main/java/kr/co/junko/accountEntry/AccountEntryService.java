@@ -270,16 +270,17 @@ public class AccountEntryService {
 	    // 2. 첨부파일 처리
 	    if (file != null && !file.isEmpty()) {
 	        try {
-	            String ori = file.getOriginalFilename();
-	            String ext = ori.substring(ori.lastIndexOf('.'));
-	            String uuid = UUID.randomUUID().toString();
-	            String newName = uuid + ext;
+	        	String ori = file.getOriginalFilename();
+	        	String ext = ori.substring(ori.lastIndexOf('.'));
+	        	String uuid = UUID.randomUUID().toString();
+	        	String newName = uuid + ext;
 
-	            String uploadPath = "C:/upload"; // 운영 환경이 Windows라서 유지
-	            new File(uploadPath).mkdirs();
+	            String uploadPath = "C:/upload";
+	            File uploadDir = new File(uploadPath);
+	            if (!uploadDir.exists()) uploadDir.mkdirs();
 
-	            File saveFile = new File(uploadPath, newName);
-	            file.transferTo(saveFile);
+	            File saveFile = Paths.get(uploadPath, newName).toFile();
+	            file.transferTo(saveFile); 
 
 	            FileDTO fileDTO = new FileDTO();
 	            fileDTO.setOri_filename(ori);
