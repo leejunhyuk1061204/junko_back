@@ -67,7 +67,14 @@
                 custom_phone LIKE CONCAT('%', #{search}, '%')
             )
         </if>
-        ORDER BY custom_idx DESC
+        <choose>
+            <when test="sortKey != null and sortOrder != null">
+                ORDER BY ${sortKey} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY custom_idx DESC
+            </otherwise>
+        </choose>
         LIMIT #{start}, #{size}
     </select>
     
