@@ -20,6 +20,8 @@ public interface ChartDAO {
 	
 	List<Map<String, Object>> returnProduct(Map<String, Object> param);
 	
+	List<Map<String, Object>> returnProductThisMonth(Map<String, Object> param);
+	
 	List<Map<String, Object>> getDelayedProduct(Map<String, Object> param);
 	
 	List<Map<String, Object>> getOrderStatus(Map<String, Object> param);
@@ -43,5 +45,6 @@ public interface ChartDAO {
 	List<Map<String, Object>> getShippedToday(Map<String, Object> param);
 
 	List<Map<String, Object>> getReceiveThisMonth(Map<String, Object> param);
+
 
 }
