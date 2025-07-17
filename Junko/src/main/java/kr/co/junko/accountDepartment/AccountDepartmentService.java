@@ -102,6 +102,14 @@ public class AccountDepartmentService {
 	    AccountingDepartmentDTO dto = dao.accountDeptDetailByDeptIdx(dept_idx);
 	    if (dto == null) throw new IllegalArgumentException("분개 정보 없음");
 
+	    log.info("📌 분개 PDF 생성용 dto 확인");
+	    log.info("dept_idx: " + dto.getDept_idx());
+	    log.info("entry_idx: " + dto.getEntry_idx());
+	    log.info("as_name: " + dto.getAs_name());
+	    log.info("amount: " + dto.getAmount());
+	    log.info("type: " + dto.getType());
+	    
+	    
 	    // 2. 템플릿 조회
 	    TemplateDTO template = templateService.getTemplate(template_idx);
 	    if (template == null) throw new IllegalArgumentException("템플릿 없음");
