@@ -50,73 +50,125 @@
 		where sales_idx = #{sales_idx}
 	</update>
 
-	<select id="salesList" parameterType="map" resultType="kr.co.junko.dto.SalesDTO">
-		select * from sales
+	<select id="salesList" parameterType="map" resultType="map">
+		select s.*
+			,p.product_name
+			,c.combined_name 
+			,count(s.sales_idx) as product_cnt
+		from sales s
+			join sales_product sp on s.sales_idx = sp.sales_idx
+			join product p on p.product_idx = sp.product_idx
+			left join product_option po on po.product_option_idx = sp.product_option_idx
+			left join combined c on c.combined_idx = po.combined_idx
 		<where>
-			del_yn = false
+			s.del_yn = false
 			<if test="customer != null and customer != ''">
-				and customer = #{customer}
+				and s.customer = #{customer}
 			</if>
 			<if test="customer_phone != null and customer_phone != ''">
-				and customer_phone = #{customer_phone}
+				and s.customer_phone = #{customer_phone}
 			</if>
 			<if test="customer_address != null and customer_address != ''">
-				and customer_address = #{customer_address}
+				and s.customer_address = #{customer_address}
 			</if>
 			<if test="payment_option != null and payment_option != ''">
-				and payment_option = #{payment_option}
+				and s.payment_option = #{payment_option}
 			</if>
-			<if test="start_date != null and start_date != ''">
-				and payment_date >= #{start_date}
+			<if test="mode == true and reg_date != null and reg_date !=''">
+				and s.reg_date = #{reg_date}
 			</if>
-			<if test="end_date != null and end_date != ''">
-				and payment_date <![CDATA[<]]>= #{end_date}
+			<if test="mode == true and start_date != null and start_date != ''">
+				and s.reg_date >= #{start_date}
 			</if>
-			<if test="payment_date != null and payment_date != ''">
-				and payment_date = #{payment_date}
+			<if test="mode == true and end_date != null and end_date != ''">
+				and s.reg_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="mode == false and payment_date != null and payment_date != ''">
+				and s.payment_date = #{payment_date}
+			</if>
+			<if test="mode == false and start_date != null and start_date != ''">
+				and s.payment_date >= #{start_date}
+			</if>
+			<if test="mode == false and end_date != null and end_date != ''">
+				and s.payment_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and s.status = #{status}
+			</if>
+			<if test="search != null and search != ''">
+				AND (
+					 s.customer LIKE CONCAT('%', #{search}, '%')
+				OR s.sales_idx LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
+		group by s.sales_idx
 		<if test="orderColumn != null and orderColumn != ''">
 			order by ${orderColumn}
 			<if test="orderDirection != null and orderDirection != ''">
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != ''">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<select id="salesListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) from sales
+		select ceil(count(*)*1.0/#{cnt}) from (
+			select s.*
+			,p.product_name
+			,c.combined_name 
+			,count(s.sales_idx) as product_cnt
+		from sales s
+			join sales_product sp on s.sales_idx = sp.sales_idx
+			join product p on p.product_idx = sp.product_idx
+			left join product_option po on po.product_option_idx = sp.product_option_idx
+			left join combined c on c.combined_idx = po.combined_idx
 		<where>
-			del_yn = false
+			s.del_yn = false
 			<if test="customer != null and customer != ''">
-				and customer = #{customer}
+				and s.customer = #{customer}
 			</if>
 			<if test="customer_phone != null and customer_phone != ''">
-				and customer_phone = #{customer_phone}
+				and s.customer_phone = #{customer_phone}
 			</if>
 			<if test="customer_address != null and customer_address != ''">
-				and customer_address = #{customer_address}
+				and s.customer_address = #{customer_address}
 			</if>
 			<if test="payment_option != null and payment_option != ''">
-				and payment_option = #{payment_option}
+				and s.payment_option = #{payment_option}
 			</if>
-			<if test="start_date != null and start_date != ''">
-				and payment_date >= #{start_date}
+			<if test="mode == true and reg_date != null and reg_date !=''">
+				and s.reg_date = #{reg_date}
 			</if>
-			<if test="end_date != null and end_date != ''">
-				and payment_date <![CDATA[<]]>= #{end_date}
+			<if test="mode == true and start_date != null and start_date != ''">
+				and s.reg_date >= #{start_date}
 			</if>
-			<if test="payment_date != null and payment_date != ''">
-				and payment_date = #{payment_date}
+			<if test="mode == true and end_date != null and end_date != ''">
+				and s.reg_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="mode == false and payment_date != null and payment_date != ''">
+				and s.payment_date = #{payment_date}
+			</if>
+			<if test="mode == false and start_date != null and start_date != ''">
+				and s.payment_date >= #{start_date}
+			</if>
+			<if test="mode == false and end_date != null and end_date != ''">
+				and s.payment_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and s.status = #{status}
+			</if>
+			<if test="search != null and search != ''">
+				AND (
+					 s.customer LIKE CONCAT('%', #{search}, '%')
+				OR s.sales_idx LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
+		group by s.sales_idx
+		) as total
 	</select>
 
 	<update id="salesDel">
@@ -159,15 +211,21 @@
 		where sales_product_idx = #{sales_product_idx}
 	</update>
 	
-	<select id="salesProductList" parameterType="map" resultType="kr.co.junko.dto.SalesProductDTO">
-		select * from sales_product
+	<select id="salesProductList" parameterType="map" resultType="map">
+		select sp.* 
+			, p.product_name 
+			, c.combined_name 
+		from sales_product sp
+			join product p on p.product_idx = sp.product_idx
+			left join product_option po on po.product_option_idx = sp.product_option_idx
+			left join combined c on c.combined_idx = po.combined_idx
 		<where>
-			del_yn = false
+			sp.del_yn = false
 			<if test="sales_idx != null and sales_idx != 0">
-				and sales_idx = #{sales_idx}
+				and sp.sales_idx = #{sales_idx}
 			</if>
 			<if test="product_idx != null and product_idx != 0">
-				and product_idx = #{product_idx}
+				and sp.product_idx = #{product_idx}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
@@ -176,20 +234,30 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != ''">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 
 	<select id="salesProdcutListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) from sales_product
+		select ceil(count(*)*1.0/#{cnt}) from (
+			select sp.* 
+			, p.product_name 
+			, c.combined_name 
+		from sales_product sp
+			join product p on p.product_idx = sp.product_idx
+			left join product_option po on po.product_option_idx = sp.product_option_idx
+			left join combined c on c.combined_idx = po.combined_idx
 		<where>
-			del_yn = false
+			sp.del_yn = false
 			<if test="sales_idx != null and sales_idx != 0">
-				and sales_idx = #{sales_idx}
+				and sp.sales_idx = #{sales_idx}
 			</if>
 			<if test="product_idx != null and product_idx != 0">
-				and product_idx = #{product_idx}
+				and sp.product_idx = #{product_idx}
 			</if>
 		</where>
+		) as total
 	</select>
 
 	<update id="salesProductDel">
