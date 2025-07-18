@@ -115,7 +115,7 @@ public class ReceiveService {
 
 	public Map<String, Object> receiveProductList(Map<String, Object> param) {
 		Map<String, Object>result = new HashMap<String, Object>();
-		if((boolean)param.get("limit")) {
+		if(param.get("page") != null) {
 			int cnt = 5;
 			int offset = ((int)param.get("page")-1)*cnt;
 			param.put("cnt", cnt);
