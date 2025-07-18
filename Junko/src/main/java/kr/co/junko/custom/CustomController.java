@@ -141,5 +141,11 @@ public class CustomController {
         return result;
     }
 
+    // 거래처 리스트
+    @PostMapping(value="/custom/list2")
+    public Map<String, Object>customList2(@RequestBody Map<String, Object>param){
+    	log.info("param : {}",param);
+    	return service.customList2(param);
+    }
 	
 }

@@ -234,7 +234,9 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != 0 and page != ''">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<select id="productNoptionListTotalPage" parameterType="map">
