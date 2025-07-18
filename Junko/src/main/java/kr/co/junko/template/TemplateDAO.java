@@ -1,6 +1,7 @@
 package kr.co.junko.template;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,7 +24,9 @@ public interface TemplateDAO {
 
 	int templateDel(int template_idx);
 
-	List<TemplateDTO> templateList();
+	List<TemplateDTO> templateList(Map<String, Object> param);
+	
+	int templateTotalCnt(Map<String, Object> param);
 
 	TemplateDTO templateDetail(int template_idx);
 

@@ -1,6 +1,7 @@
 package kr.co.junko.template;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -96,8 +97,48 @@ public class TemplateService {
 	}
 
 	// 템플릿 리스트
-	public List<TemplateDTO> templateList() {
-		return dao.templateList();
+	public Map<String, Object> templateList(Map<String, Object> param) {
+	    int page = param.get("page") != null ? (int) param.get("page") : 1;
+	    int size = param.get("size") != null ? (int) param.get("size") : 10;
+	    String category = param.get("category") != null ? param.get("category").toString() : "";
+	    String search = param.get("search") != null ? param.get("search").toString() : "";
+	    String sort = param.get("sort") != null ? param.get("sort").toString() : "created_date DESC";
+
+	    if (page < 1) page = 1;
+	    if (size < 1) size = 10;
+
+	    List<String> allowedSortColumns = List.of("template_name", "created_date", "template_idx");
+	    String sortColumn = "created_date";
+	    String sortDirection = "DESC";
+
+	    String[] sortParts = sort.split("\\s+");
+	    if (sortParts.length > 0 && allowedSortColumns.contains(sortParts[0])) {
+	        sortColumn = sortParts[0];
+	    }
+	    if (sortParts.length > 1 && ("ASC".equalsIgnoreCase(sortParts[1]) || "DESC".equalsIgnoreCase(sortParts[1]))) {
+	        sortDirection = sortParts[1].toUpperCase();
+	    }
+	    String finalSort = sortColumn + " " + sortDirection;
+
+	    int offset = (page - 1) * size;
+
+	    Map<String, Object> queryParam = new HashMap<>();
+	    queryParam.put("category", category);
+	    queryParam.put("search", search);
+	    queryParam.put("limit", size);
+	    queryParam.put("offset", offset);
+	    queryParam.put("sort", finalSort);
+
+	    List<TemplateDTO> list = dao.templateList(queryParam);
+	    int total = dao.templateTotalCnt(queryParam);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("list", list);
+	    result.put("total", total);
+	    result.put("page", page);
+	    result.put("size", size);
+
+	    return result;
 	}
 
 	// 템플릿 상세보기

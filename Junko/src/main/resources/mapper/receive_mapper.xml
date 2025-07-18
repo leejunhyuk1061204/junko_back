@@ -185,8 +185,13 @@
 		select 
 			rp.* ,
 			p.product_name,
-			c.combined_name 
+			c.combined_name, 
+			o.warehouse_idx,
+			w.warehouse_name 
 		from receive_product rp 
+			join receive r on r.receive_idx = rp.receive_idx 
+			join `order` o on r.order_idx = o.order_idx 
+			join warehouse w on o.warehouse_idx = w.warehouse_idx 
 			join product p on rp.product_idx = p.product_idx 
 			left join product_option po on rp.product_option_idx = po.product_option_idx
 			left join combined c on po.combined_idx = c.combined_idx

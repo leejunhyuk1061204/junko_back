@@ -243,7 +243,7 @@ public class ProductController {
 	    int page = (int) param.getOrDefault("page", 1);
 	    int size = (int) param.getOrDefault("size", 10);
 
-	    // ✅ 카테고리 + 하위 포함 리스트 구하기
+	    // 카테고리 + 하위 포함 리스트 구하기
 	    List<Integer> categoryList = categoryService.getCategoryWithChildren(category_idx);
 	    int start = (page - 1) * size;
 

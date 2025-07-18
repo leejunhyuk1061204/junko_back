@@ -47,7 +47,7 @@ public class StockService {
 			// stock_idx, product_idx, product_option_idx, manufacture,	expiration, stock_cnt, warehouse_idx, zone_idx, type, user_idx,	del_yn
 			stockDTO = new StockDTO();
 			stockDTO.setProduct_idx((int)stockInfo.get("product_idx"));
-			if(stockInfo.containsKey("product_option_idx")) {
+			if(stockInfo.containsKey("product_option_idx") && stockInfo.get("product_option_idx") != null)  {
 				stockDTO.setProduct_option_idx((int)stockInfo.get("product_option_idx"));
 			}
 			if(stockInfo.containsKey("manufacture")) {

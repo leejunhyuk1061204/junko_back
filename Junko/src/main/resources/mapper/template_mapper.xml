@@ -50,11 +50,34 @@
     </update>
     
     <!-- 템플릿 리스트 -->
-    <select id="templateList" resultType="kr.co.junko.dto.TemplateDTO">
-	    SELECT * FROM template
-        WHERE del_yn = 0
-        ORDER BY created_date DESC
-    </select>
+	<select id="templateList" parameterType="map" resultType="kr.co.junko.dto.TemplateDTO">
+	    SELECT t.*, u.user_name AS user_name
+	    FROM template t
+	    JOIN `user` u ON t.user_idx = u.user_idx
+	    WHERE t.del_yn = 0
+	    <if test="category != null and category != ''">
+	        AND t.category = #{category}
+	    </if>
+	    <if test="search != null and search != ''">
+	        AND (t.template_name LIKE CONCAT('%', #{search}, '%')
+	             OR t.template_desc LIKE CONCAT('%', #{search}, '%'))
+	    </if>
+	    ORDER BY ${sort}
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="templateTotalCnt" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM template
+	    WHERE del_yn = 0
+	    <if test="category != null and category != ''">
+	        AND category = #{category}
+	    </if>
+	    <if test="search != null and search != ''">
+	        AND (template_name LIKE CONCAT('%', #{search}, '%')
+	             OR template_desc LIKE CONCAT('%', #{search}, '%'))
+	    </if>
+	</select>
     
     <!-- 템플릿 상세보기 -->
     <select id="templateDetail" resultType="kr.co.junko.dto.TemplateDTO">

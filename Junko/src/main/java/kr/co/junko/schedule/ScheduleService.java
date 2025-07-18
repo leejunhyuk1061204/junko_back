@@ -1,5 +1,6 @@
 package kr.co.junko.schedule;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,14 +42,24 @@ public class ScheduleService {
 	}
 
 	public List<Map<String, Object>> scheduleList(Map<String, Object> param) {
-		int label_idx = (int) param.get("label_idx");
+		String type = (String) param.get("type"); // personal, dept, work
 		List<Map<String, Object>> result;
 		
-		if (label_idx == 1) {
-			result = dao.scheduleListPersonal(param);
-		}else {
-			result = dao.scheduleListDept(param);
-		}
+		switch (type) {
+			case "personal":
+				result = dao.scheduleListPersonal(param);
+				break;
+			case "dept":
+				result = dao.scheduleListDept(param);
+				break;
+			case "work":
+				result = dao.scheduleListStatus(param);
+				break;
+			default:
+				result = Collections.emptyList(); // 예외 처리
+				break;
+
+		}		
 		return result;
 	}
 

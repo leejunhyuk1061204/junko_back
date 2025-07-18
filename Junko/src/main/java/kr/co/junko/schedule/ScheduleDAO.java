@@ -26,6 +26,8 @@ public interface ScheduleDAO {
 	List<Map<String, Object>> scheduleListDept(Map<String, Object> param);
 
 	MemberDTO getUserInfo(int user_idx);
+
+	List<Map<String, Object>> scheduleListStatus(Map<String, Object> param);
 	
 
 }

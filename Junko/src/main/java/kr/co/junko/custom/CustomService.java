@@ -1,5 +1,6 @@
 package kr.co.junko.custom;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,21 @@ public class CustomService {
 
 	public CustomDTO customSelect(int custom_idx) {
 		return dao.customSelect(custom_idx);
+	}
+
+	public Map<String, Object> customList2(Map<String, Object> param) {
+		Map<String, Object>result = new HashMap<String, Object>();
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.customListTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.customList2(param);
+		result.put("list", list);
+		return result;
 	}
 
 }
