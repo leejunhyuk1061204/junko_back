@@ -61,5 +61,11 @@
 	<select id="getUserInfo" resultType="kr.co.junko.dto.MemberDTO">
 		SELECT * FROM user WHERE user_idx = #{user_idx}
 	</select>
+	
+	<select id="scheduleListStatus" resultType="map" parameterType="map">
+		SELECT CONCAT(u.user_name,' ',j.job_name) AS user, sl.label_name, s.* FROM schedule s
+			JOIN user u ON u.user_idx = s.user_idx JOIN job j ON j.job_idx = u.job_idx
+			JOIN schedule_label sl ON sl.label_idx = s.label_idx WHERE u.dept_idx = #{dept_idx} AND s.label_idx IN (2, 3, 5, 6)
+	</select>
 
 </mapper>

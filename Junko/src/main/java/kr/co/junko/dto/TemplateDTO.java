@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class TemplateDTO {
 
-	private int template_idx;
+	private Integer template_idx;
 	private int user_idx;
 	private String template_name;
 	private String template_desc;
@@ -16,5 +16,7 @@ public class TemplateDTO {
 	private Date update_date;
 	private int del_yn;
 	private String category;
+	
+	private String user_name;
 	
 }
