@@ -253,13 +253,20 @@ public class AccountEntryService {
 		return dao.userIdxByLoginId(loginId);
 	}
 	
-	public int findCustomIdxByName(String name) {
-		
-		return dao.findCustomIdxByName(name);
+	public Integer findSalesIdxByName(String name) {
+	    Integer idx = dao.findSalesIdxByName(name);
+	    if (idx == null) {
+	        log.warn("❗ 고객명 '{}'에 해당하는 sales_idx 없음", name);
+	    }
+	    return idx;
 	}
 
-	public int findSalesIdxByName(String name) {
-		return dao.findSalesIdxByName(name);
+	public Integer findCustomIdxByName(String name) {
+	    Integer idx = dao.findCustomIdxByName(name);
+	    if (idx == null) {
+	        log.warn("❗ 거래처명 '{}'에 해당하는 custom_idx 없음", name);
+	    }
+	    return idx;
 	}
 
 	@Transactional

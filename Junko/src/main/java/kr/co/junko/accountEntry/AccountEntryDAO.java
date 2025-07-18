@@ -60,9 +60,9 @@ public interface AccountEntryDAO {
  
 	int accountTotalCount();
 
-	int findCustomIdxByName(String name);
+	Integer findCustomIdxByName(String name);
 
-	int findSalesIdxByName(String name);
+	Integer findSalesIdxByName(String name);
 
 	void deletePdfByEntryIdx(int entry_idx);
 
