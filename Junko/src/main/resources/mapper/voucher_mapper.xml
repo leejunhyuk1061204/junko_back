@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.voucher.VoucherDAO">
+
+    <!-- 등록 -->
+    <insert id="voucherInsert" parameterType="kr.co.junko.dto.VoucherDTO">
+     <selectKey keyProperty="entry_idx" resultType="int" order="AFTER">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+        INSERT INTO voucher (
+            account_idx, entry_type, amount, entry_date,
+            custom_idx, sales_idx, status, user_idx
+        ) VALUES (
+            #{account_idx}, #{entry_type}, #{amount}, NOW(),
+            #{custom_idx}, #{sales_idx}, '작성중', #{user_idx}
+        )
+    </insert>
+
+    <!-- 수정 (작성중 상태만) -->
+    <update id="voucherUpdate" parameterType="kr.co.junko.dto.VoucherDTO">
+        UPDATE voucher
+        SET account_idx = #{account_idx},
+            entry_type = #{entry_type},
+            amount = #{amount},
+            entry_date = NOW(),
+            custom_idx = #{custom_idx},
+            sales_idx = #{sales_idx}
+        WHERE entry_idx = #{entry_idx}
+          AND del_yn = 0
+    </update>
+
+    <!-- 논리 삭제 -->
+    <update id="voucherDel">
+        UPDATE voucher
+        SET del_yn = 1
+        WHERE entry_idx = #{entryIdx}
+          AND del_yn = 0
+    </update>
+
+    <!-- 리스트 조회 -->
+    <select id="voucherList" resultType="kr.co.junko.dto.VoucherDTO">
+        SELECT *
+        FROM voucher
+        WHERE del_yn = 0
+        <if test="entry_type != null and entry_type != ''">
+            AND entry_type = #{entry_type}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND custom_idx IN (
+                SELECT custom_idx FROM custom
+                WHERE custom_name LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        ORDER BY ${sort} ${order}
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 총 개수 조회 -->
+    <select id="voucherTotal" resultType="int">
+        SELECT COUNT(*)
+        FROM voucher
+        WHERE del_yn = 0
+        <if test="entry_type != null and entry_type != ''">
+            AND entry_type = #{entry_type}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND custom_idx IN (
+                SELECT custom_idx FROM custom
+                WHERE custom_name LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+    </select>
+
+    <!-- 상태 조회 -->
+    <select id="voucherStatus" resultType="String">
+        SELECT status
+        FROM voucher
+        WHERE entry_idx = #{entry_idx}
+          AND del_yn = 0
+    </select>
+
+    <!-- 전표 상세 조회 -->
+    <insert id="insertEntryDetail" parameterType="kr.co.junko.dto.EntryDetailDTO">
+        INSERT INTO entry_detail (
+            as_idx,
+            amount,
+            type,
+            del_yn,
+            entry_idx
+        ) VALUES (
+            #{as_idx},
+            #{amount},
+            #{type},
+            #{del_yn},
+            #{entry_idx}
+        ) 
+    </insert>
+
+</mapper>
