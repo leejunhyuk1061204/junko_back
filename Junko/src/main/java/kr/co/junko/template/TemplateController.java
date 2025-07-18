@@ -66,14 +66,22 @@ public class TemplateController {
 	}
 	
 	// 템플릿 리스트
-	@GetMapping(value="/template/list")
-	public Map<String, Object> templateList(@RequestParam(required = false)  String category){
-		result = new HashMap<String, Object>();
-		
-		List<TemplateDTO> list = (category == null || category.isEmpty())
-				? service.templateList() : service.templateListCategory(category);
-		result.put("list", list);
-		return result;
+	@GetMapping("/template/list")
+	public Map<String, Object> templateList(
+	        @RequestParam(required = false, defaultValue = "") String category,
+	        @RequestParam(required = false, defaultValue = "") String search,
+	        @RequestParam(required = false, defaultValue = "1") int page,
+	        @RequestParam(required = false, defaultValue = "10") int size,
+	        @RequestParam(required = false, defaultValue = "create_date DESC")String sort
+	) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("category", category.trim());
+	    param.put("search", search.trim());
+	    param.put("page", page);
+	    param.put("size", size);
+	    param.put("sort", sort.trim());
+
+	    return service.templateList(param);
 	}
 	
 	// 템플릿 상세보기
