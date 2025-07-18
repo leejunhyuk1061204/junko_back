@@ -129,34 +129,51 @@ public class AccountEntryController {
 	                                         @RequestHeader Map<String, String> header) {
 	    result = new HashMap<>();
 
-	    String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+	    try {
+	        // 토큰 파싱
+	        String rawToken = header.get("authorization");
+	        String token = rawToken != null && rawToken.startsWith("Bearer ") ? rawToken.substring(7) : rawToken;
+	        String loginId = (String) Jwt.readToken(token).get("user_id");
 
-	    if (loginId != null && !loginId.isEmpty()) {
-	        // entry DTO 구성
-	        String entry_type = (String) body.get("entry_type");
-	        int amount = (int) body.get("amount");
-	        String entry_date = (String) body.get("entry_date");
-	        String custom_name = (String) body.get("custom_name");
-	        String customer_name = (String) body.get("customer_name");
+	        if (loginId != null && !loginId.isEmpty()) {
+	            // 데이터 파싱
+	            String entry_type = (String) body.get("entry_type");
+	            int amount = Integer.parseInt(String.valueOf(body.get("amount")));
+	            String entry_date = (String) body.get("entry_date");
+	            String custom_name = (String) body.get("custom_name");
+	            String customer_name = (String) body.get("customer_name");
 
-	        // idx 조회
-	        Integer custom_idx = service.findCustomIdxByName(custom_name);
-	        Integer sales_idx = service.findSalesIdxByName(customer_name);
+	            Integer custom_idx = null;
+	            Integer sales_idx = null;
 
-	        AccountingEntryDTO dto = new AccountingEntryDTO();
-	        dto.setEntry_type(entry_type);
-	        dto.setAmount(amount);
-	        dto.setEntry_date(Date.valueOf(entry_date));
-	        dto.setCustom_idx(custom_idx);
-	        dto.setSales_idx(sales_idx);
+	            if (custom_name != null && !custom_name.trim().isEmpty()) {
+	                custom_idx = service.findCustomIdxByName(custom_name);
+	            }
 
-	        boolean success = service.accountUpdate(entry_idx, dto, loginId);
-	        result.put("success", success);
-	        result.put("loginYN", true);
-	    } else {
+	            if (customer_name != null && !customer_name.trim().isEmpty()) {
+	                sales_idx = service.findSalesIdxByName(customer_name);
+	            }
+
+	            AccountingEntryDTO dto = new AccountingEntryDTO();
+	            dto.setEntry_type(entry_type);
+	            dto.setAmount(amount);
+	            dto.setEntry_date(Date.valueOf(entry_date));
+	            dto.setCustom_idx(custom_idx);
+	            dto.setSales_idx(sales_idx);
+
+	            boolean success = service.accountUpdate(entry_idx, dto, loginId);
+	            result.put("success", success);
+	            result.put("loginYN", true);
+	        } else {
+	            result.put("success", false);
+	            result.put("loginYN", false);
+	        }
+	    } catch (Exception e) {
+	        log.error("❗ 전표 수정 중 오류", e);
 	        result.put("success", false);
-	        result.put("loginYN", false);
+	        result.put("message", "서버 오류: " + e.getMessage());
 	    }
+
 	    return result;
 	}
 
