@@ -19,9 +19,11 @@ public class PurchaseSettlementDTO {
 	private String status;						// 정산상태
 	private boolean del_yn; // 삭제여부
 	public void setUser_idx(int user_idx) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
 		
 	}
+	
+	private String custom_name;   
 	
 }
 

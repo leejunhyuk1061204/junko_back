@@ -64,6 +64,8 @@ public class MemberController {
 	            result.put("token", token);
 	            result.put("user_idx", loginUser.getUser_idx()); 
 	            result.put("user_name", loginUser.getUser_name());
+	            result.put("user_id", loginUser.getUser_id());
+	            result.put("user_id", loginUser.getUser_id()); 
 	            result.put("success", true);
 	            result.put("login", true);
 	        } else {

@@ -253,13 +253,20 @@ public class AccountEntryService {
 		return dao.userIdxByLoginId(loginId);
 	}
 	
-	public int findCustomIdxByName(String name) {
-		
-		return dao.findCustomIdxByName(name);
+	public Integer findSalesIdxByName(String name) {
+	    Integer idx = dao.findSalesIdxByName(name);
+	    if (idx == null) {
+	        log.warn("❗ 고객명 '{}'에 해당하는 sales_idx 없음", name);
+	    }
+	    return idx;
 	}
 
-	public int findSalesIdxByName(String name) {
-		return dao.findSalesIdxByName(name);
+	public Integer findCustomIdxByName(String name) {
+	    Integer idx = dao.findCustomIdxByName(name);
+	    if (idx == null) {
+	        log.warn("❗ 거래처명 '{}'에 해당하는 custom_idx 없음", name);
+	    }
+	    return idx;
 	}
 
 	@Transactional
@@ -270,16 +277,17 @@ public class AccountEntryService {
 	    // 2. 첨부파일 처리
 	    if (file != null && !file.isEmpty()) {
 	        try {
-	            String ori = file.getOriginalFilename();
-	            String ext = ori.substring(ori.lastIndexOf('.'));
-	            String uuid = UUID.randomUUID().toString();
-	            String newName = uuid + ext;
+	        	String ori = file.getOriginalFilename();
+	        	String ext = ori.substring(ori.lastIndexOf('.'));
+	        	String uuid = UUID.randomUUID().toString();
+	        	String newName = uuid + ext;
 
-	            String uploadPath = "C:/upload"; // 운영 환경이 Windows라서 유지
-	            new File(uploadPath).mkdirs();
+	            String uploadPath = "C:/upload";
+	            File uploadDir = new File(uploadPath);
+	            if (!uploadDir.exists()) uploadDir.mkdirs();
 
-	            File saveFile = new File(uploadPath, newName);
-	            file.transferTo(saveFile);
+	            File saveFile = Paths.get(uploadPath, newName).toFile();
+	            file.transferTo(saveFile); 
 
 	            FileDTO fileDTO = new FileDTO();
 	            fileDTO.setOri_filename(ori);

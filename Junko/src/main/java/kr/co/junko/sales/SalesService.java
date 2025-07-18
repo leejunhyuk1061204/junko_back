@@ -50,16 +50,17 @@ public class SalesService {
 	}
 
 	public Map<String, Object> salesList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<SalesDTO>list = dao.salesList(param);
-		int total = dao.salesListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
-		result.put("total", total);
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.salesListTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.salesList(param);
 		result.put("list", list);
-		result.put("page", param.get("page"));
 		return result;
 	}
 
@@ -162,16 +163,17 @@ public class SalesService {
 	}
 
 	public Map<String, Object> salesProductList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<SalesProductDTO>list = dao.salesProductList(param);
-		int total = dao.salesProdcutListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
-		result.put("total", total);
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.salesProdcutListTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.salesProductList(param);
 		result.put("list", list);
-		result.put("page", param.get("page"));
 		return result;
 	}
 

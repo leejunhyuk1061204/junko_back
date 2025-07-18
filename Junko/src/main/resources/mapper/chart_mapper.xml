@@ -173,6 +173,31 @@
 		GROUP BY p.product_idx, c.category_idx
 	</select>
 	
+	<!-- 이번 달 반품률 분석 -->
+	<select id="returnProductThisMonth" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT DATE_FORMAT(CURDATE(), '%m') AS current_month
+			,p.product_idx, c.category_name, p.product_name, SUM(rp.return_cnt) AS return_cnt
+		FROM return_product rp JOIN product p ON rp.product_idx = p.product_idx
+		JOIN category c ON p.category_idx = c.category_idx JOIN return_handle rh ON rh.product_idx = p.product_idx
+			<where>
+				rp.del_yn = 0
+				AND YEAR(rh.handle_date) = YEAR(CURDATE()) AND MONTH(rh.handle_date) = MONTH(CURDATE())
+				<if test="categoryIdx != null">
+					AND p.category_idx IN (SELECT category_idx FROM category_tree)
+				</if>
+			</where>
+		GROUP BY p.product_idx, c.category_idx
+	</select>
+	
 	<!-- 처리 지연 상품 -->
 	<select id="getDelayedProduct" resultType="map">
 		WITH RECURSIVE category_tree AS (

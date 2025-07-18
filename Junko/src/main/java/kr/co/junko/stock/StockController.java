@@ -34,7 +34,7 @@ public class StockController {
 	
 	// 기록 보기
 	@PostMapping(value="/stock/list")
-	public Map<String, Object>stockList(@RequestBody Map<String, Object>param){
+	public Map<String, Object>stockList(@RequestBody Map<String, Object>param){	
 		log.info("param : {}",param);
 		return service.stockList(param);
 	}

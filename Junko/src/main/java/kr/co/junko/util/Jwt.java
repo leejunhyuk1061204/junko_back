@@ -39,19 +39,24 @@ private static SecretKey priKey = null;
 	}
 	
 	public static Map<String, Object> readToken(String token) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			Claims claims = Jwts.parserBuilder()
-					.setSigningKey(priKey).build()
-					.parseClaimsJws(token).getBody();
-			for (String key : claims.keySet()) {
-				result.put(key, claims.get(key));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("id", "");
-		}
-		return result;
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        if (token != null && token.startsWith("Bearer ")) {
+	            token = token.substring(7).trim();
+	        }
+
+	        Claims claims = Jwts.parserBuilder()
+	                .setSigningKey(priKey).build()
+	                .parseClaimsJws(token).getBody();
+
+	        for (String key : claims.keySet()) {
+	            result.put(key, claims.get(key));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        result.put("id", "");
+	    }
+	    return result;
 	}
 
 	public static int getUserIdx(HttpServletRequest request) {

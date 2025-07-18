@@ -21,6 +21,10 @@ public interface CustomDAO {
 	int customCnt(Map<String, Object> param);
 
 	CustomDTO customSelect(int custom_idx);
+
+	List<Map<String, Object>> customList2(Map<String, Object> param);
+
+	int customListTotalPage(Map<String, Object> param);
 	
 	
 	

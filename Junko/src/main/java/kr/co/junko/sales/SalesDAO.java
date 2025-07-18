@@ -15,7 +15,7 @@ public interface SalesDAO {
 
 	int salesUpdate(SalesDTO dto);
 
-	List<SalesDTO> salesList(Map<String, Object> param);
+	List<Map<String, Object>> salesList(Map<String, Object> param);
 
 	int salesListTotalPage(Map<String, Object> param);
 
@@ -27,7 +27,7 @@ public interface SalesDAO {
 
 	int salesProductUpdate(SalesProductDTO dto);
 
-	List<SalesProductDTO> salesProductList(Map<String, Object> param);
+	List<Map<String, Object>> salesProductList(Map<String, Object> param);
 
 	int salesProdcutListTotalPage(Map<String, Object> param);
 

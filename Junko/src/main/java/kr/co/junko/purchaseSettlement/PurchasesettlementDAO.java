@@ -3,6 +3,7 @@ package kr.co.junko.purchaseSettlement;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.PurchaseSettlementDTO;
@@ -33,8 +34,12 @@ public interface PurchasesettlementDAO {
 
 	FileDTO settlementFileDown(int idx);
 
-	List<PurchaseSettlementDTO> getFilteredSettlements(String status, String customName, String startDate,
-			String endDate);
+	List<PurchaseSettlementDTO> getFilteredSettlements(
+			  @Param("status") String status,
+			  @Param("customName") String customName,
+			  @Param("start") String start,
+			  @Param("end") String end
+			);
 
 	int userIdxByLoginId(String loginId);
 
