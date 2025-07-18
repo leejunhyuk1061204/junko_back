@@ -67,11 +67,12 @@ public class CollectionAndPaymentController {
 	// 검색 정렬
 	@PostMapping("/searchCap")
 	public Map<String, Object> searchCap(@RequestBody CapSearchDTO dto) {
-		Map<String, Object> result = new HashMap<>();
-		List<CollectionAndPaymentResponseDTO> list = service.searchCap(dto);
-		result.put("success", true);
-		result.put("data", list);
-		return result;
+	    List<CollectionAndPaymentResponseDTO> list = service.searchCap(dto);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("success", true);
+	    result.put("data", list);
+	    return result;
 	}
 
 	// 수정 (토큰 기반)

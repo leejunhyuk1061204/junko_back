@@ -229,7 +229,7 @@ public class CollectionAndPaymentService {
 	}
 
 	public List<CollectionAndPaymentResponseDTO> searchCap(CapSearchDTO dto) {
-		return dao.searchCap(dao);
+		return dao.searchCap(dto);
 	}
 
 	public int userIdxByLoginId(String loginId) {
