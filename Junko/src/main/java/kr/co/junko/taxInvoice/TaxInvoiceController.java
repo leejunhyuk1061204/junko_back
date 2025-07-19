@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 public class TaxInvoiceController {
 
-	@Autowired
+	@Autowired 
 	private final TaxInvoiceService service;
 	Map<String, Object> result = null;
 	
