@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.accountCode.AccountCodeDAO">
+
+    <!-- 계정과목 등록 -->
+    <insert id="accountInsert" parameterType="kr.co.junko.dto.AccountCodeDTO">
+        INSERT INTO account_code (as_name, del_yn)
+        VALUES (#{as_name}, 0)
+    </insert>
+
+    <!-- 계정과목 수정 -->
+    <update id="accountUpdate" parameterType="kr.co.junko.dto.AccountCodeDTO">
+        UPDATE account_code
+        SET as_name = #{as_name}
+        WHERE as_idx = #{as_idx}
+        AND del_yn = 0
+    </update>
+
+    <!-- 계정과목 삭제 (논리삭제) -->
+    <update id="accountDel" parameterType="int">
+        UPDATE account_code
+        SET del_yn = 1
+        WHERE as_idx = #{as_idx}
+    </update>
+
+    <!-- 계정과목 리스트 -->
+    <select id="accountList" resultType="kr.co.junko.dto.AccountCodeDTO">
+        SELECT as_idx, as_name, del_yn
+        FROM account_code
+        WHERE del_yn = 0
+        ORDER BY as_idx DESC
+    </select>
+
+</mapper>

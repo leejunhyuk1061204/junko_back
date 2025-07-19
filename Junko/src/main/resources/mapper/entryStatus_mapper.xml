@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.entryStatus.EntryStatusDAO">
+
+    <!-- 정산 등록 -->
+    <insert id="settlementInsert" parameterType="kr.co.junko.dto.EntryStatusDTO">
+        INSERT INTO entry_status (
+            entry_idx, custom_idx, settlement_day,
+            total_amount, amount, status
+        ) VALUES (
+            #{entry_idx}, #{custom_idx}, #{settlement_day},
+            #{total_amount}, #{amount}, #{status}
+        )
+    </insert>
+
+    <!-- 정산 리스트 -->
+    <select id="settlementList" parameterType="map" resultType="kr.co.junko.dto.EntryStatusDTO">
+        SELECT es.*, c.custom_name
+        FROM entry_status es
+        LEFT JOIN custom c ON es.custom_idx = c.custom_idx
+        WHERE es.del_yn = 0
+        <if test="status != null and status != ''">
+            AND es.status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (
+                c.custom_name LIKE CONCAT('%', #{keyword}, '%')
+                OR es.total_amount LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        ORDER BY es.settlement_day DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 정산 총합 -->
+    <select id="settlementTotal" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM entry_status es
+        LEFT JOIN custom c ON es.custom_idx = c.custom_idx
+        WHERE es.del_yn = 0
+        <if test="status != null and status != ''">
+            AND es.status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (
+                c.custom_name LIKE CONCAT('%', #{keyword}, '%')
+                OR es.total_amount LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+    </select>
+
+    <!-- 정산 수정 -->
+    <update id="settlementUpdate" parameterType="kr.co.junko.dto.EntryStatusDTO">
+        UPDATE entry_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="settlement_day != null">
+                settlement_day = #{settlement_day},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+        </trim>
+        WHERE settlement_id = #{settlement_id}
+    </update>
+
+    <!-- 정산 삭제 -->
+    <update id="settlementDel" parameterType="int">
+        UPDATE entry_status
+        SET del_yn = 1
+        WHERE settlement_id = #{settlement_id}
+    </update>
+
+    <!-- 정산 상세보기  -->
+    <select id="settlementDetail" parameterType="int" resultType="kr.co.junko.dto.EntryStatusDTO">
+        SELECT 
+            es.*, 
+            c.custom_name,
+            v.entry_type,
+            v.entry_date,
+            v.amount AS voucher_amount
+        FROM entry_status es
+        LEFT JOIN custom c ON es.custom_idx = c.custom_idx
+        LEFT JOIN voucher v ON es.entry_idx = v.entry_idx
+        WHERE es.del_yn = 0
+        AND es.settlement_id = #{settlement_id}
+    </select>
+
+    <!-- 정산 다건 등록 -->
+    <insert id="settlementMulti" parameterType="kr.co.junko.dto.EntryStatusDTO">
+        INSERT INTO entry_status (
+            entry_idx,
+            custom_idx,
+            settlement_day,
+            total_amount,
+            amount,
+            status
+        ) VALUES (
+            #{entry_idx},
+            #{custom_idx},
+            #{settlement_day},
+            #{amount},
+            #{amount},
+            #{status}
+        )
+    </insert>
+
+    <!-- 해당 전표의 정산 총합 구하기 -->
+    <select id="sumAmount" resultType="int">
+        SELECT IFNULL(SUM(amount), 0)
+        FROM entry_status
+        WHERE entry_idx = #{entry_idx}
+        AND del_yn = 0
+    </select>
+
+    <!-- 정산 상태 업데이트 -->
+    <update id="voucherSettlementUpdate">
+        UPDATE voucher
+        SET status = #{status}
+        WHERE entry_idx = #{entry_idx}
+    </update>
+
+    <!-- 해당 전표의 정산 레코드 개수 -->
+    <select id="settlementCnt" resultType="int">
+        SELECT COUNT(*) FROM entry_status
+        WHERE entry_idx = #{entry_idx}
+        AND del_yn = 0
+    </select>
+
+    <!-- 전표 총액 -->
+    <select id="voucherAmount" resultType="int">
+        SELECT amount
+        FROM voucher
+        WHERE entry_idx = #{entry_idx}
+    </select>
+
+</mapper>
