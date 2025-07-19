@@ -1,6 +1,7 @@
 package kr.co.junko.voucher;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,5 +24,15 @@ public interface VoucherDAO {
     public int voucherTotal(String entry_type, String status, String keyword);
 
     public void insertEntryDetail(EntryDetailDTO detail);
+
+    public VoucherDTO voucherDetail(int entry_idx);
+
+    public List<EntryDetailDTO> entryDetailList(int entry_idx);
+
+    public int voucherStatusUpdate(Map<String, Object> map);
+
+    public boolean checkReceiptPayment(int entry_idx);
+
+    public void insertReceiptPayment(Map<String, Object> insertMap);
 
 }

@@ -100,5 +100,30 @@ public class VoucherController {
     }
 
 
+    // 전표 상세
+    @GetMapping("/voucher/detail/{entry_idx}")
+    public Map<String, Object> voucherDetail(@PathVariable int entry_idx) {
+        result = new HashMap<String, Object>();
+        VoucherDTO dto = service.voucherDetail(entry_idx);
+
+        result.put("success", dto != null);
+        result.put("data", dto);
+        return result;
+    }
     
+    // 전표 상태 변경
+    @PutMapping("/voucher/status/update/{entry_idx}")
+    public Map<String, Object> voucherStatusUpdate(
+        @PathVariable int entry_idx,
+        @RequestBody Map<String, Object> body) {
+        result = new HashMap<String, Object>();
+
+        String status = (String) body.get("status");
+        boolean success = service.voucherStatusUpdate(entry_idx, status);
+
+        result.put("success", success);
+        return result;
+    }
+
+
 }

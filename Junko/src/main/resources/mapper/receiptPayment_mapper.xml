@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.receiptPayment.ReceiptPaymentDAO">
+
+    <!-- 수금 등록 -->
+    <insert id="receiptInsert" parameterType="kr.co.junko.dto.ReceiptPaymentDTO">
+        INSERT INTO receipt_payment (
+            type, entry_idx, custom_idx, amount, method, transaction_date,
+            note, status, reg_date, user_idx
+        ) VALUES (
+            #{type}, #{entry_idx}, #{custom_idx}, #{amount}, #{method}, #{transaction_date},
+            #{note}, #{status}, NOW(), #{user_idx}
+        )
+    </insert>
+
+    <!-- 지급 등록 -->
+    <insert id="paymentInsert" parameterType="kr.co.junko.dto.ReceiptPaymentDTO">
+        INSERT INTO receipt_payment (
+            type, entry_idx, custom_idx, amount, method, transaction_date,
+            note, status, reg_date, user_idx
+        ) VALUES (
+            #{type}, #{entry_idx}, #{custom_idx}, #{amount}, #{method}, #{transaction_date},
+            #{note}, #{status}, NOW(), #{user_idx}
+        )
+    </insert>
+
+    <!-- 수정 (공통) -->
+    <update id="receiptUpdate" parameterType="kr.co.junko.dto.ReceiptPaymentDTO">
+        UPDATE receipt_payment
+        SET
+            entry_idx = #{entry_idx},
+            custom_idx = #{custom_idx},
+            amount = #{amount},
+            method = #{method},
+            transaction_date = #{transaction_date},
+            note = #{note},
+            status = #{status},
+            mod_date = NOW()
+        WHERE rp_idx = #{rp_idx} AND del_yn = 0
+    </update>
+
+    <!-- 논리 삭제 -->
+    <update id="receiptDel" parameterType="int">
+        UPDATE receipt_payment
+        SET del_yn = 1, mod_date = NOW()
+        WHERE rp_idx = #{rp_idx}
+    </update>
+
+    <!-- 수금 리스트 -->
+    <select id="receiptList" parameterType="String" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
+        SELECT *
+        FROM receipt_payment
+        WHERE del_yn = 0 AND type = #{type}
+        ORDER BY transaction_date DESC, rp_idx DESC
+    </select>
+
+    <!-- 지급 리스트 -->
+    <select id="paymentList" parameterType="String" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
+        SELECT *
+        FROM receipt_payment
+        WHERE del_yn = 0 AND type = #{type}
+        ORDER BY transaction_date DESC, rp_idx DESC
+    </select>
+
+    <!-- 수금 상세 -->
+    <select id="detailReceipt" parameterType="int" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
+        SELECT *
+        FROM receipt_payment
+        WHERE rp_idx = #{rp_idx} AND del_yn = 0 AND type = '수금'
+    </select>
+
+    <!-- 지급 상세 -->
+    <select id="detailPayment" parameterType="int" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
+        SELECT *
+        FROM receipt_payment
+        WHERE rp_idx = #{rp_idx} AND del_yn = 0 AND type = '지급'
+    </select>
+
+    <update id="updateVoucherStatus" parameterType="map">
+        UPDATE voucher
+        SET status = #{status}
+        WHERE entry_idx = #{entry_idx}
+    </update>
+
+</mapper>

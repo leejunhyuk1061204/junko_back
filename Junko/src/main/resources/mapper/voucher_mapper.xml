@@ -103,4 +103,44 @@
         ) 
     </insert>
 
+    <!-- 전표 기본 정보 -->
+    <select id="voucherDetail" resultType="kr.co.junko.dto.VoucherDTO">
+        SELECT * FROM voucher
+        WHERE entry_idx = #{entry_idx}
+        AND del_yn = 0
+    </select>
+
+    <!-- 전표 분개 내역 -->
+    <select id="entryDetailList" resultType="kr.co.junko.dto.EntryDetailDTO">
+        SELECT * FROM entry_detail
+        WHERE entry_idx = #{entry_idx}
+        AND del_yn = 0
+    </select>
+
+    <!-- 전표 상태 업데이트 -->
+    <update id="voucherStatusUpdate" parameterType="map">
+        UPDATE voucher
+        SET status = #{status}
+        WHERE entry_idx = #{entry_idx}
+    </update>
+
+    <!-- 전표 기준 수금/지급 존재 여부 확인 -->
+    <select id="checkReceiptPayment" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM receipt_payment
+        WHERE entry_idx = #{entry_idx} AND del_yn = 0
+    </select>
+
+    <!-- 전표 기반 수금/지급 자동 생성 -->
+    <insert id="insertReceiptPayment" parameterType="map">
+        INSERT INTO receipt_payment (
+            type, entry_idx, custom_idx, amount, method, transaction_date,
+            note, status, reg_date, user_idx
+        )
+        VALUES (
+            #{type}, #{entry_idx}, #{custom_idx}, #{amount}, #{method}, #{transaction_date},
+            #{note}, #{status}, NOW(), #{user_idx}
+        )
+    </insert>
+
 </mapper>
