@@ -37,8 +37,8 @@ public class ScheduleService {
 		return dao.scheduleUpdate(dto)>0;
 	}
 
-	public boolean scheduleDelete(int schedule_idx) {
-		return dao.scheduleDelete(schedule_idx)>0;
+	public boolean scheduleDelete(int schedule_idx, int user_idx) {
+		return dao.scheduleDelete(schedule_idx, user_idx)>0;
 	}
 
 	public List<Map<String, Object>> scheduleList(Map<String, Object> param) {

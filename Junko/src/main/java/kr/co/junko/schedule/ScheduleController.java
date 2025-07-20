@@ -81,7 +81,8 @@ public class ScheduleController {
 		boolean login = false;
 		
 		if (loginId != null && !loginId.isEmpty()) {
-			success = service.scheduleDelete(schedule_idx);
+			int user_idx = service.userIdxByLoginId(loginId);
+			success = service.scheduleDelete(schedule_idx, user_idx);
 			login = true;
 		}
 		result.put("success", success);

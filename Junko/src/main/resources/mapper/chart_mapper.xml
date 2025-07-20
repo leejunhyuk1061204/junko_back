@@ -17,9 +17,9 @@
 		SELECT
 		    CURDATE() AS date, c.category_name, p.product_name
 		    <!-- 금일 총 매출 -->
-		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() THEN sp.product_price * sp.product_cnt ELSE 0 END) AS sales_today
+		    ,SUM(CASE WHEN s.payment_date = CURDATE() THEN sp.product_price * sp.product_cnt ELSE 0 END) AS sales_today
 		    <!-- 전일 총 매출 -->
-		    ,SUM(CASE WHEN DATE(s.payment_date) = CURDATE() - INTERVAL 1 DAY THEN sp.product_price * sp.product_cnt ELSE 0 END) AS sales_yesterday
+		    ,SUM(CASE WHEN s.payment_date = CURDATE() - INTERVAL 1 DAY THEN sp.product_price * sp.product_cnt ELSE 0 END) AS sales_yesterday
 		FROM sales s left JOIN sales_product sp ON s.sales_idx = sp.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx JOIN category c ON c.category_idx = p.category_idx
 		WHERE s.status IN ('결제 완료', '배송중', '배송완료')
@@ -56,7 +56,7 @@
 						AND p.category_idx IN (SELECT category_idx FROM category_tree)
 					</if>
 					<if test="startDate != null and endDate != null">
-				        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				        AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				    </if>
 		    	</where>
 		    GROUP BY date, c.category_idx, p.product_name ORDER BY date DESC LIMIT 5) t ORDER BY date
@@ -83,7 +83,7 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
 				<if test="startDate != null and endDate != null">
-				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
 		GROUP BY sp.product_idx, c.category_idx ORDER BY total_sales DESC LIMIT 5
@@ -136,12 +136,14 @@
 		JOIN category c ON p.category_idx = c.category_idx
 		JOIN stock st ON p.product_idx = st.product_idx
 		LEFT JOIN sales_product sp ON p.product_idx = sp.product_idx
-		<!-- 출고 이력에서 최근 30일 데이터만 조회 -->
-		LEFT JOIN sales sl ON sp.sales_idx = sl.sales_idx AND sl.payment_date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()
+		LEFT JOIN sales sl ON sp.sales_idx = sl.sales_idx
 			<where>
 				p.del_yn = 0
 				<if test="categoryIdx != null">
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
+				</if>
+				<if test="startDate != null and endDate != null">
+				    AND sl.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
 		GROUP BY p.product_idx, c.category_idx
@@ -167,7 +169,7 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
 				<if test="startDate != null and endDate != null">
-				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
 		GROUP BY p.product_idx, c.category_idx
@@ -222,7 +224,7 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
 				<if test="startDate != null and endDate != null">
-				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
 		ORDER BY delay_days DESC
@@ -252,10 +254,10 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
 				<if test="startDate != null and endDate != null">
-				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
-		GROUP BY DATE(s.payment_date) ORDER BY date
+		GROUP BY s.payment_date ORDER BY date
 	</select>
 	
 	<!-- 마진율 계산 -->
@@ -269,12 +271,12 @@
 				</where>
 		  		UNION ALL
 		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
-		SELECT c.category_name, p.product_name
+		SELECT DATE_FORMAT(s.payment_date, '%Y-%m') AS month, c.category_name, p.product_name
 		    ,SUM(sp.product_price * sp.product_cnt) AS total_sales <!-- 총 매출액 -->
 		    ,SUM(p.purchase_price * sp.product_cnt) AS total_cost <!-- 총 매입원가 -->
 		    ,ROUND( <!-- 마진율 = (매출-원가) / 매출*100, 소수점 없이 정수로 반올림 -->
 		        (SUM(sp.product_price * sp.product_cnt) - SUM(p.purchase_price * sp.product_cnt)) 
-		        / SUM(sp.product_price * sp.product_cnt) * 100, 0) AS margin_rate
+		        / NULLIF (SUM(sp.product_price * sp.product_cnt), 0) * 100, 0) AS margin_rate
 		FROM sales_product sp
 		JOIN sales s ON sp.sales_idx = s.sales_idx
 		JOIN product p ON sp.product_idx = p.product_idx
@@ -285,10 +287,10 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
 				<if test="startDate != null and endDate != null">
-				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
-		GROUP BY c.category_name, p.product_name
+		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m'), c.category_name, p.product_name ORDER BY month
 	</select>
 	
 	<!-- 순이익률 계산 -->
@@ -319,7 +321,7 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
 				<if test="startDate != null and endDate != null">
-				    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
 		GROUP BY c.category_name, p.product_name
@@ -345,7 +347,7 @@
 						AND p.category_idx IN (SELECT category_idx FROM category_tree)
 					</if>
 					<if test="startDate != null and endDate != null">
-					    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+					    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 					</if>
 		    	</where>
 		    ) AS total_receive_cnt,
@@ -358,7 +360,7 @@
 						AND p.category_idx IN (SELECT category_idx FROM category_tree)
 					</if>
 					<if test="startDate != null and endDate != null">
-					    AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+					    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 					</if>
 		    	</where>
 		    ) AS total_shipment_cnt
@@ -394,7 +396,7 @@
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
 				</if>
 			    <if test="startDate != null and endDate != null">
-			        AND DATE(s.payment_date) BETWEEN #{startDate} AND #{endDate}
+			        AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 			    </if>
 		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m') ORDER BY month
 	</select>
@@ -464,7 +466,7 @@
 		JOIN product p ON p.product_idx = sp.product_idx
 		JOIN category c ON c.category_idx = p.category_idx
 			<where>
-				s.status = '결제 완료' AND DATE(payment_date) >= CURDATE() - INTERVAL 5 DAY AND s.del_yn = 0
+				s.status = '결제 완료' AND payment_date >= CURDATE() - INTERVAL 5 DAY AND s.del_yn = 0
 				<if test="categoryIdx != null">
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
 				</if>
@@ -487,7 +489,7 @@
 		JOIN product p ON sp.product_idx = p.product_idx JOIN category c ON p.category_idx = c.category_idx
 			<where>
 				s.status = '출고 예정'
-				AND s.del_yn = 0 AND DATE(s.payment_date) = CURDATE() <!-- 오늘 실적 -->
+				AND s.del_yn = 0 AND s.payment_date = CURDATE() <!-- 오늘 실적 -->
 				<if test="categoryIdx != null">
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
 				</if>
@@ -510,7 +512,7 @@
 		FROM shipment smt JOIN sales s ON smt.sales_idx = s.sales_idx JOIN sales_product sp ON sp.sales_idx = s.sales_idx
 		JOIN product p ON p.product_idx = sp.product_idx JOIN category c ON p.category_idx = c.category_idx
 			<where>
-				DATE(smt.shipment_date) = CURDATE() AND s.status = '배송중' AND smt.del_yn = 0 AND s.del_yn = 0
+				smt.shipment_date = CURDATE() AND s.status = '배송중' AND smt.del_yn = 0 AND s.del_yn = 0
 				<if test="categoryIdx != null">
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
 				</if>
@@ -542,6 +544,32 @@
 				</if>
 			</where>
 		GROUP BY c.category_name
+	</select>
+	
+	<!-- 카테고리별 전체 매출 -->
+	<select id="getSalesByCategory" resultType="map">
+		WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT c.category_name, SUM(IFNULL(sp.product_price,0) * IFNULL(sp.product_cnt,0)) AS sales
+		FROM sales s JOIN sales_product sp ON s.sales_idx = sp.sales_idx
+		JOIN product p ON sp.product_idx = p.product_idx JOIN category c ON p.category_idx = c.category_idx
+			<where>
+				s.status IN ('결제 완료','배송중','배송완료')
+				<if test="categoryIdx != null">
+					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
+				</if>
+			    <if test="startDate != null and endDate != null">
+			        AND s.payment_date BETWEEN #{startDate} AND #{endDate}
+			    </if>
+			</where>
+		GROUP BY c.category_idx, c.category_name, c.category_parent
 	</select>
 
 </mapper>

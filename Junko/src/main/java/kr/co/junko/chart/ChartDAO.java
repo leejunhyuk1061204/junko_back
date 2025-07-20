@@ -46,5 +46,7 @@ public interface ChartDAO {
 
 	List<Map<String, Object>> getReceiveThisMonth(Map<String, Object> param);
 
+	List<Map<String, Object>> getSalesByCategory(Map<String, Object> param);
+
 
 }
