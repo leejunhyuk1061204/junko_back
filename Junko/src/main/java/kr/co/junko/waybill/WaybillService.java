@@ -134,8 +134,8 @@ public class WaybillService {
 				SalesProductDTO salesProduct = new SalesProductDTO();
 				salesProduct.setProduct_idx(p.getProduct_idx());
 				salesProduct.setProduct_cnt(p.getReturn_cnt());
-				if(p.getExchange_idx() != 0) {
-					salesProduct.setProduct_option_idx(p.getExchange_idx());
+				if(p.getExchange_option() != 0) {
+					salesProduct.setProduct_option_idx(p.getExchange_option());
 				}
 				productList.add(salesProduct);
 			}

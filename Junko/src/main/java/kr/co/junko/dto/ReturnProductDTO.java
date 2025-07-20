@@ -11,5 +11,5 @@ public class ReturnProductDTO {
 	private int product_option_idx;
 	private int return_cnt;
 	private boolean del_yn;
-	private int exchange_idx;
+	private int exchange_option;
 }

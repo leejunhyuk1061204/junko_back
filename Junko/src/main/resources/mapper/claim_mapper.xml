@@ -30,30 +30,36 @@
 		where claim_idx = #{claim_idx}
 	</update>
 
-	<select id="claimList" parameterType="map" resultType="kr.co.junko.dto.ClaimDTO">
-		select * from claim
+	<select id="claimList" parameterType="map" resultType="map">
+		select * from claim c
 		<where>
-			del_yn = false
+			c.del_yn = false
 			<if test="sales_idx != null and sales_idx != 0">
-				and sales_idx = #{sales_idx}
+				and c.sales_idx = #{sales_idx}
 			</if>
 			<if test="type != null and type != ''">
-				and type = #{type}
+				and c.type = #{type}
 			</if>
 			<if test="claim_reason != null and claim_reason != ''">
-				and claim_reason like concat('%',#{claim_reason},'%')
+				and c.claim_reason like concat('%',#{claim_reason},'%')
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and c.status = #{status}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and claim_date > #{start_date}
+				and c.claim_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date !=''">
-				and claim_date <![CDATA[<]]> #{end_date}
+				and c.claim_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="claim_date != null and claim_date !=''">
-				and claim_date = #{claim_date}
+				and c.claim_date = #{claim_date}
+			</if>
+			<if test="search != null and search != ''">
+				and (
+					c.claim_idx LIKE CONCAT('%', #{search}, '%')
+					OR c.sales_idx LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
@@ -62,33 +68,41 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != '' and page !=0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 
 	<select id="claimListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) from claim
+		select ceil(count(*)*1.0/#{cnt}) from claim c
 		<where>
-			del_yn = false
+			c.del_yn = false
 			<if test="sales_idx != null and sales_idx != 0">
-				and sales_idx = #{sales_idx}
+				and c.sales_idx = #{sales_idx}
 			</if>
 			<if test="type != null and type != ''">
-				and type = #{type}
+				and c.type = #{type}
 			</if>
 			<if test="claim_reason != null and claim_reason != ''">
-				and claim_reason like concat('%',#{claim_reason},'%')
+				and c.claim_reason like concat('%',#{claim_reason},'%')
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and c.status = #{status}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and claim_date > #{start_date}
+				and c.claim_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date !=''">
-				and claim_date <![CDATA[<]]> #{end_date}
+				and c.claim_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="claim_date != null and claim_date !=''">
-				and claim_date = #{claim_date}
+				and c.claim_date = #{claim_date}
+			</if>
+			<if test="search != null and search != ''">
+				and (
+					c.claim_idx LIKE CONCAT('%', #{search}, '%')
+					OR c.sales_idx LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
 	</select>

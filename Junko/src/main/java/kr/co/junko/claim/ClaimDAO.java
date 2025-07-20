@@ -15,7 +15,7 @@ public interface ClaimDAO {
 
 	int claimUpdate(ClaimDTO dto);
 
-	List<ClaimDTO> claimList(Map<String, Object> param);
+	List<Map<String, Object>> claimList(Map<String, Object> param);
 
 	int claimListTotalPage(Map<String, Object> param);
 
