@@ -44,6 +44,7 @@ public class AccountEntryController {
 	public Map<String, Object> accountList(@PathVariable String page) {
 		return service.accountList(page);
 	}
+	
 
 	//거래처 명 idx와 연결
 	// AccountEntryController.java
@@ -295,4 +296,16 @@ public class AccountEntryController {
 		}
 		return result;
 	}
+	
+	// 정산 entry_idx 불러오
+	@GetMapping("/entryListForSettlement")
+	public Map<String, Object> entryListForSettlement() {
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("data", service.getEntryListForSettlement());
+	    return result;
+	}
+	
+	
+	
+	
 }

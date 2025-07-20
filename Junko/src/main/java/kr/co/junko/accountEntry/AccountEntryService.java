@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -280,5 +281,12 @@ public class AccountEntryService {
 
     public boolean hasDept(int entry_idx) {
         return deptDao.countDeptByEntryIdx(entry_idx) > 0;
+    }
+
+    public List<AccountingEntryDTO> getEntryListForSettlement() {
+        List<AccountingEntryDTO> all = dao.accountList(0, 99999); // 충분히 큰 수
+        return all.stream()
+                .filter(e -> "미정산".equals(e.getStatus()) || "부분정산".equals(e.getStatus()))
+                .collect(Collectors.toList());
     }
 }

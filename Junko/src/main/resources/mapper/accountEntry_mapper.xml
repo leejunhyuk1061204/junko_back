@@ -269,6 +269,23 @@ ORDER BY file_idx DESC
         #{type}, #{idx}, #{del_yn}
     )
 </insert>
+
+
+<resultMap id="entryResultMap" type="kr.co.junko.dto.AccountingEntryDTO">
+    <id property="entry_idx" column="entry_idx"/>
+    <result property="account_idx" column="account_idx"/>
+    <result property="entry_type" column="entry_type"/>
+    <result property="amount" column="amount"/>
+    <result property="entry_date" column="entry_date"/>
+    <result property="custom_idx" column="custom_idx"/>
+    <result property="sales_idx" column="sales_idx"/>
+    <result property="status" column="status"/>
+    <result property="custom_name" column="custom_name"/>
+    <result property="customer_name" column="customer_name"/>
+    <result property="user_name" column="user_name"/>
+    <result property="user_id" column="user_id"/>
+    <result property="has_file" column="has_file"/>
+</resultMap>
 	
 	
 </mapper>
