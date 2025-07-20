@@ -57,6 +57,7 @@ public class ChartService {
 		list.put("getPendingShipment", safeList(dao.getPendingShipment(param)));
 		list.put("getShippedToday", safeList(dao.getShippedToday(param)));
 		list.put("getReceiveThisMonth", safeList(dao.getReceiveThisMonth(param)));
+		list.put("getSalesByCategory", safeList(dao.getSalesByCategory(param)));
 		
 		return list;
 	}

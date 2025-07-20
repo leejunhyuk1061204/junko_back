@@ -133,7 +133,11 @@
 </select>
 	
 	
-	
+	<select id="userIdxByLoginId" parameterType="String" resultType="int">
+    SELECT user_idx
+    FROM user
+    WHERE user_id = #{loginId}
+</select>
 	
 	
 	

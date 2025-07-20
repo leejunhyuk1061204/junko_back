@@ -19,7 +19,7 @@ public interface ScheduleDAO {
 
 	int scheduleUpdate(ScheduleDTO dto);
 
-	int scheduleDelete(int schedule_idx);
+	int scheduleDelete(int schedule_idx, int user_idx);
 
 	List<Map<String, Object>> scheduleListPersonal(Map<String, Object> param);
 
