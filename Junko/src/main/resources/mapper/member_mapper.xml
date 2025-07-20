@@ -67,7 +67,9 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != '' and page != 0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 
 	<select id="userListTotalPage" parameterType="map">
