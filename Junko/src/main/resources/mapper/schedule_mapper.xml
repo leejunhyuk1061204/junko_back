@@ -55,7 +55,7 @@
 	
 	<select id="scheduleListDept" resultType="map" parameterType="map">
 		SELECT u.user_name, sl.label_name, s.* FROM schedule s JOIN schedule_label sl ON sl.label_idx = s.label_idx
-			JOIN user u ON s.user_idx = u.user_idx WHERE s.label_idx != 1 AND u.dept_idx = #{dept_idx}
+			JOIN user u ON s.user_idx = u.user_idx WHERE s.label_idx NOT IN (1,2,3,5,6) AND u.dept_idx = #{dept_idx}
 	</select>
 	
 	<select id="getUserInfo" resultType="kr.co.junko.dto.MemberDTO">
