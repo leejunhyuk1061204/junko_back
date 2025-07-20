@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.junko.dto.FileDTO;
 import lombok.RequiredArgsConstructor;
@@ -135,4 +139,46 @@ public class FileController {
         }
     }
 	
+
+    // 파일 저장
+    @PostMapping("/file/upload/{type}/{idx}")
+    public Map<String, Object> uploadFile(
+            @PathVariable String type,
+            @PathVariable int idx,
+            @RequestParam("file") MultipartFile file) {
+
+        result = new HashMap<String, Object>();
+
+        boolean success = service.uploadFile(type, idx, file);
+
+        result.put("success", success);
+        return result;
+    }
+
+    // 파일 리스트 조회
+    @GetMapping("/file/list/{type}/{idx}")
+    public Map<String, Object> getFileList(
+        @PathVariable String type,
+        @PathVariable int idx) {
+
+        result = new HashMap<>();
+        List<FileDTO> list = service.fileList(type, idx);
+        result.put("success", true);
+        result.put("list", list);
+        return result;
+    }
+
+    // 파일 삭제
+    @PutMapping("/file/del/{type}/{idx}")
+    public Map<String, Object> delFile(
+        @PathVariable String type,
+        @PathVariable int idx) {
+
+        result = new HashMap<>();
+        boolean success = service.delFile(type, idx);
+        result.put("success", success);
+        return result;
+    }
+
+
 }

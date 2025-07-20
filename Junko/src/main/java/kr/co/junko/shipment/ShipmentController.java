@@ -53,4 +53,18 @@ public class ShipmentController {
 		return result;
 	}
 	
+	// 출고할 상품 리스트
+	@GetMapping(value="/shipmentProduct/list/{shipment_idx}")
+	public Map<String, Object>shipmentProductList(@PathVariable int shipment_idx){
+		log.info("idx: "+shipment_idx);
+		return service.shipmentProductList(shipment_idx);
+	}
+	
+	// 출고할 상품의 보관 위치 리스트
+	@PostMapping(value="/shipmentProductStockList")
+	public Map<String, Object>shipmentProductStockList(@RequestBody Map<String, Object>param){
+		log.info("param: {}",param);
+		return service.shipmentProductStockList(param);
+	}
+	
 }

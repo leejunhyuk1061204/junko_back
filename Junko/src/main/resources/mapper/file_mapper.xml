@@ -30,4 +30,21 @@
 		select * from file where type="발주서" and idx = #{param1}
 	</select>
 	
+	<!-- 파일 리스트 조회 -->
+	<select id="fileList" resultType="kr.co.junko.dto.FileDTO">
+		SELECT * FROM file
+		WHERE type = #{type}
+		AND idx = #{idx}
+		AND del_yn = 0
+		ORDER BY reg_date DESC
+	</select>
+
+	<!-- 파일 논리삭제 -->
+	<update id="delFile">
+		UPDATE file
+		SET del_yn = 1
+		WHERE type = #{type}
+		AND idx = #{idx}
+	</update>
+
 </mapper>

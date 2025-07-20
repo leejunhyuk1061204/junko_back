@@ -1,5 +1,6 @@
 package kr.co.junko.file;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +17,9 @@ public interface FileDAO {
 	int orderFileUpdate(int order_idx,String fileName);
 
 	FileDTO fileSearchByOrderIdx(int order_idx);
+
+	List<FileDTO> fileList(String type, int idx);
+
+    int delFile(Map<String, Object> param);
 	
 }

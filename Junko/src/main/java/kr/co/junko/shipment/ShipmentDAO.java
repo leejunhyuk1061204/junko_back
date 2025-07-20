@@ -15,12 +15,16 @@ public interface ShipmentDAO {
 
 	int shipmentUpdate(ShipmentDTO dto);
 
-	List<ShipmentDTO> shipmentList(Map<String, Object> param);
+	List<Map<String, Object>> shipmentList(Map<String, Object> param);
 
 	int shipmentListTotalPage(Map<String, Object> param);
 
 	int shipmentDel(int idx);
 
 	ShipmentDTO shipmentDetailByIdx(int shipment_idx);
+
+	List<Map<String, Object>> shipmentProductList(int idx);
+
+	List<Map<String, Object>> shipmentProductStockList(Map<String, Object> param);
 
 }
