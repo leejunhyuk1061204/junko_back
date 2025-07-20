@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.junko.invoiceTax.InvoiceTaxDAO">
+
+    <!-- 세금계산서 등록 -->
+    <insert id="insertInvoice" parameterType="kr.co.junko.dto.InvoiceTaxDTO" 
+        useGeneratedKeys="true" keyProperty="invoice_idx">
+        INSERT INTO invoice_tax (custom_idx, entry_idx, total_amount, status, reg_date, issued_by)
+        VALUES (#{custom_idx}, #{entry_idx}, #{total_amount}, #{status}, NOW(), #{issued_by})
+    </insert>
+
+    <insert id="insertInvoiceDetail" parameterType="kr.co.junko.dto.InvoiceDetailDTO">
+        INSERT INTO invoice_detail (invoice_idx, item_name, quantity, price, total_amount)
+        VALUES (#{invoice_idx}, #{item_name}, #{quantity}, #{price}, #{total_amount})
+    </insert>
+
+    <!-- 세금계산서 수정 -->
+    <update id="updateInvoice" parameterType="kr.co.junko.dto.InvoiceTaxDTO">
+        UPDATE invoice_tax
+        SET custom_idx = #{custom_idx},
+            entry_idx = #{entry_idx},
+            total_amount = #{total_amount},
+            status = #{status},
+            mod_date = NOW(),
+            issued_by = #{issued_by}
+        WHERE invoice_idx = #{invoice_idx}
+    </update>
+
+    <!-- 세금계산서 디테일 삭제 -->
+    <update id="delInvoiceDetail" parameterType="int">
+        UPDATE invoice_detail
+        SET del_yn = 1
+        WHERE invoice_idx = #{invoice_idx}
+    </update>
+
+    <!-- 세금계산서 삭제 -->
+    <update id="delInvoice" parameterType="int">
+        UPDATE invoice_tax
+        SET del_yn = 1, mod_date = NOW()
+        WHERE invoice_idx = #{invoice_idx}
+    </update>
+
+    <!-- 세금계산서 리스트 -->
+    <select id="invoicesList" resultType="kr.co.junko.dto.InvoiceTaxDTO">
+        SELECT * FROM invoice_tax
+        WHERE del_yn = 0
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND issued_by LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="startDate != null and endDate != null">
+            AND reg_date BETWEEN #{startDate} AND #{endDate}
+        </if>
+        ORDER BY reg_date DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="invoiceTotal" resultType="int">
+        SELECT COUNT(*) FROM invoice_tax
+        WHERE del_yn = 0
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND issued_by LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="startDate != null and endDate != null">
+            AND reg_date BETWEEN #{startDate} AND #{endDate}
+        </if>
+    </select>
+
+    <!-- 세금계산서 상세보기 -->
+    <select id="invoiceDetail" resultType="kr.co.junko.dto.InvoiceTaxDTO" parameterType="int">
+        SELECT * FROM invoice_tax
+        WHERE invoice_idx = #{invoice_idx} AND del_yn = 0
+    </select>
+
+    <select id="invoiceDetailList" resultType="kr.co.junko.dto.InvoiceDetailDTO" parameterType="int">
+        SELECT * FROM invoice_detail
+        WHERE invoice_idx = #{invoice_idx}
+    </select>
+
+    <!-- 세금계산서 상태 변경 -->
+    <update id="updateInvoiceStatus">
+        UPDATE invoice_tax
+        SET status = #{status}, mod_date = NOW()
+        WHERE invoice_idx = #{invoice_idx}
+    </update>
+
+</mapper>

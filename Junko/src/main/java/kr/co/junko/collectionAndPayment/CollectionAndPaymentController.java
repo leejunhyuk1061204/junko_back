@@ -20,32 +20,42 @@ public class CollectionAndPaymentController {
 	private final CollectionAndPaymentService service = null;
 	Map<String, Object> result = null;
 
+	
+	// 페이징처
+	@PostMapping("/searchCapPaged")
+	public Map<String, Object> searchCapPaged(@RequestBody CapSearchDTO dto) {
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("success", true);
+	    result.put("data", service.searchCapPaged(dto));
+	    result.put("total", service.countSearchCap(dto)); // 전체 개수 반환
+	    return result;
+	}
+	
 	// 등록 (토큰 기반)
 	@PostMapping("/capRegist")
 	public Map<String, Object> capRegist(@RequestBody CollectionAndPaymentRequestDTO dto,
 	                                     @RequestHeader Map<String, String> header) {
-		result = new HashMap<>();
+	    result = new HashMap<>();
+	    String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
-		if (loginId != null && !loginId.isEmpty()) {
-			int user_idx = service.userIdxByLoginId(loginId);
-			dto.setUser_idx(user_idx);
-
-			try {
-				service.capRegist(dto);
-				result.put("success", true);
-				result.put("message", "입금/지급 등록 성공");
-			} catch (Exception e) {
-				log.error("입금/지급 등록 실패", e);
-				result.put("success", false);
-				result.put("message", "등록 중 오류 발생");
-			}
-		} else {
-			result.put("success", false);
-			result.put("message", "로그인 정보 없음");
-		}
-
-		return result;
+	    if (loginId != null && !loginId.isEmpty()) {
+	        int user_idx = service.userIdxByLoginId(loginId);
+	        dto.setUser_idx(user_idx);
+	        try {
+	            int cap_idx = service.capRegist(dto); 
+	            result.put("success", true);
+	            result.put("cap_idx", cap_idx);       
+	            result.put("message", "입금/지급 등록 성공");
+	        } catch (Exception e) {
+	            log.error("입금/지급 등록 실패", e);
+	            result.put("success", false);
+	            result.put("message", "등록 중 오류 발생");
+	        }
+	    } else {
+	        result.put("success", false);
+	        result.put("message", "로그인 정보 없음");
+	    }
+	    return result;
 	}
 
 	// 조회

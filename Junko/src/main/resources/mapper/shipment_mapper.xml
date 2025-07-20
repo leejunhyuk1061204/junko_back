@@ -33,73 +33,111 @@
 		where shipment_idx = #{shipment_idx}
 	</update>
 	
-	<select id="shipmentList" parameterType="map" resultType="kr.co.junko.dto.ShipmentDTO">
-		select * from shipment
+	<select id="shipmentList" parameterType="map" resultType="map">
+		select s.*,w.warehouse_name,u.user_name from shipment s
+		join warehouse w on w.warehouse_idx = s.warehouse_idx
+		join `user` u on u.user_idx = s.user_idx
 		<where>
-			del_yn = false
+			s.del_yn = false
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and s.user_idx = #{user_idx}
 			</if>
 			<if test="sales_idx != null and sales_idx != 0">
-				and sales_idx = #{sales_idx}
+				and s.sales_idx = #{sales_idx}
 			</if>
 			<if test="waybill_idx != null and waybill_idx != 0">
-				and waybill_idx = #{waybill_idx}
+				and s.waybill_idx = #{waybill_idx}
 			</if>
 			<if test="start_date != null and start_date !=''">
-				and shipment_date > #{start_date}
+				and s.shipment_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and shipment_date <![CDATA[<]]> = {end_date}
+				and s.shipment_date <![CDATA[<]]>= #{end_date}
 			</if>
-			<if test="shipment_date != null">
-				and shipment_date = #{shipment_date}
+			<if test="shipment_date != null and shipment_date != ''">
+				and s.shipment_date = #{shipment_date}
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and s.status = #{status}
 			</if>
 			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx}
+				and s.warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="search != null and search != ''">
+				and (
+					u.user_name LIKE CONCAT('%', #{search}, '%')
+				OR w.warehouse_name LIKE CONCAT('%', #{search}, '%')
+				OR s.shipment_idx LIKE CONCAT('%', #{search}, '%')
+				OR s.sales_idx LIKE CONCAT('%', #{search}, '%')
+				OR s.waybill_idx LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
-		<if test="orderColumn != null and orderColumn != ''">
-			order by ${orderColumn}
-			<if test="orderDirection != null and orderDirection != ''">
-				${orderDirection}
-			</if>
+		<choose>
+			<when test="orderColumn eq 'shipment_date'">
+				order by
+				case when s.shipment_date &gt;= current_date then 0 else 1 end,
+				s.shipment_date
+				<if test="orderDirection != null and orderDirection != ''">
+					${orderDirection}
+				</if>
+			</when>
+			<otherwise>
+				<if test="orderColumn != null and orderColumn != ''">
+					order by ${orderColumn}
+					<if test="orderDirection != null and orderDirection != ''">
+						${orderDirection}
+					</if>
+				</if>
+			</otherwise>
+		</choose>
+		<if test="page != null and page != '' and page !=0">
+			limit #{cnt} offset #{offset}
 		</if>
-		limit #{cnt} offset #{offset}
 	</select>
 	
 	<select id="shipmentListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) from shipment
+		select ceil(count(*)*1.0/#{cnt}) from (
+			select s.*,w.warehouse_name,u.user_name from shipment s
+		join warehouse w on w.warehouse_idx = s.warehouse_idx
+		join `user` u on u.user_idx = s.user_idx
 		<where>
-			del_yn = false
+			s.del_yn = false
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and s.user_idx = #{user_idx}
 			</if>
 			<if test="sales_idx != null and sales_idx != 0">
-				and sales_idx = #{sales_idx}
+				and s.sales_idx = #{sales_idx}
 			</if>
 			<if test="waybill_idx != null and waybill_idx != 0">
-				and waybill_idx = #{waybill_idx}
+				and s.waybill_idx = #{waybill_idx}
 			</if>
 			<if test="start_date != null and start_date !=''">
-				and shipment_date > #{start_date}
+				and s.shipment_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and shipment_date <![CDATA[<]]> = {end_date}
+				and s.shipment_date <![CDATA[<]]>= #{end_date}
 			</if>
-			<if test="shipment_date != null">
-				and shipment_date = #{shipment_date}
+			<if test="shipment_date != null and shipment_date != ''">
+				and s.shipment_date = #{shipment_date}
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and s.status = #{status}
 			</if>
 			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx}
+				and s.warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="search != null and search != ''">
+				and (
+					u.user_name LIKE CONCAT('%', #{search}, '%')
+				OR w.warehouse_name LIKE CONCAT('%', #{search}, '%')
+				OR s.shipment_idx LIKE CONCAT('%', #{search}, '%')
+				OR s.sales_idx LIKE CONCAT('%', #{search}, '%')
+				OR s.waybill_idx LIKE CONCAT('%', #{search}, '%')
+				)
 			</if>
 		</where>
+		) as total
 	</select>
 
 	<update id="shipmentDel">
@@ -108,6 +146,63 @@
 	
 	<select id="shipmentDetailByIdx" resultType="kr.co.junko.dto.ShipmentDTO">
 		select * from shipment where shipment_idx = #{param1}
+	</select>
+	
+	<select id="shipmentProductList" resultType="map">
+			SELECT 
+				s.*,sp.product_idx , 
+				sp.product_option_idx ,
+				p.product_name ,
+				c.combined_name , 
+				sp.product_cnt
+			from shipment s 
+				join sales s2 on s.sales_idx = s2.sales_idx 
+				join sales_product sp on s2.sales_idx = sp.sales_idx
+				join product p on p. product_idx = sp.product_idx 
+				left join product_option po on po.product_option_idx = sp.product_option_idx 
+				left join combined c on c.combined_idx = po.combined_idx 
+			where s.del_yn = false and s.shipment_idx = #{param1}
+	</select>
+	
+	<!-- 출고 시 선택 할 때 보여지는 리스트 -->
+	<select id="shipmentProductStockList" parameterType="map" resultType="map">
+		select 
+			s.product_idx,
+			p.product_name,
+			s.product_option_idx,
+			c.combined_name ,
+			sum(stock_cnt) as stock_cnt,
+			s.manufacture,
+			s.expiration,
+			s.warehouse_idx,
+			s.zone_idx ,
+			z.zone_name
+		from stock s 
+		join product p on p.product_idx = s.product_idx
+		join `zone` z on z.zone_idx = s.zone_idx
+		left join product_option po on po.product_option_idx = s.product_option_idx
+		left join combined c on c.combined_idx = po.combined_idx
+		<where>
+			s.del_yn = false
+			<if test="warehouse_idx != null and warehouse_idx != 0">
+				and s.warehouse_idx = #{warehouse_idx}
+			</if>
+			<if test="product_idx != null and product_idx != 0">
+				and s.product_idx = #{product_idx}
+			</if>
+			<if test="product_option_idx != null and product_option_idx != 0">
+				and s.product_option_idx = #{product_option_idx}
+			</if>
+		</where>
+		group by 
+			s.product_idx,
+			s.product_option_idx, 
+			s.manufacture , 
+			s.expiration ,
+			s.warehouse_idx,
+			s.zone_idx
+		having
+			sum(stock_cnt)>0
 	</select>
 	
 </mapper>

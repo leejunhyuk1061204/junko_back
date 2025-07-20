@@ -146,15 +146,17 @@ public class MemberService {
 	}
 
 	public Map<String, Object> userList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<MemberDTO>list = dao.userList(param);
-		int total = dao.userListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.userListTotalPage(param);
+			result.put("total", total);
+		}
+		List<MemberDTO>list = dao.userList(param);
 		result.put("list", list);
-		result.put("total", total);
 		return result;
 	}
 

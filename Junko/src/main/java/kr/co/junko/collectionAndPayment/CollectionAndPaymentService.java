@@ -236,7 +236,18 @@ public class CollectionAndPaymentService {
 		return dao.userIdxByLoginId(loginId);
 	}
 
+	public Map<String, Object> searchCapPaged(CapSearchDTO dto) {
+	    Map<String, Object> result = new HashMap<>();
+	    List<CollectionAndPaymentResponseDTO> list = dao.searchCapPaged(dto);
+	    int total = dao.countSearchCap(dto);
 
+	    result.put("list", list);
+	    result.put("total", total);
+	    return result;
+	}
 
+	public int countSearchCap(CapSearchDTO dto) {
+	    return dao.countSearchCap(dto);
+	}
 	
 }

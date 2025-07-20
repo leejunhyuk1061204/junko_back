@@ -16,5 +16,8 @@ public class CapSearchDTO {
 	    private String sortBy;        // 정렬 기준: "date", "amount"
 	    private String sortOrder;     // 정렬 방향: "asc", "desc"
 	
-	
+	    private int limit;
+	    private int offset;
+	    
+	    
 }

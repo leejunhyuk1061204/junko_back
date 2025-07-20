@@ -71,8 +71,14 @@ public class SalesController {
 	public Map<String, Object> salesCsvInsert(@RequestParam("file") MultipartFile file){
 		log.info("CSV file : {}",file);
 		result = new HashMap<String, Object>();
-		boolean success = service.salesCsvInsert(file);
-		result.put("success", success);
+		try {
+			boolean success = service.salesCsvInsert(file);
+			result.put("success", success);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	

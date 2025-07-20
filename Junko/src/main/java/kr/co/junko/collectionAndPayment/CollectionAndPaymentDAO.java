@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.co.junko.dto.CapSearchDTO;
 import kr.co.junko.dto.CollectionAndPaymentLogDTO;
@@ -47,6 +48,9 @@ public interface CollectionAndPaymentDAO {
 	List<CollectionAndPaymentResponseDTO> searchCap(CapSearchDTO dto);
 
 	int userIdxByLoginId(String loginId);
+
+	List<CollectionAndPaymentResponseDTO> searchCapPaged(CapSearchDTO dto);
+	int countSearchCap(CapSearchDTO dto);
 	
 	
 }

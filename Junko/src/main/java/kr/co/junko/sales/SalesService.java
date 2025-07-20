@@ -109,13 +109,17 @@ public class SalesService {
 
 	            // 상품 정보 추출
 	            int product_idx = Integer.parseInt(values[7]);
-	            int product_cnt = Integer.parseInt(values[8]);
-	            int product_price = Integer.parseInt(values[9]);
+	            int product_option_idx= 0;
+	            if(!values[8].isEmpty() && !values[8].equals("")) {
+	            	product_option_idx = Integer.parseInt(values[8]);
+	            }
+	            int product_cnt = Integer.parseInt(values[9]);
+	            int product_price = Integer.parseInt(values[10]);
 				
 	            
 	            
 	            // 주문번호가 같지 않으면 주문 등록
-	            if(!order_no.equals(lastOrder_no)) {
+	            if(!order_no.equals(lastOrder_no)||lastOrder_no.equals("")) {
 	            	dto = new SalesDTO();
 					dto.setCustomer(customer.trim());
 					dto.setCustomer_phone(phone.trim());
@@ -138,6 +142,9 @@ public class SalesService {
 	            SalesProductDTO productDTO = new SalesProductDTO();
 	            productDTO.setSales_idx(cur_salesIdx);
 	            productDTO.setProduct_idx(product_idx);
+	            if(product_option_idx != 0) {
+	            	productDTO.setProduct_option_idx(product_option_idx);
+	            }
 	            productDTO.setProduct_cnt(product_cnt);
 	            productDTO.setProduct_price(product_price);
 	            dao.salesProductInsert(productDTO);
@@ -145,12 +152,12 @@ public class SalesService {
 			}
 			
 			log.info("CSV 상품 등록 성공 수 : {}", successCount);
-			return successCount > 0;
+			return true;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("CSV 파일 처리 중 오류 발생", e);
-			return false;
+			throw new RuntimeException("CSV 파일 처리 실패",e);
 		}
 	}
 
