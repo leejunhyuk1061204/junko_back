@@ -200,18 +200,16 @@ public class AccountEntryController {
 	public ResponseEntity<?> accountStatusUpdate(
 	    @PathVariable int entry_idx,
 	    @RequestBody Map<String, String> map,
-	    HttpServletRequest request
+	    @RequestHeader("user_idx") int user_idx
 	) {
-	    Integer user_idx = Jwt.getUserIdx(request);
-
 	    if (user_idx == 0) {
 	        return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인 필요"));
 	    }
 
 	    String newStatus = map.get("status");
 	    String logMsg = map.getOrDefault("logMsg", null);
-	    
-	 //  분개 유무 체크
+
+	    // 분개 유무 체크
 	    if (!service.hasDept(entry_idx)) {
 	        return ResponseEntity.badRequest().body(Map.of(
 	            "success", false,
@@ -219,14 +217,17 @@ public class AccountEntryController {
 	        ));
 	    }
 
-	    // 차/대변 검증 추가
+	    // 차/대변 검증
 	    if (!service.isBalanced(entry_idx)) {
 	        return ResponseEntity.badRequest().body(Map.of(
 	            "success", false,
 	            "message", "차변과 대변의 금액이 일치하지 않아 상태 변경이 불가능합니다."
 	        ));
 	    }
+	    log.info("🟢 상태 변경 요청 - entry_idx: {}, user_idx: {}", entry_idx, user_idx);
 	    
+	    log.info("⚖️ 차/대변 일치 여부: {}", service.isBalanced(entry_idx));
+
 	    service.accountStatusUpdate(entry_idx, newStatus, user_idx, logMsg);
 	    return ResponseEntity.ok().body(Map.of("success", true, "message", "상태 변경 완료!"));
 	}
