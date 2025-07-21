@@ -66,20 +66,11 @@ public class ChartController {
 			HttpServletResponse res, @RequestHeader Map<String, String> header) throws IOException {
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 		Integer categoryIdx = param.get("categoryIdx") != null ? Integer.parseInt(param.get("categoryIdx").toString()) : null;
-		String startDate = (String) param.get("startDate");
-		String endDate = (String) param.get("endDate");
 		
 		if (loginId != null && !loginId.isEmpty()) {
 			if(categoryIdx != null) {
 				param.put("categoryIdx", categoryIdx);
 			}
-			if (startDate != null && endDate != null) {
-		        param.put("startDate", startDate);
-		        param.put("endDate", endDate);
-		    }else {
-		    	res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-		    	return;		    	
-		    }
 		}
 	    service.chartExcel(param, res); // 로그인 성공시
 	}
@@ -90,20 +81,11 @@ public class ChartController {
 			HttpServletResponse res, @RequestHeader Map<String, String> header) throws IOException {
 		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
 		Integer categoryIdx = (Integer) param.get("categoryIdx");
-		String startDate = (String) param.get("startDate");
-		String endDate = (String) param.get("endDate");
 		
 		if (loginId != null && !loginId.isEmpty()) {
 			if(categoryIdx != null) {
 				param.put("categoryIdx", categoryIdx);
 			}
-			if (startDate != null && endDate != null) {
-		        param.put("startDate", startDate);
-		        param.put("endDate", endDate);
-		    }else {
-		    	res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-		    	return;		    	
-		    }
 		}
 		service.chartPdf(param, res);
 	}
