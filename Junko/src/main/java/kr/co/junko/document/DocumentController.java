@@ -225,7 +225,7 @@ public class DocumentController {
         param.put("keyword", keyword);
         param.put("order", order);
         param.put("sort", sort);
-        param.put("start", (page - 1) * limit);
+        param.put("offset", (page - 1) * limit);
         param.put("limit", limit);
         
     	List<DocumentDTO> list = service.documentList(param);

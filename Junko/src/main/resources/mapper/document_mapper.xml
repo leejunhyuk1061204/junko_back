@@ -102,6 +102,7 @@
 			AND content LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 		ORDER BY ${order} ${sort}
+	    LIMIT #{limit} OFFSET #{offset}
 	</select>
 	
 	<!-- 문서 총 갯수 -->
