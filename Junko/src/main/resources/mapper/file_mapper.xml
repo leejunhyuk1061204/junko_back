@@ -44,7 +44,27 @@
 		UPDATE file
 		SET del_yn = 1
 		WHERE type = #{type}
-		AND idx = #{idx}
+		AND file_idx = #{idx}
 	</update>
+
+	<!-- file_idx 기준 파일 단건 조회 -->
+	<select id="downloadFileFileIdx" resultType="kr.co.junko.dto.FileDTO">
+	    SELECT *
+	    FROM file
+	    WHERE file_idx = #{file_idx}
+	    AND del_yn = 0
+	</select>
+	
+	<!-- 최신 PDF 1개 조회 -->
+	<select id="latestPdfFile" resultType="kr.co.junko.dto.FileDTO">
+	    SELECT *
+	    FROM file
+	    WHERE type = #{type}
+	      AND idx = #{idx}
+	      AND new_filename LIKE CONCAT('%.', #{ext})
+	      AND del_yn = 0
+	    ORDER BY file_idx DESC
+	    LIMIT 1
+	</select>
 
 </mapper>
