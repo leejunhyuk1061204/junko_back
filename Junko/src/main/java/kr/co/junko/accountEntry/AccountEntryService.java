@@ -184,6 +184,12 @@ public class AccountEntryService {
         }
 
         FileDTO file = new FileDTO();
+        file.setOri_filename(template.getTemplate_name() + "_전표");
+        file.setNew_filename(fileName);
+        file.setIdx(entry_idx);
+        file.setType("pdf");
+        file.setDel_yn(false);
+        file.setReg_date(LocalDateTime.now());
         dao.accountPdf(file);
         return file;
     }
@@ -220,8 +226,9 @@ public class AccountEntryService {
     }
 
     @Transactional
-    public void insertAccountingEntry(AccountingEntryDTO dto, MultipartFile file) {
+    public int insertAccountingEntry(AccountingEntryDTO dto, MultipartFile file) {
         dao.accountRegist(dto);
+        int entry_idx = dto.getEntry_idx();
 
         if (file != null && !file.isEmpty()) {
             try {
@@ -235,6 +242,10 @@ public class AccountEntryService {
                 file.transferTo(saveFile);
 
                 FileDTO fileDTO = new FileDTO();
+                fileDTO.setOri_filename(ori);
+                fileDTO.setNew_filename(newName);
+                fileDTO.setType("account");
+                fileDTO.setIdx(entry_idx);
                 dao.accountFile(fileDTO);
             } catch (Exception e) {
                 throw new RuntimeException("파일 저장 실패", e);
@@ -249,6 +260,7 @@ public class AccountEntryService {
             log.error("❌ 전표 PDF 자동 생성 실패", e);
             throw new RuntimeException("PDF 생성 중 오류", e);
         }
+		return entry_idx;
     }
 
     public boolean approveEntry(int entry_idx, int user_idx) {

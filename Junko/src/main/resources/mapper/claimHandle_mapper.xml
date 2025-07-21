@@ -4,8 +4,8 @@
 <mapper namespace="kr.co.junko.claimHandle.ClaimHandleDAO">
 
 	<insert id="claimHandleInsert" parameterType="kr.co.junko.dto.ClaimHandleDTO">
-		insert into claim_handle (claim_idx, user_idx, handle_detail)
-		values (#{claim_idx},#{user_idx},#{handle_detail})
+		insert into claim_handle (claim_idx, user_idx, handle_detail, status)
+		values (#{claim_idx},#{user_idx},#{handle_detail},#{status})
 	</insert>
 
 	<update id="claimHandleUpdate" parameterType="kr.co.junko.dto.ClaimHandleDTO">
@@ -18,30 +18,37 @@
 				user_idx = #{user_idx},
 			</if>
 			<if test="handle_detail != null and handle_detail != ''">
-				handle_detail = #{handle_detail}
+				handle_detail = #{handle_detail},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status}
 			</if>
 		</trim>
 		where claim_handle_idx = #{claim_handle_idx}
 	</update>
 
-	<select id="claimHandleList" parameterType="map" resultType="kr.co.junko.dto.ClaimHandleDTO">
-		select * from claim_handle
+	<select id="claimHandleList" parameterType="map" resultType="map">
+		select ch.*,u.user_name from claim_handle ch
+		join `user` u on u.user_idx = ch.user_idx
 		<where>
-			del_yn = false
+			ch.del_yn = false
 			<if test="claim_idx != null and claim_idx != 0">
-				and claim_idx = #{claim_idx}
+				and ch.claim_idx = #{claim_idx}
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and ch.user_idx = #{user_idx}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and handle_date > #{start_date}
+				and ch.handle_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and handle_date <![CDATA[<]]> #{end_date}
+				and ch.handle_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="handle_date != null and handle_date != ''">
-				and handle_date = #{handle_date}
+				and ch.handle_date = #{handle_date}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
@@ -50,7 +57,9 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != '' and page != 0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<select id="claimHandleListTotalPage" parameterType="map">
@@ -64,13 +73,16 @@
 				and user_idx = #{user_idx}
 			</if>
 			<if test="start_date != null and start_date != ''">
-				and handle_date > #{start_date}
+				and handle_date >= #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				and handle_date <![CDATA[<]]> #{end_date}
+				and handle_date <![CDATA[<]]>= #{end_date}
 			</if>
 			<if test="handle_date != null and handle_date != ''">
 				and handle_date = #{handle_date}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
 			</if>
 		</where>
 	</select>

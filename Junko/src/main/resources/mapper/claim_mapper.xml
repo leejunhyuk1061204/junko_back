@@ -156,21 +156,31 @@
 		where return_product_idx = #{return_product_idx}
 	</update>
 	
-	<select id="returnProductList" parameterType="map" resultType="kr.co.junko.dto.ReturnProductDTO">
-		select * from return_product
+	<select id="returnProductList" parameterType="map" resultType="map">
+		select 
+			rp.*,
+			p.product_name,
+			c.combined_name,
+			c2.combined_name as exchange_name
+		from return_product rp
+			join product p on rp.product_idx = p.product_idx
+			left join product_option po on rp.product_option_idx=po.product_option_idx
+			left join combined c on c.combined_idx = po.combined_idx
+			left join product_option po2 on rp.exchange_option=po2.product_option_idx
+			left join combined c2 on c2.combined_idx = po2.combined_idx
 		<where>
-			del_yn = false
+			rp.del_yn = false
 			<if test="claim_idx != null and claim_idx != 0">
-				and claim_idx != #{claim_idx}
+				and rp.claim_idx = #{claim_idx}
 			</if>
 			<if test="product_idx != null and product_idx != 0">
-				and product_idx = #{product_idx}
+				and rp.product_idx = #{product_idx}
 			</if>
 			<if test="product_option_idx != null and product_option_idx != 0">
-				and product_option_idx = #{product_option_idx}
+				and rp.product_option_idx = #{product_option_idx}
 			</if>
 			<if test="exchange_option != null and exchange_option != 0">
-				and exchange_option = #{exchange_option}
+				and rp.exchange_option = #{exchange_option}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn !=''">
@@ -179,24 +189,31 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != '' and page != 0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<select id="returnProductListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) from return_product
+		select ceil(count(*)*1.0/#{cnt}) from return_product rp
+			join product p on rp.product_idx = p.product_idx
+			left join product_option po on rp.product_option_idx=po.product_option_idx
+			left join combined c on c.combined_idx = po.combined_idx
+			left join product_option po2 on rp.exchange_option=po2.product_option_idx
+			left join combined c2 on c2.combined_idx = po2.combined_idx
 		<where>
-			del_yn = false
+			rp.del_yn = false
 			<if test="claim_idx != null and claim_idx != 0">
-				and claim_idx != #{claim_idx}
+				and rp.claim_idx != #{claim_idx}
 			</if>
 			<if test="product_idx != null and product_idx != 0">
-				and product_idx = #{product_idx}
+				and rp.product_idx = #{product_idx}
 			</if>
 			<if test="product_option_idx != null and product_option_idx != 0">
-				and product_option_idx = #{product_option_idx}
+				and rp.product_option_idx = #{product_option_idx}
 			</if>
 			<if test="exchange_option != null and exchange_option != 0">
-				and exchange_option = #{exchange_option}
+				and rp.exchange_option = #{exchange_option}
 			</if>
 		</where>
 	</select>

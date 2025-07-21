@@ -14,7 +14,7 @@ public interface ClaimHandleDAO {
 
 	int claimHandleUpdate(ClaimHandleDTO dto);
 
-	List<ClaimHandleDTO> claimHandleList(Map<String, Object> param);
+	List<Map<String, Object>> claimHandleList(Map<String, Object> param);
 
 	int claimHandleListTotalPage(Map<String, Object> param);
 

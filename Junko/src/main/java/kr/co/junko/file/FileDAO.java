@@ -21,5 +21,9 @@ public interface FileDAO {
 	List<FileDTO> fileList(String type, int idx);
 
     int delFile(Map<String, Object> param);
+
+	FileDTO downloadFileFileIdx(int file_idx);
+
+	FileDTO latestPdfFile(Map<String, Object> param);
 	
 }

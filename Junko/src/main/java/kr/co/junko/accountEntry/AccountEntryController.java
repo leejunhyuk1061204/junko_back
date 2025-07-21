@@ -88,9 +88,11 @@ public class AccountEntryController {
 	    dto.setSales_idx(sales_idx);
 	    dto.setUser_idx(user_idx);
 
-	    service.insertAccountingEntry(dto, file); // ← file 처리 포함
+	    int entry_idx = service.insertAccountingEntry(dto, file); // ← file 처리 포함
 
-	    return Map.of("success", true);
+	    return Map.of(
+	    		"success", true,
+	    	    "voucher_idx", entry_idx);
 	}
 
 	// 전표 상태 승인 여부 
@@ -179,7 +181,7 @@ public class AccountEntryController {
 	}
 
 	// 전표 삭제
-	@DeleteMapping("/accountDelete/{entry_idx}")
+	@PutMapping("/accountDelete/{entry_idx}")
 	public Map<String, Object> accountDelete(@PathVariable int entry_idx,
 	                                         @RequestHeader Map<String, String> header) {
 		result = new HashMap<>();

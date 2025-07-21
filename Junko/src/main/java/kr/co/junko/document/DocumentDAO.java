@@ -1,6 +1,7 @@
 package kr.co.junko.document;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -32,5 +33,9 @@ public interface DocumentDAO {
 	int getMinStep(int document_idx);
 
 	List<ApprovalLogDTO> getApprovalLogs(int document_idx);
+
+	List<DocumentDTO> documentList(Map<String, Object> param);
+
+	int documentCnt(Map<String, Object> param);
 
 }

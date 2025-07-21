@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.ApprovalLogDTO;
@@ -205,6 +206,37 @@ public class DocumentController {
             result.put("message", "파일 전송 중 오류가 발생했습니다.");
             return ResponseEntity.status(500).body(result);
         }
+    }
+    
+    // 전자 문서 리스트
+    @GetMapping("/document/list")
+    public Map<String, Object> documentList(
+    		@RequestParam int user_idx,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "created_date") String order,
+            @RequestParam(defaultValue = "desc") String sort,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("user_idx", user_idx);
+        param.put("status", status);
+        param.put("keyword", keyword);
+        param.put("order", order);
+        param.put("sort", sort);
+        param.put("start", (page - 1) * limit);
+        param.put("limit", limit);
+        
+    	List<DocumentDTO> list = service.documentList(param);
+    	int totalCnt = service.documentCnt(param);
+    	
+    	result = new HashMap<String, Object>();
+    	result.put("list", list);
+        result.put("totalCnt", totalCnt);
+        result.put("currentPage", page);
+        result.put("totalPage", (int) Math.ceil((double) totalCnt / limit));
+    	return result;
     }
 	
 }
