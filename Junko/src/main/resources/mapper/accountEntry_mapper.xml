@@ -236,7 +236,7 @@ LIMIT #{limit} OFFSET #{offset}
 FROM file
 WHERE idx = #{entry_idx} 
   AND del_yn = 0 
-  AND (type = 'accounting' OR type = 'pdf')
+  AND type IN ('accounting', 'entry', 'document', 'pdf')
 ORDER BY file_idx DESC
 
 </select>
