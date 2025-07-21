@@ -309,4 +309,12 @@ public class DocumentService {
 		return filePath;
 	}
 
+	public List<DocumentDTO> documentList(Map<String, Object> param) {
+		return dao.documentList(param);
+	}
+
+	public int documentCnt(Map<String, Object> param) {
+		return dao.documentCnt(param);
+	}
+
 }
