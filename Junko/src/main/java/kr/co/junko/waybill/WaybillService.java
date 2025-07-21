@@ -109,6 +109,7 @@ public class WaybillService {
 		WarehouseDTO warehouse =  warehouseDAO.getWarehouseByIdx(dto.getWarehouse_idx());
 		returnReceiveDTO.setWarehouse_idx(dto.getWarehouse_idx());
 		returnReceiveDTO.setUser_idx(warehouse.getUser_idx());
+		returnReceiveDTO.setReceive_date(LocalDate.now().plusDays(1));
 		
 		boolean receiveResult = returnReceiveDAO.returnReceiveInsert(returnReceiveDTO)>0;
 		if(!receiveResult) throw new RuntimeException("반품 등록 실패");

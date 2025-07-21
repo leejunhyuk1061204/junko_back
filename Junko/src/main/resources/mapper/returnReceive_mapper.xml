@@ -24,64 +24,149 @@
 			user_idx = #{user_idx},
 		</if>
 		<if test="status != null and status != ''">
-			status = #{status}
+			status = #{status},
+		</if>
+		<if test ="receive_date != null">
+			receive_date=#{receive_date}
 		</if>
 		</trim>
 		where return_receive_idx = #{return_receive_idx}		
 	</update>
 	
-	<select id="returnReceiveList" parameterType="map" resultType="kr.co.junko.dto.ReturnReceiveDTO">
-		select * from return_receive
+	<select id="returnReceiveList" parameterType="map" resultType="map">
+		select 
+			rr.* ,
+			u.user_name ,
+			w.warehouse_name ,
+			p.product_name,
+			rp.product_option_idx,
+			c2.combined_name ,
+			COUNT(*) as product_cnt
+		from return_receive rr
+			join `user` u ON rr.user_idx = u.user_idx 
+			join warehouse w on w.warehouse_idx = rr.warehouse_idx
+			join claim c on rr.claim_idx = c.claim_idx 
+			join return_product rp on rp.claim_idx = c.claim_idx
+			join product p on p.product_idx = rp.product_idx 
+			left join product_option po on rp.product_option_idx = po.product_option_idx 
+			left join combined c2 on c2.combined_idx = po.combined_idx 
 		<where>
-			del_yn = false
+			rr.del_yn = false
 			<if test="claim_idx != null and claim_idx != 0">
-				and claim_idx = #{claim_idx}
+				and rr.claim_idx = #{claim_idx}
 			</if>
 			<if test="return_waybill_idx != null and return_waybill_idx != 0">
-				and return_waybill_idx = #{return_waybill_idx}
+				and rr.return_waybill_idx = #{return_waybill_idx}
 			</if>
 			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx}
+				and rr.warehouse_idx = #{warehouse_idx}
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
+				and rr.user_idx = #{user_idx}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and rr.receive_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and rr.receive_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="receive_date !=null and receive_date !=''">
+				and rr.receive_date = #{receive_date}
 			</if>
 			<if test="status != null and status != ''">
-				and status = #{status}
+				and rr.status = #{status}
+			</if>
+			<if test="search != null and search != ''">
+				and (
+					w.warehouse_name like concat('%',#{search},'%') or
+					u.user_name like concat('%',#{search},'%') or
+					rr.return_receive_idx like concat('%',#{search},'%') or
+					rr.return_waybill_idx like concat('%',#{search},'%')
+				)
 			</if>
 		</where>
+		GROUP by rr.return_receive_idx
 		<if test="orderColumn != null and orderColumn != ''">
 			order by ${orderColumn}
 			<if test="orderDirection != null and orderDirection != ''">
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != '' and page != 0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 
 	<select id="returnReceiveListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) from return_receive
-		<where>
-			del_yn = false
-			<if test="claim_idx != null and claim_idx != 0">
-				and claim_idx = #{claim_idx}
-			</if>
-			<if test="return_waybill_idx != null and return_waybill_idx != 0">
-				and return_waybill_idx = #{return_waybill_idx}
-			</if>
-			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx}
-			</if>
-			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}
-			</if>
-			<if test="status != null and status != ''">
-				and status = #{status}
-			</if>
-		</where>
+		select ceil(count(*)*1.0/#{cnt}) from (
+			select 
+				rr.* ,
+				u.user_name ,
+				w.warehouse_name ,
+				p.product_name,
+				rp.product_option_idx,
+				c2.combined_name ,
+				COUNT(*) as product_cnt
+			from return_receive rr
+				join `user` u ON rr.user_idx = u.user_idx 
+				join warehouse w on w.warehouse_idx = rr.warehouse_idx
+				join claim c on rr.claim_idx = c.claim_idx 
+				join return_product rp on rp.claim_idx = c.claim_idx
+				join product p on p.product_idx = rp.product_idx 
+				left join product_option po on rp.product_option_idx = po.product_option_idx 
+				left join combined c2 on c2.combined_idx = po.combined_idx 
+			<where>
+				rr.del_yn = false
+				<if test="claim_idx != null and claim_idx != 0">
+					and rr.claim_idx = #{claim_idx}
+				</if>
+				<if test="return_waybill_idx != null and return_waybill_idx != 0">
+					and rr.return_waybill_idx = #{return_waybill_idx}
+				</if>
+				<if test="warehouse_idx != null and warehouse_idx != 0">
+					and rr.warehouse_idx = #{warehouse_idx}
+				</if>
+				<if test="user_idx != null and user_idx != 0">
+					and rr.user_idx = #{user_idx}
+				</if>
+				<if test="start_date != null and start_date != ''">
+					and rr.receive_date >= #{start_date}
+				</if>
+				<if test="end_date != null and end_date != ''">
+					and rr.receive_date <![CDATA[<]]>= #{end_date}
+				</if>
+				<if test="receive_date !=null and receive_date !=''">
+					and rr.receive_date = #{receive_date}
+				</if>
+				<if test="status != null and status != ''">
+					and rr.status = #{status}
+				</if>
+				<if test="search != null and search != ''">
+					and (
+						w.warehouse_name like concat('%',#{search},'%') or
+						u.user_name like concat('%',#{search},'%') or
+						rr.return_receive_idx like concat('%',#{search},'%') or
+						rr.return_waybill_idx like concat('%',#{search},'%')
+					)
+				</if>
+			</where>
+			GROUP by rr.return_receive_idx
+		) as total
 	</select>
 	
 	<update id="returnReceiveDel">
 		update return_receive set del_yn = true where return_receive_idx = #{param1}
 	</update>
+	
+	<select id="returnReceiveProductList" resultType="map">
+		select 
+			rp.*,
+			p.product_name,
+			c.combined_name
+		from return_product rp 
+		join product p on p.product_idx = rp.product_idx
+		left join product_option po on po.product_option_idx = rp.product_option_idx
+		left join combined c on po.combined_idx = c.combined_idx
+		where claim_idx= #{param1}
+	</select>
 </mapper>

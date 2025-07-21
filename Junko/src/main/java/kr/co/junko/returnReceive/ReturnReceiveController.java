@@ -41,11 +41,17 @@ public class ReturnReceiveController {
 	
 	@GetMapping(value="/returnReceive/del/{return_receive_idx}")
 	public Map<String, Object>returnReceiveDel(@PathVariable int return_receive_idx){
-		log.info("dto : {}",return_receive_idx);
+		log.info("idx : "+return_receive_idx);
 		result = new HashMap<String, Object>();
 		boolean success = service.returnReceiveDel(return_receive_idx);
 		result.put("success", success);
 		return result;
+	}
+	
+	@GetMapping(value="/returnReceiveProduct/list/{claim_idx}")
+	public Map<String, Object>returnReceiveProductList(@PathVariable int claim_idx){
+		log.info("idx : "+claim_idx);
+		return service.returnReceiveProductList(claim_idx);
 	}
 	
 }

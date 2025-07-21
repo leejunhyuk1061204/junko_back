@@ -90,7 +90,10 @@
 			</if>
 			<if test="zone_name != null and zone_name != ''">
 				and zone_name = #{zone_name}
-			</if>	
+			</if>
+			<if test="search != null and search != ''">
+				and search = #{search}
+			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
 			order by ${orderColumn}
@@ -112,6 +115,9 @@
 			</if>
 			<if test="zone_name != null and zone_name != ''">
 				and zone_name = #{zone_name}
+			</if>
+			<if test="search != null and search != ''">
+				and search = #{search}
 			</if>	
 		</where>
 	</select>
