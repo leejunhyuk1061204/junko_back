@@ -230,7 +230,7 @@
 		ORDER BY delay_days DESC
 	</select>
 	
-	<!-- 주문 상태 분포 -->
+	<!-- 월별 주문 상태 분포 -->
 	<select id="getOrderStatus" resultType="map">
 		WITH RECURSIVE category_tree AS (
 			SELECT category_idx FROM category
@@ -241,7 +241,7 @@
 				</where>
 		  		UNION ALL
 		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
-		SELECT DATE(s.payment_date) AS date, c.category_name
+		SELECT DATE_FORMAT(s.payment_date, '%Y-%m') AS payment_date, c.category_name
 		    ,COUNT(CASE WHEN s.status IN ('결제 대기', '결제 완료') THEN 1 END) AS complete
 		    ,COUNT(CASE WHEN s.status = '배송중' THEN 1 END) AS shipping
 		    ,COUNT(CASE WHEN s.status = '배송완료' THEN 1 END) AS shipped
@@ -250,6 +250,7 @@
 		JOIN product p ON sp.product_idx = p.product_idx
 		JOIN category c ON p.category_idx = c.category_idx
 			<where>
+				s.payment_date IS NOT NULL
 				<if test="categoryIdx != null">
 					AND p.category_idx IN (SELECT category_idx FROM category_tree)
 				</if>
@@ -257,7 +258,7 @@
 				    AND s.payment_date BETWEEN #{startDate} AND #{endDate}
 				</if>
 			</where>
-		GROUP BY s.payment_date ORDER BY date
+		GROUP BY DATE_FORMAT(s.payment_date, '%Y-%m') ORDER BY s.payment_date
 	</select>
 	
 	<!-- 마진율 계산 -->

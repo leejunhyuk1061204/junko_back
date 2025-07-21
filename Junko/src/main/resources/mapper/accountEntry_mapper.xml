@@ -31,7 +31,7 @@ LEFT JOIN (
     WHERE del_yn = 0 AND (type = 'accounting' OR type = 'pdf')
     GROUP BY idx
 ) f ON ae.entry_idx = f.idx
-WHERE ae.del_yn = false
+WHERE ae.del_yn = 0
 ORDER BY ae.entry_idx DESC
 LIMIT #{limit} OFFSET #{offset}
 	</select>
@@ -176,9 +176,11 @@ LIMIT #{limit} OFFSET #{offset}
     WHERE entry_idx=#{entry_idx}
 </update>
 	
-	<delete id="accountDelete" parameterType="int">
-	DELETE FROM accountingEntry WHERE entry_idx=#{entry_idx}
-	</delete>
+	<update id="accountDelete" parameterType="int">
+	UPDATE accountingEntry SET
+		del_yn = 1
+	WHERE entry_idx=#{entry_idx}
+	</update>
 	
 	<delete id="deletePdfPhysicallyByEntryIdx" parameterType="int">
     DELETE FROM file
@@ -234,7 +236,7 @@ LIMIT #{limit} OFFSET #{offset}
 FROM file
 WHERE idx = #{entry_idx} 
   AND del_yn = 0 
-  AND (type = 'accounting' OR type = 'pdf')
+  AND type IN ('accounting', 'entry', 'document', 'pdf')
 ORDER BY file_idx DESC
 
 </select>

@@ -88,9 +88,11 @@ public class AccountEntryController {
 	    dto.setSales_idx(sales_idx);
 	    dto.setUser_idx(user_idx);
 
-	    service.insertAccountingEntry(dto, file); // ← file 처리 포함
+	    int entry_idx = service.insertAccountingEntry(dto, file); // ← file 처리 포함
 
-	    return Map.of("success", true);
+	    return Map.of(
+	    		"success", true,
+	    	    "entry_idx", entry_idx);
 	}
 
 	// 전표 상태 승인 여부 
@@ -179,7 +181,7 @@ public class AccountEntryController {
 	}
 
 	// 전표 삭제
-	@DeleteMapping("/accountDelete/{entry_idx}")
+	@PutMapping("/accountDelete/{entry_idx}")
 	public Map<String, Object> accountDelete(@PathVariable int entry_idx,
 	                                         @RequestHeader Map<String, String> header) {
 		result = new HashMap<>();
@@ -252,7 +254,8 @@ public class AccountEntryController {
 	                                                         @RequestParam(required = false) Boolean preview) throws IOException {
 	    FileDTO dto = service.entryFileDown(file_idx);
 	    String rootPath = "C:/upload";
-	    if ("pdf".equalsIgnoreCase(dto.getType())) rootPath = "C:/upload/pdf";
+	    if ("pdf".equalsIgnoreCase(dto.getType()) || "entry".equalsIgnoreCase(dto.getType()))
+        rootPath = "C:/upload/pdf";
 	    File file = new File(rootPath, dto.getNew_filename());
 
 	    if (!file.exists()) throw new FileNotFoundException("존재하지 않는 파일");

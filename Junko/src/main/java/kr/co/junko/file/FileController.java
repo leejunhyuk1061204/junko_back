@@ -70,7 +70,7 @@ public class FileController {
         		body(resource);
     }
     
- // PDF 다운로드
+    // PDF 다운로드
     @GetMapping(value="/download/pdf")
     public ResponseEntity<?> downloadPDF(@RequestParam String idx, String type) {
         return sendFile(Integer.parseInt(idx), "pdf", "application/pdf",type);
@@ -177,6 +177,36 @@ public class FileController {
         result = new HashMap<>();
         boolean success = service.delFile(type, idx);
         result.put("success", success);
+        return result;
+    }
+
+    // file_idx 로 다운로드
+    @GetMapping("/download/file/{file_idx}")
+    public ResponseEntity<?> downloadFileIdx(@PathVariable int file_idx) {
+        return service.downloadFileFileIdx(file_idx, "pdf", "application/pdf");
+    }
+    
+    // 가장 최근 pdf
+    @GetMapping("/file/latest/pdf")
+    public Map<String, Object> latestPdfFile(
+        @RequestParam String type,
+        @RequestParam int idx) {
+
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("type", type);
+        param.put("idx", idx);
+        param.put("ext", "pdf");
+
+        FileDTO file = filedao.latestPdfFile(param);
+
+        if (file != null) {
+            result.put("success", true);
+            result.put("file", file);
+        } else {
+            result.put("success", false);
+        }
+
         return result;
     }
 
