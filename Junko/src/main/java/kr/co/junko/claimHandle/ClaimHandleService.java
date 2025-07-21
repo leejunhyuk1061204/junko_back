@@ -30,6 +30,7 @@ public class ClaimHandleService {
 		claimDTO.setClaim_idx(dto.getClaim_idx());
 		claimDTO.setStatus(dto.getStatus());
 		claimDTO.setCustom_idx(dto.getCustom_idx());
+		claimDTO.setWarehouse_idx(dto.getWarehouse_idx());
 		
 		boolean updateResult = claimService.claimUpdate(claimDTO);
 		if(!updateResult) throw new RuntimeException("클레임 상태 변경 실패");
@@ -42,16 +43,17 @@ public class ClaimHandleService {
 	}
 
 	public Map<String, Object> claimHandleList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset =((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<ClaimHandleDTO>list = dao.claimHandleList(param);
-		int total = dao.claimHandleListTotalPage(param);
 		Map<String, Object>result = new HashedMap<String, Object>();
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset =((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.claimHandleListTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.claimHandleList(param);
 		result.put("list", list);
-		result.put("total", total);
-		result.put("page", param.get("page"));
 		return result;
 	}
 

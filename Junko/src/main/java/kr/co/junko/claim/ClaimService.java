@@ -73,16 +73,17 @@ public class ClaimService {
 	}
 
 	public Map<String, Object> returnProductList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<ReturnProductDTO>list = dao.returnProductList(param);
-		int total = dao.returnProductListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.returnProductListTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.returnProductList(param);
 		result.put("list", list);
-		result.put("total", total);
-		result.put("page", param.get("page"));
 		return result;
 	}
 

@@ -25,7 +25,7 @@ public interface ClaimDAO {
 
 	int returnProductUpdate(ReturnProductDTO dto);
 
-	List<ReturnProductDTO> returnProductList(Map<String, Object> param);
+	List<Map<String, Object>> returnProductList(Map<String, Object> param);
 
 	int returnProductListTotalPage(Map<String, Object> param);
 
