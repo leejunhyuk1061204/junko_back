@@ -92,7 +92,7 @@ public class AccountEntryController {
 
 	    return Map.of(
 	    		"success", true,
-	    	    "voucher_idx", entry_idx);
+	    	    "entry_idx", entry_idx);
 	}
 
 	// 전표 상태 승인 여부 
@@ -254,7 +254,8 @@ public class AccountEntryController {
 	                                                         @RequestParam(required = false) Boolean preview) throws IOException {
 	    FileDTO dto = service.entryFileDown(file_idx);
 	    String rootPath = "C:/upload";
-	    if ("pdf".equalsIgnoreCase(dto.getType())) rootPath = "C:/upload/pdf";
+	    if ("pdf".equalsIgnoreCase(dto.getType()) || "entry".equalsIgnoreCase(dto.getType()))
+        rootPath = "C:/upload/pdf";
 	    File file = new File(rootPath, dto.getNew_filename());
 
 	    if (!file.exists()) throw new FileNotFoundException("존재하지 않는 파일");

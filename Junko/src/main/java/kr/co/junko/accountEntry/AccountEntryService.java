@@ -187,7 +187,7 @@ public class AccountEntryService {
         file.setOri_filename(template.getTemplate_name() + "_전표");
         file.setNew_filename(fileName);
         file.setIdx(entry_idx);
-        file.setType("pdf");
+        file.setType("entry");
         file.setDel_yn(false);
         file.setReg_date(LocalDateTime.now());
         dao.accountPdf(file);
