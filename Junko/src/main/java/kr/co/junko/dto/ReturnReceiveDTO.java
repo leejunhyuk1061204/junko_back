@@ -1,5 +1,6 @@
 package kr.co.junko.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Data;
@@ -14,6 +15,7 @@ public class ReturnReceiveDTO {
 	private int user_idx;
 	private String status;
 	private boolean del_yn;
+	private LocalDate receive_date;
 	
 	// 반품 처리 입력을 위해 입력받는 값
 	// return_receive_idx, user_idx

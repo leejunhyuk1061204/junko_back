@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.junko.dto.ReturnProductDTO;
 import kr.co.junko.dto.ReturnReceiveDTO;
 import kr.co.junko.dto.WaybillDTO;
 
@@ -15,10 +16,12 @@ public interface ReturnReceiveDAO {
 
 	int returnReceiveUpdate(ReturnReceiveDTO dto);
 
-	List<ReturnReceiveDTO> returnReceiveList(Map<String, Object> param);
+	List<Map<String, Object>> returnReceiveList(Map<String, Object> param);
 
 	int returnReceiveListTotalPage(Map<String, Object> param);
 
 	int returnReceiveDel(int idx);
+
+	List<Map<String, Object>> returnReceiveProductList(int idx);
 
 }

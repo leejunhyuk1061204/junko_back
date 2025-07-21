@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.junko.dto.ReturnProductDTO;
 import kr.co.junko.dto.ReturnReceiveDTO;
 import kr.co.junko.dto.WaybillDTO;
 import kr.co.junko.returnHandle.ReturnHandleService;
@@ -30,21 +31,29 @@ public class ReturnReceiveService {
 	}
 
 	public Map<String, Object> returnReceiveList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<ReturnReceiveDTO>list = dao.returnReceiveList(param);
-		int total = dao.returnReceiveListTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.returnReceiveListTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.returnReceiveList(param);
 		result.put("list", list);
-		result.put("total", total);
-		result.put("page", param.get("page"));
 		return result;
 	}
 
 	public boolean returnReceiveDel(int idx) {
 		return dao.returnReceiveDel(idx)>0;
+	}
+
+	public Map<String, Object> returnReceiveProductList(int idx) {
+		Map<String, Object>result = new HashMap<String, Object>();
+		List<Map<String, Object>>list = dao.returnReceiveProductList(idx);
+		result.put("list", list);
+		return result;
 	}
 
 }
