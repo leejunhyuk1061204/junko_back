@@ -5,8 +5,8 @@
 
 	<!-- 문서 저장 -->
 	<insert id="documentInsert" useGeneratedKeys="true" keyProperty="document_idx" keyColumn="document_idx" parameterType="kr.co.junko.dto.DocumentDTO">
-		INSERT INTO document (user_idx, content, created_date, status)
-			VALUES (#{user_idx}, #{content}, NOW(), #{status})
+		INSERT INTO document (user_idx, content, created_date, status, type, idx, template_idx)
+		VALUES (#{user_idx}, #{content}, NOW(), #{status}, #{type}, #{idx}, #{template_idx})
 	</insert>
 	
 	<!-- 결재라인 저장 -->
@@ -125,4 +125,14 @@
 		</if>
 	</select>
 	
+	<!-- 문서 타입과 idx로 조회 -->
+	<select id="getByTypeAndIdx" parameterType="map" resultType="kr.co.junko.dto.DocumentDTO">
+		SELECT * FROM document
+		WHERE type = #{type}
+		AND idx = #{idx}
+		AND del_yn = 0
+		ORDER BY document_idx DESC
+		LIMIT 1
+	</select>
+
 </mapper>

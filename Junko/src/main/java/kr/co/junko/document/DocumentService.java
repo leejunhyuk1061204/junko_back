@@ -89,6 +89,9 @@ public class DocumentService {
 		doc.setUser_idx(dto.getUser_idx());
 		doc.setContent(html);
 		doc.setStatus("미확인");
+		doc.setType(dto.getType());
+		doc.setIdx(dto.getIdx());
+		doc.setTemplate_idx(dto.getTemplate_idx());
 		
 		// 문서 DB 저장
 		int row = dao.documentInsert(doc);
@@ -316,5 +319,12 @@ public class DocumentService {
 	public int documentCnt(Map<String, Object> param) {
 		return dao.documentCnt(param);
 	}
+
+    public DocumentDTO getByTypeAndIdx(String type, int idx) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("type", type);
+		map.put("idx", idx);
+		return dao.getByTypeAndIdx(map);
+    }
 
 }

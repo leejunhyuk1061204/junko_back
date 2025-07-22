@@ -121,9 +121,12 @@
 
     <!-- 전표 기본 정보 -->
     <select id="voucherDetail" resultType="kr.co.junko.dto.VoucherDTO">
-        SELECT * FROM voucher
-        WHERE entry_idx = #{entry_idx}
-        AND del_yn = 0
+      SELECT v.*, c.custom_name, u.user_name, c.custom_owner
+      FROM voucher v
+      LEFT JOIN custom c ON v.custom_idx = c.custom_idx
+      LEFT JOIN user u ON v.user_idx = u.user_idx
+      WHERE v.entry_idx = #{entry_idx}
+      AND v.del_yn = 0
     </select>
 
     <!-- 전표 분개 내역 -->

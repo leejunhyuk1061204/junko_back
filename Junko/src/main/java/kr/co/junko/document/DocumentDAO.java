@@ -38,4 +38,6 @@ public interface DocumentDAO {
 
 	int documentCnt(Map<String, Object> param);
 
+	DocumentDTO getByTypeAndIdx(Map<String, Object> map);
+
 }

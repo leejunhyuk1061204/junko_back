@@ -23,4 +23,7 @@ public class VoucherDTO {
     private String custom_name;
     private String user_name;
     private String custom_owner;
+
+    private Integer document_idx;
+    private String file_name;
 }

@@ -13,5 +13,7 @@ public class DocumentDTO {
 	private Date created_date;
 	private String status;
 	private int del_yn;
-	
+	private int template_idx;
+	private int idx;
+	private String type;
 }

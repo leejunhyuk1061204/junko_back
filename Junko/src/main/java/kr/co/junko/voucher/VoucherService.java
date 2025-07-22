@@ -20,10 +20,10 @@ public class VoucherService {
 
     Map<String, Object> result = null;
 
-    public boolean voucherInsert(VoucherDTO dto) {
+    public int voucherInsert(VoucherDTO dto) {
         // 전표 먼저 insert
         boolean inserted = dao.voucherInsert(dto);
-        if (!inserted) return false;
+        if (!inserted) return 0;
 
         int entry_idx = dto.getEntry_idx(); // selectKey로 셋팅된 값
 
@@ -33,7 +33,7 @@ public class VoucherService {
             dao.insertEntryDetail(detail);
         }
 
-        return true;
+        return entry_idx; 
     }
 
     public boolean voucherUpdate(VoucherDTO dto) {

@@ -18,12 +18,11 @@ import kr.co.junko.custom.CustomService;
 import kr.co.junko.document.DocumentService;
 import kr.co.junko.dto.CustomDTO;
 import kr.co.junko.dto.DocumentDTO;
-import kr.co.junko.dto.EntryDetailDTO;
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
-import kr.co.junko.dto.TemplateDTO;
 import kr.co.junko.dto.TemplatePreviewDTO;
-import kr.co.junko.dto.TemplateVarDTO;
 import kr.co.junko.dto.VoucherDTO;
+import kr.co.junko.file.FileDAO;
 import kr.co.junko.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,26 +36,41 @@ public class VoucherController {
     @Autowired CustomService customService;
     @Autowired DocumentService documentService;
     @Autowired MemberService memberService;
+    @Autowired FileDAO fileDAO;
 
     Map<String, Object> result = null;
 
     // 전표 등록
     @PostMapping("/voucher/insert")
-    public Map<String, Object> voucherInsert(
-    		@RequestBody VoucherDTO dto){
-        log.info("dto : {}", dto);
-
-        result = new HashMap<String, Object>();
+    public Map<String, Object> voucherInsert(@RequestBody VoucherDTO dto){
+        result = new HashMap<>();
 
         if (dto.getEntry_details() == null || dto.getEntry_details().isEmpty()) {
             service.defaultEntryDetails(dto);
         }
 
-        boolean success = service.voucherInsert(dto);
-        result.put("success", success);
+        int entry_idx = service.voucherInsert(dto);
+
+        result.put("success", entry_idx > 0);
+        result.put("entry_idx", entry_idx);
+
+        // 저장 성공 후 → 커밋 완료 후 → 변수 세팅
+        if (entry_idx > 0) {
+            Map<String, String> param = new HashMap<>();
+            param.put("entry_type", dto.getEntry_type());
+            param.put("amount", String.valueOf(dto.getAmount()));
+            param.put("entry_idx", String.valueOf(entry_idx));
+            param.put("user_idx", String.valueOf(dto.getUser_idx()));
+            param.put("custom_idx", String.valueOf(dto.getCustom_idx()));
+            param.put("entry_date", String.valueOf(dto.getEntry_date()));
+
+            Map<String, String> variables = voucherToVariables(param);
+            result.put("variables", variables);
+        }
 
         return result;
     }
+
 
     // 전표 수정
     @PutMapping("/voucher/update/{entry_idx}")
@@ -124,6 +138,29 @@ public class VoucherController {
         result = new HashMap<String, Object>();
         VoucherDTO dto = service.voucherDetail(entry_idx);
 
+    if (dto == null) {
+        result.put("success", false);
+        return result;
+    }
+
+    // 문서 조회 (type = voucher, idx = entry_idx)
+    DocumentDTO doc = documentService.getByTypeAndIdx("voucher", entry_idx);
+    if (doc != null) {
+        dto.setDocument_idx(doc.getDocument_idx());
+
+        Map<String, Object> fileParam = new HashMap<>();
+        fileParam.put("type", "document");
+        fileParam.put("idx", doc.getDocument_idx());
+        fileParam.put("ext", "pdf");
+
+        // 파일 조회
+        FileDTO file = fileDAO.selectTypeIdx(fileParam);
+
+        if (file != null) {
+            dto.setFile_name(file.getNew_filename());
+        }
+    }
+
         result.put("success", dto != null);
         result.put("data", dto);
         return result;
@@ -146,7 +183,7 @@ public class VoucherController {
     @PostMapping("/voucher/preview")
     public Map<String, Object> voucherPreview(@RequestBody TemplatePreviewDTO dto) {
         Map<String, Object> result = new HashMap<>();
-        log.info("voucherPreview dto: {}", dto);
+        log.info("dto: {}", dto);
 
         // 템플릿 치환 변수 세팅용
         Map<String, String> variables = voucherToVariables(dto.getVariables());
@@ -154,6 +191,7 @@ public class VoucherController {
         String html = documentService.documentPreview(dto.getTemplate_idx(), variables);
         result.put("preview", html);
         result.put("success", html != null);
+        result.put("variables", variables);
         return result;
     }
 
