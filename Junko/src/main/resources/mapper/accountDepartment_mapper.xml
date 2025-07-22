@@ -10,9 +10,12 @@
         s.as_name,
         d.amount,
         d.type,
-        d.del_yn
+        d.del_yn,
+        f.file_idx,
+        f.ori_filename
     FROM accountingDepartment d
     JOIN accountSubject s ON d.as_idx = s.as_idx
+    LEFT JOIN file f ON f.idx = d.dept_idx AND f.type = 'ENTRY_DETAIL' AND f.del_yn = false
     WHERE d.entry_idx = #{entry_idx}
       AND d.del_yn = false
 </select>

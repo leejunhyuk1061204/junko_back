@@ -40,43 +40,59 @@
 
     <!-- 리스트 조회 -->
     <select id="voucherList" resultType="kr.co.junko.dto.VoucherDTO">
-        SELECT *
-        FROM voucher
-        WHERE del_yn = 0
-        <if test="entry_type != null and entry_type != ''">
-            AND entry_type = #{entry_type}
-        </if>
-        <if test="status != null and status != ''">
-            AND status = #{status}
-        </if>
-        <if test="keyword != null and keyword != ''">
-            AND custom_idx IN (
-                SELECT custom_idx FROM custom
-                WHERE custom_name LIKE CONCAT('%', #{keyword}, '%')
-            )
-        </if>
-        ORDER BY ${sort} ${order}
-        LIMIT #{size} OFFSET #{offset}
+	  SELECT v.*, c.custom_name, u.user_name, c.custom_owner
+	  FROM voucher v
+	  LEFT JOIN custom c ON v.custom_idx = c.custom_idx
+	  LEFT JOIN user u ON v.user_idx = u.user_idx
+	  WHERE v.del_yn = 0
+		<if test="custom_name != null and custom_name != ''">
+		  AND c.custom_name LIKE CONCAT('%', #{custom_name}, '%')
+		</if>
+		<if test="custom_owner != null and custom_owner != ''">
+		  AND c.custom_owner LIKE CONCAT('%', #{custom_owner}, '%')
+		</if>
+		<if test="from != null and from != ''">
+		  AND v.entry_date &gt;= #{from}
+		</if>
+		<if test="to != null and to != ''">
+		  AND v.entry_date &lt;= #{to}
+		</if>
+		<if test="status != null and status != ''">
+		  AND v.status = #{status}
+		</if>
+	<choose>
+	  <when test="sort != null and sort != '' and order != null and order != ''">
+	    ORDER BY ${sort} ${order}
+	  </when>
+	  <otherwise>
+	    ORDER BY entry_date desc
+	  </otherwise>
+	</choose>
+	  LIMIT #{size} OFFSET #{offset}
     </select>
 
     <!-- 총 개수 조회 -->
-    <select id="voucherTotal" resultType="int">
-        SELECT COUNT(*)
-        FROM voucher
-        WHERE del_yn = 0
-        <if test="entry_type != null and entry_type != ''">
-            AND entry_type = #{entry_type}
-        </if>
-        <if test="status != null and status != ''">
-            AND status = #{status}
-        </if>
-        <if test="keyword != null and keyword != ''">
-            AND custom_idx IN (
-                SELECT custom_idx FROM custom
-                WHERE custom_name LIKE CONCAT('%', #{keyword}, '%')
-            )
-        </if>
-    </select>
+	<select id="voucherTotal" resultType="int">
+	  SELECT COUNT(*)
+	  FROM voucher v
+	  LEFT JOIN custom c ON v.custom_idx = c.custom_idx
+	  WHERE v.del_yn = 0
+		<if test="custom_name != null and custom_name != ''">
+		  AND c.custom_name LIKE CONCAT('%', #{custom_name}, '%')
+		</if>
+		<if test="custom_owner != null and custom_owner != ''">
+		  AND c.custom_owner LIKE CONCAT('%', #{custom_owner}, '%')
+		</if>
+		<if test="from != null and from != ''">
+		  AND v.entry_date &gt;= #{from}
+		</if>
+		<if test="to != null and to != ''">
+		  AND v.entry_date &lt;= #{to}
+		</if>
+		<if test="status != null and status != ''">
+		  AND v.status = #{status}
+		</if>
+	</select>
 
     <!-- 상태 조회 -->
     <select id="voucherStatus" resultType="String">

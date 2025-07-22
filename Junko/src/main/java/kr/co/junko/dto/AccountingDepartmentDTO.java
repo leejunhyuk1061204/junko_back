@@ -23,7 +23,8 @@ public class AccountingDepartmentDTO {
 		
 	}
 		
-	
+	private Integer file_idx;
+	private String ori_filename;
 	
 }
 

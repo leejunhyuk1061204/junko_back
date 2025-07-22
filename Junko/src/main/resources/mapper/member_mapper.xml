@@ -102,4 +102,8 @@
 		</where>
 	</select>
 
+	<select id="selectUserByIdx" parameterType="int" resultType="kr.co.junko.dto.MemberDTO">
+	    SELECT user_idx, user_name FROM user WHERE user_idx = #{user_idx}
+	</select>
+
 </mapper>

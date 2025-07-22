@@ -214,6 +214,8 @@ public class DocumentController {
     		@RequestParam int user_idx,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String start_date,
+            @RequestParam(required = false) String end_date,
             @RequestParam(defaultValue = "created_date") String order,
             @RequestParam(defaultValue = "desc") String sort,
             @RequestParam(defaultValue = "1") int page,
@@ -223,6 +225,8 @@ public class DocumentController {
         param.put("user_idx", user_idx);
         param.put("status", status);
         param.put("keyword", keyword);
+        param.put("start_date", start_date);
+        param.put("end_date", end_date);
         param.put("order", order);
         param.put("sort", sort);
         param.put("offset", (page - 1) * limit);
@@ -230,12 +234,14 @@ public class DocumentController {
         
     	List<DocumentDTO> list = service.documentList(param);
     	int totalCnt = service.documentCnt(param);
+    	int totalPage = (int) Math.ceil((double) totalCnt / limit);
+    	if (totalPage == 0) totalPage = 1;
     	
     	result = new HashMap<String, Object>();
     	result.put("list", list);
         result.put("totalCnt", totalCnt);
         result.put("currentPage", page);
-        result.put("totalPage", (int) Math.ceil((double) totalCnt / limit));
+        result.put("totalPage", totalPage);
     	return result;
     }
 	

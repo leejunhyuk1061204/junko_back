@@ -230,6 +230,8 @@ public class AccountEntryService {
         dao.accountRegist(dto);
         int entry_idx = dto.getEntry_idx();
 
+        autoDeptType(dto.getEntry_type(), entry_idx, dto.getAmount());
+        
         if (file != null && !file.isEmpty()) {
             try {
                 String ori = file.getOriginalFilename();
@@ -260,10 +262,54 @@ public class AccountEntryService {
             log.error("❌ 전표 PDF 자동 생성 실패", e);
             throw new RuntimeException("PDF 생성 중 오류", e);
         }
+        
 		return entry_idx;
     }
 
-    public boolean approveEntry(int entry_idx, int user_idx) {
+    private void autoDeptType(String entry_type, int entry_idx, int amount) {
+        switch (entry_type) {
+        case "매출":
+            insertAutoDept(entry_idx, 3, amount, "차변"); // 외상매출금
+            insertAutoDept(entry_idx, 7, amount, "대변"); // 매출
+            break;
+        case "매입":
+            insertAutoDept(entry_idx, 6, amount, "차변"); // 상품
+            insertAutoDept(entry_idx, 5, amount, "대변"); // 외상매출금
+            break;
+        case "급여":
+            insertAutoDept(entry_idx, 9, amount, "차변"); // 급여
+            insertAutoDept(entry_idx, 4, amount, "대변"); // 현금
+            break;
+        case "이자수익":
+            insertAutoDept(entry_idx, 4, amount, "차변"); // 현금
+            insertAutoDept(entry_idx, 11, amount, "대변"); // 이자수익
+            break;
+        case "기타수익":
+            insertAutoDept(entry_idx, 4, amount, "차변"); // 현금
+            insertAutoDept(entry_idx, 12, amount, "대변"); // 기타수익
+            break;
+        case "보험료":
+            insertAutoDept(entry_idx, 10, amount, "차변"); // 보험료
+            insertAutoDept(entry_idx, 4, amount, "대변");  // 현금
+            break;
+        case "차입금":
+            insertAutoDept(entry_idx, 4, amount, "차변"); // 현금
+            insertAutoDept(entry_idx, 13, amount, "대변"); // 차입금
+            break;
+        }
+		
+	}
+    
+    private void insertAutoDept(int entry_idx, int as_idx, int amount, String type) {
+        AccountingDepartmentDTO dept = new AccountingDepartmentDTO();
+        dept.setEntry_idx(entry_idx);
+        dept.setAs_idx(as_idx);
+        dept.setAmount(amount);
+        dept.setType(type);
+        deptDao.accountDeptAdd(dept);
+    }
+
+	public boolean approveEntry(int entry_idx, int user_idx) {
         int updated = dao.updateEntryStatus(entry_idx, "승인됨");
         if (updated > 0) {
             AccountingEntryLogDTO log = new AccountingEntryLogDTO();
