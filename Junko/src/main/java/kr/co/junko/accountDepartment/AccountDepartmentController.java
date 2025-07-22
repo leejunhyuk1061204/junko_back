@@ -133,7 +133,9 @@ public class AccountDepartmentController {
 
 	// 분개 증빙파일 다운로드
 	@GetMapping("/deptfileDown/{file_idx}")
-	public ResponseEntity<UrlResource> deptfileDown(@PathVariable int file_idx) {
+	public ResponseEntity<UrlResource> deptfileDown(
+			@PathVariable int file_idx,
+			@RequestParam(required = false) Boolean preview) {
 		FileDTO dto = service.deptfileDown(file_idx);
 
 		if (dto == null || dto.isDel_yn()) {
@@ -141,8 +143,17 @@ public class AccountDepartmentController {
 		}
 
 		try {
-			String basePath = "C:/upload";
-			Path filePath = Paths.get(basePath + dto.getNew_filename());
+			String filename = dto.getNew_filename();
+			String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+
+			String basePath;
+			if ("pdf".equals(ext)) {
+			    basePath = "C:/upload/pdf";
+			} else {
+			    basePath = "C:/upload";
+			}
+	        
+			Path filePath = Paths.get(basePath, dto.getNew_filename());
 			UrlResource resource = new UrlResource(filePath.toUri());
 
 			if (!resource.exists()) {
@@ -151,10 +162,17 @@ public class AccountDepartmentController {
 
 			String encodedName = URLEncoder.encode(dto.getOri_filename(), "UTF-8");
 
-			return ResponseEntity.ok()
-			                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedName + "\"")
-			                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
-			                     .body(resource);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+
+	        if (Boolean.TRUE.equals(preview)) {
+	            headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + encodedName + "\"");
+	        } else {
+	            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedName + "\"");
+	        }
+			
+	        return ResponseEntity.ok().headers(headers).body(resource);
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

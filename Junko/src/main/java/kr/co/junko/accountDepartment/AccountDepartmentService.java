@@ -155,7 +155,7 @@ public class AccountDepartmentService {
 	        PdfRendererBuilder builder = new PdfRendererBuilder();
 	        builder.useFastMode();
 	        builder.withHtmlContent(html, null);
-	        builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "malgun");
+	        builder.useFont(new File("C:/Windows/Fonts/malgun.ttf"), "Malgun Gothic");
 	        builder.toStream(os);
 	        builder.run();
 	    }
