@@ -17,11 +17,11 @@ public interface VoucherDAO {
 
     public int voucherDel(int entry_idx);
 
-    public List<VoucherDTO> voucherList(String entry_type, String status, String keyword, String sort, String order, int offset, int size);
+    public List<VoucherDTO> voucherList(String entry_type, String status, String keyword, String custom_name, String custom_owner, String from, String to, String sort, String order, int offset, int size);
 
     public String voucherStatus(int entry_idx);
 
-    public int voucherTotal(String entry_type, String status, String keyword);
+    public int voucherTotal(String entry_type, String status, String keyword, String custom_name, String custom_owner, String from, String to);
 
     public void insertEntryDetail(EntryDetailDTO detail);
 

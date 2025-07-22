@@ -29,5 +29,7 @@ public interface MemberDAO {
 
 	int userListTotalPage(Map<String, Object> param);
 
+	MemberDTO selectUserByIdx(int user_idx);
+
 
 }

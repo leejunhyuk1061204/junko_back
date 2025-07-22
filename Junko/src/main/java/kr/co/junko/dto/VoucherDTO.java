@@ -20,4 +20,7 @@ public class VoucherDTO {
     private String status;
 
     private List<EntryDetailDTO> entry_details;
+    private String custom_name;
+    private String user_name;
+    private String custom_owner;
 }

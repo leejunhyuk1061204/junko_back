@@ -160,6 +160,10 @@ public class MemberService {
 		return result;
 	}
 
+	public MemberDTO selectUserByIdx(int user_idx) {
+		return dao.selectUserByIdx(user_idx);
+	}
+
 	
 
 

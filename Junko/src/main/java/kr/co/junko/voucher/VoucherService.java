@@ -50,12 +50,12 @@ public class VoucherService {
         return row > 0;
     }
 
-    public List<VoucherDTO> voucherList(String entry_type, String status, String keyword, String sort, String order, int offset, int size) {
-        return dao.voucherList(entry_type, status, keyword, sort, order, offset, size);
+    public List<VoucherDTO> voucherList(String entry_type, String status, String keyword, String custom_name, String custom_owner, String from, String to, String sort, String order, int offset, int size) {
+        return dao.voucherList(entry_type, status, keyword, custom_name, custom_owner, from, to, sort, order, offset, size);
     }
 
-    public int voucherTotal(String entry_type, String status, String keyword) {
-        return dao.voucherTotal(entry_type, status, keyword);
+    public int voucherTotal(String entry_type, String status, String keyword, String custom_name, String custom_owner, String from, String to) {
+        return dao.voucherTotal(entry_type, status, keyword, custom_name, custom_owner, from, to);
     }
 
     public void defaultEntryDetails(VoucherDTO dto) {
