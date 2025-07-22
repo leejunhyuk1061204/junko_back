@@ -10,7 +10,7 @@
 		values (#{warehouse_name},#{warehouse_address},#{user_idx})
 	</insert>
 
-	<update id="warehouseUpdate" parameterType="map">
+	<update id="warehouseUpdate" parameterType="kr.co.junko.dto.WarehouseDTO">
 		update warehouse
 		<trim prefix="set" suffixOverrides=",">
 			<if test="warehouse_name != null and warehouse_name != ''">
@@ -26,15 +26,19 @@
 		where warehouse_idx = #{warehouse_idx}
 	</update>
 	
-	<select id="warehouseList" parameterType="map" resultType="kr.co.junko.dto.WarehouseDTO">
-		select * from warehouse
+	<select id="warehouseList" parameterType="map" resultType="map">
+		select w.*,u.user_name from warehouse w
+		join `user` u on w.user_idx = u.user_idx
 		<where>
-			del_yn = false
+			w.del_yn = false
 			<if test="warehouse_name != null and warehouse_name !=''">
-				and warehouse_name like concat('%', #{warehouse_name} ,'%')
+				and w.warehouse_name like concat('%', #{warehouse_name} ,'%')
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}			
+				and w.user_idx = #{user_idx}			
+			</if>
+			<if test="search != null and search != ''">
+				and w.warehouse_name like concat('%', #{search} ,'%')
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
@@ -43,20 +47,28 @@
 				${orderDirection}
 			</if>
 		</if>
-		limit #{cnt} offset #{offset}
+		<if test="page != null and page != '' and page !=0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<select id="warehouseTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) as total from warehouse
+		select ceil(count(*)*1.0/#{cnt}) as total from (
+			select w.*,u.user_name from warehouse w
+		join `user` u on w.user_idx = u.user_idx
 		<where>
-			del_yn = false
+			w.del_yn = false
 			<if test="warehouse_name != null and warehouse_name !=''">
-				and warehouse_name like concat('%', #{warehouse_name} ,'%')
+				and w.warehouse_name like concat('%', #{warehouse_name} ,'%')
 			</if>
 			<if test="user_idx != null and user_idx != 0">
-				and user_idx = #{user_idx}			
+				and w.user_idx = #{user_idx}			
+			</if>
+			<if test="search != null and search != ''">
+				and w.warehouse_name like concat('%', #{search} ,'%')
 			</if>
 		</where>
+		) as total
 	</select>
 
 	<update id="warehouseDel">
@@ -81,18 +93,19 @@
 		where zone_idx =#{zone_idx}
 	</update>
 	
-	<select id="zoneList" parameterType="map" resultType="kr.co.junko.dto.ZoneDTO">
-		select * from `zone`
+	<select id="zoneList" parameterType="map" resultType="map">
+		select z.*,w.warehouse_name from `zone` z
+		join warehouse w on z.warehouse_idx = w.warehouse_idx
 		<where>
-			del_yn = false
+			z.del_yn = false
 			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx} 
+				and z.warehouse_idx = #{warehouse_idx} 
 			</if>
 			<if test="zone_name != null and zone_name != ''">
-				and zone_name = #{zone_name}
+				and z.zone_name = #{zone_name}
 			</if>
 			<if test="search != null and search != ''">
-				and search = #{search}
+				and z.zone_name like concat('%',#{search},'%')
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">
@@ -107,19 +120,22 @@
 	</select>
 	
 	<select id="zoneListTotalPage" parameterType="map">
-		select ceil(count(*)*1.0/#{cnt}) as total from `zone`
+		select ceil(count(*)*1.0/#{cnt}) as total from (
+			select z.*,w.warehouse_name from `zone` z
+		join warehouse w on z.warehouse_idx = w.warehouse_idx
 		<where>
-			del_yn = false
+			z.del_yn = false
 			<if test="warehouse_idx != null and warehouse_idx != 0">
-				and warehouse_idx = #{warehouse_idx} 
+				and z.warehouse_idx = #{warehouse_idx} 
 			</if>
 			<if test="zone_name != null and zone_name != ''">
-				and zone_name = #{zone_name}
+				and z.zone_name = #{zone_name}
 			</if>
 			<if test="search != null and search != ''">
-				and search = #{search}
-			</if>	
+				and z.zone_name like concat('%',#{search},'%')
+			</if>
 		</where>
+		) as total
 	</select>
 	
 	<update id="zoneDel">

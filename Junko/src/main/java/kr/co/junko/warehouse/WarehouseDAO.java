@@ -15,7 +15,7 @@ public interface WarehouseDAO {
 
 	int warehouseUpdate(WarehouseDTO dto);
 
-	List<WarehouseDTO> warehouseList(Map<String, Object> param);
+	List<Map<String, Object>> warehouseList(Map<String, Object> param);
 
 	int warehouseTotalPage(Map<String, Object> param);
 
@@ -25,7 +25,7 @@ public interface WarehouseDAO {
 
 	int zoneUpdate(ZoneDTO dto);
 
-	List<ZoneDTO> zoneList(Map<String, Object> param);
+	List<Map<String, Object>> zoneList(Map<String, Object> param);
 
 	int zoneListTotalPage(Map<String, Object> param);
 

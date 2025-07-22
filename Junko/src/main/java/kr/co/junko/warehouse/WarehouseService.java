@@ -29,16 +29,17 @@ public class WarehouseService {
 	}
 
 	public Map<String, Object> warehouseList(Map<String, Object> param) {
-		int cnt = 10;
-		int offset = ((int)param.get("page")-1)*cnt;
-		param.put("cnt", cnt);
-		param.put("offset", offset);
-		List<WarehouseDTO>list = dao.warehouseList(param);
-		int total = dao.warehouseTotalPage(param);
 		Map<String, Object>result = new HashMap<String, Object>();
+		if(param.get("page") != null) {
+			int cnt = 10;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+			int total = dao.warehouseTotalPage(param);
+			result.put("total", total);
+		}
+		List<Map<String, Object>>list = dao.warehouseList(param);
 		result.put("list", list);
-		result.put("total", total);
-		result.put("page", param.get("page"));
 		return result;
 	}
 
@@ -65,7 +66,7 @@ public class WarehouseService {
 			int total = dao.zoneListTotalPage(param);
 			result.put("total", total);
 		}
-		List<ZoneDTO>list = dao.zoneList(param);
+		List<Map<String, Object>>list = dao.zoneList(param);
 		result.put("list", list);
 		return result;
 	}
