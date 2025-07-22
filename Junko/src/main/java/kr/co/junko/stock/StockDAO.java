@@ -15,7 +15,7 @@ public interface StockDAO {
 
 	StockDTO stockDetailByIdx(int idx);
 
-	List<StockDTO> StockList(Map<String, Object> param);
+	List<Map<String, Object>> StockList(Map<String, Object> param);
 
 	int StockListTotalPage(Map<String, Object> param);
 
