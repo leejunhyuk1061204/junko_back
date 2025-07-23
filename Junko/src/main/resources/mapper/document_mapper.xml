@@ -92,23 +92,29 @@
 	
 	<!-- 문서 리스트 -->
 	<select id="documentList" resultType="kr.co.junko.dto.DocumentDTO">
-		SELECT * FROM document
-		WHERE user_idx = #{user_idx}
-		  AND del_yn = 0
+		SELECT t.template_name, d.* FROM document d LEFT JOIN template t ON t.template_idx = d.template_idx
+		WHERE d.user_idx = #{user_idx} AND d.del_yn = 0
 		<if test="status != null and status != ''">
-			AND status = #{status}
+			AND d.status = #{status}
 		</if>
 		<if test="keyword != null and keyword != ''">
-			AND content LIKE CONCAT('%', #{keyword}, '%')
+			AND d.content LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 	    <if test="start_date != null and start_date != ''">
-	        AND created_date >= #{start_date}
+	        AND d.created_date >= #{start_date}
 	    </if>
 	    <if test="end_date != null and end_date != ''">
-	        AND created_date <![CDATA[<=]]> #{end_date}
+	        AND d.created_date <![CDATA[<=]]> #{end_date}
 	    </if>
 		ORDER BY ${order} ${sort}
 	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<!-- 미리보기용 -->
+	<select id="getVariables" resultType="map">
+	    SELECT var_key AS `key`, var_value AS `value`
+	    FROM document_variable
+	    WHERE document_idx = #{document_idx}
 	</select>
 	
 	<!-- 문서 총 갯수 -->
@@ -134,5 +140,29 @@
 		ORDER BY document_idx DESC
 		LIMIT 1
 	</select>
+
+
+	<!-- 문서 업데이트 -->
+	<update id="documentUpdate" parameterType="kr.co.junko.dto.DocumentCreateDTO">
+	    UPDATE document
+	    SET template_idx = #{template_idx},
+	        user_idx = #{user_idx},
+	        idx = #{idx},
+	        type = #{type}
+	    WHERE document_idx = #{document_idx}
+	</update>
+	
+	<update id="delDocumentVar" parameterType="int">
+	    UPDATE document_variable
+	    SET del_yn = 1
+	    WHERE document_idx = #{document_idx}
+	</update>
+	
+	<insert id="insertDocumentVar" parameterType="map">
+	    INSERT INTO document_variable (document_idx, var_key, var_value, del_yn)
+	    VALUES (#{document_idx}, #{key}, #{value}, 0)
+	</insert>
+
+
 
 </mapper>

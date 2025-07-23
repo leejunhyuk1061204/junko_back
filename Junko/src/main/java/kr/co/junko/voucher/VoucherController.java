@@ -18,6 +18,7 @@ import kr.co.junko.custom.CustomService;
 import kr.co.junko.document.DocumentService;
 import kr.co.junko.dto.CustomDTO;
 import kr.co.junko.dto.DocumentDTO;
+import kr.co.junko.dto.EntryDetailDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.TemplatePreviewDTO;
@@ -85,6 +86,19 @@ public class VoucherController {
 
         boolean success = service.voucherUpdate(dto);
         result.put("success", success);
+        
+        if (success) {
+            Map<String, String> param = new HashMap<>();
+            param.put("entry_type", dto.getEntry_type());
+            param.put("amount", String.valueOf(dto.getAmount()));
+            param.put("entry_idx", String.valueOf(entry_idx));
+            param.put("user_idx", String.valueOf(dto.getUser_idx()));
+            param.put("custom_idx", String.valueOf(dto.getCustom_idx()));
+            param.put("entry_date", String.valueOf(dto.getEntry_date()));
+
+            Map<String, String> variables = voucherToVariables(param);
+            result.put("variables", variables);
+        }
 
         return result;
     }
@@ -143,6 +157,9 @@ public class VoucherController {
         return result;
     }
 
+    List<EntryDetailDTO> details = service.entryDetailList(entry_idx);
+    dto.setEntry_details(details);
+    
     // 문서 조회 (type = voucher, idx = entry_idx)
     DocumentDTO doc = documentService.getByTypeAndIdx("voucher", entry_idx);
     if (doc != null) {
@@ -159,6 +176,11 @@ public class VoucherController {
         if (file != null) {
             dto.setFile_name(file.getNew_filename());
         }
+    }
+    
+    DocumentDTO entryDetailDoc = documentService.getByTypeAndIdx("entry_detail", entry_idx);
+    if (entryDetailDoc != null) {
+        dto.setEntry_detail_document_idx(entryDetailDoc.getDocument_idx());
     }
 
         result.put("success", dto != null);
@@ -238,4 +260,47 @@ public class VoucherController {
         return map;
     }
     
+    // 분개 치환 변수 생성 함수
+    private Map<String, String> entryDetailToVariables(int entry_idx) {
+        Map<String, String> map = new HashMap<>();
+        List<EntryDetailDTO> details = service.entryDetailList(entry_idx);
+
+        if (details == null || details.isEmpty()) return map;
+
+        StringBuilder rows = new StringBuilder();
+        for (EntryDetailDTO d : details) {
+            String asName = service.selectAsNameByIdx(d.getAs_idx());
+            rows.append("<tr>")
+                .append("<td>").append(d.getDept_idx()).append("</td>")
+                .append("<td>").append(asName).append("</td>")
+                .append("<td>").append(String.format("%,d", d.getAmount())).append("원</td>")
+                .append("<td>").append(d.getType()).append("</td>")
+                .append("</tr>");
+        }
+
+        map.put("rows", rows.toString());
+        map.put("entry_idx", String.valueOf(entry_idx));
+        map.put("entry_type", service.selectVoucherType(entry_idx));
+        map.put("amount", String.valueOf(service.selectVoucherAmount(entry_idx)));
+
+        return map;
+    }
+
+    
+    // 분개 문서 미리보기
+    @PostMapping("/entry-detail/preview")
+    public Map<String, Object> entryDetailPreview(@RequestBody TemplatePreviewDTO dto) {
+        Map<String, Object> result = new HashMap<>();
+        
+        int entry_idx = Integer.parseInt(dto.getVariables().get("entry_idx"));
+        Map<String, String> variables = entryDetailToVariables(entry_idx);
+        
+        String html = documentService.documentPreview(dto.getTemplate_idx(), variables);
+        result.put("preview", html);
+        result.put("success", html != null);
+        result.put("variables", variables);
+        return result;
+    }
+
+
 }

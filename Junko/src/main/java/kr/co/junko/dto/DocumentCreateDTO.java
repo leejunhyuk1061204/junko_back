@@ -14,4 +14,6 @@ public class DocumentCreateDTO {
 	private List<Integer> approver_ids;    // 결재자 user_idx 리스트
 	private int idx;
 	private String type;
+    private int document_idx;
+    
 }

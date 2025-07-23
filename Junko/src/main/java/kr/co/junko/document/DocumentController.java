@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -244,5 +245,25 @@ public class DocumentController {
         result.put("totalPage", totalPage);
     	return result;
     }
+    
+    // 전자 문서 수정
+    @PutMapping("/document/update")
+    public Map<String, Object> documentUpdate(@RequestBody DocumentCreateDTO dto) {
+        Map<String, Object> result = new HashMap<>();
+
+        log.info("수정 요청 들어옴: {}", dto);
+        
+        boolean success = service.documentUpdate(dto);
+        result.put("success", success);
+        log.info("document update 결과: {}", result);
+
+        if (success) {
+            result.put("document_idx", dto.getDocument_idx());
+            log.info("document idx 결과: {}", result);
+        }
+
+        return result;
+    }
+
 	
 }

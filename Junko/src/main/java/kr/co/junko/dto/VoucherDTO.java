@@ -26,4 +26,5 @@ public class VoucherDTO {
 
     private Integer document_idx;
     private String file_name;
+    private Integer entry_detail_document_idx;
 }

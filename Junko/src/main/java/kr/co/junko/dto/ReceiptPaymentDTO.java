@@ -21,4 +21,6 @@ public class ReceiptPaymentDTO {
     private Date mod_date;
     private int user_idx;
 
+    private String customer_name;
+    
 }
