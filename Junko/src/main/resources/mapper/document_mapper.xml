@@ -110,6 +110,13 @@
 	    LIMIT #{limit} OFFSET #{offset}
 	</select>
 	
+	<!-- 미리보기용 -->
+	<select id="getVariables" resultType="map">
+	    SELECT var_key AS `key`, var_value AS `value`
+	    FROM document_variable
+	    WHERE document_idx = #{document_idx}
+	</select>
+	
 	<!-- 문서 총 갯수 -->
 	<select id="documentCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*) 

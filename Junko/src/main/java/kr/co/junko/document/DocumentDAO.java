@@ -47,4 +47,6 @@ public interface DocumentDAO {
 
 	void insertDocumentVar(Map<String, Object> param);
 
+	List<Map<String, String>> getVariables(int document_idx);
+
 }

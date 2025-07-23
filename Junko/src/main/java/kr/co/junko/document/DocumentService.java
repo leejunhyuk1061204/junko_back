@@ -29,8 +29,10 @@ import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.TemplateDTO;
 import kr.co.junko.file.FileDAO;
 import kr.co.junko.template.TemplateService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class DocumentService {
 
 	@Autowired DocumentDAO dao;
@@ -70,8 +72,13 @@ public class DocumentService {
 	public Map<String, Object> documentInsert(DocumentCreateDTO dto) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
+		log.info("==================approver_ids: {}", dto.getApprover_ids());
+		
 		// 템플릿 가져오기
 		TemplateDTO template = temService.getTemplate(dto.getTemplate_idx());
+		
+		log.info("==================template: {}", template);
+		
 		if (template == null) {
 			result.put("success", false);
 			return result;
@@ -95,6 +102,9 @@ public class DocumentService {
 		
 		// 문서 DB 저장
 		int row = dao.documentInsert(doc);
+		
+		log.info("==================document insert row: {}", row);
+		
 		if (row == 0) {
 			result.put("success", false);
 			return result;
@@ -324,7 +334,19 @@ public class DocumentService {
 	}
 
 	public List<DocumentDTO> documentList(Map<String, Object> param) {
-		return dao.documentList(param);
+		List<DocumentDTO> list = dao.documentList(param);
+		
+		for (DocumentDTO doc : list) {
+			List<Map<String, String>> vars = dao.getVariables(doc.getDocument_idx());
+			
+			// List -> Map 으로 변환
+			Map<String, String> map = new HashMap<String, String>();
+			for (Map<String, String> item : vars) {
+				map.put(item.get("key"), item.get("value"));
+			}
+			doc.setVariables(map);
+		}
+		return list;
 	}
 
 	public int documentCnt(Map<String, Object> param) {

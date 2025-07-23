@@ -1,6 +1,7 @@
 package kr.co.junko.dto;
 
 import java.sql.Date;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -16,4 +17,7 @@ public class DocumentDTO {
 	private int template_idx;
 	private int idx;
 	private String type;
+	
+	private String template_name;
+	private Map<String, String> variables;
 }
