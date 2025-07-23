@@ -103,6 +103,17 @@ public class DocumentService {
 		// 저장한 문서 idx 값 가져오기
 		int document_idx = doc.getDocument_idx();
 		
+		// 변수 document_variable 에 저장
+		if (variables != null) {
+		    for (Map.Entry<String, String> entry : variables.entrySet()) {
+		        Map<String, Object> param = new HashMap<>();
+		        param.put("document_idx", document_idx);
+		        param.put("key", entry.getKey());
+		        param.put("value", entry.getValue());
+		        dao.insertDocumentVar(param);
+		    }
+		}
+		
 		// 결재자 리스트를 기반으로 결재 라인에 등록
 		int step = 1;
 		if(dto.getApprover_ids() != null) {
