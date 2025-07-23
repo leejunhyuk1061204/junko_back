@@ -28,4 +28,6 @@ public interface ReceiptPaymentDAO {
 
     void updateVoucherStatus(Map<String, Object> map);
 
+    ReceiptPaymentDTO detailReceiptPayment(int rp_idx);
+
 }

@@ -75,20 +75,13 @@
 	        rp.transaction_date DESC, rp.rp_idx DESC
     </select>
 
-    <!-- 수금 상세 -->
-    <select id="detailReceipt" parameterType="int" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
-	    SELECT rp.*, c.custom_name AS customer_name
-	    FROM receipt_payment rp
-	    LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
-	    WHERE rp.rp_idx = #{rp_idx} AND rp.del_yn = 0 AND rp.type = '수금'
-	</select>
-
-    <!-- 지급 상세 -->
-    <select id="detailPayment" parameterType="int" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
-	    SELECT rp.*, c.custom_name AS customer_name
-	    FROM receipt_payment rp
-	    LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
-	    WHERE rp.rp_idx = #{rp_idx} AND rp.del_yn = 0 AND rp.type = '지급'
+    <!-- 수금 /지급 상세 -->
+    <select id="detailReceiptPayment" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
+        SELECT rp.*, c.custom_name AS customer_name
+        FROM receipt_payment rp
+        LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
+        WHERE rp.rp_idx = #{rp_idx}
+        AND rp.del_yn = 0
     </select>
 
     <update id="updateVoucherStatus" parameterType="map">

@@ -160,10 +160,10 @@
 		<where>
 			m.receiver_del = false
 			and m.receiver_idx = #{user_idx}
-			<if test="important_yn != null and important_yn !=''">
+			<if test="important_yn != null">
 				and m.important_yn = #{important_yn}
 			</if>
-			<if test="read_yn != null and read_yn != ''">
+			<if test="read_yn != null">
 				and m.read_yn = #{read_yn}
 			</if>
 		</where>
@@ -185,10 +185,10 @@
 		<where>
 			m.receiver_del = false
 			and m.receiver_idx = #{user_idx}
-			<if test="important_yn != null and important_yn !=''">
+			<if test="important_yn != null">
 				and m.important_yn = #{important_yn}
 			</if>
-			<if test="read_yn != null and read_yn != ''">
+			<if test="read_yn != null">
 				and m.read_yn = #{read_yn}
 			</if>
 		</where>
