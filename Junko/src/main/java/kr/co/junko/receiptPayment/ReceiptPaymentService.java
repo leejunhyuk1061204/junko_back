@@ -64,12 +64,8 @@ public class ReceiptPaymentService {
         return dao.paymentList(string);
     }
 
-    public ReceiptPaymentDTO detailReceipt(int rp_idx) {
-        return dao.detailReceipt(rp_idx);
-    }
-
-    public ReceiptPaymentDTO detailPayment(int rp_idx) {
-        return dao.detailPayment(rp_idx);
+    public ReceiptPaymentDTO detailReceiptPayment(int rp_idx) {
+        return dao.detailReceiptPayment(rp_idx);
     }
 
 }

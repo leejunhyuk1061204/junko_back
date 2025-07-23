@@ -14,7 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.junko.custom.CustomService;
+import kr.co.junko.document.DocumentService;
+import kr.co.junko.dto.CustomDTO;
+import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.EntryStatusDTO;
+import kr.co.junko.dto.MemberDTO;
+import kr.co.junko.dto.TemplatePreviewDTO;
+import kr.co.junko.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -23,6 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 public class EntryStatusController {
     
     @Autowired EntryStatusService service;
+    @Autowired DocumentService documentService;
+    @Autowired CustomService customService;
+    @Autowired MemberService memberService;
 
     Map<String, Object> result = null;
 
@@ -30,13 +40,28 @@ public class EntryStatusController {
     @PostMapping("/settlement/insert")
     public Map<String, Object> settlementInsert(@RequestBody EntryStatusDTO dto) {
         log.info("dto: {}", dto);
-        result = new HashMap<String, Object>();
+        result = new HashMap<>();
 
         boolean success = service.settlementInsert(dto);
-
         result.put("success", success);
+
+        if (success) {
+            Map<String, String> param = new HashMap<>();
+            param.put("settlement_id", String.valueOf(dto.getSettlement_id()));
+            param.put("entry_idx", String.valueOf(dto.getEntry_idx()));
+            param.put("custom_idx", String.valueOf(dto.getCustom_idx()));
+            param.put("settlement_day", dto.getSettlement_day() != null ? dto.getSettlement_day().toString() : "");
+            param.put("amount", String.valueOf(dto.getAmount()));
+            param.put("total_amount", String.valueOf(dto.getTotal_amount()));
+            param.put("status", dto.getStatus() != null ? dto.getStatus() : "작성중");
+            param.put("user_idx", String.valueOf(dto.getUser_idx()));
+
+            result.put("variables", settlementToVariables(param));
+        }
+
         return result;
-    }
+    }   
+
 
     // 정산 리스트
     @GetMapping("/settlement/list")
@@ -44,13 +69,15 @@ public class EntryStatusController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(required = false) String status,
-        @RequestParam(required = false) String keyword
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) String from,
+        @RequestParam(required = false) String to
     ) {
         result = new HashMap<String, Object>();
         int offset = (page - 1) * size;
 
-        List<EntryStatusDTO> list = service.settlementList(status, keyword, offset, size);
-        int total = service.settlementTotal(status, keyword);
+        List<EntryStatusDTO> list = service.settlementList(status, keyword, offset, size, from, to);
+        int total = service.settlementTotal(status, keyword, from, to);
 
         result.put("success", true);
         result.put("list", list);
@@ -90,6 +117,24 @@ public class EntryStatusController {
         result = new HashMap<String, Object>();
 
         EntryStatusDTO dto = service.settlementDetail(settlement_id);
+
+        if (dto != null) {
+            try {
+                CustomDTO custom = customService.customSelect(dto.getCustom_idx());
+                dto.setCustom_name(custom != null ? custom.getCustom_name() : "");
+            } catch (Exception e) {
+                dto.setCustom_name("");
+            }
+            try {
+                DocumentDTO document = documentService.getByTypeAndIdx("settlement", settlement_id);
+                if (document != null) {
+                    dto.setDocument_idx(document.getDocument_idx());
+                }
+            } catch (Exception e) {
+                // 예외 무시 또는 로깅
+            }
+        }
+
         result.put("success", dto != null);
         result.put("data", dto);
 
@@ -107,5 +152,59 @@ public class EntryStatusController {
         return result;
     }
 
+
+    // 정산 미리보기
+    @PostMapping("/settlement/preview")
+    public Map<String, Object> settlementPreview(@RequestBody TemplatePreviewDTO dto) {
+        Map<String, Object> result = new HashMap<>();
+        
+        Map<String, String> variables = settlementToVariables(dto.getVariables());
+        String html = documentService.documentPreview(dto.getTemplate_idx(), variables);
+
+        result.put("preview", html);
+        result.put("success", html != null);
+        result.put("variables", variables);
+
+        return result;
+    }
+        
+    // 치환 변수 맵
+    private Map<String, String> settlementToVariables(Map<String, String> param) {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("settlement_idx", param.getOrDefault("settlement_id", "정산 번호 미정"));
+        map.put("settlement_day", param.getOrDefault("settlement_day", ""));
+        map.put("amount", param.getOrDefault("amount", ""));
+        map.put("total_amount", param.getOrDefault("total_amount", ""));
+        map.put("status", param.getOrDefault("status", "작성중"));
+
+        try {
+            int user_idx = Integer.parseInt(param.getOrDefault("user_idx", "0"));
+            MemberDTO user = memberService.selectUserByIdx(user_idx);
+            map.put("user_name", user != null ? user.getUser_name() : "");
+        } catch (Exception e) {
+            map.put("user_name", "");
+        }
+
+        try {
+            int custom_idx = Integer.parseInt(param.getOrDefault("custom_idx", "0"));
+            CustomDTO custom = customService.customSelect(custom_idx);
+            map.put("custom_name", custom != null ? custom.getCustom_name() : "");
+        } catch (Exception e) {
+            map.put("custom_name", "");
+        }
+
+        try {
+            int entry_idx = Integer.parseInt(param.getOrDefault("entry_idx", "0"));
+            int totalAmount = Integer.parseInt(param.getOrDefault("total_amount", "0"));
+            int settledSum = service.selectTotalSettlementAmount(entry_idx);
+            int unpaid = totalAmount - settledSum;
+            map.put("unpaid_amount", String.valueOf(unpaid));
+        } catch (Exception e) {
+            map.put("unpaid_amount", "");
+        }
+
+        return map;
+    }
 
 }

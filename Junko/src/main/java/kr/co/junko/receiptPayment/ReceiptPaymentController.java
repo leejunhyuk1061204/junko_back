@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.co.junko.custom.CustomService;
 import kr.co.junko.document.DocumentService;
 import kr.co.junko.dto.CustomDTO;
+import kr.co.junko.dto.DocumentDTO;
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.ReceiptPaymentDTO;
+import kr.co.junko.file.FileDAO;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -28,6 +31,7 @@ public class ReceiptPaymentController {
     @Autowired ReceiptPaymentService service;
     @Autowired DocumentService documentService;
     @Autowired CustomService customService;
+    @Autowired FileDAO filedao;
 
     Map<String, Object> result = null;
     
@@ -38,6 +42,12 @@ public class ReceiptPaymentController {
         result = new HashMap<>();
 
         dto.setType("수금");
+
+        CustomDTO custom = customService.customSelect(dto.getCustom_idx());
+        if (custom != null) {
+            dto.setCustomer_name(custom.getCustom_name());
+        }
+
         boolean success = service.receiptInsert(dto);
 
         result.put("success", success);
@@ -83,6 +93,12 @@ public class ReceiptPaymentController {
         result = new HashMap<>();
 
         dto.setType("지급");
+
+        CustomDTO custom = customService.customSelect(dto.getCustom_idx());
+        if (custom != null) {
+            dto.setCustomer_name(custom.getCustom_name());
+        }
+        
         boolean success = service.paymentInsert(dto);
 
         result.put("success", success);
@@ -147,18 +163,29 @@ public class ReceiptPaymentController {
         return result;
     }
 
-    // 수금 상세
-    @GetMapping("/receipt/detail/{rp_idx}")
-    public Map<String, Object> detailReceipt(@PathVariable int rp_idx) {
-        result = new HashMap<String, Object>();
+    // 수금,지급 상세
+    @GetMapping("/receiptPayment/detail/{rp_idx}")
+    public Map<String, Object> detailReceiptPayment(@PathVariable int rp_idx) {
+        result = new HashMap<>();
 
-        ReceiptPaymentDTO dto = service.detailReceipt(rp_idx);
-
-        boolean success = dto != null && "수금".equals(dto.getType());
+        ReceiptPaymentDTO dto = service.detailReceiptPayment(rp_idx);
+        boolean success = dto != null;
         result.put("success", success);
         result.put("data", dto);
 
         if (success) {
+            DocumentDTO doc = documentService.getByTypeAndIdx("receipt_payment", rp_idx);
+            result.put("document", doc);
+
+            if (doc != null) {
+                Map<String, Object> fileParam = new HashMap<>();
+                fileParam.put("type", "document");
+                fileParam.put("idx", doc.getDocument_idx());
+                fileParam.put("ext", "pdf");
+                FileDTO file = filedao.selectTypeIdx(fileParam);
+                result.put("file", file);
+            }
+
             Map<String, String> variables = receiptPaymentToVariables(dto);
             result.put("variables", variables);
         }
@@ -166,22 +193,4 @@ public class ReceiptPaymentController {
         return result;
     }
 
-    // 지급 상세
-    @GetMapping("/payment/detail/{rp_idx}")
-    public Map<String, Object> detailPayment(@PathVariable int rp_idx) {
-        result = new HashMap<String, Object>();
-        
-        ReceiptPaymentDTO dto = service.detailPayment(rp_idx);
-
-        boolean success = dto != null && "지급".equals(dto.getType());
-        result.put("success", success);
-        result.put("data", dto);
-
-        if (success) {
-            Map<String, String> variables = receiptPaymentToVariables(dto);
-            result.put("variables", variables);
-        }
-
-        return result;
-    }
 }
