@@ -35,4 +35,8 @@ public interface VoucherDAO {
 
     public void insertReceiptPayment(Map<String, Object> insertMap);
 
+	public void delEntryDetailEntryIdx(int entry_idx);
+
+	public String selectAsNameByIdx(int as_idx);
+
 }

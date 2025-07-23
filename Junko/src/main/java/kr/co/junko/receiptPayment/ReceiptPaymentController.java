@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.junko.custom.CustomService;
+import kr.co.junko.document.DocumentService;
+import kr.co.junko.dto.CustomDTO;
 import kr.co.junko.dto.ReceiptPaymentDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ReceiptPaymentController {
 
     @Autowired ReceiptPaymentService service;
+    @Autowired DocumentService documentService;
+    @Autowired CustomService customService;
 
     Map<String, Object> result = null;
     
@@ -30,37 +35,80 @@ public class ReceiptPaymentController {
     @PostMapping("/receipt/insert")
     public Map<String, Object> receiptInsert(@RequestBody ReceiptPaymentDTO dto) {
         log.info("dto : {}", dto);
-        result = new HashMap<String, Object>();
+        result = new HashMap<>();
 
         dto.setType("수금");
         boolean success = service.receiptInsert(dto);
 
         result.put("success", success);
+        result.put("data", dto);
+
+        if (success) {
+            Map<String, String> variables = receiptPaymentToVariables(dto);
+            result.put("variables", variables);
+        }
+
         return result;
     }
+    
+    private Map<String, String> receiptPaymentToVariables(ReceiptPaymentDTO dto) {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("cap_idx", String.valueOf(dto.getRp_idx()));
+        map.put("type", dto.getType());
+        map.put("date", dto.getTransaction_date() != null ? dto.getTransaction_date().toString() : "");
+        map.put("amount", String.format("%,d", dto.getAmount()));
+        map.put("customName", dto.getCustomer_name() != null ? dto.getCustomer_name() : "");
+        map.put("memo", dto.getNote() != null ? dto.getNote() : "");
+        map.put("entry_idx", dto.getEntry_idx() != null ? String.valueOf(dto.getEntry_idx()) : "");
+
+        // 거래처 정보 조회
+        CustomDTO custom = customService.customSelect(dto.getCustom_idx());
+        if (custom != null) {
+            map.put("accountBank", custom.getBank() != null ? custom.getBank() : "");
+            map.put("accountNumber", custom.getAccount_number() != null ? custom.getAccount_number() : "");
+        } else {
+            map.put("accountBank", "");
+            map.put("accountNumber", "");
+        }
+
+        return map;
+    }
+
     
     // 지급 등록
     @PostMapping("/payment/insert")
     public Map<String, Object> paymentInsert(@RequestBody ReceiptPaymentDTO dto) {
         log.info("dto : {}", dto);
-        result = new HashMap<String, Object>();
+        result = new HashMap<>();
 
         dto.setType("지급");
         boolean success = service.paymentInsert(dto);
 
         result.put("success", success);
+        result.put("data", dto);
+
+        if (success) {
+            Map<String, String> variables = receiptPaymentToVariables(dto);
+            result.put("variables", variables);
+        }
+
         return result;
     }
 
     // 수정 (수금/지급 공통)
-    @PutMapping("/receipt/update")
     public Map<String, Object> receiptUpdate(@RequestBody ReceiptPaymentDTO dto) {
         log.info("dto : {}", dto);
-        result = new HashMap<String, Object>();
+        result = new HashMap<>();
 
         boolean success = service.receiptUpdate(dto);
-
         result.put("success", success);
+
+        if (success) {
+            Map<String, String> variables = receiptPaymentToVariables(dto);
+            result.put("variables", variables);
+        }
+
         return result;
     }
 
@@ -106,8 +154,15 @@ public class ReceiptPaymentController {
 
         ReceiptPaymentDTO dto = service.detailReceipt(rp_idx);
 
-        result.put("success", dto != null && "수금".equals(dto.getType()));
+        boolean success = dto != null && "수금".equals(dto.getType());
+        result.put("success", success);
         result.put("data", dto);
+
+        if (success) {
+            Map<String, String> variables = receiptPaymentToVariables(dto);
+            result.put("variables", variables);
+        }
+
         return result;
     }
 
@@ -118,8 +173,15 @@ public class ReceiptPaymentController {
         
         ReceiptPaymentDTO dto = service.detailPayment(rp_idx);
 
-        result.put("success", dto != null && "지급".equals(dto.getType()));
+        boolean success = dto != null && "지급".equals(dto.getType());
+        result.put("success", success);
         result.put("data", dto);
+
+        if (success) {
+            Map<String, String> variables = receiptPaymentToVariables(dto);
+            result.put("variables", variables);
+        }
+
         return result;
     }
 }

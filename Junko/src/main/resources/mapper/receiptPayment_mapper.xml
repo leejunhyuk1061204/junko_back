@@ -4,7 +4,8 @@
 <mapper namespace="kr.co.junko.receiptPayment.ReceiptPaymentDAO">
 
     <!-- 수금 등록 -->
-    <insert id="receiptInsert" parameterType="kr.co.junko.dto.ReceiptPaymentDTO">
+    <insert id="receiptInsert" parameterType="kr.co.junko.dto.ReceiptPaymentDTO"
+    		useGeneratedKeys="true" keyProperty="rp_idx">
         INSERT INTO receipt_payment (
             type, entry_idx, custom_idx, amount, method, transaction_date,
             note, status, reg_date, user_idx
@@ -15,7 +16,8 @@
     </insert>
 
     <!-- 지급 등록 -->
-    <insert id="paymentInsert" parameterType="kr.co.junko.dto.ReceiptPaymentDTO">
+    <insert id="paymentInsert" parameterType="kr.co.junko.dto.ReceiptPaymentDTO"
+    		useGeneratedKeys="true" keyProperty="rp_idx">
         INSERT INTO receipt_payment (
             type, entry_idx, custom_idx, amount, method, transaction_date,
             note, status, reg_date, user_idx
@@ -49,32 +51,44 @@
 
     <!-- 수금 리스트 -->
     <select id="receiptList" parameterType="String" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
-        SELECT *
-        FROM receipt_payment
-        WHERE del_yn = 0 AND type = #{type}
-        ORDER BY transaction_date DESC, rp_idx DESC
+	    SELECT
+	        rp.*, c.custom_name AS customer_name
+	    FROM
+	        receipt_payment rp
+	        LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
+	    WHERE
+	        rp.del_yn = 0 AND rp.type = #{type}
+	    ORDER BY
+	        rp.transaction_date DESC, rp.rp_idx DESC
     </select>
 
     <!-- 지급 리스트 -->
     <select id="paymentList" parameterType="String" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
-        SELECT *
-        FROM receipt_payment
-        WHERE del_yn = 0 AND type = #{type}
-        ORDER BY transaction_date DESC, rp_idx DESC
+	    SELECT
+	        rp.*, c.custom_name AS customer_name
+	    FROM
+	        receipt_payment rp
+	        LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
+	    WHERE
+	        rp.del_yn = 0 AND rp.type = #{type}
+	    ORDER BY
+	        rp.transaction_date DESC, rp.rp_idx DESC
     </select>
 
     <!-- 수금 상세 -->
     <select id="detailReceipt" parameterType="int" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
-        SELECT *
-        FROM receipt_payment
-        WHERE rp_idx = #{rp_idx} AND del_yn = 0 AND type = '수금'
-    </select>
+	    SELECT rp.*, c.custom_name AS customer_name
+	    FROM receipt_payment rp
+	    LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
+	    WHERE rp.rp_idx = #{rp_idx} AND rp.del_yn = 0 AND rp.type = '수금'
+	</select>
 
     <!-- 지급 상세 -->
     <select id="detailPayment" parameterType="int" resultType="kr.co.junko.dto.ReceiptPaymentDTO">
-        SELECT *
-        FROM receipt_payment
-        WHERE rp_idx = #{rp_idx} AND del_yn = 0 AND type = '지급'
+	    SELECT rp.*, c.custom_name AS customer_name
+	    FROM receipt_payment rp
+	    LEFT JOIN custom c ON rp.custom_idx = c.custom_idx
+	    WHERE rp.rp_idx = #{rp_idx} AND rp.del_yn = 0 AND rp.type = '지급'
     </select>
 
     <update id="updateVoucherStatus" parameterType="map">

@@ -161,5 +161,16 @@
             #{note}, #{status}, NOW(), #{user_idx}
         )
     </insert>
+    
+    <update id="delEntryDetailEntryIdx" parameterType="int">
+	    UPDATE entry_detail
+	    SET del_yn = 1
+	    WHERE entry_idx = #{entry_idx}
+	</update>
+	
+	<select id="selectAsNameByIdx" resultType="String">
+	    SELECT as_name FROM account_code WHERE as_idx = #{as_idx}
+	</select>
+    
 
 </mapper>

@@ -39,8 +39,28 @@ public class VoucherService {
     public boolean voucherUpdate(VoucherDTO dto) {
         String status = dao.voucherStatus(dto.getEntry_idx());
         if (!"작성중".equals(status)) return false;
+        
+        int fixedIdx = dto.getEntry_idx();
+        
         int row = dao.voucherUpdate(dto);
-        return row > 0;
+        
+        if (row > 0) {
+            dto.setEntry_idx(fixedIdx);
+            
+            // 기존 분개 삭제
+            dao.delEntryDetailEntryIdx(dto.getEntry_idx());
+
+            // 새 분개 자동 생성
+            defaultEntryDetails(dto);
+            
+            for (EntryDetailDTO detail : dto.getEntry_details()) {
+                dao.insertEntryDetail(detail);
+            }
+            
+            return true;
+        }
+        
+        return false;
     }
 
     public boolean voucherDel(int entry_idx) {
@@ -146,5 +166,23 @@ public class VoucherService {
 
         return dao.voucherStatusUpdate(map) > 0;
     }
+
+	public List<EntryDetailDTO> entryDetailList(int entry_idx) {
+		return dao.entryDetailList(entry_idx);
+	}
+
+	public String selectAsNameByIdx(int as_idx) {
+		return dao.selectAsNameByIdx(as_idx);
+	}
+
+	public String selectVoucherType(int entry_idx) {
+	    VoucherDTO dto = dao.voucherDetail(entry_idx);
+	    return dto != null ? dto.getEntry_type() : "";
+	}
+
+	public int selectVoucherAmount(int entry_idx) {
+	    VoucherDTO dto = dao.voucherDetail(entry_idx);
+	    return dto != null ? dto.getAmount() : 0;
+	}
 
 }
