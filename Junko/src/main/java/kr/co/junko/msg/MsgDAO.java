@@ -34,4 +34,15 @@ public interface MsgDAO {
 
 	int msgUnreadCnt(int user_idx);
 
+	List<Map<String, Object>> msgSendList(Map<String, Object> param);
+
+	int msgSendListTotalPage(Map<String, Object> param);
+
+	List<Map<String, Object>> msgReceiveList(Map<String, Object> param);
+
+	int msgReceiveListTotalPage(Map<String, Object> param);
+
+	int msgInsert(MsgDTO dto);
+
+
 }

@@ -1,5 +1,6 @@
 package kr.co.junko.msg;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,45 @@ public class MsgService {
 
 	public int msgUnreadCnt(int user_idx) {
 		return dao.msgUnreadCnt(user_idx);
+	}
+
+	public Map<String, Object> msgList(Map<String, Object> param) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		boolean success = true;
+		if(param.get("page") != null) {
+			int cnt = 5;
+			int offset = ((int)param.get("page")-1)*cnt;
+			param.put("cnt", cnt);
+			param.put("offset", offset);
+		}
+		switch ((String)param.get("type")) {
+		case "send":
+			if(param.get("page") != null) {
+				int total = dao.msgSendListTotalPage(param);
+				result.put("total", total);
+			}
+			List<Map<String, Object>>list = dao.msgSendList(param);
+			result.put("list", list);
+			break;
+		case "receive":
+			if(param.get("page") != null) {
+				int total = dao.msgReceiveListTotalPage(param);
+				result.put("total", total);
+			}
+			list = dao.msgReceiveList(param);
+			result.put("list", list);
+			break;
+			
+		default:
+			success = false;
+			break;
+		}
+		result.put("success", success);
+		return result;
+	}
+
+	public boolean msgInsert(MsgDTO dto) {
+		return dao.msgInsert(dto)>0;
 	}
 	
 }

@@ -70,6 +70,9 @@ public class StockService {
 		boolean receiveResult = receiveDAO.receiveUpdate(dto)>0;
 		if(!receiveResult) throw new RuntimeException("입고 상태 변경 실패");
 		
+		
+		// 5. 쪽지 발송
+		
 		return true;
 	}
 
@@ -119,6 +122,9 @@ public class StockService {
 		waybillDTO.setStatus("배송중");
 		boolean waybillResult = waybillDAO.waybillUpdate(waybillDTO)>0;
 		if(!waybillResult) throw new RuntimeException("송장 상태 변경 실패");
+		
+		// 5. 쪽지 발송
+		
 		
 		return true;
 	}

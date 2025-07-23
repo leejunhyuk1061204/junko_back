@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -197,5 +198,19 @@ public class MsgController {
 		return result;
 	}
 	
+	@PostMapping(value="/msg/list")
+	public Map<String, Object>msgList(@RequestBody Map<String, Object>param){
+		log.info("param : {}", param);
+		return service.msgList(param);
+	}
+	
+	@PostMapping(value="/msg/insert")
+	public Map<String, Object>msgInsert(@RequestBody MsgDTO dto){
+		log.info("dto : {}",dto);
+		boolean success = service.msgInsert(dto);
+		result = new HashMap<String, Object>();
+		result.put("success", success);
+		return result;
+	}
 	
 }
