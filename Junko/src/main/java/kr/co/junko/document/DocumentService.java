@@ -327,4 +327,24 @@ public class DocumentService {
 		return dao.getByTypeAndIdx(map);
     }
 
+	public boolean documentUpdate(DocumentCreateDTO dto) {
+	    // 1. 문서 기본 정보 업데이트
+	    int updated = dao.documentUpdate(dto);
+	    if (updated == 0) return false;
+
+	    // 2. 기존 변수 삭제
+	    dao.delDocumentVar(dto.getDocument_idx());
+
+	    // 3. 새 변수 등록
+	    for (Map.Entry<String, String> entry : dto.getVariables().entrySet()) {
+	        Map<String, Object> param = new HashMap<>();
+	        param.put("document_idx", dto.getDocument_idx());
+	        param.put("key", entry.getKey());
+	        param.put("value", entry.getValue());
+	        dao.insertDocumentVar(param);
+	    }
+
+	    return true;
+	}
+
 }

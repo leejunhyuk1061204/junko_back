@@ -85,6 +85,19 @@ public class VoucherController {
 
         boolean success = service.voucherUpdate(dto);
         result.put("success", success);
+        
+        if (success) {
+            Map<String, String> param = new HashMap<>();
+            param.put("entry_type", dto.getEntry_type());
+            param.put("amount", String.valueOf(dto.getAmount()));
+            param.put("entry_idx", String.valueOf(entry_idx));
+            param.put("user_idx", String.valueOf(dto.getUser_idx()));
+            param.put("custom_idx", String.valueOf(dto.getCustom_idx()));
+            param.put("entry_date", String.valueOf(dto.getEntry_date()));
+
+            Map<String, String> variables = voucherToVariables(param);
+            result.put("variables", variables);
+        }
 
         return result;
     }

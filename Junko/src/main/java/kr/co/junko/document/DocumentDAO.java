@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.ApprovalLogDTO;
+import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 
 @Mapper
@@ -39,5 +40,11 @@ public interface DocumentDAO {
 	int documentCnt(Map<String, Object> param);
 
 	DocumentDTO getByTypeAndIdx(Map<String, Object> map);
+
+	int documentUpdate(DocumentCreateDTO dto);
+
+	void delDocumentVar(int document_idx);
+
+	void insertDocumentVar(Map<String, Object> param);
 
 }

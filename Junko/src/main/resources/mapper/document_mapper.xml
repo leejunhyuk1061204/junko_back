@@ -134,4 +134,28 @@
 		LIMIT 1
 	</select>
 
+
+	<!-- 문서 업데이트 -->
+	<update id="documentUpdate" parameterType="kr.co.junko.dto.DocumentCreateDTO">
+	    UPDATE document
+	    SET template_idx = #{template_idx},
+	        user_idx = #{user_idx},
+	        idx = #{idx},
+	        type = #{type}
+	    WHERE document_idx = #{document_idx}
+	</update>
+	
+	<update id="delDocumentVar" parameterType="int">
+	    UPDATE document_variable
+	    SET del_yn = 1
+	    WHERE document_idx = #{document_idx}
+	</update>
+	
+	<insert id="insertDocumentVar" parameterType="map">
+	    INSERT INTO document_variable (document_idx, var_key, var_value, del_yn)
+	    VALUES (#{document_idx}, #{key}, #{value}, 0)
+	</insert>
+
+
+
 </mapper>
