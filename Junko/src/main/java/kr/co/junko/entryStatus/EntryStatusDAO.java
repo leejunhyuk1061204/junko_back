@@ -11,9 +11,9 @@ public interface EntryStatusDAO {
 
     int settlementInsert(EntryStatusDTO dto);
 
-    List<EntryStatusDTO> settlementList(String status, String keyword, int offset, int size);
+    List<EntryStatusDTO> settlementList(String status, String keyword, int offset, int size, String from, String to);
 
-    int settlementTotal(String status, String keyword);
+    int settlementTotal(String status, String keyword, String from, String to);
 
     int settlementUpdate(EntryStatusDTO dto);
 
@@ -30,5 +30,7 @@ public interface EntryStatusDAO {
     int voucherAmount(int entry_idx);
 
     void voucherSettlementUpdate(int entry_idx, String status);
+
+    int selectTotalSettlementAmount(int entry_idx);
 
 }

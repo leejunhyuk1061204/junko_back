@@ -25,20 +25,34 @@ public class EntryStatusService {
             dto.setSettlement_day(new Date(System.currentTimeMillis()));
         }
 
+        int voucherAmount = dao.voucherAmount(dto.getEntry_idx());
+        int amount = dto.getAmount();
+        String status = "미정산";
+        if (amount > 0 && amount < voucherAmount) status = "부분정산";
+        else if (amount >= voucherAmount) status = "정산";
+        dto.setStatus(status);
+
         int row = dao.settlementInsert(dto);
         if (row > 0) updateSettlementStatus(dto.getEntry_idx());
         return row > 0;
     }
 
-    public List<EntryStatusDTO> settlementList(String status, String keyword, int offset, int size) {
-        return dao.settlementList(status, keyword, offset, size);
+    public List<EntryStatusDTO> settlementList(String status, String keyword, int offset, int size, String from, String to) {
+        return dao.settlementList(status, keyword, offset, size, from, to);
     }
 
-    public int settlementTotal(String status, String keyword) {
-        return dao.settlementTotal(status, keyword);
+    public int settlementTotal(String status, String keyword, String from, String to) {
+        return dao.settlementTotal(status, keyword, from, to);
     }
 
     public boolean settlementUpdate(EntryStatusDTO dto) {
+        int voucherAmount = dao.voucherAmount(dto.getEntry_idx());
+        int amount = dto.getAmount();
+        String status = "미정산";
+        if (amount > 0 && amount < voucherAmount) status = "부분정산";
+        else if (amount >= voucherAmount) status = "정산";
+        dto.setStatus(status);
+
         int row = dao.settlementUpdate(dto);
         if (row > 0) updateSettlementStatus(dto.getEntry_idx());
         return row > 0;
@@ -66,6 +80,14 @@ public class EntryStatusService {
         int count = 0;
         for (int entry_idx : list) {
             dto.setEntry_idx(entry_idx);
+
+            int voucherAmount = dao.voucherAmount(entry_idx);
+            int amount = dto.getAmount();
+            String status = "미정산";
+            if (amount > 0 && amount < voucherAmount) status = "부분정산";
+            else if (amount >= voucherAmount) status = "정산";
+            dto.setStatus(status);
+
             count += dao.settlementMulti(dto);
             updateSettlementStatus(entry_idx);
         }
@@ -85,6 +107,10 @@ public class EntryStatusService {
         }
 
         dao.voucherSettlementUpdate(entry_idx, status);
+    }
+
+    public int selectTotalSettlementAmount(int entry_idx) {
+        return dao.selectTotalSettlementAmount(entry_idx);
     }
 
 }

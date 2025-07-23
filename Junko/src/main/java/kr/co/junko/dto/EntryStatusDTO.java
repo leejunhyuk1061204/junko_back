@@ -18,4 +18,13 @@ public class EntryStatusDTO {
     private int del_yn;  
     
     private List<Integer> entry_idx_list;
+    private String custom_name;
+    private int user_idx;
+
+    private String entry_type;
+    private Date entry_date;
+    private String user_name;
+
+    private int document_idx;
+    
 }

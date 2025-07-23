@@ -4,21 +4,26 @@
 <mapper namespace="kr.co.junko.entryStatus.EntryStatusDAO">
 
     <!-- 정산 등록 -->
-    <insert id="settlementInsert" parameterType="kr.co.junko.dto.EntryStatusDTO">
+    <insert id="settlementInsert" parameterType="kr.co.junko.dto.EntryStatusDTO"
+            useGeneratedKeys="true" keyProperty="document_idx">
         INSERT INTO entry_status (
             entry_idx, custom_idx, settlement_day,
-            total_amount, amount, status
+            total_amount, amount, status, user_idx
         ) VALUES (
             #{entry_idx}, #{custom_idx}, #{settlement_day},
-            #{total_amount}, #{amount}, #{status}
+            #{total_amount}, #{amount}, #{status}, #{user_idx}
         )
     </insert>
 
     <!-- 정산 리스트 -->
     <select id="settlementList" parameterType="map" resultType="kr.co.junko.dto.EntryStatusDTO">
-        SELECT es.*, c.custom_name
+        SELECT 
+            es.*, 
+            c.custom_name,
+            u.user_name
         FROM entry_status es
         LEFT JOIN custom c ON es.custom_idx = c.custom_idx
+        LEFT JOIN `user` u ON es.user_idx = u.user_idx
         WHERE es.del_yn = 0
         <if test="status != null and status != ''">
             AND es.status = #{status}
@@ -27,7 +32,14 @@
             AND (
                 c.custom_name LIKE CONCAT('%', #{keyword}, '%')
                 OR es.total_amount LIKE CONCAT('%', #{keyword}, '%')
+                OR u.user_name LIKE CONCAT('%', #{keyword}, '%')
             )
+        </if>
+        <if test="from != null and from != ''">
+            AND es.settlement_day <![CDATA[ >= ]]> #{from}
+        </if>
+        <if test="to != null and to != ''">
+            AND es.settlement_day <![CDATA[ <= ]]> #{to}
         </if>
         ORDER BY es.settlement_day DESC
         LIMIT #{offset}, #{size}
@@ -38,6 +50,7 @@
         SELECT COUNT(*) 
         FROM entry_status es
         LEFT JOIN custom c ON es.custom_idx = c.custom_idx
+        LEFT JOIN `user` u ON es.user_idx = u.user_idx
         WHERE es.del_yn = 0
         <if test="status != null and status != ''">
             AND es.status = #{status}
@@ -46,6 +59,7 @@
             AND (
                 c.custom_name LIKE CONCAT('%', #{keyword}, '%')
                 OR es.total_amount LIKE CONCAT('%', #{keyword}, '%')
+                OR u.user_name LIKE CONCAT('%', #{keyword}, '%')
             )
         </if>
     </select>
@@ -77,14 +91,24 @@
     <!-- 정산 상세보기  -->
     <select id="settlementDetail" parameterType="int" resultType="kr.co.junko.dto.EntryStatusDTO">
         SELECT 
-            es.*, 
+            es.settlement_id,
+            es.entry_idx,
+            es.custom_idx,
+            es.settlement_day,
+            es.total_amount,
+            es.amount,
+            es.status,
+            es.del_yn,
+            es.user_idx,
             c.custom_name,
             v.entry_type,
             v.entry_date,
-            v.amount AS voucher_amount
+            v.amount AS voucher_amount,
+            u.user_name
         FROM entry_status es
         LEFT JOIN custom c ON es.custom_idx = c.custom_idx
         LEFT JOIN voucher v ON es.entry_idx = v.entry_idx
+        LEFT JOIN `user` u ON es.user_idx = u.user_idx
         WHERE es.del_yn = 0
         AND es.settlement_id = #{settlement_id}
     </select>
@@ -97,14 +121,16 @@
             settlement_day,
             total_amount,
             amount,
-            status
+            status,
+            user_idx
         ) VALUES (
             #{entry_idx},
             #{custom_idx},
             #{settlement_day},
             #{amount},
             #{amount},
-            #{status}
+            #{status},
+            #{user_idx}
         )
     </insert>
 
@@ -135,6 +161,13 @@
         SELECT amount
         FROM voucher
         WHERE entry_idx = #{entry_idx}
+    </select>
+
+    <select id="selectTotalSettlementAmount" parameterType="int" resultType="int">
+        SELECT COALESCE(SUM(amount), 0)
+        FROM entry_status
+        WHERE entry_idx = #{entry_idx}
+        AND del_yn = 0
     </select>
 
 </mapper>
