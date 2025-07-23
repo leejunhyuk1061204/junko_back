@@ -21,8 +21,12 @@
 		WHERE document_idx = #{document_idx}
 		  AND del_yn = 0
 	</select>
-
-
+	
+	<!-- 결재자 검색 -->
+	<select id="searchUser" resultType="kr.co.junko.dto.MemberDTO">
+	    SELECT j.job_name, u.* FROM user u LEFT JOIN job j ON j.job_idx = u.job_idx WHERE status = '재직'
+	    	AND user_name LIKE CONCAT('%', #{user_name}, '%') LIMIT 10
+	</select>
 
 
 	<!-- 결재라인 조회 -->

@@ -9,6 +9,7 @@ import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.ApprovalLogDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
+import kr.co.junko.dto.MemberDTO;
 
 @Mapper
 public interface DocumentDAO {
@@ -48,5 +49,7 @@ public interface DocumentDAO {
 	void insertDocumentVar(Map<String, Object> param);
 
 	List<Map<String, String>> getVariables(int document_idx);
+
+	List<MemberDTO> searchUser(String user_name);
 
 }

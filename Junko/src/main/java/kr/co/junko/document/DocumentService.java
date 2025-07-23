@@ -26,6 +26,7 @@ import kr.co.junko.dto.ApprovalLogDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
+import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.TemplateDTO;
 import kr.co.junko.file.FileDAO;
 import kr.co.junko.template.TemplateService;
@@ -141,6 +142,10 @@ public class DocumentService {
 		result.put("document_idx", document_idx);
 		
 		return result;
+	}
+	
+	public List<MemberDTO> searchUser(String user_name) {
+		return dao.searchUser(user_name);
 	}
 
 	// PDF 파일 생성 및 파일 테이블 저장

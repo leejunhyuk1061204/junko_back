@@ -29,6 +29,7 @@ import kr.co.junko.dto.ApprovalLogDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
+import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.TemplatePreviewDTO;
 import kr.co.junko.file.FileDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,12 @@ public class DocumentController {
 		result.putAll(insertResult);
 		
 		return result;
+	}
+	
+	// 결재선 검색
+	@GetMapping("/user/search")
+	public List<MemberDTO> searchUser(@RequestParam String user_name) {
+		return service.searchUser(user_name);
 	}
 	
 	// 결재 문서 PDF 파일 생성
