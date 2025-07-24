@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,10 @@ import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
+import kr.co.junko.dto.MsgDTO;
 import kr.co.junko.dto.TemplateDTO;
 import kr.co.junko.file.FileDAO;
+import kr.co.junko.msg.MsgService;
 import kr.co.junko.template.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +42,7 @@ public class DocumentService {
 	@Autowired DocumentDAO dao;
     @Autowired TemplateService temService;
     @Autowired FileDAO filedao;
+    @Autowired MsgService msgService;
     
     @Value("${spring.servlet.multipart.location}") 
     private String root;
@@ -73,13 +77,8 @@ public class DocumentService {
 	public Map<String, Object> documentInsert(DocumentCreateDTO dto) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		log.info("==================approver_ids: {}", dto.getApprover_ids());
-		
 		// 템플릿 가져오기
 		TemplateDTO template = temService.getTemplate(dto.getTemplate_idx());
-		
-		log.info("==================template: {}", template);
-		
 		if (template == null) {
 			result.put("success", false);
 			return result;
@@ -104,8 +103,6 @@ public class DocumentService {
 		// 문서 DB 저장
 		int row = dao.documentInsert(doc);
 		
-		log.info("==================document insert row: {}", row);
-		
 		if (row == 0) {
 			result.put("success", false);
 			return result;
@@ -127,16 +124,35 @@ public class DocumentService {
 		
 		// 결재자 리스트를 기반으로 결재 라인에 등록
 		int step = 1;
+		Integer firstApproverId = null;
+		
 		if(dto.getApprover_ids() != null) {
 			for (int approval_id : dto.getApprover_ids()) {
+				
+				if (step == 1) firstApproverId = approval_id;
+				
 				ApprovalLineDTO line = new ApprovalLineDTO();
 				line.setDocument_idx(document_idx);
 				line.setUser_idx(approval_id);
 				line.setStep(step++);
 				line.setStatus("미확인");
 				dao.insertApprovalLine(line);
+				
+				step++;
 			}
 		}
+		
+		// 쪽지 자동 발송 (1단계 결재자 한정)
+		if (firstApproverId != null) {
+			MsgDTO msg = new MsgDTO();
+			msg.setSender_idx(dto.getUser_idx());
+			msg.setReceiver_idx(firstApproverId);
+			msg.setMsg_title("[전자결재] "+template.getTemplate_name()+" 결재 요청");
+			msg.setMsg_content("전자결재 문서 [ "+template.getTemplate_name()+" ]에 대한 결재 요청이 도착했습니다.");
+			log.info("=============================msg : {}", msg);
+			msgService.msgInsert(msg);
+		}
+		
 		result.put("success", true);
 		result.put("preview", html);
 		result.put("document_idx", document_idx);
@@ -339,7 +355,17 @@ public class DocumentService {
 	}
 
 	public List<DocumentDTO> documentList(Map<String, Object> param) {
-		List<DocumentDTO> list = dao.documentList(param);
+		String tab = (String) param.get("tab");
+		
+		List<DocumentDTO> list = null;
+		
+		if (tab == null || tab.isEmpty() || "상신함".equals(tab)) {
+		    list = dao.requestedDocument(param);
+		} else if ("수신함".equals(tab)) {
+		    list = dao.receivedDocument(param);
+		} else {
+			list = new ArrayList<DocumentDTO>();
+		}
 		
 		for (DocumentDTO doc : list) {
 			List<Map<String, String>> vars = dao.getVariables(doc.getDocument_idx());

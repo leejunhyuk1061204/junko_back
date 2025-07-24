@@ -20,9 +20,9 @@ public interface InvoiceTaxDAO {
 
     int delInvoice(int invoice_idx);
 
-    List<InvoiceTaxDTO> invoicesList(int offset, int size, String status, String keyword, String startDate, String endDate);
+    List<InvoiceTaxDTO> invoiceList(int offset, int size, String status, String keyword, String startDate, String endDate, String sort, String order);
 
-    int invoiceTotal(String status, String keyword, String startDate, String endDate);
+    int invoiceTotal(String status, String keyword, String startDate, String endDate, String sort, String order);
 
     InvoiceTaxDTO invoiceDetail(int invoice_idx);
 

@@ -19,8 +19,10 @@ import kr.co.junko.document.DocumentService;
 import kr.co.junko.dto.CustomDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.EntryStatusDTO;
+import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.TemplatePreviewDTO;
+import kr.co.junko.file.FileDAO;
 import kr.co.junko.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,7 @@ public class EntryStatusController {
     @Autowired DocumentService documentService;
     @Autowired CustomService customService;
     @Autowired MemberService memberService;
+    @Autowired FileDAO filedao;
 
     Map<String, Object> result = null;
 
@@ -129,6 +132,16 @@ public class EntryStatusController {
                 DocumentDTO document = documentService.getByTypeAndIdx("settlement", settlement_id);
                 if (document != null) {
                     dto.setDocument_idx(document.getDocument_idx());
+                    result.put("document", document);
+                    
+                    Map<String, Object> fileParam = new HashMap<>();
+                    fileParam.put("type", "document");
+                    fileParam.put("idx", settlement_id);
+                    fileParam.put("ext", "pdf");
+
+                    FileDTO file = filedao.selectTypeIdx(fileParam);
+                    result.put("file", file);
+                    
                 }
             } catch (Exception e) {
                 // 예외 무시 또는 로깅
