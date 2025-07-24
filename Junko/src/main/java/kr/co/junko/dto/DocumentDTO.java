@@ -20,4 +20,5 @@ public class DocumentDTO {
 	
 	private String template_name;
 	private Map<String, String> variables;
+	private String approver_name;
 }

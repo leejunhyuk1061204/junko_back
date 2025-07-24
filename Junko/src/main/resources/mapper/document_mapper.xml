@@ -47,6 +47,15 @@
 	    AND user_idx = #{user_idx}
 	</update>
 	
+	<!-- 현재 결재 단계 처리 -->
+	<select id="currentApprover" resultType="int">
+		SELECT user_idx FROM approval_line WHERE document_idx = #{document_idx}
+			AND status = '미확인'
+			AND step = (
+				SELECT MIN(step) FROM approval_line WHERE document_idx = #{document_idx} AND status = '미확인'
+			) AND del_yn = 0 LIMIT 1
+	</select>
+	
 	<!-- 미승인 상태 결재라인 카운트 -->
 	<select id="approveCnt" resultType="int">
 	    SELECT COUNT(*) FROM approval_line
@@ -135,6 +144,15 @@
 	    LIMIT #{limit} OFFSET #{offset}
 	</select>
 	
+	<!-- 결재자명+직급 추출 -->
+	<select id="approverNames" resultType="String">
+		SELECT GROUP_CONCAT(u.user_name,' ',j.job_name SEPARATOR ', ') AS approver_name
+	    FROM approval_line al
+	    JOIN user u ON al.user_idx = u.user_idx
+	    LEFT JOIN job j ON u.job_idx = j.job_idx
+	    WHERE al.document_idx = #{document_idx}
+	    AND al.del_yn = 0
+	</select>
 	
 	<!-- 미리보기용 -->
 	<select id="getVariables" resultType="map">
@@ -188,7 +206,5 @@
 	    INSERT INTO document_variable (document_idx, var_key, var_value, del_yn)
 	    VALUES (#{document_idx}, #{key}, #{value}, 0)
 	</insert>
-
-
 
 </mapper>

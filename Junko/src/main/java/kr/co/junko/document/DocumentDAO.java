@@ -54,4 +54,8 @@ public interface DocumentDAO {
 
 	List<MemberDTO> searchUser(String user_name);
 
+	int currentApprover(int document_idx);
+
+	String approverNames(int document_idx);
+
 }

@@ -370,6 +370,9 @@ public class DocumentService {
 		for (DocumentDTO doc : list) {
 			List<Map<String, String>> vars = dao.getVariables(doc.getDocument_idx());
 			
+			String approvers = dao.approverNames(doc.getDocument_idx());
+			doc.setApprover_name(approvers);
+			
 			// List -> Map 으로 변환
 			Map<String, String> map = new HashMap<String, String>();
 			for (Map<String, String> item : vars) {
@@ -409,6 +412,10 @@ public class DocumentService {
 	    }
 
 	    return true;
+	}
+
+	public int currentApprover(int document_idx) {
+		return dao.currentApprover(document_idx);
 	}
 
 }

@@ -97,6 +97,16 @@ public class DocumentController {
 		return result;
 	}
 	
+	// 현재 결재자 추출
+	@GetMapping("/document/currentApprover/{document_idx}")
+	public Map<String, Object> currentApprover(@PathVariable int document_idx) {
+	    result = new HashMap<String, Object>();
+	    int approver = service.currentApprover(document_idx);
+	    result.put("approver", approver);
+	    
+	    return result;
+	}
+	
 	
 	// 문서 결재 (승인)
 	@PostMapping(value="/document/approve")
