@@ -36,7 +36,9 @@ public interface DocumentDAO {
 
 	List<ApprovalLogDTO> getApprovalLogs(int document_idx);
 
-	List<DocumentDTO> documentList(Map<String, Object> param);
+	List<DocumentDTO> requestedDocument(Map<String, Object> param);
+	
+	List<DocumentDTO> receivedDocument(Map<String, Object> param);
 
 	int documentCnt(Map<String, Object> param);
 

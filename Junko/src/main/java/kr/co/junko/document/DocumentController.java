@@ -227,7 +227,8 @@ public class DocumentController {
             @RequestParam(defaultValue = "created_date") String order,
             @RequestParam(defaultValue = "desc") String sort,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int limit
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(required = false) String tab
     ) {
         Map<String, Object> param = new HashMap<>();
         param.put("user_idx", user_idx);
@@ -239,6 +240,7 @@ public class DocumentController {
         param.put("sort", sort);
         param.put("offset", (page - 1) * limit);
         param.put("limit", limit);
+        param.put("tab", tab);
         
     	List<DocumentDTO> list = service.documentList(param);
     	int totalCnt = service.documentCnt(param);
