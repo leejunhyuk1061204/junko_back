@@ -58,4 +58,6 @@ public interface DocumentDAO {
 
 	String approverNames(int document_idx);
 
+	List<ApprovalLineDTO> getApprovalLines(int document_idx);
+
 }

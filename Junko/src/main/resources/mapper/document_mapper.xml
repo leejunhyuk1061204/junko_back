@@ -207,4 +207,11 @@
 	    VALUES (#{document_idx}, #{key}, #{value}, 0)
 	</insert>
 
+	<select id="getApprovalLines" parameterType="int" resultType="kr.co.junko.dto.ApprovalLineDTO">
+		SELECT * 
+		FROM approval_line 
+		WHERE document_idx = #{document_idx}
+		ORDER BY step ASC
+	</select>
+
 </mapper>

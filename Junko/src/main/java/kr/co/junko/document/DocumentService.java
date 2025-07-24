@@ -149,7 +149,6 @@ public class DocumentService {
 			msg.setReceiver_idx(firstApproverId);
 			msg.setMsg_title("[전자결재] "+template.getTemplate_name()+" 결재 요청");
 			msg.setMsg_content("전자결재 문서 [ "+template.getTemplate_name()+" ]에 대한 결재 요청이 도착했습니다.");
-			log.info("=============================msg : {}", msg);
 			msgService.msgInsert(msg);
 		}
 		
@@ -417,5 +416,10 @@ public class DocumentService {
 	public int currentApprover(int document_idx) {
 		return dao.currentApprover(document_idx);
 	}
+
+    public List<ApprovalLineDTO> getApprovalLines(int document_idx) {
+        return dao.getApprovalLines(document_idx);
+    }
+
 
 }
