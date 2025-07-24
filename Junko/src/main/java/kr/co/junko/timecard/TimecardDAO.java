@@ -11,20 +11,31 @@ import kr.co.junko.dto.TimecardDTO;
 @Mapper
 public interface TimecardDAO {
 
-	int attendInsert(@Param("user_idx") int user_idx, @Param("status") String status);
+//	int attendInsert(@Param("user_idx") int user_idx, @Param("status") String status);
+//
+//	int endTimeInsert(@Param("user_idx") int user_idx, @Param("status") String status);
+//
+//	int leaveStatusInsert(@Param("user_idx") int user_idx, @Param("status") String status);
+//
+//	int checkTodayAttend(@Param("user_idx") int user_idx, @Param("list") List<String> statusList);
+//
+//	List<Map<String, Object>> attendList(int user_idx);
+//
+//	List<Map<String, Object>> attendListDept(int dept_idx);
+//
+//	List<Map<String, Object>> attendListDate(Map<String, Object> param);
 
-	int endTimeInsert(@Param("user_idx") int user_idx, @Param("status") String status);
+	List<Integer> getUserIdxList();
 
-	int leaveStatusInsert(@Param("user_idx") int user_idx, @Param("status") String status);
+	int searchTimecardByIdx(int idx);
 
-	int checkTodayAttend(@Param("user_idx") int user_idx, @Param("list") List<String> statusList);
+	int timecardInsert(TimecardDTO paramDTO);
+	
+	int timecardUpdate(TimecardDTO paramDTO);
 
-	List<Map<String, Object>> attendList(int user_idx);
+	int timecardListTotalPage(Map<String, Object> param);
 
-	List<Map<String, Object>> attendListDept(int dept_idx);
+	List<Map<String, Object>> timecardList(Map<String, Object> param);
 
-	List<Map<String, Object>> attendListDate(Map<String, Object> param);
-
-	int timecardUpdate(TimecardDTO dto);
 
 }

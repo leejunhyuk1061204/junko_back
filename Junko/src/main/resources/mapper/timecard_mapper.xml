@@ -51,7 +51,7 @@
 	</select>
 	
 	<!-- 근태 수정 -->
-	<update id="timecardUpdate" parameterType="kr.co.junko.dto.TimecardDTO">
+	<!-- <update id="timecardUpdate" parameterType="kr.co.junko.dto.TimecardDTO">
 		UPDATE timecard
 			<trim prefix="SET" suffixOverrides=",">
 				<if test="work_date != null">
@@ -68,6 +68,46 @@
 				</if>
 			</trim>
 		WHERE attend_idx = #{attend_idx}
+	</update> -->
+	
+	<!-- 유저 idxList  -->
+	<select id="getUserIdxList">
+		select user_idx from `user`
+	</select>
+	
+	<!-- 미리 입력된 값 있는지 찾기 -->
+	<select id="searchTimecardByIdx">
+		select count(*) from timecard where user_idx = #{param1} and work_date = current_date
+	</select>
+	
+	<update id="timecardUpdate" parameterType="kr.co.junko.dto.TimecardDTO">
+		update timecard set status = #{status}
+		<where>
+			<if test="attend_idx != null and attend_idx != 0">
+				attend_idx = #{attend_idx}
+			</if>
+			<if test="user_idx != null and user_idx != 0">
+				and user_idx = #{user_idx}
+			</if>
+			<if test="work_date != null">
+				and work_date = #{work_date}
+			</if>
+		</where>
 	</update>
+	
+	<insert id="timecardInsert" parameterType="kr.co.junko.dto.TimecardDTO">
+		insert into timecard (user_idx,work_date,status
+		<if test="work_time != null">
+			,work_time
+		</if>
+		)
+		values (#{user_idx},#{work_date},#{status}
+		<if test="work_time != null">
+			,#{work_time}
+		</if>
+		)
+	</insert>
+	
+	
 	
 </mapper>
