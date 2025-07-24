@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.ApprovalLogDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
@@ -274,5 +275,14 @@ public class DocumentController {
         return result;
     }
 
+    // 문서에 연결된 결재선 조회
+    @GetMapping("/document/approval/lines/{document_idx}")
+    public Map<String, Object> getApprovalLines(@PathVariable int document_idx) {
+        Map<String, Object> result = new HashMap<>();
+        List<ApprovalLineDTO> lines = service.getApprovalLines(document_idx);
+        result.put("success", true);
+        result.put("lines", lines);
+        return result;
+    }
 	
 }

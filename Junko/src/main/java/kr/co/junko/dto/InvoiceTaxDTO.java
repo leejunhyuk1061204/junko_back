@@ -27,4 +27,6 @@ public class InvoiceTaxDTO {
     
     private int user_idx;
 
+    private List<Integer> approver_ids;
+
 }

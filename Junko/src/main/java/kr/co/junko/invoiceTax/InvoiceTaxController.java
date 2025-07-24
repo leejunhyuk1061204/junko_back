@@ -3,6 +3,7 @@ package kr.co.junko.invoiceTax;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.document.DocumentService;
+import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
@@ -153,6 +155,14 @@ public class InvoiceTaxController {
             FileDTO file = filedao.selectTypeIdx(fileParam);
             if (file != null) {
                 dto.setFile_name(file.getNew_filename());
+            }
+
+            List<ApprovalLineDTO> approvalLines = documentService.getApprovalLines(doc.getDocument_idx());
+            if (approvalLines != null && !approvalLines.isEmpty()) {
+                List<Integer> approverIds = approvalLines.stream()
+                    .map(line -> line.getUser_idx())
+                    .collect(Collectors.toList());
+                dto.setApprover_ids(approverIds);
             }
         }
 

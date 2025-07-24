@@ -113,6 +113,7 @@
     <select id="invoiceDetailList" resultType="kr.co.junko.dto.InvoiceDetailDTO" parameterType="int">
         SELECT * FROM invoice_detail
         WHERE invoice_idx = #{invoice_idx}
+		AND del_yn = 0
     </select>
 
     <!-- 세금계산서 상태 변경 -->

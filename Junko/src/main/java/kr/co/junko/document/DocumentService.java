@@ -411,4 +411,8 @@ public class DocumentService {
 	    return true;
 	}
 
+    public List<ApprovalLineDTO> getApprovalLines(int document_idx) {
+        return dao.getApprovalLines(document_idx);
+    }
+
 }
