@@ -55,12 +55,12 @@ public class InvoiceTaxService {
         return row > 0;
     }
 
-    public List<InvoiceTaxDTO> invoiceList(int offset, int size, String status, String keyword, String startDate, String endDate) {
-        return dao.invoicesList(offset, size, status, keyword, startDate, endDate);
+    public List<InvoiceTaxDTO> invoiceList(int offset, int size, String status, String keyword, String startDate, String endDate, String sort, String order) {
+        return dao.invoiceList(offset, size, status, keyword, startDate, endDate, sort, order);
     }
 
-    public int invoiceTotal(String status, String keyword, String startDate, String endDate) {
-        return dao.invoiceTotal(status, keyword, startDate, endDate);
+    public int invoiceTotal(String status, String keyword, String startDate, String endDate, String sort, String order) {
+        return dao.invoiceTotal(status, keyword, startDate, endDate, sort, order);
     }
 
     public InvoiceTaxDTO invoiceDetail(int invoice_idx) {

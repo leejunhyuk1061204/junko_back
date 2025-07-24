@@ -42,40 +42,72 @@
     </update>
 
     <!-- 세금계산서 리스트 -->
-    <select id="invoicesList" resultType="kr.co.junko.dto.InvoiceTaxDTO">
-        SELECT * FROM invoice_tax
-        WHERE del_yn = 0
-        <if test="status != null and status != ''">
-            AND status = #{status}
-        </if>
-        <if test="keyword != null and keyword != ''">
-            AND issued_by LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="startDate != null and endDate != null">
-            AND reg_date BETWEEN #{startDate} AND #{endDate}
-        </if>
-        ORDER BY reg_date DESC
-        LIMIT #{size} OFFSET #{offset}
-    </select>
-
-    <select id="invoiceTotal" resultType="int">
-        SELECT COUNT(*) FROM invoice_tax
-        WHERE del_yn = 0
-        <if test="status != null and status != ''">
-            AND status = #{status}
-        </if>
-        <if test="keyword != null and keyword != ''">
-            AND issued_by LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="startDate != null and endDate != null">
-            AND reg_date BETWEEN #{startDate} AND #{endDate}
-        </if>
-    </select>
+	<select id="invoiceList" resultType="kr.co.junko.dto.InvoiceTaxDTO">
+	    SELECT 
+	        i.*, 
+	        c.custom_name
+	    FROM invoice_tax i
+	    LEFT JOIN custom c ON i.custom_idx = c.custom_idx
+	    WHERE i.del_yn = 0
+	    <if test="status != null and status != ''">
+	        AND i.status = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND i.issued_by LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+	        AND i.reg_date BETWEEN #{startDate} AND #{endDate}
+	    </if>
+	    ORDER BY
+	    <choose>
+	        <when test="sort != null and sort != ''">
+	            ${sort}
+	        </when>
+	        <otherwise>
+	            i.reg_date
+	        </otherwise>
+	    </choose>
+	    <choose>
+	        <when test="order != null and order != ''">
+	            ${order}
+	        </when>
+	        <otherwise>
+	            DESC
+	        </otherwise>
+	    </choose>
+	
+	    LIMIT #{size} OFFSET #{offset}
+	</select>
+	
+	<!-- 전체 수 계산 -->
+	<select id="invoiceTotal" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM invoice_tax i
+	    WHERE i.del_yn = 0
+	
+	    <if test="status != null and status != ''">
+	        AND i.status = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND i.issued_by LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+	        AND i.reg_date BETWEEN #{startDate} AND #{endDate}
+	    </if>
+	</select>
 
     <!-- 세금계산서 상세보기 -->
     <select id="invoiceDetail" resultType="kr.co.junko.dto.InvoiceTaxDTO" parameterType="int">
-        SELECT * FROM invoice_tax
-        WHERE invoice_idx = #{invoice_idx} AND del_yn = 0
+	    SELECT 
+	        i.*, 
+	        c.custom_name
+	    FROM 
+	        invoice_tax i
+	    LEFT JOIN 
+	        custom c ON i.custom_idx = c.custom_idx
+	    WHERE 
+	        i.invoice_idx = #{invoice_idx}
+	        AND i.del_yn = 0
     </select>
 
     <select id="invoiceDetailList" resultType="kr.co.junko.dto.InvoiceDetailDTO" parameterType="int">

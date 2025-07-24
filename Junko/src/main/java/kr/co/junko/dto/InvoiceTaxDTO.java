@@ -19,5 +19,12 @@ public class InvoiceTaxDTO {
     private int del_yn;
 
     private List<InvoiceDetailDTO> details;  // 디테일 리스트 포함
+    
+    private String custom_name;
+    
+    private Integer document_idx;
+    private String file_name;      
+    
+    private int user_idx;
 
 }
