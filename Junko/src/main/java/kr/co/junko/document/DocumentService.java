@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -358,10 +359,12 @@ public class DocumentService {
 		
 		List<DocumentDTO> list = null;
 		
-		if (tab == null || tab.equals("") || tab.equals("상신함")) {
+		if (tab == null || tab.isEmpty() || "상신함".equals(tab)) {
 		    list = dao.requestedDocument(param);
-		} else if (tab.equals("수신함")) {
+		} else if ("수신함".equals(tab)) {
 		    list = dao.receivedDocument(param);
+		} else {
+			list = new ArrayList<DocumentDTO>();
 		}
 		
 		for (DocumentDTO doc : list) {
