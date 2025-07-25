@@ -59,8 +59,13 @@ public class StockController {
 	public Map<String, Object>stockInsert(@RequestBody StockDTO dto){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.stockInsert(dto);
-		result.put("success", success);
+		try {
+			boolean success = service.stockInsert(dto);
+			result.put("success", success);
+		} catch (Exception e) {
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+		}
 		return result;
 	}
 	

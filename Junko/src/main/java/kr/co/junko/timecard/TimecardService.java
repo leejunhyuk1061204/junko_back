@@ -66,14 +66,15 @@ public class TimecardService {
 			param.put("cnt", cnt);
 			param.put("offset", offset);
 			int total = dao.timecardListTotalPage(param);
-			result.put("totla", total);
+			result.put("total", total);
 		}
 		List<Map<String, Object>>list = dao.timecardList(param);
+		log.info("{}",dao.timecardList(param));
 		result.put("list", list);
 		return result;
 	}
 	
-	// auto 결근, 미퇴근
+	// auto 결근
 	@Scheduled(cron = "00 55 23 ? * 2-6",zone="Asia/Seoul")
 	public void autoUpdateTimecard() {
 		log.info("자동입력 시작: " + LocalDateTime.now());
@@ -84,7 +85,7 @@ public class TimecardService {
 				if(row == 0) {
 					dto = new TimecardDTO();
 					dto.setUser_idx(idx);
-					dto.setWork_date(LocalDate.now().minusDays(1));
+					dto.setWork_date(LocalDate.now());
 					dto.setStatus("결근");
 					dao.timecardInsert(dto);
 				}

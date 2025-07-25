@@ -215,10 +215,18 @@
 	</insert>
 
 	<select id="getApprovalLines" parameterType="int" resultType="kr.co.junko.dto.ApprovalLineDTO">
-		SELECT * 
-		FROM approval_line 
-		WHERE document_idx = #{document_idx}
-		ORDER BY step ASC
+		SELECT al.*, u.user_name
+		FROM approval_line al
+		LEFT JOIN user u ON al.user_idx = u.user_idx
+		WHERE al.document_idx = #{document_idx}
+		  AND al.del_yn = 0
+		ORDER BY al.step ASC
 	</select>
+	
+	<update id="delApprovalLines" parameterType="int">
+	    UPDATE approval_line
+	    SET del_yn = 1
+	    WHERE document_idx = #{document_idx}
+	</update>
 
 </mapper>

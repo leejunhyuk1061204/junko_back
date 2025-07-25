@@ -16,4 +16,6 @@ public class ApprovalLineDTO {
 	private Date approved_date;
 	private int del_yn;
 	
+	
+	private String user_name;
 }
