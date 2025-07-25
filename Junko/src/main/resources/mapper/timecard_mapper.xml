@@ -108,6 +108,71 @@
 		)
 	</insert>
 	
+	<select id="timecardList" parameterType="map" resultType="map">
+		select 
+			t.* ,
+			u.user_name
+		from timecard t
+			join `user` u on t.user_idx = u.user_idx
+		<where>
+			<if test="user_idx != null and user_idx != 0">
+				t.user_idx = #{user_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and t.status = #{status}
+			</if>
+			<if test="work_date != null and work_date != ''">
+				and t.work_date = #{work_date}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and t.work_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and t.end_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="search != null and search != ''">
+				and u.user_name like concat('%',#{search},'%')
+			</if>
+		</where>
+		<if test="orderColumn != null and orderColumn != ''">
+			order by ${orderColumn}
+			<if test="orderDirection != null and orderDirection != ''">
+				${orderDirection}
+			</if>
+		</if>	
+		<if test="page != null and page != '' and page !=0">
+			limit #{cnt} offset #{offset}
+		</if>
+	</select>
 	
+	<select id="timecardListTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) as total from (
+			select 
+			t.* ,
+			u.user_name
+		from timecard t
+			join `user` u on t.user_idx = u.user_idx
+		<where>
+			<if test="user_idx != null and user_idx != 0">
+				t.user_idx = #{user_idx}
+			</if>
+			<if test="status != null and status != ''">
+				and t.status = #{status}
+			</if>
+			<if test="work_date != null and work_date != ''">
+				and t.work_date = #{work_date}
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and t.work_date >= #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and t.end_date <![CDATA[<]]>= #{end_date}
+			</if>
+			<if test="search != null and search != ''">
+				and u.user_name like concat('%',#{search},'%')
+			</if>
+		</where>
+		) as total
+	</select>
 	
 </mapper>

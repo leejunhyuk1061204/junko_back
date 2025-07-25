@@ -146,16 +146,9 @@ public class TimecardController {
 
 	// 리스트
 	@PostMapping(value="/timecard/list")
-	public Map<String, Object> timecardList(@RequestBody Map<String, Object>param,@RequestHeader Map<String, String>header){
+	public Map<String, Object> timecardList(@RequestBody Map<String, Object>param){
 		log.info("param : {}",param);
-		log.info("header : {}",header);
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
-		
-		if(loginId != null && !loginId.isEmpty()) {
-			Map<String, Object> result = service.timecardList(param);
-			result.put("loginId", loginId);
-		}
-		return result; 
+		return service.timecardList(param); 
 	}
 
 	@PostMapping(value="/timecard/insert")
@@ -169,6 +162,7 @@ public class TimecardController {
 			success = service.timecardInsert(dto);
 		}
 		result.put("success", success);
+		log.info("success : "+success);
 		return result;
 	}
 	
