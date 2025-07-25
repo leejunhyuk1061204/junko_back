@@ -29,10 +29,15 @@ import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.MsgDTO;
+import kr.co.junko.dto.ScheduleDTO;
 import kr.co.junko.dto.TemplateDTO;
+import kr.co.junko.dto.TimecardDTO;
 import kr.co.junko.file.FileDAO;
 import kr.co.junko.msg.MsgService;
+import kr.co.junko.schedule.ScheduleService;
+import kr.co.junko.template.TemplateDAO;
 import kr.co.junko.template.TemplateService;
+import kr.co.junko.timecard.TimecardService;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -43,6 +48,8 @@ public class DocumentService {
     @Autowired TemplateService temService;
     @Autowired FileDAO filedao;
     @Autowired MsgService msgService;
+    @Autowired TimecardService timeService;
+    @Autowired ScheduleService scheService;
     
     @Value("${spring.servlet.multipart.location}") 
     private String root;
@@ -262,9 +269,85 @@ public class DocumentService {
 	    dao.insertLog(log);
 		
 		boolean allApproved = dao.approveCnt(document_idx) == 0;
+		
+		DocumentDTO document = dao.documentIdx(document_idx);
+		TemplateDTO template = temService.getTemplate(document.getTemplate_idx());
+		
 		if (allApproved) {
 			dao.updateDocStatus(document_idx, "승인");
+			
+			int writerId = dao.getWriter(document_idx);
+			
+			MsgDTO msg = new MsgDTO();
+			msg.setSender_idx(user_idx);
+			msg.setReceiver_idx(writerId);
+			msg.setMsg_title("[전자결재] "+template.getTemplate_name()+" 승인 완료");
+			msg.setMsg_content("전자결재 문서 [ "+template.getTemplate_name()+" ]가 최종 승인되었습니다.");
+			msgService.msgInsert(msg);
+			
+			if (document.getType() != null && document.getIdx() != 0) {
+				
+				// 근태 연동
+				int idx = document.getIdx();
+				String type = document.getType(); // 연차, 반차, 외근, 출장
+				
+			    TimecardDTO tc = new TimecardDTO();
+			    tc.setUser_idx(document.getUser_idx());
+			    tc.setStatus(type);
+			    
+			    timeService.timecardInsert(tc);
+
+			    // 스케줄 연동
+			    Map<String, Integer> label = new HashMap<String, Integer>();
+			    label.put("연차", 2);
+			    label.put("반차", 3);
+			    label.put("외근", 5);
+			    label.put("출장", 6);
+			    
+			    int label_idx = label.getOrDefault(document.getType(), 1); // default: 일반일정
+			    ScheduleDTO sc = new ScheduleDTO();
+
+			    Map<String, String> variables = document.getVariables();
+
+			    sc.setUser_idx(document.getUser_idx());
+			    sc.setDescription("전자결재 연동 일정");
+			    sc.setLabel_idx(label_idx);
+			    //날짜 파싱
+			    for (Map.Entry<String, String> entry : variables.entrySet()) {
+			        String key = entry.getKey();
+			        String val = entry.getValue();
+
+			        if (key != null && key.endsWith("date") && val != null && !val.trim().isEmpty()) {
+			        	Date parsedDate = Date.valueOf(val.trim());
+			        	
+		                if (sc.getStart_date() == null) {
+		                    sc.setStart_date(parsedDate);
+		                } else if (sc.getEnd_date() == null) {
+		                    sc.setEnd_date(parsedDate);
+		                }
+			        }
+			    }
+			    scheService.scheduleInsert(sc);
+			}
 		}
+		
+		// 승인 직후 다음 결재자 뽑아서 쪽지 발송
+		List<ApprovalLineDTO> lines = dao.getApprovalLines(document_idx);
+		int currentStep = line.getStep();
+		ApprovalLineDTO nextLine = lines.stream()
+		    .filter(l -> l.getStep() > currentStep && "미확인".equals(l.getStatus()))
+		    .findFirst()
+		    .orElse(null);
+		
+		if (nextLine != null) {
+			MsgDTO msg = new MsgDTO();
+			msg.setSender_idx(user_idx);
+			msg.setReceiver_idx(nextLine.getUser_idx());
+			msg.setMsg_title("[전자결재] "+template.getTemplate_name()+" 결재 요청");
+			msg.setMsg_content("전자결재 문서 [ "+template.getTemplate_name()+" ]에 대한 결재 요청이 도착했습니다.");
+			msgService.msgInsert(msg);
+		};
+
 		return true;
 	}
 

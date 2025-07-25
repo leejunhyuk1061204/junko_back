@@ -13,6 +13,5 @@ public class TimecardDTO {
 	private LocalDate work_date;
 	private LocalTime work_time;
 	private String status;					// 근무 상태 (출근,지각,결근)
-	private String leave_status;		// 연차,반차 상태 (오전반차,오후반차)
 	
 }
