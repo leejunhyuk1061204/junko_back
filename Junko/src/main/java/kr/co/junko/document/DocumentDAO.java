@@ -60,4 +60,6 @@ public interface DocumentDAO {
 
 	List<ApprovalLineDTO> getApprovalLines(int document_idx);
 
+	void delApprovalLines(Integer document_idx);
+
 }

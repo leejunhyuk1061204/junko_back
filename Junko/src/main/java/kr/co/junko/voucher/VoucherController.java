@@ -1,5 +1,6 @@
 package kr.co.junko.voucher;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.custom.CustomService;
 import kr.co.junko.document.DocumentService;
+import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.CustomDTO;
+import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.EntryDetailDTO;
 import kr.co.junko.dto.FileDTO;
@@ -54,6 +57,7 @@ public class VoucherController {
 
         result.put("success", entry_idx > 0);
         result.put("entry_idx", entry_idx);
+        result.put("status", dto.getStatus());
 
         // 저장 성공 후 → 커밋 완료 후 → 변수 세팅
         if (entry_idx > 0) {
@@ -67,8 +71,24 @@ public class VoucherController {
 
             Map<String, String> variables = voucherToVariables(param);
             result.put("variables", variables);
-        }
+            
+            DocumentCreateDTO docDto = new DocumentCreateDTO();
+            docDto.setTemplate_idx(dto.getTemplate_idx());
+            docDto.setUser_idx(dto.getUser_idx());
+            docDto.setVariables(variables);
+            docDto.setType("voucher");
+            docDto.setIdx(entry_idx);
+            docDto.setApprover_ids(dto.getApprover_ids());
 
+            Map<String, Object> docRes = documentService.documentInsert(docDto);
+            if (docRes != null && docRes.containsKey("document_idx")) {
+                int document_idx = (int) docRes.get("document_idx");
+                dto.setDocument_idx(document_idx);
+                result.put("document_idx", document_idx);
+            }
+            
+        }
+        
         return result;
     }
 
@@ -85,7 +105,10 @@ public class VoucherController {
         result = new HashMap<String, Object>();
 
         boolean success = service.voucherUpdate(dto);
-        result.put("success", success);
+		
+		if (!success) {
+		    result.put("success", false);
+		}
         
         if (success) {
             Map<String, String> param = new HashMap<>();
@@ -98,6 +121,36 @@ public class VoucherController {
 
             Map<String, String> variables = voucherToVariables(param);
             result.put("variables", variables);
+            
+            DocumentCreateDTO docDto = new DocumentCreateDTO();
+            docDto.setTemplate_idx(dto.getTemplate_idx());
+            docDto.setUser_idx(dto.getUser_idx());
+            docDto.setVariables(variables);
+            docDto.setType("voucher");
+            docDto.setIdx(entry_idx);
+            docDto.setDocument_idx(dto.getDocument_idx());
+            docDto.setApprover_ids(dto.getApprover_ids());
+            
+            // 1. 기존 결재라인 삭제
+            log.info(">>>>> documentService.delApprovalLines 호출 직전");
+            documentService.delApprovalLines(dto.getDocument_idx());
+
+            // 2. 새 결재라인 삽입
+            if (dto.getApprover_ids() != null && !dto.getApprover_ids().isEmpty()) {
+                int step = 1;
+                for (Integer userIdx : dto.getApprover_ids()) {
+                    ApprovalLineDTO line = new ApprovalLineDTO();
+                    line.setDocument_idx(dto.getDocument_idx());
+                    line.setUser_idx(userIdx);
+                    line.setStep(step++);
+                    line.setStatus("미확인");
+                    documentService.insertApprovalLine(line);
+                }
+            }
+
+            documentService.documentUpdate(docDto);
+            result.put("success", true);
+            
         }
 
         return result;
@@ -164,6 +217,15 @@ public class VoucherController {
     DocumentDTO doc = documentService.getByTypeAndIdx("voucher", entry_idx);
     if (doc != null) {
         dto.setDocument_idx(doc.getDocument_idx());
+        
+        List<ApprovalLineDTO> lines = documentService.getApprovalLines(doc.getDocument_idx());
+        List<Integer> approverIds = new ArrayList<>();
+        for (ApprovalLineDTO line : lines) {
+            approverIds.add(line.getUser_idx());
+        }
+        dto.setDocument_idx(doc.getDocument_idx());
+        result.put("approver_ids", approverIds);
+        result.put("approval_lines", lines);
 
         Map<String, Object> fileParam = new HashMap<>();
         fileParam.put("type", "document");
@@ -231,7 +293,7 @@ public class VoucherController {
         map.put("entry_idx", String.valueOf(param.getOrDefault("entry_idx", "전표 번호 미정")));
 
         // 상태 - 등록 전에는 작성중
-        map.put("status", "작성중");
+        map.put("status", param.getOrDefault("status", "작성중"));
 
         // 작성자 이름 조회
         Object userIdxObj = param.get("user_idx");

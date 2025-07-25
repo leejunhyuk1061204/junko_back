@@ -13,7 +13,7 @@
             custom_idx, sales_idx, status, user_idx
         ) VALUES (
             #{account_idx}, #{entry_type}, #{amount}, NOW(),
-            #{custom_idx}, #{sales_idx}, '작성중', #{user_idx}
+            #{custom_idx}, #{sales_idx}, #{status}, #{user_idx}
         )
     </insert>
 
@@ -25,7 +25,8 @@
             amount = #{amount},
             entry_date = NOW(),
             custom_idx = #{custom_idx},
-            sales_idx = #{sales_idx}
+            sales_idx = #{sales_idx},
+            status = #{status}
         WHERE entry_idx = #{entry_idx}
           AND del_yn = 0
     </update>

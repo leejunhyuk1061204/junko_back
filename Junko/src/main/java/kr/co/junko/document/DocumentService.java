@@ -421,5 +421,14 @@ public class DocumentService {
         return dao.getApprovalLines(document_idx);
     }
 
+	public void delApprovalLines(Integer document_idx) {
+		log.info("결재라인 삭제 실행 전 document_idx: {}", document_idx);
+		dao.delApprovalLines(document_idx);
+		
+	}
+
+	public void insertApprovalLine(ApprovalLineDTO line) {
+		dao.insertApprovalLine(line);
+	}
 
 }
