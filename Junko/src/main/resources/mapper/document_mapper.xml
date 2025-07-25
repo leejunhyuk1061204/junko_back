@@ -153,9 +153,9 @@
 	
 	<!-- 결재자명+직급 추출 -->
 	<select id="approverNames" resultType="String">
-		SELECT al.user_idx, u.user_name, j.job_name 
+		SELECT GROUP_CONCAT(u.user_name,' ',j.job_name SEPARATOR ', ') AS approver_name
 	    FROM approval_line al
-	    JOIN `user` u ON u.user_idx = al.user_idx 
+	    JOIN user u ON al.user_idx = u.user_idx
 	    LEFT JOIN job j ON u.job_idx = j.job_idx
 	    WHERE al.document_idx = #{document_idx}
 	    AND al.del_yn = 0
