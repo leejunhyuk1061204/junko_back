@@ -1,5 +1,6 @@
 package kr.co.junko.receiptPayment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.custom.CustomService;
 import kr.co.junko.document.DocumentService;
+import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.CustomDTO;
+import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.ReceiptPaymentDTO;
@@ -56,6 +59,16 @@ public class ReceiptPaymentController {
         if (success) {
             Map<String, String> variables = receiptPaymentToVariables(dto);
             result.put("variables", variables);
+
+            DocumentCreateDTO docDto = new DocumentCreateDTO();
+            docDto.setTemplate_idx(dto.getTemplate_idx());
+            docDto.setUser_idx(dto.getUser_idx());
+            docDto.setVariables(variables);
+            docDto.setType("receipt_payment");
+            docDto.setIdx(dto.getRp_idx());
+            docDto.setApprover_ids(dto.getApprover_ids());
+
+            documentService.documentInsert(docDto);
         }
 
         return result;
@@ -107,12 +120,23 @@ public class ReceiptPaymentController {
         if (success) {
             Map<String, String> variables = receiptPaymentToVariables(dto);
             result.put("variables", variables);
+
+            DocumentCreateDTO docDto = new DocumentCreateDTO();
+            docDto.setTemplate_idx(dto.getTemplate_idx());
+            docDto.setUser_idx(dto.getUser_idx());
+            docDto.setVariables(variables);
+            docDto.setType("receipt_payment");
+            docDto.setIdx(dto.getRp_idx());
+            docDto.setApprover_ids(dto.getApprover_ids());
+
+            documentService.documentInsert(docDto);
         }
 
         return result;
     }
 
     // 수정 (수금/지급 공통)
+    @PutMapping("/receipt/update")
     public Map<String, Object> receiptUpdate(@RequestBody ReceiptPaymentDTO dto) {
         log.info("dto : {}", dto);
         result = new HashMap<>();
@@ -123,6 +147,34 @@ public class ReceiptPaymentController {
         if (success) {
             Map<String, String> variables = receiptPaymentToVariables(dto);
             result.put("variables", variables);
+
+        // 1. 기존 결재자 삭제
+        documentService.delApprovalLines(dto.getDocument_idx());
+
+        // 2. 새 결재자 삽입
+        if (dto.getApprover_ids() != null) {
+            int step = 1;
+            for (Integer userIdx : dto.getApprover_ids()) {
+                ApprovalLineDTO line = new ApprovalLineDTO();
+                line.setDocument_idx(dto.getDocument_idx());
+                line.setUser_idx(userIdx);
+                line.setStep(step++);
+                line.setStatus("미확인");
+                documentService.insertApprovalLine(line);
+            }
+        }
+
+        // 3. 문서 업데이트
+        DocumentCreateDTO docDto = new DocumentCreateDTO();
+        docDto.setDocument_idx(dto.getDocument_idx());
+        docDto.setTemplate_idx(dto.getTemplate_idx());
+        docDto.setUser_idx(dto.getUser_idx());
+        docDto.setVariables(variables);
+        docDto.setType("receipt_payment");
+        docDto.setIdx(dto.getRp_idx());
+        docDto.setApprover_ids(dto.getApprover_ids());
+
+        documentService.documentUpdate(docDto);
         }
 
         return result;
@@ -178,6 +230,16 @@ public class ReceiptPaymentController {
             result.put("document", doc);
 
             if (doc != null) {
+                dto.setDocument_idx(doc.getDocument_idx());
+
+                List<ApprovalLineDTO> lines = documentService.getApprovalLines(doc.getDocument_idx());
+                List<Integer> approverIds = new ArrayList<>();
+                for (ApprovalLineDTO line : lines) {
+                    approverIds.add(line.getUser_idx());
+                }
+                result.put("approver_ids", approverIds);
+                result.put("approval_lines", lines);
+
                 Map<String, Object> fileParam = new HashMap<>();
                 fileParam.put("type", "document");
                 fileParam.put("idx", doc.getDocument_idx());
@@ -190,6 +252,8 @@ public class ReceiptPaymentController {
             result.put("variables", variables);
         }
 
+        result.put("success", true);
+        result.put("data", dto);
         return result;
     }
 

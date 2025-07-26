@@ -26,5 +26,9 @@ public class EntryStatusDTO {
     private String user_name;
 
     private int document_idx;
+
+    private int template_idx;
+    private List<Integer> approver_ids;
+    private List<ApprovalLineDTO> approval_lines;
     
 }

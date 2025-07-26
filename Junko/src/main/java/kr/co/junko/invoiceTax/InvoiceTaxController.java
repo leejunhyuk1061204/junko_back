@@ -1,5 +1,6 @@
 package kr.co.junko.invoiceTax;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,11 @@ import kr.co.junko.document.DocumentService;
 import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
+import kr.co.junko.dto.EntryDetailDTO;
 import kr.co.junko.dto.FileDTO;
+import kr.co.junko.dto.InvoiceDetailDTO;
 import kr.co.junko.dto.InvoiceTaxDTO;
+import kr.co.junko.dto.VoucherDTO;
 import kr.co.junko.file.FileDAO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,6 +76,9 @@ public class InvoiceTaxController {
     public Map<String, Object> updateInvoice(@RequestBody InvoiceTaxDTO dto) {
         result = new HashMap<String, Object>();
 
+        if (dto.getApprover_ids() == null) dto.setApprover_ids(new ArrayList<>());
+        if (dto.getDetails() == null) dto.setDetails(new ArrayList<>());
+
         boolean success = service.updateInvoice(dto);
         result.put("success", success);        
 
@@ -84,7 +91,9 @@ public class InvoiceTaxController {
             docDto.setVariables(variables);
             docDto.setType("invoice");
             docDto.setIdx(dto.getInvoice_idx());
-            docDto.setDocument_idx(dto.getDocument_idx());
+            if (dto.getDocument_idx() != null) {
+                docDto.setDocument_idx(dto.getDocument_idx());
+            }
 
             documentService.documentUpdate(docDto);
 
@@ -232,6 +241,5 @@ public class InvoiceTaxController {
         result.put("variables", variables);
         return result;
     }
-
 
 }

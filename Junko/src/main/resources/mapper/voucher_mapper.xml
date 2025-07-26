@@ -173,5 +173,12 @@
 	    SELECT as_name FROM account_code WHERE as_idx = #{as_idx}
 	</select>
     
-
+  <select id="getSettledVouchers" resultType="kr.co.junko.dto.VoucherDTO">
+    SELECT v.*, c.custom_name
+    FROM voucher v
+    LEFT JOIN custom c ON v.custom_idx = c.custom_idx
+    WHERE v.status = '정산'
+      AND v.del_yn = 0
+  </select>
+  
 </mapper>

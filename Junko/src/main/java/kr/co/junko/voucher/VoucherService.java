@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.junko.dto.EntryDetailDTO;
+import kr.co.junko.dto.InvoiceTaxDTO;
 import kr.co.junko.dto.VoucherDTO;
+import kr.co.junko.invoiceTax.InvoiceTaxService;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VoucherService {
 
     @Autowired VoucherDAO dao;
+    @Autowired InvoiceTaxService invoiceTaxService;
 
     Map<String, Object> result = null;
 
@@ -140,6 +143,24 @@ public class VoucherService {
 
         if ("확정".equals(status)) {
             VoucherDTO dto = dao.voucherDetail(entry_idx);
+            List<EntryDetailDTO> details = dao.entryDetailList(entry_idx);
+
+            // 매출 전표일 경우 → 세금계산서 자동 생성
+            if ("매출".equals(dto.getEntry_type())) {
+                boolean exists = invoiceTaxService.existsInvoiceEntryIdx(entry_idx);
+                if (!exists) {
+                    InvoiceTaxDTO invoice = new InvoiceTaxDTO();
+                    invoiceTaxService.insertInvoiceWithDetails(dto, details);
+                    invoice.setEntry_idx(dto.getEntry_idx());
+                    invoice.setCustom_idx(dto.getCustom_idx());
+                    invoice.setTotal_amount(dto.getAmount());
+                    invoice.setIssued_by("자동생성");
+                    invoice.setStatus("작성중");
+
+                    invoiceTaxService.insertInvoice(invoice); // 디테일 없이 헤더만 생성
+                }
+            }
+
 
             if ("수금".equals(dto.getEntry_type()) || "지급".equals(dto.getEntry_type())) {
                 boolean exists = dao.checkReceiptPayment(entry_idx);
@@ -184,5 +205,9 @@ public class VoucherService {
 	    VoucherDTO dto = dao.voucherDetail(entry_idx);
 	    return dto != null ? dto.getAmount() : 0;
 	}
+
+    public List<VoucherDTO> getSettledVouchers() {
+        return dao.getSettledVouchers();
+    }
 
 }

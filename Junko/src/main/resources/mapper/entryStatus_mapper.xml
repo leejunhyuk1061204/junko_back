@@ -5,7 +5,7 @@
 
     <!-- 정산 등록 -->
     <insert id="settlementInsert" parameterType="kr.co.junko.dto.EntryStatusDTO"
-            useGeneratedKeys="true" keyProperty="document_idx">
+            useGeneratedKeys="true" keyProperty="settlement_id">
         INSERT INTO entry_status (
             entry_idx, custom_idx, settlement_day,
             total_amount, amount, status, user_idx
@@ -168,6 +168,33 @@
         FROM entry_status
         WHERE entry_idx = #{entry_idx}
         AND del_yn = 0
+    </select>
+
+    <!-- 동일 전표에 동일 날짜 정산 존재 여부 확인 -->
+    <select id="checkDuplicateSettlement" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM entry_status
+        WHERE entry_idx = #{entry_idx}
+        AND settlement_day = #{settlement_day}
+        AND del_yn = 0
+    </select>
+
+    <select id="settlementListEntryIdx" parameterType="int" resultType="kr.co.junko.dto.EntryStatusDTO">
+        SELECT 
+            es.settlement_id,
+            es.entry_idx,
+            es.custom_idx,
+            es.settlement_day,
+            es.total_amount,
+            es.amount,
+            es.status,
+            es.user_idx,
+            u.user_name
+        FROM entry_status es
+        LEFT JOIN `user` u ON es.user_idx = u.user_idx
+        WHERE es.entry_idx = #{entry_idx}
+        AND es.del_yn = 0
+        ORDER BY es.settlement_day DESC
     </select>
 
 </mapper>

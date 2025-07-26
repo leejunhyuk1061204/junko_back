@@ -22,10 +22,12 @@ import kr.co.junko.dto.CustomDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
 import kr.co.junko.dto.EntryDetailDTO;
+import kr.co.junko.dto.EntryStatusDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.TemplatePreviewDTO;
 import kr.co.junko.dto.VoucherDTO;
+import kr.co.junko.entryStatus.EntryStatusService;
 import kr.co.junko.file.FileDAO;
 import kr.co.junko.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,7 @@ public class VoucherController {
     @Autowired DocumentService documentService;
     @Autowired MemberService memberService;
     @Autowired FileDAO fileDAO;
+    @Autowired EntryStatusService entryStatusService;
 
     Map<String, Object> result = null;
 
@@ -245,6 +248,9 @@ public class VoucherController {
         dto.setEntry_detail_document_idx(entryDetailDoc.getDocument_idx());
     }
 
+    List<EntryStatusDTO> settlementList = entryStatusService.settlementListEntryIdx(entry_idx);
+    result.put("settlement_list", settlementList);
+
         result.put("success", dto != null);
         result.put("data", dto);
         return result;
@@ -364,5 +370,9 @@ public class VoucherController {
         return result;
     }
 
+    @GetMapping("/voucher/settled")
+    public List<VoucherDTO> getSettledVouchers() {
+        return service.getSettledVouchers();
+    }
 
 }

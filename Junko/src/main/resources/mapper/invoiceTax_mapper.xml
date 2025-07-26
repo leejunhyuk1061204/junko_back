@@ -123,4 +123,12 @@
         WHERE invoice_idx = #{invoice_idx}
     </update>
 
+	<!-- 세금계산서 존재 여부 -->
+	<select id="existsInvoiceEntryIdx" resultType="boolean">
+		SELECT COUNT(*) > 0
+		FROM invoice_tax
+		WHERE entry_idx = #{entry_idx}
+		AND del_yn = 0
+	</select>
+
 </mapper>
