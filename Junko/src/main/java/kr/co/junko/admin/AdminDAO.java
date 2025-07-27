@@ -31,10 +31,13 @@ public interface AdminDAO {
 
 	int empUpdate(Map<String, Object> param);
 
+	List<Map<String, Object>> deptTree();
+	
 	List<Map<String, Object>> userList(int dept_idx);
 
 	Map<String, Object> userDetail(int user_idx);
 
 	int revokeGrant();
+
 
 }

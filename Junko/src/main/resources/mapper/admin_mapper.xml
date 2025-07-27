@@ -79,6 +79,20 @@
 	    WHERE user_idx = #{user_idx}
 	</update>
 	
+	<select id="deptTree" resultType="map">
+		WITH RECURSIVE dept_tree AS (
+		    SELECT dept_idx, dept_name, parent_idx, 0 AS depth
+		    FROM dept
+		    WHERE parent_idx IS NULL AND del_yn = 0
+		    UNION ALL
+		    SELECT d.dept_idx, d.dept_name, d.parent_idx, dt.depth + 1
+		    FROM dept d
+		    JOIN dept_tree dt ON d.parent_idx = dt.dept_idx
+		    WHERE d.del_yn = 0
+		  )
+		  SELECT * FROM dept_tree ORDER BY depth, dept_idx
+	</select>
+	
 	<select id="userList" resultType="map" parameterType="int">
 		SELECT d.dept_name, j.job_name, u.* FROM user u JOIN dept d ON d.dept_idx = u.dept_idx
 		JOIN job j ON j.job_idx = u.job_idx WHERE u.dept_idx = #{dept_idx}

@@ -65,6 +65,16 @@ public class AdminService {
 	public boolean empUpdate(Map<String, Object> param) {
 		return dao.empUpdate(param)>0;
 	}
+	
+	public List<Map<String, Object>> deptTree() {
+		List<Map<String, Object>> deptList = dao.deptTree();
+	    for (Map<String, Object> dept : deptList) {
+	        int deptIdx = (int) dept.get("dept_idx");
+	        List<Map<String, Object>> users = dao.userList(deptIdx);
+	        dept.put("users", users);
+	    }
+	    return deptList;
+	}
 
 	public List<Map<String, Object>> userList(int dept_idx) {
 		return dao.userList(dept_idx);
@@ -77,5 +87,6 @@ public class AdminService {
 	public int revokeGrant() {
 		return dao.revokeGrant();
 	}
+
 
 }

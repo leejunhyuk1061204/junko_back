@@ -229,6 +229,22 @@ public class AdminController {
 		return result;
 	}
 	
+	// 조직도 조회
+	@GetMapping("/orgchart/tree")
+	public Map<String, Object> deptTree(@RequestHeader Map<String, String> header) {
+		result = new HashMap<String, Object>();
+		boolean login = false;
+		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+		
+		if (loginId != null && !loginId.isEmpty()) {
+			List<Map<String, Object>> tree = service.deptTree();
+			result.put("deptTree", tree);
+			login = true;
+		}
+		result.put("loginYN", login);
+		return result;
+	}
+	
 	// 부서별 직원 리스트 조회
 	@PostMapping("/user/list")
 	public Map<String, Object> userList(@RequestBody Map<String, Object> param,

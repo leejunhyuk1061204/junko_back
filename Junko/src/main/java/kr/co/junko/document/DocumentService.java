@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ import kr.co.junko.msg.MsgService;
 import kr.co.junko.schedule.ScheduleService;
 import kr.co.junko.template.TemplateDAO;
 import kr.co.junko.template.TemplateService;
+import kr.co.junko.timecard.TimecardDAO;
 import kr.co.junko.timecard.TimecardService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +50,7 @@ public class DocumentService {
     @Autowired TemplateService temService;
     @Autowired FileDAO filedao;
     @Autowired MsgService msgService;
-    @Autowired TimecardService timeService;
+    @Autowired TimecardDAO timeDao;
     @Autowired ScheduleService scheService;
     
     @Value("${spring.servlet.multipart.location}") 
@@ -286,51 +288,63 @@ public class DocumentService {
 			msgService.msgInsert(msg);
 			
 			if (document.getType() != null && document.getIdx() != 0) {
-				
-				// 근태 연동
-				int idx = document.getIdx();
-				String type = document.getType(); // 연차, 반차, 외근, 출장
-				
-			    TimecardDTO tc = new TimecardDTO();
-			    tc.setUser_idx(document.getUser_idx());
-			    tc.setStatus(type);
-			    
-			    timeService.timecardInsert(tc);
-
-			    // 스케줄 연동
+				// 스케줄 연동
 			    Map<String, Integer> label = new HashMap<String, Integer>();
 			    label.put("연차", 2);
 			    label.put("반차", 3);
 			    label.put("외근", 5);
 			    label.put("출장", 6);
-			    
-			    int label_idx = label.getOrDefault(document.getType(), 1); // default: 일반일정
-			    ScheduleDTO sc = new ScheduleDTO();
+				
+			    LocalDate workDate = null;
+			    Date start = null;
+			    Date end = null;
+				int idx = document.getIdx();
+				String type = document.getType(); // 연차, 반차, 외근, 출장
+				int label_idx = label.getOrDefault(document.getType(), 1); // default: 일반일정
+				
+				Map<String, String> variables = document.getVariables();
+				ScheduleDTO sc = new ScheduleDTO();
 
-			    Map<String, String> variables = document.getVariables();
-
-			    sc.setUser_idx(document.getUser_idx());
-			    sc.setDescription("전자결재 연동 일정");
-			    sc.setLabel_idx(label_idx);
-			    //날짜 파싱
+				//날짜 파싱
 			    for (Map.Entry<String, String> entry : variables.entrySet()) {
 			        String key = entry.getKey();
 			        String val = entry.getValue();
 
 			        if (key != null && key.endsWith("date") && val != null && !val.trim().isEmpty()) {
-			        	Date parsedDate = Date.valueOf(val.trim());
-			        	
-		                if (sc.getStart_date() == null) {
-		                    sc.setStart_date(parsedDate);
-		                } else if (sc.getEnd_date() == null) {
-		                    sc.setEnd_date(parsedDate);
-		                }
+			        	if (val.contains("~")) {
+			                String[] range = val.split("~");
+			                start = Date.valueOf(range[0].trim());
+			                end = Date.valueOf(range[1].trim());
+			                workDate = LocalDate.parse(range[0].trim());
+			            } else {
+			                start = Date.valueOf(val.trim());
+			                end = start;
+			                workDate = LocalDate.parse(val.trim());
+			            }
+			            break;
 			        }
 			    }
-			    scheService.scheduleInsert(sc);
+			    // 근태 연동
+			    TimecardDTO tc = new TimecardDTO();
+			    DocumentService.log.info("근태 인서트 전!!!!!!!!!!!!!!!!!!!!!"+tc);
+			    tc.setUser_idx(document.getUser_idx());
+			    tc.setWork_date(workDate);
+			    tc.setStatus(type);
+			    int timeRow = timeDao.timecardInsert(tc);
+			    DocumentService.log.info("근태!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+timeRow);
+
+			    // 스케줄 연동
+			    DocumentService.log.info("스케줄 인서트 전!!!!!!!!!!!!!!!!!!!!!"+sc);
+			    sc.setUser_idx(document.getUser_idx());
+			    sc.setDescription("전자결재 연동 일정");
+			    sc.setLabel_idx(label_idx);
+			    sc.setStart_date(start);
+			    sc.setEnd_date(end);
+			    boolean scheRow = scheService.scheduleInsert(sc);
+			    DocumentService.log.info("스케줄!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+scheRow);
 			}
 		}
-		
+
 		// 승인 직후 다음 결재자 뽑아서 쪽지 발송
 		List<ApprovalLineDTO> lines = dao.getApprovalLines(document_idx);
 		int currentStep = line.getStep();
