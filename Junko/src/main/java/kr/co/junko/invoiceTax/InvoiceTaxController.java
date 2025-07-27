@@ -242,4 +242,14 @@ public class InvoiceTaxController {
         return result;
     }
 
+    // 세금계산서 발행된 전표 확인
+    @GetMapping("/used/{entry_idx}")
+    public Map<String, Object> isUsedEntry(@PathVariable int entry_idx) {
+        Map<String, Object> result = new HashMap<>();
+        boolean exists = service.existsInvoiceEntryIdx(entry_idx);
+        result.put("success", true);
+        result.put("used", exists);
+        return result;
+    }
+
 }
