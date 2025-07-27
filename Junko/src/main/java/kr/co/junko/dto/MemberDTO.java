@@ -21,6 +21,7 @@ public class MemberDTO {
 	private int dept_idx;
 	
 	private String job_name;
+	private String dept_name;
 	
 }
 

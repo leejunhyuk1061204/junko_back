@@ -1,5 +1,6 @@
 package kr.co.junko.admin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.PowerDTO;
+import kr.co.junko.dto.TemplateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,14 +72,55 @@ public class AdminService {
 		List<Map<String, Object>> deptList = dao.deptTree();
 	    for (Map<String, Object> dept : deptList) {
 	        int deptIdx = (int) dept.get("dept_idx");
-	        List<Map<String, Object>> users = dao.userList(deptIdx);
+	        List<Map<String, Object>> users = dao.allUserList(deptIdx);
 	        dept.put("users", users);
 	    }
 	    return deptList;
 	}
 
-	public List<Map<String, Object>> userList(int dept_idx) {
-		return dao.userList(dept_idx);
+	public Map<String, Object> userList(Map<String, Object> param) {
+		int page = (int) param.getOrDefault("page", 1);
+	    int size = (int) param.getOrDefault("size", 10);
+	    String dept_name = param.getOrDefault("dept_name", "").toString();
+	    String search = param.getOrDefault("search", "").toString();
+	    String sort = param.getOrDefault("sort", "hire_date ASC").toString();
+	    
+	    List<String> allowedSortColumns = List.of("user_name", "hire_date", "dept_idx");
+	    String sortColumn = "hire_date";
+	    String sortDirection = "ASC";
+
+	    if (page < 1) page = 1;
+	    if (size < 1) size = 10;
+
+	    String[] sortParts = sort.split("\\s+");
+	    if (sortParts.length > 0 && allowedSortColumns.contains(sortParts[0])) {
+	        sortColumn = sortParts[0];
+	    }
+	    if (sortParts.length > 1 && ("DESC".equalsIgnoreCase(sortParts[1]) || "ASC".equalsIgnoreCase(sortParts[1]))) {
+	        sortDirection = sortParts[1].toUpperCase();
+	    }
+	    String finalSort = sortColumn + " " + sortDirection;
+
+	    int offset = (page - 1) * size;
+
+	    Map<String, Object> queryParam = new HashMap<>();
+	    queryParam.put("dept_name", dept_name);
+	    queryParam.put("search", search);
+	    queryParam.put("limit", size);
+	    queryParam.put("offset", offset);
+	    queryParam.put("sort", finalSort);
+	    
+	    List<Map<String, Object>> list = dao.userList(queryParam);
+	    int total = dao.userTotalCnt(queryParam);
+	    
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("list", list);
+	    result.put("total", total);
+	    result.put("page", page);
+	    result.put("size", size);
+
+	    return result;
 	}
 	
 	public Map<String, Object> userDetail(int user_idx) {
@@ -86,6 +129,10 @@ public class AdminService {
 
 	public int revokeGrant() {
 		return dao.revokeGrant();
+	}
+
+	public List<Map<String, Object>> allUserList() {
+		return dao.allUserList();
 	}
 
 

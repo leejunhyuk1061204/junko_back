@@ -33,11 +33,17 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> deptTree();
 	
-	List<Map<String, Object>> userList(int dept_idx);
+	List<Map<String, Object>> userList(Map<String, Object> queryParam);
 
 	Map<String, Object> userDetail(int user_idx);
 
 	int revokeGrant();
+
+	List<Map<String, Object>> allUserList();
+
+	int userTotalCnt(Map<String, Object> queryParam);
+
+	List<Map<String, Object>> allUserList(int deptIdx);
 
 
 }

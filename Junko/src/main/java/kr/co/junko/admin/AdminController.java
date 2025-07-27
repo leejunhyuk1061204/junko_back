@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.MemberDTO;
@@ -238,7 +239,9 @@ public class AdminController {
 		
 		if (loginId != null && !loginId.isEmpty()) {
 			List<Map<String, Object>> tree = service.deptTree();
+			List<Map<String, Object>> userList = service.allUserList(); 
 			result.put("deptTree", tree);
+			result.put("userList", userList);
 			login = true;
 		}
 		result.put("loginYN", login);
@@ -247,21 +250,21 @@ public class AdminController {
 	
 	// 부서별 직원 리스트 조회
 	@PostMapping("/user/list")
-	public Map<String, Object> userList(@RequestBody Map<String, Object> param,
-	        @RequestHeader Map<String, String> header) {
-		result = new HashMap<String, Object>();
-		boolean login = false;
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+	public Map<String, Object> userList(
+			@RequestParam(required = false, defaultValue = "") String dept_name,
+	        @RequestParam(required = false, defaultValue = "") String search,
+	        @RequestParam(required = false, defaultValue = "1") int page,
+	        @RequestParam(required = false, defaultValue = "10") int size,
+	        @RequestParam(required = false, defaultValue = "hire_date ASC")String sort) {
 		
-		if (loginId != null && !loginId.isEmpty()) {
-			int dept_idx = (int) param.get("dept_idx");
-			list = service.userList(dept_idx);
-			login = true;
-		}
-		result.put("list", list);
-		result.put("loginYN", login);
-		return result;
+		Map<String, Object> param = new HashMap<>();
+	    param.put("dept_name", dept_name.trim());
+	    param.put("search", search.trim());
+	    param.put("page", page);
+	    param.put("size", size);
+	    param.put("sort", sort.trim());
+
+		return service.userList(param);
 	}
 	
 	// 직원 상세보기

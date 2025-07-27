@@ -93,10 +93,37 @@
 		  SELECT * FROM dept_tree ORDER BY depth, dept_idx
 	</select>
 	
-	<select id="userList" resultType="map" parameterType="int">
-		SELECT d.dept_name, j.job_name, u.* FROM user u JOIN dept d ON d.dept_idx = u.dept_idx
-		JOIN job j ON j.job_idx = u.job_idx WHERE u.dept_idx = #{dept_idx}
-			ORDER BY j.job_idx ASC, u.hire_date ASC
+	<select id="allUserList" resultType="map">
+	    SELECT j.job_name, u.* FROM user u JOIN job j ON j.job_idx = u.job_idx WHERE status = '재직'
+	</select>
+	
+	<select id="userList" resultType="map" parameterType="map">
+		SELECT d.dept_name, j.job_name, u.* FROM user u
+		LEFT JOIN dept d ON d.dept_idx = u.dept_idx
+		LEFT JOIN job j ON j.job_idx = u.job_idx
+		WHERE u.status = '재직'
+			<if test="dept_name != null and dept_name != ''">
+			    AND d.dept_name = #{dept_name}
+			</if>
+			<if test="search != null and search != ''">
+		        AND (u.user_name LIKE CONCAT('%', #{search}, '%')
+		             OR u.user_id LIKE CONCAT('%', #{search}, '%'))
+		    </if>
+			ORDER BY ${sort}
+			LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="userTotalCnt" parameterType="map" resultType="int">
+	    SELECT COUNT(*) FROM user
+	    LEFT JOIN dept d ON d.dept_idx = u.dept_idx
+	    WHERE status = '재직'
+		    <if test="dept_name != null and dept_name != ''">
+			    AND d.dept_name = #{dept_name}
+			</if>
+			<if test="search != null and search != ''">
+		        AND (u.user_name LIKE CONCAT('%', #{search}, '%')
+		             OR u.user_id LIKE CONCAT('%', #{search}, '%'))
+		    </if>
 	</select>
 	
 	<select id="userDetail" resultType="map" parameterType="int">
