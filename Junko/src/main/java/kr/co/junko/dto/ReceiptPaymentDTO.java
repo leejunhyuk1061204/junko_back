@@ -1,6 +1,7 @@
 package kr.co.junko.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -22,5 +23,11 @@ public class ReceiptPaymentDTO {
     private int user_idx;
 
     private String customer_name;
+
+    private int template_idx;
+    private List<Integer> approver_ids;
+    private List<ApprovalLineDTO> approval_lines;
+
+    private int document_idx;
     
 }

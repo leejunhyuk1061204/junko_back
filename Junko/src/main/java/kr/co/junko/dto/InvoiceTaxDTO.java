@@ -10,7 +10,7 @@ public class InvoiceTaxDTO {
     
     private int invoice_idx;
     private int custom_idx;
-    private int entry_idx;
+    private Integer entry_idx;
     private int total_amount;
     private String status;
     private Date reg_date;
@@ -28,5 +28,7 @@ public class InvoiceTaxDTO {
     private int user_idx;
 
     private List<Integer> approver_ids;
+
+    private String entry_type;
 
 }

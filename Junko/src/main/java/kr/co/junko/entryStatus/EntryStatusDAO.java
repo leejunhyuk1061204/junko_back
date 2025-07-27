@@ -1,5 +1,6 @@
 package kr.co.junko.entryStatus;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -32,5 +33,9 @@ public interface EntryStatusDAO {
     void voucherSettlementUpdate(int entry_idx, String status);
 
     int selectTotalSettlementAmount(int entry_idx);
+
+    int checkDuplicateSettlement(int entry_idx, Date settlement_day);
+
+    List<EntryStatusDTO> settlementListEntryIdx(int entry_idx);
 
 }

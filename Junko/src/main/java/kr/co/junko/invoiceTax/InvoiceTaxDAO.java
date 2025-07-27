@@ -30,4 +30,6 @@ public interface InvoiceTaxDAO {
 
     int updateInvoiceStatus(int invoice_idx, String status);
 
+    boolean existsInvoiceEntryIdx(int entry_idx);
+
 }

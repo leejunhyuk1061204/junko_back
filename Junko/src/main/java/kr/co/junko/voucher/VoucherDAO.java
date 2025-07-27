@@ -39,4 +39,6 @@ public interface VoucherDAO {
 
 	public String selectAsNameByIdx(int as_idx);
 
+    public List<VoucherDTO> getSettledVouchers();
+    
 }
