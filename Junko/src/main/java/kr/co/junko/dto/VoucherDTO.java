@@ -30,4 +30,6 @@ public class VoucherDTO {
     
     private int template_idx;
     private List<Integer> approver_ids;
+    
+    private int approved;
 }

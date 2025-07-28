@@ -41,7 +41,22 @@
 
     <!-- 리스트 조회 -->
     <select id="voucherList" resultType="kr.co.junko.dto.VoucherDTO">
-	  SELECT v.*, c.custom_name, u.user_name, c.custom_owner
+		  SELECT 
+	  v.*, 
+	  c.custom_name, 
+	  u.user_name, 
+	  c.custom_owner,
+	  (
+	    SELECT 
+	      CASE 
+	        WHEN COUNT(*) = 0 THEN 0
+	        ELSE 1
+	      END
+	    FROM approval_line a 
+	    WHERE a.document_idx = v.entry_idx 
+	      AND a.status = '승인' 
+	      AND a.del_yn = 0
+	  ) AS approved
 	  FROM voucher v
 	  LEFT JOIN custom c ON v.custom_idx = c.custom_idx
 	  LEFT JOIN user u ON v.user_idx = u.user_idx
