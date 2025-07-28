@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MsgDTO;
 import kr.co.junko.file.FileDAO;
+import kr.co.junko.util.Jwt;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -205,10 +207,17 @@ public class MsgController {
 	}
 	
 	@PostMapping(value="/msg/insert")
-	public Map<String, Object>msgInsert(@RequestBody MsgDTO dto){
+	public Map<String, Object>msgInsert(@RequestBody MsgDTO dto, @RequestHeader Map<String, String>header){
 		log.info("dto : {}",dto);
-		boolean success = service.msgInsert(dto);
 		result = new HashMap<String, Object>();
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			success = service.msgInsert(dto);
+		}
 		result.put("success", success);
 		return result;
 	}

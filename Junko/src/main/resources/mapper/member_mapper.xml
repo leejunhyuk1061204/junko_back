@@ -40,25 +40,25 @@
 				user_name like concat('%',#{user_name},'%')
 			</if>
 			<if test="start_date != null and start_date !=''">
-				hire_date > #{start_date}
+				and hire_date > #{start_date}
 			</if>
 			<if test="end_date != null and end_date != ''">
-				hire_date <![CDATA[<]]> #{end_date}
+				and hire_date <![CDATA[<]]> #{end_date}
 			</if>
 			<if test="hire_date != null and hire_date != ''">
-				hire_date = #{hire_date}
+				and hire_date = #{hire_date}
 			</if>
 			<if test="status != null and status != ''">
-				status = #{status}
+				and status = #{status}
 			</if>
 			<if test="annual != null and annual !=0">
-				annual_cnt > #{annual}
+				and annual_cnt > #{annual}
 			</if>
 			<if test="job_idx != null and job_idx != 0">
-				job_idx = #{job_idx}
+				and job_idx = #{job_idx}
 			</if>
 			<if test="dept_idx != null and dept_idx != 0">
-				dept_idx = #{dept_idx}
+				and dept_idx = #{dept_idx}
 			</if>
 		</where>
 		<if test="orderColumn != null and orderColumn != ''">

@@ -4,13 +4,19 @@
 <mapper namespace="kr.co.junko.msg.MsgDAO">
 
 	<insert id="msgSend" parameterType="kr.co.junko.dto.MsgDTO">
-		INSERT INTO msg (sender_idx, receiver_idx, msg_title, msg_content
+		INSERT INTO msg (receiver_idx, msg_title, msg_content
+		<if test="sender_idx != null and sender_idx != 0">
+			,sender_idx
+		</if>
 		<if test="important_yn != null and important_yn != ''and important_yn != 0">
 			,important_yn
 		</if>
 		) 
-			VALUES (#{sender_idx}, #{receiver_idx}, #{msg_title}, #{msg_content}
-			<if test="important_yn != null and important_yn != ''and important_yn != 0">
+		VALUES (#{receiver_idx}, #{msg_title}, #{msg_content}
+		<if test="sender_idx != null and sender_idx != 0">
+			,#{sender_idx}
+		</if>
+		<if test="important_yn != null and important_yn != ''and important_yn != 0">
 			,#{important_yn}
 		</if>
 			)
@@ -108,8 +114,8 @@
 			u.user_name as sender_name,
 			u2.user_name as receiver_name
 		from msg m
-			join `user` u on m.sender_idx = u.user_idx
-			join `user` u2 on m.receiver_idx = u2.user_idx
+			left join `user` u on m.sender_idx = u.user_idx
+			left join `user` u2 on m.receiver_idx = u2.user_idx
 		<where>
 			m.sender_del = false
 			and m.sender_idx = #{user_idx}
@@ -133,8 +139,8 @@
 			u.user_name as sender_name,
 			u2.user_name as receiver_name
 		from msg m
-			join `user` u on m.sender_idx = u.user_idx
-			join `user` u2 on m.receiver_idx = u2.user_idx
+			left join `user` u on m.sender_idx = u.user_idx
+			left join `user` u2 on m.receiver_idx = u2.user_idx
 		<where>
 			m.sender_del = false
 			and m.sender_idx = #{user_idx}
@@ -155,8 +161,8 @@
 			u.user_name as sender_name,
 			u2.user_name as receiver_name
 		from msg m
-			join `user` u on m.sender_idx = u.user_idx
-			join `user` u2 on m.receiver_idx = u2.user_idx
+			left join `user` u on m.sender_idx = u.user_idx
+			left join `user` u2 on m.receiver_idx = u2.user_idx
 		<where>
 			m.receiver_del = false
 			and m.receiver_idx = #{user_idx}
@@ -180,8 +186,8 @@
 			u.user_name as sender_name,
 			u2.user_name as receiver_name
 		from msg m
-			join `user` u on m.sender_idx = u.user_idx
-			join `user` u2 on m.receiver_idx = u2.user_idx
+			left join `user` u on m.sender_idx = u.user_idx
+			left join `user` u2 on m.receiver_idx = u2.user_idx
 		<where>
 			m.receiver_del = false
 			and m.receiver_idx = #{user_idx}
@@ -197,13 +203,19 @@
 	</select>
 	
 	<insert id="msgInsert" parameterType="kr.co.junko.dto.MsgDTO">
-		INSERT INTO msg (sender_idx, receiver_idx, msg_title, msg_content
+		INSERT INTO msg (receiver_idx, msg_title, msg_content
+		<if test="sender_idx != null and sender_idx != 0">
+			,sender_idx
+		</if>
 		<if test="important_yn != null and important_yn != ''and important_yn != 0">
 			,important_yn
 		</if>
 		) 
-			VALUES (#{sender_idx}, #{receiver_idx}, #{msg_title}, #{msg_content}
-			<if test="important_yn != null and important_yn != ''and important_yn != 0">
+		VALUES (#{receiver_idx}, #{msg_title}, #{msg_content}
+		<if test="sender_idx != null and sender_idx != 0">
+			,#{sender_idx}
+		</if>
+		<if test="important_yn != null and important_yn != ''and important_yn != 0">
 			,#{important_yn}
 		</if>
 			)

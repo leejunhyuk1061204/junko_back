@@ -1,5 +1,6 @@
 package kr.co.junko.stock;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +80,7 @@ public class StockService {
 			if(!stockResult) throw new RuntimeException("재고 등록 실패");
 			
 			// 5. 쪽지 발송
-			// boolean msgSendResult = msgSend((int)stockInfo.get("product_idx"),product_option_idx);
+			boolean msgSendResult = msgSend((int)stockInfo.get("product_idx"),product_option_idx);
 		}
 		// 4. 입고 상태 변경
 		boolean receiveResult = receiveDAO.receiveUpdate(dto)>0;
@@ -121,7 +122,7 @@ public class StockService {
 			if(!stockResult) throw new RuntimeException("재고 등록 실패");
 			
 			// 5. 쪽지 발송
-			// msgSend((int)stockInfo.get("product_idx"),product_option_idx);
+			msgSend((int)stockInfo.get("product_idx"),product_option_idx);
 		}
 		
 		// 2. 출고 상태변경
@@ -183,7 +184,7 @@ public class StockService {
 		if(!stockResult) throw new RuntimeException("재고 등록 실패");
 		
 		// 쪽지 발송
-		// msgSend(dto.getProduct_idx(),product_option_idx);
+		msgSend(dto.getProduct_idx(),product_option_idx);
 		
 		return true;
 	}
@@ -222,8 +223,17 @@ public class StockService {
 		return dao.stockUpdate(dto)>0;
 	}
 
+	@Transactional
 	public boolean stockInsert(StockDTO dto) {
-		return dao.stockInsert(dto)>0;
+		boolean stockResult = dao.stockInsert(dto)>0;
+		if(!stockResult) throw new RuntimeException("재고 조정 실패");
+		int product_option_idx = 0;
+		if(dto.getProduct_option_idx() != 0) {
+			product_option_idx = dto.getProduct_option_idx();
+		}
+		msgSend(dto.getProduct_idx(),product_option_idx);
+		
+		return true;
 	}
 
 	public boolean stockDel(int idx) {
@@ -242,20 +252,31 @@ public class StockService {
 			group.add("option");
 		}
 		List<Map<String, Object>>list = (List<Map<String, Object>>) StockSumList(param).get("list");
-		int stock_sum = (int) list.get(0).get("stock_sum");
+		// sum으로 해서 그런가 신기한 타입 
+		// BigDecimal 은 정교한 계산에 사용되는 타입
+		// int 변환 : intValue()
+		// long 변환 : longValue()
+		// double 변환 : doubleValue()
+		log.info("type : {}", list.get(0).get("stock_sum").getClass().getName());
+		BigDecimal stockSumBD = (BigDecimal) list.get(0).get("stock_sum"); 
+		int stock_sum = stockSumBD.intValue();
 		// 5-2 상품 min_cnt 가져오기
 		int min_cnt = productDAO.selectProductIdx(product_idx).getMin_cnt();
+		log.info("stock_sum : "+stock_sum);
+		log.info("min_cnt : "+min_cnt);
 		if(stock_sum <= min_cnt) {
 			MsgDTO msgDTO = new MsgDTO();
 			msgDTO.setMsg_title("재고 부족 알림");
 			msgDTO.setMsg_content("상품코드 "+product_idx+" 번 상품의 재고가 부족합니다.");
+			msgDTO.setImportant_yn(1);
 			// 5-3 userList 가져오기
 			param= new HashMap<String, Object>();
 			param.put("job_idx", 1);
-			param.put("dept_idx", 1);
+			param.put("dept_idx", 4);
 			List<MemberDTO> userList = memberDAO.userList(param);
 			for (MemberDTO user : userList) {
 				msgDTO.setReceiver_idx(user.getUser_idx());
+				log.info("msgDTO : {}",msgDTO);
 				boolean success = msgDAO.msgInsert(msgDTO)>0;
 				if(!success) throw new RuntimeException("쪽지 발송 실패");
 			}
