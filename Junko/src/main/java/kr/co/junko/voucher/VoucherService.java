@@ -35,6 +35,8 @@ public class VoucherService {
             detail.setEntry_idx(entry_idx);
             dao.insertEntryDetail(detail);
         }
+        
+        autoInsertReceiptPayment(dto, dto.getStatus());
 
         return entry_idx; 
     }
@@ -59,6 +61,8 @@ public class VoucherService {
             for (EntryDetailDTO detail : dto.getEntry_details()) {
                 dao.insertEntryDetail(detail);
             }
+            
+            autoInsertReceiptPayment(dto, dto.getStatus());
             
             return true;
         }
@@ -161,24 +165,8 @@ public class VoucherService {
                 }
             }
 
-
-            if ("수금".equals(dto.getEntry_type()) || "지급".equals(dto.getEntry_type())) {
-                boolean exists = dao.checkReceiptPayment(entry_idx);
-                if (!exists) {
-                    Map<String, Object> insertMap = new HashMap<String, Object>();
-                    insertMap.put("type", dto.getEntry_type());
-                    insertMap.put("entry_idx", dto.getEntry_idx());
-                    insertMap.put("custom_idx", dto.getCustom_idx());
-                    insertMap.put("amount", dto.getAmount());
-                    insertMap.put("method", "기타"); // 기본값, 프론트에서 수정 가능
-                    insertMap.put("transaction_date", dto.getEntry_date());
-                    insertMap.put("note", "[전표확정 자동생성]");
-                    insertMap.put("status", "확정");
-                    insertMap.put("user_idx", dto.getUser_idx());
-
-                    dao.insertReceiptPayment(insertMap);
-                }
-            }
+            autoInsertReceiptPayment(dto, status);
+            
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -209,5 +197,34 @@ public class VoucherService {
     public List<VoucherDTO> getSettledVouchers() {
         return dao.getSettledVouchers();
     }
+
+    public void autoInsertReceiptPayment(VoucherDTO dto, String status) {
+    	if (!"확정".equals(status)) return;
+		
+        if (!"수금".equals(dto.getEntry_type()) && !"지급".equals(dto.getEntry_type())) return;
+
+        boolean exists = dao.checkReceiptPayment(dto.getEntry_idx());
+        if (exists) return;
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", dto.getEntry_type());
+        map.put("entry_idx", dto.getEntry_idx());
+        map.put("custom_idx", dto.getCustom_idx());
+        map.put("amount", dto.getAmount());
+        map.put("method", "기타");
+        map.put("transaction_date", dto.getEntry_date());
+        map.put("note", "[전표 " + status + " 자동생성]");
+        map.put("status", status);
+        map.put("user_idx", dto.getUser_idx());
+
+        dao.insertReceiptPayment(map);
+
+        log.info("영수증/지급내역 자동생성 완료 - entry_idx: {}, type: {}", dto.getEntry_idx(), dto.getEntry_type());
+    }
+
+	public List<VoucherDTO> getReceivableVouchers(String custom_name) {
+		return dao.getReceivableVouchers(custom_name);
+	}
+
 
 }

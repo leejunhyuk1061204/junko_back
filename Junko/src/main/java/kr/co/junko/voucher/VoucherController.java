@@ -374,5 +374,16 @@ public class VoucherController {
     public List<VoucherDTO> getSettledVouchers() {
         return service.getSettledVouchers();
     }
+    
+    // 수금/지급 안된 것들만 목록 불러오기
+    @GetMapping("/voucher/list/receivable")
+    public Map<String, Object> getReceivableVouchers(@RequestParam(required = false) String custom_name) {
+        List<VoucherDTO> list = service.getReceivableVouchers(custom_name);
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", list);
+        result.put("success", true);
+        return result;
+    }
+
 
 }

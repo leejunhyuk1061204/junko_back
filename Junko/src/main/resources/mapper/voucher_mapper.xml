@@ -41,7 +41,22 @@
 
     <!-- 리스트 조회 -->
     <select id="voucherList" resultType="kr.co.junko.dto.VoucherDTO">
-	  SELECT v.*, c.custom_name, u.user_name, c.custom_owner
+		  SELECT 
+	  v.*, 
+	  c.custom_name, 
+	  u.user_name, 
+	  c.custom_owner,
+	  (
+	    SELECT 
+	      CASE 
+	        WHEN COUNT(*) = 0 THEN 0
+	        ELSE 1
+	      END
+	    FROM approval_line a 
+	    WHERE a.document_idx = v.entry_idx 
+	      AND a.status = '승인' 
+	      AND a.del_yn = 0
+	  ) AS approved
 	  FROM voucher v
 	  LEFT JOIN custom c ON v.custom_idx = c.custom_idx
 	  LEFT JOIN user u ON v.user_idx = u.user_idx
@@ -181,4 +196,20 @@
       AND v.del_yn = 0
   </select>
   
+<select id="getReceivableVouchers" resultType="kr.co.junko.dto.VoucherDTO">
+  SELECT v.*, c.custom_name
+  FROM voucher v
+  JOIN custom c ON v.custom_idx = c.custom_idx
+  WHERE v.entry_type IN ('수금', '지급')
+    AND v.del_yn = 0
+    AND NOT EXISTS (
+      SELECT 1
+      FROM receipt_payment rp
+      WHERE rp.entry_idx = v.entry_idx AND rp.del_yn = 0
+    )
+    <if test="custom_name != null and custom_name != ''">
+      AND c.custom_name = #{custom_name}
+    </if>
+</select>
+
 </mapper>
