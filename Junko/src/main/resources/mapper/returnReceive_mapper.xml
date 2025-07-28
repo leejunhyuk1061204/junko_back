@@ -4,8 +4,8 @@
 <mapper namespace="kr.co.junko.returnReceive.ReturnReceiveDAO">
 
 	<insert id="returnReceiveInsert" parameterType="kr.co.junko.dto.ReturnReceiveDTO">
-		insert into return_receive (claim_idx, return_waybill_idx, warehouse_idx, user_idx)
-		values (#{claim_idx},#{return_waybill_idx},#{warehouse_idx},#{user_idx})
+		insert into return_receive (claim_idx, return_waybill_idx, warehouse_idx, user_idx, receive_date)
+		values (#{claim_idx},#{return_waybill_idx},#{warehouse_idx},#{user_idx},#{receive_date})
 	</insert>
 
 	<update id="returnReceiveUpdate" parameterType="kr.co.junko.dto.ReturnReceiveDTO">

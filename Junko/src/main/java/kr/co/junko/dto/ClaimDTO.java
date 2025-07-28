@@ -20,4 +20,7 @@ public class ClaimDTO {
 	
 	// 반품 자동 생성을 위한 입력값
 	private int warehouse_idx;
+	
+	// 클레임 반품, 교환 처리 여부
+	private boolean returnStatus;
 }

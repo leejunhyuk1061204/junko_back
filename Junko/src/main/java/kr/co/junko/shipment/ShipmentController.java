@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.ShipmentDTO;
+import kr.co.junko.util.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,17 +26,23 @@ public class ShipmentController {
 	Map<String, Object> result = null;
 	
 	@PostMapping(value="/shipment/update")
-	public Map<String, Object> shipmentUpdate(@RequestBody ShipmentDTO dto){
+	public Map<String, Object> shipmentUpdate(@RequestBody ShipmentDTO dto, @RequestHeader Map<String, String>header){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		try {
-			boolean success = service.shipmentUpdate(dto);
-			result.put("success", success);	
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("msg", e.getMessage());
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			try {
+				success = service.shipmentUpdate(dto);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.put("msg", e.getMessage());
+			}
 		}
+		result.put("success", success);	
 		return result;
 	}
 	

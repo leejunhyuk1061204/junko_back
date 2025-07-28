@@ -85,7 +85,7 @@ public class StockService {
 		boolean receiveResult = receiveDAO.receiveUpdate(dto)>0;
 		if(!receiveResult) throw new RuntimeException("입고 상태 변경 실패");
 		
-		
+		// 6. 발주 상태 변경
 		
 		return true;
 	}

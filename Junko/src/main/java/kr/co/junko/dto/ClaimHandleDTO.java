@@ -16,10 +16,15 @@ public class ClaimHandleDTO {
 	
 	// 클레임 상태 변경을 위한 입력값
 	private String status;
+
+	// 클레임 반품, 교환 처리 여부
+	private boolean returnStatus;
 	
 	// 클레임 처리완료 시 를 위한 입력값
 	private int warehouse_idx;
-	
+
 	// 송장 자동생성을 위한 입력값
 	private int custom_idx;
+	
+
 }

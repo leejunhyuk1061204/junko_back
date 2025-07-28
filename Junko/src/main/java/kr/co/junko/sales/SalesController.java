@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.junko.dto.FullSalesDTO;
 import kr.co.junko.dto.SalesDTO;
 import kr.co.junko.dto.SalesProductDTO;
+import kr.co.junko.util.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,25 +31,38 @@ public class SalesController {
 	Map<String, Object>result = null;
 	
 	@PostMapping(value="/sales/insert")
-	public Map<String, Object>salesInsert(@RequestBody FullSalesDTO dto){
+	public Map<String, Object>salesInsert(@RequestBody FullSalesDTO dto,@RequestHeader Map<String, String>header){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		try {
-			boolean success =service.salesInsert(dto);
-			result.put("success", success);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("msg", e.getMessage());
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			try {
+				success =service.salesInsert(dto);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.put("msg", e.getMessage());
+			}
 		}
+		result.put("success", success);
 		return result;
 	}
 	
 	@PostMapping(value="/sales/update")
-	public Map<String, Object>salesUpdate(@RequestBody SalesDTO dto){
+	public Map<String, Object>salesUpdate(@RequestBody SalesDTO dto,@RequestHeader Map<String, String> header){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success =service.salesUpdate(dto);
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			success =service.salesUpdate(dto);
+		}
 		result.put("success", success);
 		return result;
 	}
@@ -68,17 +83,23 @@ public class SalesController {
 	}
 	
 	@PostMapping(value="/sales/csv")
-	public Map<String, Object> salesCsvInsert(@RequestParam("file") MultipartFile file){
+	public Map<String, Object> salesCsvInsert(@RequestParam("file") MultipartFile file,@RequestHeader Map<String, String>header){
 		log.info("CSV file : {}",file);
 		result = new HashMap<String, Object>();
-		try {
-			boolean success = service.salesCsvInsert(file);
-			result.put("success", success);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("msg", e.getMessage());
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			try {
+				success = service.salesCsvInsert(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.put("msg", e.getMessage());
+			}
 		}
+		result.put("success", success);
 		return result;
 	}
 	

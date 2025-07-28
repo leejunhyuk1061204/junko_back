@@ -42,7 +42,7 @@ public class ClaimService {
 	}
 
 	public boolean claimUpdate(ClaimDTO dto) {
-		if("처리완료".equals(dto.getStatus())) {
+		if("처리완료".equals(dto.getStatus())&&dto.isReturnStatus()) {
 			return waybillService.returnWaybillInsert(dto);
 		}else {
 			return dao.claimUpdate(dto)>0;

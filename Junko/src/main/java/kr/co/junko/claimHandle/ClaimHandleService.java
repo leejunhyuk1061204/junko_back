@@ -29,8 +29,11 @@ public class ClaimHandleService {
 		ClaimDTO claimDTO = new ClaimDTO();
 		claimDTO.setClaim_idx(dto.getClaim_idx());
 		claimDTO.setStatus(dto.getStatus());
-		claimDTO.setCustom_idx(dto.getCustom_idx());
-		claimDTO.setWarehouse_idx(dto.getWarehouse_idx());
+		claimDTO.setReturnStatus(dto.isReturnStatus());
+		if(dto.isReturnStatus()) {
+			claimDTO.setCustom_idx(dto.getCustom_idx());
+			claimDTO.setWarehouse_idx(dto.getWarehouse_idx());
+		}
 		
 		boolean updateResult = claimService.claimUpdate(claimDTO);
 		if(!updateResult) throw new RuntimeException("클레임 상태 변경 실패");

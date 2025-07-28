@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.junko.dto.ClaimHandleDTO;
+import kr.co.junko.util.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,25 +27,38 @@ public class ClaimHandleController {
 	Map<String, Object>result =null;
 	
 	@PostMapping(value="/claimHandle/insert")
-	public Map<String, Object>claimHandleInsert(@RequestBody ClaimHandleDTO dto){
+	public Map<String, Object>claimHandleInsert(@RequestBody ClaimHandleDTO dto,@RequestHeader Map<String, String>header){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		try {
-			boolean success = service.claimHandleInsert(dto);
-			result.put("success", success);	
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", false);
-			result.put("msg", e.getMessage());
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			try {
+				success = service.claimHandleInsert(dto);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.put("msg", e.getMessage());
+			}
 		}
+		result.put("success", success);	
 		return result;
 	}
 	
 	@PostMapping(value="/claimHandle/update")
-	public Map<String, Object>claimHandleUpdate(@RequestBody ClaimHandleDTO dto){
+	public Map<String, Object>claimHandleUpdate(@RequestBody ClaimHandleDTO dto,@RequestHeader Map<String, String>header){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		boolean success = service.claimHandleUpdate(dto);
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			success = service.claimHandleUpdate(dto);
+		}
 		result.put("success", success);
 		return result;
 	}

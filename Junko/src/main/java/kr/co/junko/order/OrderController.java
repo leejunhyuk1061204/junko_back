@@ -86,16 +86,22 @@ public class OrderController {
 	
 	// 발주 수정
 	@PostMapping(value="/order/update")
-	public Map<String, Object>orderUpdate(@RequestBody OrderDTO dto){
+	public Map<String, Object>orderUpdate(@RequestBody OrderDTO dto,@RequestHeader Map<String, String> header){
 		log.info("dto : {}",dto);
 		result = new HashMap<String, Object>();
-		try {
-			boolean success = service.orderUpdate(dto);
-			result.put("success", success);
-		} catch (RuntimeException e) {
-			result.put("success", false);
-			result.put("msg", e.getMessage());
+		String token = header.get("authorization");
+		Map<String, Object>payload = Jwt.readToken(token);
+		String loginId = (String)payload.get("user_id");
+		boolean login = loginId != null && !loginId.isEmpty();
+		boolean success = false;
+		if(login) {
+			try {
+				success = service.orderUpdate(dto);
+			} catch (RuntimeException e) {
+				result.put("msg", e.getMessage());
+			}
 		}
+		result.put("success", success);
 		return result;
 	}
 	
