@@ -59,7 +59,7 @@ public class CategoryService {
 		List<CategoryDTO> rootList = new ArrayList<>();
 		for (CategoryDTO cate : flatList) {
 			Integer parentIdx = cate.getCategory_parent();
-			if (parentIdx == null) {
+			if (parentIdx == null || parentIdx == 0) {
 				// 루트 카테고리
 				rootList.add(cate);
 			} else {
