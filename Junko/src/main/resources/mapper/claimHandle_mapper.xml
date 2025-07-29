@@ -4,8 +4,8 @@
 <mapper namespace="kr.co.junko.claimHandle.ClaimHandleDAO">
 
 	<insert id="claimHandleInsert" parameterType="kr.co.junko.dto.ClaimHandleDTO">
-		insert into claim_handle (claim_idx, user_idx, handle_detail, status)
-		values (#{claim_idx},#{user_idx},#{handle_detail},#{status})
+		insert into claim_handle (claim_idx, user_idx, handle_detail, status, return_status)
+		values (#{claim_idx},#{user_idx},#{handle_detail},#{status},#{returnStatus})
 	</insert>
 
 	<update id="claimHandleUpdate" parameterType="kr.co.junko.dto.ClaimHandleDTO">

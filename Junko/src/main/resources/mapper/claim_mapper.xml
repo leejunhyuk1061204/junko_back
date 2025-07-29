@@ -59,6 +59,7 @@
 				and (
 					c.claim_idx LIKE CONCAT('%', #{search}, '%')
 					OR c.sales_idx LIKE CONCAT('%', #{search}, '%')
+					OR c.type LIKE CONCAT('%', #{search}, '%')
 				)
 			</if>
 		</where>
@@ -102,6 +103,7 @@
 				and (
 					c.claim_idx LIKE CONCAT('%', #{search}, '%')
 					OR c.sales_idx LIKE CONCAT('%', #{search}, '%')
+					OR c.type LIKE CONCAT('%', #{search}, '%')
 				)
 			</if>
 		</where>
