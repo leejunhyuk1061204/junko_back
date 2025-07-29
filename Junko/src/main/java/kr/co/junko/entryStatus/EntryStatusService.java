@@ -89,6 +89,10 @@ public class EntryStatusService {
 
     public boolean settlementDel(int settlement_id) {
         EntryStatusDTO dto = dao.settlementDetail(settlement_id);
+        if (dto == null) {
+            log.warn("삭제 요청: settlement_id {} 는 이미 삭제되었거나 존재하지 않음", settlement_id);
+            return false;
+        }
         int row = dao.settlementDel(settlement_id);
         if (row > 0) updateSettlementStatus(dto.getEntry_idx());
         return row > 0;
