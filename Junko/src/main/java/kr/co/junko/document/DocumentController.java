@@ -112,9 +112,13 @@ public class DocumentController {
 	@PostMapping(value="/document/approve")
 	public Map<String, Object> documentApprove(@RequestBody Map<String, Object> req){
 		result = new HashMap<String, Object>();
-		
-		boolean success = service.documentApprove(req);
-		result.put("success", success);
+		try {
+			boolean success = service.documentApprove(req);
+			result.put("success", success);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success", false);
+		}
 		
 		return result;
 	}

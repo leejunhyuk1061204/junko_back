@@ -27,6 +27,7 @@ import kr.co.junko.dto.ApprovalLineDTO;
 import kr.co.junko.dto.ApprovalLogDTO;
 import kr.co.junko.dto.DocumentCreateDTO;
 import kr.co.junko.dto.DocumentDTO;
+import kr.co.junko.dto.DocumentVarDTO;
 import kr.co.junko.dto.FileDTO;
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.MsgDTO;
@@ -232,6 +233,7 @@ public class DocumentService {
 
 	@Transactional
 	public boolean documentApprove(Map<String, Object> req) {
+		try {
 		int document_idx = (int) req.get("document_idx");
 		int user_idx = (int) req.get("user_idx");
 		String comment = (String) req.getOrDefault("comment", "");
@@ -266,15 +268,17 @@ public class DocumentService {
 		int updated = dao.updateApprove(line);
 		log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%update된 행 수 = " + updated);
 		
-	    ApprovalLogDTO log = new ApprovalLogDTO();
-	    log.setDocument_idx(document_idx);
-	    log.setUser_idx(user_idx);
-	    log.setStatus("승인");
-	    log.setComment(comment);
-	    log.setApproved_date(new Date(System.currentTimeMillis()));
-	    dao.insertLog(log);
+//	    ApprovalLogDTO log = new ApprovalLogDTO();
+//	    log.setDocument_idx(document_idx);
+//	    log.setUser_idx(user_idx);
+//	    log.setStatus("승인");
+//	    log.setComment(comment);
+//	    log.setApproved_date(new Date(System.currentTimeMillis()));
+//	    dao.insertLog(log);
 	    
 		DocumentDTO document = dao.documentIdx(document_idx);
+		List<Map<String, String>> variables2 = dao.getVariables(document_idx);
+		document.setVariablesList(variables2);
 		TemplateDTO template = temService.getTemplate(document.getTemplate_idx());
 		
 		int lineStep = line.getStep();
@@ -293,6 +297,7 @@ public class DocumentService {
 			msgService.msgInsert(msg);
 			
 			if (document.getType() != null && document.getIdx() != 0) {
+				log.info("document : {}",document);
 				// 스케줄 연동
 			    Map<String, Integer> label = new HashMap<String, Integer>();
 			    label.put("연차", 2);
@@ -307,14 +312,20 @@ public class DocumentService {
 				String type = document.getType(); // 연차, 반차, 외근, 출장
 				int label_idx = label.getOrDefault(document.getType(), 1); // default: 일반일정
 				
-				Map<String, String> variables = document.getVariables();
+				List<Map<String, String>> variables = document.getVariablesList();
 				ScheduleDTO sc = new ScheduleDTO();
 
+				log.info("variables : {}",variables);
+				log.info("variables.entrySet : {}",variables);
 				//날짜 파싱
-			    for (Map.Entry<String, String> entry : variables.entrySet()) {
-			        String key = entry.getKey();
-			        String val = entry.getValue();
+			    for (Map<String, String> variable : variables) {
+			    	
+			        String key = variable.get("key");
+			        String val = variable.get("value");
 
+			        log.info("key : " + key);
+			        log.info("val : " + val);
+			        
 			        if (key != null && key.endsWith("date") && val != null && !val.trim().isEmpty()) {
 			        	if (val.contains("~")) {
 			                String[] range = val.split("~");
@@ -367,6 +378,11 @@ public class DocumentService {
 			msgService.msgInsert(msg);
 		};
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("오류 발생");
+		}
+		
 		return true;
 	}
 
