@@ -113,8 +113,12 @@
 			LIMIT #{limit} OFFSET #{offset}
 	</select>
 	
+	<select id="getDeptList" resultType="map">
+	    SELECT dept_idx, dept_name FROM dept ORDER BY dept_name
+	</select>
+	
 	<select id="userTotalCnt" parameterType="map" resultType="int">
-	    SELECT COUNT(*) FROM user
+	    SELECT COUNT(*) FROM user u
 	    LEFT JOIN dept d ON d.dept_idx = u.dept_idx
 	    WHERE status = '재직'
 		    <if test="dept_name != null and dept_name != ''">

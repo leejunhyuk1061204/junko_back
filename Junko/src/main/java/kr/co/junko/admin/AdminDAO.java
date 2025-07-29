@@ -45,5 +45,7 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> allUserList(int deptIdx);
 
+	List<Map<String, Object>> getDeptList();
+
 
 }

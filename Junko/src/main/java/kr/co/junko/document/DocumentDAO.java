@@ -22,7 +22,7 @@ public interface DocumentDAO {
 
 	ApprovalLineDTO documentApprove(int document_idx, int user_idx);
 
-	void updateApprove(ApprovalLineDTO line);
+	int updateApprove(ApprovalLineDTO line);
 
 	int approveCnt(int document_idx);
 
@@ -63,5 +63,9 @@ public interface DocumentDAO {
 	int getWriter(int document_idx);
 	
 	void delApprovalLines(Integer document_idx);
+
+	List<String> getAllApprovalStatuses(int document_idx);
+
+	int getMaxStep(int document_idx);
 
 }

@@ -119,6 +119,9 @@ public class AdminService {
 	    result.put("total", total);
 	    result.put("page", page);
 	    result.put("size", size);
+	    
+	    log.info("==================리스트 결과 수"+list.size());
+	    log.info("======================총 카운트 total"+total);
 
 	    return result;
 	}
@@ -133,6 +136,10 @@ public class AdminService {
 
 	public List<Map<String, Object>> allUserList() {
 		return dao.allUserList();
+	}
+
+	public List<Map<String, Object>> getDeptList() {
+		return dao.getDeptList();
 	}
 
 

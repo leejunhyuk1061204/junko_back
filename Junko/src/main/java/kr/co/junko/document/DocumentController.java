@@ -108,7 +108,6 @@ public class DocumentController {
 	    return result;
 	}
 	
-	
 	// 문서 결재 (승인)
 	@PostMapping(value="/document/approve")
 	public Map<String, Object> documentApprove(@RequestBody Map<String, Object> req){

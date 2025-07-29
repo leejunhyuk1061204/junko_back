@@ -34,7 +34,9 @@
 	    SELECT * FROM approval_line
 	    WHERE document_idx = #{document_idx}
 	    AND user_idx = #{user_idx}
+	    AND status = '미확인'
 	    AND del_yn = 0
+	  	ORDER BY step ASC LIMIT 1
 	</select>
 	
 	<!-- 결재 상태 업데이트 -->
@@ -43,9 +45,20 @@
 	    SET status = #{status},
 	        comment = #{comment},
 	        approved_date = #{approved_date}
-	    WHERE document_idx = #{document_idx}
-	    AND user_idx = #{user_idx}
+	    WHERE approval_idx = #{approval_idx}
 	</update>
+	
+	<select id="getAllApprovalStatuses" resultType="String">
+		SELECT status FROM approval_line
+		WHERE document_idx = #{document_idx}
+		AND del_yn = 0
+	</select>
+	
+	<select id="getMaxStep" resultType="int">
+	    SELECT MAX(step) FROM approval_line
+	    WHERE document_idx = #{document_idx}
+	    AND del_yn = 0
+	</select>
 	
 	<!-- 현재 결재 단계 처리 -->
 	<select id="currentApprover" resultType="int">
@@ -60,7 +73,7 @@
 	<select id="approveCnt" resultType="int">
 	    SELECT COUNT(*) FROM approval_line
 	    WHERE document_idx = #{document_idx}
-	    AND status != '승인'
+	    AND status  IN ('미확인','결재중')
 	    AND del_yn = 0
 	</select>
 	
@@ -132,7 +145,8 @@
 	
 	<!-- 수신 문서 리스트 -->
 	<select id="receivedDocument" resultType="kr.co.junko.dto.DocumentDTO">
-		SELECT t.template_name, d.* FROM document d LEFT JOIN template t ON t.template_idx = d.template_idx
+		SELECT t.template_name, u.user_name, d.* FROM document d LEFT JOIN template t ON t.template_idx = d.template_idx
+		LEFT JOIN user u ON d.user_idx = u.user_idx
 		WHERE d.document_idx
 		    IN (SELECT al.document_idx FROM approval_line al WHERE al.user_idx = #{user_idx}) AND d.del_yn = 0
 		<if test="status != null and status != ''">

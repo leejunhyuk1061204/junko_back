@@ -257,6 +257,7 @@ public class AdminController {
 	        @RequestParam(required = false, defaultValue = "10") int size,
 	        @RequestParam(required = false, defaultValue = "hire_date ASC")String sort) {
 		
+		
 		Map<String, Object> param = new HashMap<>();
 	    param.put("dept_name", dept_name.trim());
 	    param.put("search", search.trim());
@@ -264,6 +265,7 @@ public class AdminController {
 	    param.put("size", size);
 	    param.put("sort", sort.trim());
 
+	    log.info("--------------------------------------------받은 param: " + param);
 		return service.userList(param);
 	}
 	
@@ -302,6 +304,22 @@ public class AdminController {
 	    result.put("success", true);
 	    
 		return result;
+	}
+	
+	@GetMapping("/dept/list")
+	public Map<String, Object> getDeptList(@RequestHeader Map<String, String> header) {
+	    result = new HashMap<String, Object>();
+	    boolean login = false;
+	    String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
+
+	    if (loginId != null && !loginId.isEmpty()) {
+	        List<Map<String, Object>> list = service.getDeptList();
+	        result.put("list", list);
+	        login = true;
+	    }
+
+	    result.put("loginYN", login);
+	    return result;
 	}
 	
 }

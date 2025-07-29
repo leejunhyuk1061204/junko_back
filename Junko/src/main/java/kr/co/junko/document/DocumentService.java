@@ -143,7 +143,7 @@ public class DocumentService {
 				ApprovalLineDTO line = new ApprovalLineDTO();
 				line.setDocument_idx(document_idx);
 				line.setUser_idx(approval_id);
-				line.setStep(step++);
+				line.setStep(step);
 				line.setStatus("미확인");
 				dao.insertApprovalLine(line);
 				
@@ -242,6 +242,7 @@ public class DocumentService {
 	    }
 		
 		ApprovalLineDTO line = dao.documentApprove(document_idx, user_idx);
+		log.info("========================================승인 대상 결재자 LINE 정보: " + line);
 		if (line == null || !"미확인".equals(line.getStatus())) {
 			return false;
 		}
@@ -260,7 +261,10 @@ public class DocumentService {
 		line.setStatus("승인");
 		line.setComment(comment);
 		line.setApproved_date(new Date(System.currentTimeMillis()));
-		dao.updateApprove(line);
+		
+		log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%line.approval_idx = " + line.getApproval_idx());
+		int updated = dao.updateApprove(line);
+		log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%update된 행 수 = " + updated);
 		
 	    ApprovalLogDTO log = new ApprovalLogDTO();
 	    log.setDocument_idx(document_idx);
@@ -269,13 +273,14 @@ public class DocumentService {
 	    log.setComment(comment);
 	    log.setApproved_date(new Date(System.currentTimeMillis()));
 	    dao.insertLog(log);
-		
-		boolean allApproved = dao.approveCnt(document_idx) == 0;
-		
+	    
 		DocumentDTO document = dao.documentIdx(document_idx);
 		TemplateDTO template = temService.getTemplate(document.getTemplate_idx());
 		
-		if (allApproved) {
+		int lineStep = line.getStep();
+		int maxStep = dao.getMaxStep(document_idx);
+		
+		if (lineStep == maxStep) {
 			dao.updateDocStatus(document_idx, "승인");
 			
 			int writerId = dao.getWriter(document_idx);
