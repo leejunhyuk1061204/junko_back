@@ -68,4 +68,6 @@ public interface DocumentDAO {
 
 	int getMaxStep(int document_idx);
 
+	Map<String, Object> documentDetail(int document_idx);
+
 }

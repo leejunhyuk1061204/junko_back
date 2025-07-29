@@ -11,8 +11,6 @@ import kr.co.junko.dto.PowerDTO;
 @Mapper
 public interface AdminDAO {
 
-	int updateJobNdept(MemberDTO dto);
-
 	int insertPower(Map<String, Object> param);
 
 	int grantPower(int user_idx, int power_idx);
@@ -47,5 +45,8 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> getDeptList();
 
+	List<Map<String, Object>> getJobList();
+
+	List<Map<String, Object>> getStatusList();
 
 }

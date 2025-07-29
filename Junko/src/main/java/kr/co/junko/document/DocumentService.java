@@ -549,4 +549,24 @@ public class DocumentService {
 		dao.insertApprovalLine(line);
 	}
 
+	public Map<String, Object> documentDetail(int document_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+	    Map<String, Object> detail = dao.documentDetail(document_idx);
+	    List<ApprovalLineDTO> approvalLine = dao.getApprovalLines(document_idx);
+	    List<Map<String, String>> varList = dao.getVariables(document_idx);
+	    
+	    Map<String, String> variables = new HashMap<>();
+	    for (Map<String, String> map : varList) {
+	        String key = map.get("key");
+	        String value = map.get("value");
+	        variables.put(key, value);
+	    }
+
+	    result.put("detail", detail);
+	    result.put("approvalLine", approvalLine);
+	    result.put("variables", variables);
+	    return result;
+	}
+
 }

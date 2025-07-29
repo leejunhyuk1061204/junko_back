@@ -298,4 +298,10 @@ public class DocumentController {
         return result;
     }
 	
+    // 문서 상세보기
+    @GetMapping("/document/detail/{document_idx}")
+    public Map<String, Object> getDocumentDetail(@PathVariable int document_idx) {
+        result = new HashMap<String, Object>();
+        return service.documentDetail(document_idx);
+    }
 }

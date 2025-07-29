@@ -242,5 +242,21 @@
 	    SET del_yn = 1
 	    WHERE document_idx = #{document_idx}
 	</update>
+	
+	<select id="documentDetail" resultType="map">
+		SELECT
+	        t.template_name,
+	        u.user_name AS drafter_name,
+	        dp.dept_name,
+	        j.job_name,
+	        d.*
+	    FROM document d
+	    LEFT JOIN template t ON d.template_idx = t.template_idx
+	    LEFT JOIN user u ON d.user_idx = u.user_idx
+	    LEFT JOIN dept dp ON dp.dept_idx = u.dept_idx
+	    LEFT JOIN job j ON j.job_idx = u.job_idx
+	    WHERE d.document_idx = #{document_idx}
+	</select>
+	
 
 </mapper>

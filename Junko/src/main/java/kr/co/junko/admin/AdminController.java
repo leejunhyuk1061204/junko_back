@@ -29,27 +29,6 @@ public class AdminController {
 	
 	private final AdminService service;
 	Map<String, Object> result = null;
-	
-	// 직책, 부서 등록 & 수정
-	@PostMapping("/JobNdept/update")
-	public Map<String, Object> updateJobNdept(@RequestBody MemberDTO dto,
-			@RequestHeader Map<String, String> header) {
-		log.info("dto : {}", dto);
-		boolean success = false;
-		boolean login = false;
-		String loginId = (String) Jwt.readToken(header.get("authorization")).get("user_id");
-		result = new HashMap<String, Object>();
-		
-		if (loginId != null && !loginId.isEmpty()) {
-			success = service.updateJobNdept(dto);
-			login = true;
-			result.put("dept_idx", dto.getDept_idx());
-			result.put("job_idx", dto.getJob_idx());
-		}		
-		result.put("success", success);
-		result.put("loginYN", login);
-		return result;
-	}
 
 	// 권한 등록
 	@PostMapping("/power/insert")
@@ -320,6 +299,16 @@ public class AdminController {
 
 	    result.put("loginYN", login);
 	    return result;
+	}
+	
+	@GetMapping("/job/list")
+	public List<Map<String, Object>> jobList() {
+		return service.getJobList();
+	}
+	
+	@GetMapping("/status/list")
+	public List<Map<String, Object>> statusList() {
+		return service.getStatusList();
 	}
 	
 }

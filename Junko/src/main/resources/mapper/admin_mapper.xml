@@ -3,10 +3,6 @@
 
 <mapper namespace="kr.co.junko.admin.AdminDAO">
 
-	<update id="updateJobNdept">
-		UPDATE user SET job_idx = #{job_idx}, dept_idx = #{dept_idx} WHERE user_idx = #{user_idx}
-	</update>
-	
 	<insert id="insertPower" parameterType="String">
 		INSERT INTO power (power_name) VALUES (#{power_name})
 	</insert>
@@ -75,9 +71,27 @@
 	        <if test="annual_cnt != null">
 	            annual_cnt = #{annual_cnt},
 	        </if>
+	        <if test="dept_idx != null and dept_idx != ''">
+	            dept_idx = #{dept_idx},
+	        </if>
+	        <if test="job_idx != null and job_idx != ''">
+	            job_idx = #{job_idx},
+	        </if>
 	    </trim>
 	    WHERE user_idx = #{user_idx}
 	</update>
+	
+	<select id="getDeptList" resultType="map">
+	   	SELECT dept_idx, dept_name FROM dept ORDER BY dept_name
+	</select>
+
+	<select id="getJobList" resultType="map">
+	    SELECT job_idx, job_name FROM job ORDER BY job_name
+	</select>
+	
+	<select id="getStatusList" resultType="map">
+		SELECT DISTINCT status FROM user
+	</select>
 	
 	<select id="deptTree" resultType="map">
 		WITH RECURSIVE dept_tree AS (
@@ -101,7 +115,7 @@
 		SELECT d.dept_name, j.job_name, u.* FROM user u
 		LEFT JOIN dept d ON d.dept_idx = u.dept_idx
 		LEFT JOIN job j ON j.job_idx = u.job_idx
-		WHERE u.status = '재직'
+		WHERE u.status IN ('재직', '휴직')
 			<if test="dept_name != null and dept_name != ''">
 			    AND d.dept_name = #{dept_name}
 			</if>
@@ -111,10 +125,6 @@
 		    </if>
 			ORDER BY ${sort}
 			LIMIT #{limit} OFFSET #{offset}
-	</select>
-	
-	<select id="getDeptList" resultType="map">
-	    SELECT dept_idx, dept_name FROM dept ORDER BY dept_name
 	</select>
 	
 	<select id="userTotalCnt" parameterType="map" resultType="int">

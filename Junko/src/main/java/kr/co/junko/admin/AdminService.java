@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.PowerDTO;
@@ -18,11 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminService {
 	
 	private final AdminDAO dao;
-
-	public boolean updateJobNdept(MemberDTO dto) {
-		int row = dao.updateJobNdept(dto);
-		return row>0;
-	}
 
 	public boolean insertPower(Map<String, Object> param) {
 		int row = dao.insertPower(param);
@@ -64,6 +60,7 @@ public class AdminService {
 		return dao.resignUpdate(param)>0;
 	}
 
+	@Transactional
 	public boolean empUpdate(Map<String, Object> param) {
 		return dao.empUpdate(param)>0;
 	}
@@ -140,6 +137,14 @@ public class AdminService {
 
 	public List<Map<String, Object>> getDeptList() {
 		return dao.getDeptList();
+	}
+
+	public List<Map<String, Object>> getJobList() {
+		return dao.getJobList();
+	}
+	
+	public List<Map<String, Object>> getStatusList() {
+		return dao.getStatusList();
 	}
 
 
