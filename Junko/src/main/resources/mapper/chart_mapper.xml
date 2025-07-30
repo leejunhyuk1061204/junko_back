@@ -403,7 +403,7 @@
 	</select>
 	
 	<!-- 전체 상품 중 부족 재고 현황 -->
-	<select id="getLowStockProduct" resultType="map">
+	<select id="getLowStockProduct" parameterType="map" resultType="map">
 		WITH RECURSIVE category_tree AS (
 			SELECT category_idx FROM category
 				<where>
@@ -413,9 +413,11 @@
 				</where>
 		  		UNION ALL
 		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
-		SELECT p.product_idx, c.category_name, p.product_name, p.min_cnt, IFNULL(SUM(s.stock_cnt), 0) AS total_stock
+		SELECT p.product_idx, c.category_name, p.product_name, c2.combined_name , p.min_cnt, IFNULL(SUM(s.stock_cnt), 0) AS total_stock
 		FROM product p LEFT JOIN stock s ON p.product_idx = s.product_idx AND s.del_yn = 0
 		JOIN category c ON c.category_idx = p.category_idx
+		left join product_option po on p.product_idx = po.product_idx 
+		left join combined c2 on po.combined_idx = c2.combined_idx 
 			<where>
 				p.del_yn = 0
 				<if test="categoryIdx != null">
@@ -423,7 +425,10 @@
 				</if>
 			</where>
 		GROUP BY p.product_idx, p.product_name, p.min_cnt
-		HAVING total_stock <![CDATA[<]]> p.min_cnt ORDER BY total_stock LIMIT 50
+		HAVING total_stock <![CDATA[<]]> p.min_cnt ORDER BY total_stock
+		<if test="page != null and page != '' and page != 0">
+			limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
 	<!-- 이번 달 총 매출 -->

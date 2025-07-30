@@ -84,5 +84,11 @@ public class StockController {
 		result.put("success", success);
 		return result;
 	}
+
+	@PostMapping(value="/lowStock/list")
+	public Map<String, Object>lowStockList(@RequestBody Map<String, Object>param){
+		log.info("param : {}",param);
+		return service.lowStockList(param);
+	}
 	
 }

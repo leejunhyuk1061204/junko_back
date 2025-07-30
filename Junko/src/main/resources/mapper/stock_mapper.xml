@@ -322,4 +322,29 @@
 		update stock set del_yn = true where stock_idx = #{param1}
 	</update>
 	
+	<select id="lowStockTotalPage" parameterType="map">
+		select ceil(count(*)*1.0/#{cnt}) from (
+			WITH RECURSIVE category_tree AS (
+			SELECT category_idx FROM category
+				<where>
+					<if test="categoryIdx != null">
+						category_idx = #{categoryIdx}
+					</if>
+				</where>
+		  		UNION ALL
+		  	SELECT c.category_idx FROM category c JOIN category_tree ct ON c.category_parent = ct.category_idx)
+		SELECT p.product_idx, c.category_name, p.product_name, p.min_cnt, IFNULL(SUM(s.stock_cnt), 0) AS total_stock
+		FROM product p LEFT JOIN stock s ON p.product_idx = s.product_idx AND s.del_yn = 0
+		JOIN category c ON c.category_idx = p.category_idx
+			<where>
+				p.del_yn = 0
+				<if test="categoryIdx != null">
+					AND p.category_idx IN (SELECT category_idx FROM category_tree)	
+				</if>
+			</where>
+		GROUP BY p.product_idx, p.product_name, p.min_cnt
+		HAVING total_stock <![CDATA[<]]> p.min_cnt ORDER BY total_stock
+		) as total
+	</select>
+	
 </mapper>

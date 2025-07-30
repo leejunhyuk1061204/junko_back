@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.junko.chart.ChartDAO;
 import kr.co.junko.dto.FullSalesDTO;
 import kr.co.junko.dto.SalesDTO;
 import kr.co.junko.dto.SalesProductDTO;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SalesService {
 
 	private final SalesDAO dao;
+	private final ChartDAO chartDAO;
 
 	@Transactional
 	public boolean salesInsert(FullSalesDTO dto) {
@@ -187,5 +189,6 @@ public class SalesService {
 	public boolean salesProductDel(int sales_product_idx) {
 		return dao.salesProductDel(sales_product_idx)>0;
 	}
+
 	
 }

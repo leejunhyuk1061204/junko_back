@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.junko.chart.ChartDAO;
 import kr.co.junko.dto.MemberDTO;
 import kr.co.junko.dto.MsgDTO;
 import kr.co.junko.dto.ReceiveDTO;
@@ -47,6 +48,7 @@ public class StockService {
 	private final ProductDAO productDAO;
 	private final MsgDAO msgDAO;
 	private final MemberDAO memberDAO;
+	private final ChartDAO chartDAO;
 
 	@Transactional
 	public boolean stockInsert(ReceiveDTO dto) {
@@ -282,6 +284,24 @@ public class StockService {
 			}
 		}
 		return true;
+	}
+	
+
+	public Map<String, Object> lowStockList(Map<String, Object> param) {
+		Map<String, Object>result = new HashMap<String, Object>();
+		int cnt = 10;
+		int offset = ((int)param.get("page")-1)*cnt;
+		param.put("cnt", cnt);
+		param.put("offset", offset);
+		log.info("ServiceParam : {}",param);
+		List<Map<String, Object>>list = chartDAO.getLowStockProduct(param);
+		log.info("list : {}",list);
+		int total = dao.lowStockTotalPage(param);
+		log.info("total : "+total);
+		result.put("total", total);
+		result.put("list", list);
+		log.info("result : {}",result);
+		return result;
 	}
 	
 }

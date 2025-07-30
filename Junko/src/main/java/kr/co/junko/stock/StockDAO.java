@@ -26,4 +26,6 @@ public interface StockDAO {
 	int stockUpdate(StockDTO dto);
 
 	int stockDel(int idx);
+	
+	int lowStockTotalPage(Map<String, Object> param);
 }
