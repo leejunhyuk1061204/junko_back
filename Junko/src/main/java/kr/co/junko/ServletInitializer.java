@@ -1,12 +1,10 @@
 package kr.co.junko;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import kr.co.junko.util.Jwt;
 
-@SpringBootApplication
 public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
