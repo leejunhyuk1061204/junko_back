@@ -48,5 +48,7 @@ public interface ChartDAO {
 
 	List<Map<String, Object>> getSalesByCategory(Map<String, Object> param);
 
+	List<Map<String, Object>> getSalesByProduct(Map<String, Object> param);
+
 
 }
